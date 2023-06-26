@@ -71,6 +71,14 @@ createComponent({
       return [
         [
           {
+            name: '发布历史',
+            icon: 'todo-list-o',
+            jumptype: 'mp',
+            url: '/release/pages/list'
+          }
+        ],
+        [
+          {
             name: '地址管理',
             icon: 'logistics',
             jumptype: 'mp',

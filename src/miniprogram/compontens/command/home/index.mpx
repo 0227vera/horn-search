@@ -52,6 +52,7 @@ createComponent({
 
 <style lang="stylus" scoped>
 .container
+  background #ffffff
   border-radius 32rpx 32rpx 0 0
   padding 32rpx
   height 1000px

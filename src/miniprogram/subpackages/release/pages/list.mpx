@@ -1,0 +1,32 @@
+<template>
+  <custom-container
+    title="发布历史"
+  >
+    <view>
+      发单的历史列表以及各个状态
+    </view>
+  </custom-container>
+</template>
+
+<script>
+import { createPage } from '@mpxjs/core'
+import { fileUpload } from '@/api'
+import { categoryItems } from '@/setting/common'
+import store from '@/store'
+
+createPage({
+})
+
+</script>
+
+<style lang="stylus" scoped>
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "custom-container": "@/compontens/base/custom-container"
+    },
+    "navigationStyle": "custom"
+  }
+</script>
