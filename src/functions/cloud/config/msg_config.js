@@ -1,0 +1,4 @@
+module.exports = {
+  MINI_TEMP_CARD_HAS_TIME: 'VCb4GZ-3yK5j66iVxOH5U1MClzXd2f97vFTYlN-K5JU', // 有打卡时间
+  MINI_TEMP_CARD_NO_TIME: 'VCb4GZ-3yK5j66iVxOH5U3wurLqu2QjwYCSyDgn5CTw' // 无打卡时间
+}

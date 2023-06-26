@@ -1,0 +1,301 @@
+<template>
+  <custom-container
+    title="发布需求"
+    btnName="发布"
+    containerBg="#fff"
+    bind:footer-btn="submitData"
+  >
+    <van-cell-group slot="" class="form" border="{{false}}">
+      <van-field
+        label="类别"
+        value="{{ categoryName }}"
+        is-link
+        readonly
+        placeholder="点击选择职位类别"
+        input-align="right"
+        bind:tap="showPopupContainer('category')"
+        required
+      />
+      <van-field
+        label="单价"
+        required
+        value="{{ updateObj.price }}"
+        placeholder="请输入单价"
+        type="digit"
+        input-align="right"
+        bind:change="onFieldChange"
+        id="price"
+      />
+      <van-field
+        label="位置"
+        required
+        is-link
+        readonly
+        value="{{address}}"
+        input-align="right"
+        placeholder="点击进入详细地址选择"
+        bind:tap="showPopupContainer('address')"
+      />
+      <van-field
+        label="电话"
+        required
+        value="{{ updateObj.tel }}"
+        type="number"
+        placeholder="请输入联系方式"
+        input-align="right"
+        bind:change="onFieldChange"
+        id="tel"
+      />
+      <van-field
+        label="截止时间"
+        is-link
+        readonly
+        value="{{ timeInfo }}"
+        placeholder="点击确定截止时间"
+        bind:tap="onTimeClick"
+        input-align="right"
+      />
+      <van-cell title="图片" label="服装的要求" value="{{imagesValue}}" border="{{false}}" />
+      <view class="image-container">
+        <view class="iamge-content">
+          <van-uploader
+            bind:after-read="afterRead"
+            deletable
+          />
+          <view class="imgurl-container" wx:for="{{updateObj.images}}" wx:key="item">
+            <van-image
+              width="80"
+              height="80"
+              src="{{item}}"
+              radius="8"
+              fit="cover"
+            />
+            <van-icon name="clear" bindtap="clearImg(item)" class="image-clear-icon"/>
+          </view>
+        </view>
+      </view>
+      <van-field
+        label="备注"
+        value="{{ updateObj.note }}"
+        placeholder="请输入备注信息"
+        input-align="right"
+        id="note"
+        bind:change="onFieldChange"
+      />
+    </van-cell-group>
+  </custom-container>
+  <van-popup
+    show="{{ showPopup }}"
+    round
+    position="bottom"
+    bind:close="closePopupContainer"
+  >
+    <van-cascader
+      wx:if="{{ popupType === 'category' }}"
+      options="{{ categoryItems.children }}"
+      title="请选择类别"
+      bind:close="closePopupContainer"
+      value="{{ updateObj.category }}"
+      bind:finish="onFinish"
+    />
+    <van-datetime-picker
+      wx:elif="{{popupType === 'time'}}"
+      type="datetime"
+      title="选择截止时间"
+      value="{{ currentDate }}"
+      min-date="{{ minDate }}"
+      bind:input="onTimeInput"
+      bind:confirm="onTimeConfirm"
+      bind:cancel="closePopupContainer"
+      formatter="{{formatter}}"
+    />
+    <view wx:elif="{{popupType === 'address'}}">
+      <van-nav-bar
+        left-text="取消"
+        right-text="确定"
+        title="请选择地址"
+        bind:click-left="closePopupContainer"
+        bind:click-right="onClickRight"
+        safe-area-inset-top="{{false}}"
+      />
+      <view class="address-list-container">
+        <address-list />
+      </view>
+    </view>
+  </van-popup>
+</template>
+
+<script>
+import { createPage } from '@mpxjs/core'
+import { fileUpload } from '@/api'
+import { categoryItems } from '@/setting/common'
+import store from '@/store'
+
+createPage({
+  computed: {
+    ...store.mapState(['adInfo']),
+    address() {
+      return this.adInfo.address
+    },
+    categoryName() {
+      return this.selectedOptions.map(item => item.text).join('/')
+    },
+    imagesValue() {
+      if (this.updateObj.images.length) {
+        return `已上传${this.updateObj.images.length}张图片`
+      }
+      return '点击下方可上传图片'
+    },
+    timeInfo() {
+      if (this.updateObj.time) {
+        const time = new Date(this.updateObj.time)
+        const year = time.getFullYear()
+        const month = time.getMonth() + 1
+        const day = time.getDate()
+        const hour = time.getHours()
+        const min = time.getMinutes()
+        return `${year}年${month}月${day}日${hour}时${min}分`
+      }
+      return ''
+    }
+  },
+  data: {
+    showPopup: false,
+    popupType: '',
+    mainActiveIndex: 0,
+    categoryItems,
+    selectedOptions: [],
+    minDate: Date.now(),
+    currentDate: Date.now(),
+    formatter(type, value) {
+      const types = {
+        year: '年',
+        month: '月',
+        day: '日',
+        hour: '时',
+        minute: '分'
+      }
+      return `${value}${types[type] || ''}`
+    },
+    updateObj: {
+      category: '',
+      note: '',
+      price: '',
+      tel: '',
+      time: '',
+      images: [],
+      poi: {}
+    }
+  },
+  async onLoad() {
+    await this.setLocation()
+    console.log(this.adInfo.address)
+    this.updateObj.poi = {
+      ...this.adInfo.location,
+      address: this.adInfo.address
+    }
+    this.$forceUpdate()
+  },
+  methods: {
+    ...store.mapActions(['setLocation']),
+    // note: 修改字段值
+    onFieldChange(e) {
+      this.updateObj[e.target.id] = e.detail
+    },
+    // note: 图片相关处理
+    async afterRead(e) {
+      const res = await fileUpload(e.detail.file.thumb)
+      this.updateObj.images.push(res.fileID)
+    },
+    clearImg(item) {
+      this.updateObj.images = this.updateObj.images.filter(f => f !== item)
+    },
+    // note: 弹窗处理
+    showPopupContainer(type) {
+      console.log(5555)
+      this.showPopup = true
+      this.popupType = type
+    },
+    closePopupContainer() {
+      this.showPopup = false
+    },
+    // note: 分类处理
+    onFinish({ detail = {} }) {
+      const { selectedOptions, value } = detail
+      this.selectedOptions = selectedOptions
+      this.updateObj.category = value
+      this.closePopupContainer()
+    },
+    // note: 时间处理
+    onTimeClick() {
+      this.showPopupContainer('time')
+      this.currentDate = this.updateObj.time || this.currentDate
+    },
+    onTimeInput(e) {
+      this.currentDate = e.detail
+    },
+    onTimeConfirm() {
+      this.updateObj.time = this.currentDate
+      this.closePopupContainer()
+    },
+    // note: 地址处理
+    onClickRight() {
+      this.closePopupContainer()
+    },
+    // note: 提交操作
+    submitData() {
+      console.log(this.updateObj)
+    }
+  }
+})
+
+</script>
+
+<style lang="stylus" scoped>
+.submit
+  margin-top 32rpx
+  margin-bottom 20rpx
+.image-container
+  background #ffffff
+  padding 20rpx 32rpx
+  box-sizing border-box
+  .iamge-content
+    border-bottom 1px solid #ebedf0
+    display flex
+    flex-wrap wrap
+.imgurl-container
+  position relative
+  margin 0 8px 8px 0
+  .image-clear-icon
+    position absolute
+    top 0
+    right 0
+    color #fff
+    font-size 40rpx
+.address-list-container
+  padding 0 32rpx
+  box-sizing border-box
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "address-list": "@/compontens/common/address-list",
+      "custom-container": "@/compontens/base/custom-container",
+      "van-cell": "@vant/weapp/cell/index",
+      "van-cell-group": "@vant/weapp/cell-group/index",
+      "van-uploader": "@vant/weapp/uploader/index",
+      "van-field": "@vant/weapp/field/index",
+      "van-image": "@vant/weapp/image/index",
+      "van-icon": "@vant/weapp/icon/index",
+      "van-popup": "@vant/weapp/popup/index",
+      "van-cascader": "@vant/weapp/cascader/index",
+      "van-datetime-picker": "@vant/weapp/datetime-picker/index",
+      "van-nav-bar": "@vant/weapp/nav-bar/index"
+    },
+    "navigationStyle": "custom",
+    "navigationBarBackgroundColor": "#eeeeee",
+    "navigationBarTitleText": "发布需求",
+    "navigationBarTextStyle": "black"
+  }
+</script>

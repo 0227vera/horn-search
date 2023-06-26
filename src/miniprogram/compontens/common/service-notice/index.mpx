@@ -1,0 +1,158 @@
+<template>
+  <view wx:if="{{ textVisible && __mpx_mode__ !== 'ali'}}" wx:style="{{ imageStyle }}" class="service-notice">
+    <view class="service-notice-mask"></view>
+  </view>
+
+  <view class="service-notice-mock" wx:if="{{ textVisible }}" wx:style="{{ imageStyle }}">
+    <image
+      class="service-notice-image"
+      src="{{ noticeImage }}"
+      mode="widthFix"
+    ></image>
+  </view>
+
+  <!-- 支付宝拉起消息订阅需要引入插件-->
+  <view class="ali-service-notice-panel">
+    <subscribe-msg wx:if="{{__mpx_mode__ === 'ali'}}" />
+  </view>
+</template>
+
+<script>
+import { createComponent } from '@mpxjs/core'
+import { setStorage } from 'common/js/storage'
+import { tryToSubscibe } from '@didi/webx-mp'
+import { trackEvent } from '../../common/omega'
+
+const globalStore = getApp().commonStore
+
+createComponent({
+  properties: {
+    // 订阅消息"总是"的状态 true勾选了总是
+    noticeAlwaysSubscribeStatus: {
+      type: Boolean,
+      value: false
+    }
+  },
+  data: {
+    textVisible: false,
+    imageStyle: {}
+  },
+  computed: {
+    noticeImage () {
+      return __mpx_mode__ === 'ali' ? 'https://pt-starimg.didistatic.com/static/starimg/img/vAOibvmEtk1647341329554.gif' : 'https://pt-starimg.didistatic.com/static/starimg/img/Zjmq7qrfcy1628235982087.gif'
+    }
+  },
+  methods: {
+    ...globalStore.mapActions({
+      updateUserInfo: 'updateUserInfo'
+    }),
+    /**
+     * 显示服务订阅弹窗——使用组件方调用
+     */
+    showServiceNotice() {
+      const self = this
+      return new Promise((resolve, reject) => {
+        !self.noticeAlwaysSubscribeStatus && self.showServiceImage()
+        // subscribeInit 在扫码付onLoad里完成
+        tryToSubscibe({
+          scene: 'scan',
+          // 订阅流程结束
+          subscribeComplete (res) {
+            self.textVisible = false
+            trackEvent('taxi_xcx_scan_pay_authorize_sw', '扫码付-服务授权弹窗-展现')
+            if (res && res.errMsg === 'requestSubscribeMessage:fail cancel') {
+              trackEvent('taxi_xcx_scan_pay_authorize_cal_ck', '扫码付-服务授权弹窗-取消-点击')
+            } else if (res && res.errMsg === 'requestSubscribeMessage:ok') {
+              delete res.errMsg
+
+              const agreeNews = Object.keys(res).filter(e => res[e] === 'accept')
+              const isAgree = agreeNews.length ? 1 : 0
+
+              if (isAgree) {
+                // 点击允许
+                trackEvent('taxi_xcx_scan_pay_authorize_cfm_ck', '扫码付-服务授权弹窗-同意-点击')
+              } else {
+                // 点击取消
+                trackEvent('taxi_xcx_scan_pay_authorize_cal_ck', '扫码付-服务授权弹窗-取消-点击')
+              }
+              self.updateUserInfo(res).then(() => {
+                setStorage({
+                  key: 'subscriptionsSetting',
+                  data: res
+                })
+              })
+            } else { // 兼容一些订阅消息没有调起的情况
+              setTimeout(() => {
+                self.textVisible = false
+              }, 500)
+            }
+            resolve(res)
+          },
+          subscribeFail (err) {
+            self.textVisible = false
+            reject(err)
+          }
+        })
+      })
+    },
+    showServiceImage() {
+      const self = this
+      wx.getSystemInfo({
+        success(res) {
+          const { windowHeight, windowWidth } = res
+          // 屏幕大于一定高度才会显示
+          if (windowHeight > 670) {
+            self.imageStyle = {
+              bottom: Math.ceil(windowWidth * 1.32) + 'px'
+            }
+            setTimeout(() => {
+              self.textVisible = true
+            }, 500)
+          }
+        }
+      })
+    }
+  }
+})
+</script>
+
+<script name="json">
+const config = {
+  component: true,
+  usingComponents: { }
+}
+if (__mpx_mode__ === 'ali') {
+  config.usingComponents['subscribe-msg'] = 'plugin://subscribeMsg/subscribe-msg'
+}
+module.exports = config
+</script>
+
+<style lang="stylus">
+// z-index 排名逻辑
+// 安全盾9999 < 蒙层10000 < 订阅消息10001 < 消息提醒图片10009999
+// 消息提醒图片需要比支付宝原生蒙层高很多个层级才能显示在蒙层之上
+.ali-service-notice-panel
+  z-index 10001
+.service-notice
+  position fixed
+  z-index 10000
+  width 100%
+  text-align center
+  .service-notice-mask
+    position fixed
+    top 0
+    left 0
+    right 0
+    bottom 0
+    opacity 0.8
+    background rgba(0, 0, 0, 0.9)
+.service-notice-mock
+  position fixed
+  z-index 100009999
+  width 100%
+  text-align center
+  .service-notice-image
+    position relative
+    width 596rpx
+// z-index 100019999
+</style>

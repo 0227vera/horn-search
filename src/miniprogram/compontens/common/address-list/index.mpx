@@ -1,0 +1,125 @@
+<template>
+  <view class="container">
+    <van-cell-group border="{{ false }}">
+      <van-cell
+        wx:for="{{ list }}"
+        wx:key="_id"
+        title="{{ item.address }}"
+        label="{{ item.name + '   ' + item.phone }}"
+        value-class="value-class"
+        title-width="{{isCanChoose ? '560rpx' : '100%'}}"
+        clickable="{{isCanChoose}}"
+        center
+        bind:click="CellClickHandle(item)"
+      >
+        <van-checkbox
+          wx:if="{{isCanChoose}}"
+          checked-color="#FF9671"
+          value="{{ item.checked }}"
+          custom-class="address-checkbox"
+        />
+      </van-cell>
+    </van-cell-group>
+    <van-button
+      round
+      block
+      color="#FF6F91"
+      custom-class="address-btn"
+      bind:tap="openAddPage"
+    >
+      新增地址
+    </van-button>
+    <van-divider contentPosition="center" bindtap="openChooseAddress">打开微信地址管理选择</van-divider>
+  </view>
+</template>
+
+<script>
+import mpx, { createComponent } from '@mpxjs/core'
+import store from './store'
+import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
+
+createComponent({
+  properties: {
+    isCanChoose: {
+      type: Boolean,
+      value: true
+    }
+  },
+  data: {
+    list: [{
+      address: '湖北省天门市蒋场镇中和村10组',
+      phone: '18331588738',
+      name: '廖轩',
+      _id: 1,
+      checked: false
+    }, {
+      address: '北京市海淀区镶黄旗万树园12-3-2-1',
+      phone: '18331588738',
+      name: '廖轩',
+      _id: 2,
+      checked: false
+    }, {
+      address: '广东省东莞市常平镇天虹商场',
+      phone: '18331588738',
+      name: '廖轩',
+      _id: 3,
+      checked: true
+    }]
+  },
+  attached() {
+    this.getAddressList()
+  },
+  methods: {
+    ...store.mapActions(['getAddressList']),
+    CellClickHandle(arg) {
+      if (!this.isCanChoose) return
+      this.list.forEach(item => {
+        item.checked = item._id === arg._id ? !item.checked : false
+      })
+    },
+    openAddPage() {
+      mpx.navigateTo({
+        url: AddAddressUrl
+      })
+    },
+    openChooseAddress() {
+      wx.chooseAddress({
+        success: res => {
+          const item = {
+            address: `${res.cityName}${res.countyName}${res.detailInfo}`,
+            phone: res.telNumber,
+            name: res.userName,
+            _id: this.list.length++
+          }
+          // note: 返回数据总是存在一个空的情况
+          this.list = this.list.concat([item]).filter(item => item)
+        }
+      })
+    }
+  }
+})
+
+</script>
+
+<style lang="stylus">
+.checkbox
+  float right
+.value-class
+  display flex
+  justify-content flex-end
+.address-btn
+  margin-top 32rpx
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "van-button": "@vant/weapp/button/index",
+      "van-checkbox": "@vant/weapp/checkbox/index",
+      "van-checkbox-group": "@vant/weapp/checkbox-group/index",
+      "van-cell": "@vant/weapp/cell/index",
+      "van-cell-group": "@vant/weapp/cell-group/index",
+      "van-divider": "@vant/weapp/divider/index"
+    }
+  }
+</script>

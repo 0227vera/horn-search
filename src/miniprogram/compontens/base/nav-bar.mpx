@@ -1,0 +1,81 @@
+<template>
+  <view
+    class="nav-bar"
+    wx:style="{{ navStyle }}"
+  >
+    <view class="left" bindtap="backClick">
+      <van-icon name="{{navBarStyle.lefticon}}" />
+    </view>
+    <view class="title" style="color: {{ navBarStyle.color }};">{{ navBarStyle.title }}</view>
+  </view>
+</template>
+
+<script>
+import mpx, { createComponent } from '@mpxjs/core'
+import store from '@/store'
+
+createComponent({
+  computed: {
+    ...store.mapState(['navBarStyle']),
+    navStyle() {
+      return {
+        height: `${this.navBarStyle.height}px`,
+        top: `${this.navBarStyle.top}px`,
+        'padding-bottom': `${this.navBarStyle.paddingBottom}px`,
+        background: `${this.navBarStyle.bg}`
+      }
+    }
+  },
+  methods: {
+    ...store.mapMutations(['setNavBarStyle', 'setCurrentKey']),
+    backClick() {
+      if (this.navBarStyle.clickLeft) {
+        this.navBarStyle.clickLeft()
+        return
+      }
+      this.setCurrentKey('home')
+      this.setNavBarStyle({
+        title: '',
+        clickLeft: null
+      })
+    }
+  }
+})
+</script>
+
+<style lang="stylus">
+.nav-bar
+  position absolute
+  display flex
+  align-items center
+  justify-content center
+  width 100%
+  z-index 2
+  overflow hidden
+  top 0
+  .left
+    position absolute
+    display flex
+    align-items center
+    justify-content center
+    left 18rpx
+    width 64rpx
+    height 42rpx
+    font-size 32rpx
+    border-radius 32rpx
+    background rgba(255, 255, 255, 0.80)
+    font-weight bold
+  .title
+    font-size 28rpx
+    font-weight 500
+    color #fff
+</style>
+
+<script name="json">
+module.exports = {
+  component: true,
+  usingComponents: {
+    "van-icon": "@vant/weapp/icon/index"
+  }
+}
+</script>

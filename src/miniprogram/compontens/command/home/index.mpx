@@ -1,0 +1,69 @@
+<template>
+  <custom-container
+    title="首页"
+    lefticon="exchange"
+    clickLeft="{{clickLeft}}"
+  >
+    <nav-list
+      bind:component="changeComponent"
+    />
+    <view class="container">
+      <view>不同角色的广告模块</view>
+      <view>当前分类下发布了哪些需求的列表模块</view>
+      <view>{{customText}}</view>
+      <view>组件参数：{{params}}</view>
+    </view>
+  </custom-container>
+</template>
+
+<script>
+import mpx, { createComponent } from '@mpxjs/core'
+createComponent({
+  data: {
+    text: '',
+    params: '',
+    clickLeft() {
+      mpx.showToast({
+        title: '身份切换',
+        icon: 'none'
+      })
+    }
+  },
+  computed: {
+    customText() {
+      if (!this.text) {
+        return 'test'
+      }
+      console.log('========>', this.text)
+      return `${this.text}的自定义模块`
+    }
+  },
+  ready() {
+  },
+  methods: {
+    changeComponent(e) {
+      this.text = e.detail.text
+      this.params = JSON.stringify(e.detail.data?.params || {})
+      console.log(e.detail, this.text)
+    }
+  }
+})
+</script>
+
+<style lang="stylus" scoped>
+.container
+  background #ffffff
+  border-radius 32rpx 32rpx 0 0
+  padding 32rpx
+  height 1000px
+</style>
+
+<script name="json">
+module.exports = {
+  component: true,
+  usingComponents: {
+    "custom-container": "@/compontens/base/custom-container",
+    "nav-list": "./nav-list"
+  }
+}
+</script>

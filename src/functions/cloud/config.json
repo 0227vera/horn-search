@@ -1,0 +1,10 @@
+{
+	"permissions": {
+		"openapi": [
+			"wxacode.getUnlimited",
+			"security.imgSecCheck",
+			"security.msgSecCheck",
+			"serviceMarket.invokeService"
+		]
+	}
+}

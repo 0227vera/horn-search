@@ -1,0 +1,27 @@
+<script lang="ts" src="./app.ts"></script>
+
+<script type="application/json">
+  {
+    "pages": [
+      "./pages/index"
+    ],
+    "packages": [
+      "./subpackages/address-manager/app?root=address-manager",
+      "./subpackages/release/app?root=release"
+    ],
+    "window": {
+      "navigationStyle": "custom",
+      "disableScroll": true
+    },
+    "requiredPrivateInfos": [
+      "chooseAddress",
+      "choosePoi",
+      "getLocation"
+    ],
+    "permission": {
+      "scope.userLocation": {
+        "desc": "你的位置信息将用于小程序位置接口的效果展示"
+      }
+    }
+  }
+</script>

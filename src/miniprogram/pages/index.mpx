@@ -1,0 +1,18 @@
+<template>
+  <component is="{{footerNavBar.currentkey}}"></component>
+  <footer />
+</template>
+<style lang="stylus">
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "footer": "../compontens/base/footer",
+      "home": "../compontens/command/home"
+    },
+    "disableScroll": true
+  }
+</script>
+
+<script lang="ts" src="./index.ts"></script>
