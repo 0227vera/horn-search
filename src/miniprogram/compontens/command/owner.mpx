@@ -1,5 +1,5 @@
 <template>
-  <view>
+  <scroll-view scroll-y style="height: 100vh" class="container">
     <view class="personalinfo"></view>
     <view class="navbar">
       <view class="navbar-content">
@@ -25,7 +25,7 @@
         </van-cell-group>
       </view>
     </view>
-  </view>
+  </scroll-view>
 </template>
 
 <script>
@@ -40,10 +40,10 @@ createComponent({
   data: {
     navbar: [
       {
-        name: '优惠券',
-        icon: 'coupon-o',
-        jumptype: 'alert',
-        message: '敬请期待，优惠券功能正在开发中，平台开发后第一时间告知您'
+        name: '发布需求',
+        icon: 'add-o',
+        jumptype: 'mp',
+        url: '/release/pages/index'
       },
       {
         name: '权益卡',
@@ -56,13 +56,13 @@ createComponent({
         icon: 'vip-card-o',
         jumptype: 'alert',
         message: '为保证的用户体验，暂不开发充值能力，之后将以更好的体验展示给您'
-      },
-      {
-        name: '账户余额',
-        icon: 'manager-o',
-        jumptype: 'alert',
-        message: '为保证用户体验和金钱安全前提，暂不对您的金额做第三方储存'
       }
+      // {
+      //   name: '账户余额',
+      //   icon: 'manager-o',
+      //   jumptype: 'alert',
+      //   message: '为保证用户体验和金钱安全前提，暂不对您的金额做第三方储存'
+      // }
     ],
     showManagerEntry: false
   },
@@ -82,13 +82,13 @@ createComponent({
             name: '关于我们',
             icon: 'question-o',
             jumptype: 'mp',
-            url: '/about-us/pages/index'
+            url: '/us/pages/about-us'
           },
           {
-            name: '加盟勇士',
+            name: '加入我们',
             icon: 'gem-o',
             jumptype: 'mp',
-            url: '/contact-us/pages/index'
+            url: '/us/pages/contact-us'
           }
         ],
         [
@@ -130,10 +130,13 @@ createComponent({
 </script>
 
 <style lang="stylus">
+.container
+  width 100%
+  background linear-gradient(#E3E0F3, #ffffff)
 .personalinfo
   width 100%
   height 300rpx
-  background #449eff
+  background linear-gradient(#449eff, #E3E0F3)
   border-radius 0 0 50rpx 50rpx
 .navbar
   width 100%
@@ -142,6 +145,7 @@ createComponent({
   margin-top -66rpx
   .navbar-content
     background #ffffff
+    box-shadow #ddd 0px 0px 10px
     border-radius 16rpx
     display flex
     align-items center
@@ -160,7 +164,7 @@ createComponent({
         font-size 26rpx
         margin-top 12rpx
 .list
-  margin-top 32rpx
+  padding-top 32rpx
 </style>
 
 <script name="json">

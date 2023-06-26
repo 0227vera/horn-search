@@ -42,7 +42,7 @@ createComponent({
 <style lang="stylus">
 .footer
   position fixed
-  bottom 40rpx
+  bottom 50rpx
   animation identifier 1s
   transition bottom 0.3s
   background rgba(255, 255, 255, 255, 0.1)
@@ -76,7 +76,7 @@ createComponent({
     bottom -100%
   }
   100% {
-    bottom 40rpx
+    bottom 50rpx
   }
 }
 </style>

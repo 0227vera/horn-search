@@ -1,0 +1,41 @@
+<template>
+  <custom-container
+    title="关于我们"
+  >
+    <van-cell-group inset>
+      <van-cell title="店铺介绍" value="{{usInfo.text}}" />
+    </van-cell-group>
+  </custom-container>
+</template>
+
+<script>
+import { createPage } from '@mpxjs/core'
+import store from '@/store'
+
+createPage({
+  computed: {
+    ...store.mapState(['usInfo'])
+  },
+  async onShow() {
+    await this.getUsInfo()
+  },
+  methods: {
+    ...store.mapActions(['getUsInfo'])
+  }
+})
+
+</script>
+
+<style lang="stylus" scoped>
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "custom-container": "@/compontens/base/custom-container",
+      "van-cell": "@vant/weapp/cell/index",
+      "van-cell-group": "@vant/weapp/cell-group/index"
+    },
+    "navigationStyle": "custom"
+  }
+</script>

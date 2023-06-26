@@ -7,7 +7,9 @@
     ],
     "packages": [
       "./subpackages/address-manager/app?root=address-manager",
-      "./subpackages/release/app?root=release"
+      "./subpackages/manager/app?root=manager",
+      "./subpackages/release/app?root=release",
+      "./subpackages/us/app?root=us"
     ],
     "window": {
       "navigationStyle": "custom",

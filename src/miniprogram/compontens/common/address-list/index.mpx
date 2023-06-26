@@ -1,6 +1,6 @@
 <template>
   <view class="container">
-    <van-cell-group border="{{ false }}">
+    <van-cell-group border="{{ false }}" inset>
       <van-cell
         wx:for="{{ list }}"
         wx:key="_id"
@@ -21,6 +21,7 @@
       </van-cell>
     </van-cell-group>
     <van-button
+      wx:if="{{showBtn}}"
       round
       block
       color="#FF6F91"
@@ -29,7 +30,7 @@
     >
       新增地址
     </van-button>
-    <van-divider contentPosition="center" bindtap="openChooseAddress">打开微信地址管理选择</van-divider>
+    <van-divider wx:if="{{showBtn}}" contentPosition="center" bindtap="openChooseAddress">打开微信地址管理选择</van-divider>
   </view>
 </template>
 
@@ -41,6 +42,10 @@ import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?r
 createComponent({
   properties: {
     isCanChoose: {
+      type: Boolean,
+      value: true
+    },
+    showBtn: {
       type: Boolean,
       value: true
     }

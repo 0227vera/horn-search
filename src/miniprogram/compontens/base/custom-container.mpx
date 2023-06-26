@@ -4,13 +4,14 @@
     <view class="content" style="padding-top: {{navBarStyle.top + navBarStyle.height + navBarStyle.paddingBottom}}px">
       <view class="content-main">
         <scroll-view scroll-y class="scroll-container">
-          <slot></slot>
+          <slot />
         </scroll-view>
       </view>
       <view class="content-footer" wx:if="{{btnName}}">
         <van-button round type="primary" block bind:tap="btnHandle">
           {{btnName}}
         </van-button>
+        <slot name="extra" />
       </view>
     </view>
   </view>
@@ -50,6 +51,14 @@ createComponent({
       type: String,
       value: ''
     }
+  },
+  attached() {
+    this.setNavBarStyle({
+      title: this.title,
+      lefticon: this.lefticon,
+      bg: this.bg,
+      clickLeft: this.clickLeft
+    })
   },
   pageLifetimes: {
     show() {

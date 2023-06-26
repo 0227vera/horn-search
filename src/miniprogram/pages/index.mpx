@@ -1,18 +1,42 @@
 <template>
   <component is="{{footerNavBar.currentkey}}"></component>
   <footer />
+  <van-dialog id="van-dialog" />
 </template>
-<style lang="stylus">
-</style>
+
+<script lang="ts">
+import { createPage } from '@mpxjs/core'
+import store from '../store'
+
+createPage({
+  onShareAppMessage() {
+    return {
+      title: '分享给朋友'
+    }
+  },
+  data: {
+    text: ''
+  },
+  computed: {
+    ...store.mapState(['navBarStyle', 'footerNavBar'])
+  },
+  methods: {
+    ...store.mapMutations(['setCurrentKey']),
+    tapItem(item) {
+      this.setCurrentKey(item.key)
+    }
+  }
+})
+</script>
 
 <script type="application/json">
   {
     "usingComponents": {
+      "van-dialog": "@vant/weapp/dialog/index",
       "footer": "../compontens/base/footer",
-      "home": "../compontens/command/home"
+      "home": "../compontens/command/home",
+      "owner": "../compontens/command/owner"
     },
     "disableScroll": true
   }
 </script>
-
-<script lang="ts" src="./index.ts"></script>

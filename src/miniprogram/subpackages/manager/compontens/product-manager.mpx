@@ -1,0 +1,252 @@
+<template>
+  <table-list
+    btn="新建产品"
+    titlekeys="{{titlekeys}}"
+    list="{{list}}"
+    showListLoading="{{loadingRequest}}"
+    bind:btnclick="handleAddBtn"
+    bind:edit="edit"
+    bind:delete="delete"
+  />
+  <popup-container
+    show="{{ show }}"
+    height="65%"
+    isLoading="{{isLoading}}"
+    title="{{popupTitle}}"
+    bind:cancel="cancelHandel"
+    bind:confirm="confirmHandel"
+  >
+    <van-cell-group inset>
+      <van-field
+        value="{{ product.name }}"
+        required
+        clearable
+        label="产品名称"
+        input-align="right"
+        placeholder="请输入名称"
+        id="name"
+        bind:change="onChange"
+      />
+      <van-field
+        value="{{ product.note }}"
+        clearable
+        label="产品备注"
+        input-align="right"
+        placeholder="请输入备注"
+        required
+        id="note"
+        bind:change="onChange"
+      />
+      <van-field
+        value="{{ product.tag }}"
+        clearable
+        label="产品标签"
+        input-align="right"
+        placeholder="请输入标签"
+        required
+        id="tag"
+        bind:change="onChange"
+      />
+      <van-field
+        value="{{ product.price }}"
+        clearable
+        label="产品价格"
+        input-align="right"
+        placeholder="请输入价格"
+        required
+        id="price"
+        bind:change="onChange"
+      />
+      <van-cell title="产品分类" required custom-class="belongclass">
+        <view class="value-content">
+          <van-dropdown-menu active-color="#333333" custom-class="value-content-value">
+            <van-dropdown-item
+              value="{{ product.belongclass }}"
+              options="{{ class_array }}"
+              id="belongclass"
+              bind:change="onChange"
+            />
+          </van-dropdown-menu>
+        </view>
+      </van-cell>
+      <van-cell title="产品图片" required>
+        <view wx:if="{{product.imgUrl}}" class="imgurl-container">
+          <van-image
+            width="80"
+            height="80"
+            src="{{product.imgUrl}}"
+            radius="8"
+            fit="cover"
+          />
+          <van-icon name="clear" bindtap="clearImg" class="image-clear-icon"/>
+        </view>
+        <van-uploader
+          wx:else
+          bind:after-read="afterRead"
+          deletable
+        />
+      </van-cell>
+    </van-cell-group>
+  </popup-container>
+</template>
+
+<script>
+import { createComponent } from '@mpxjs/core'
+import { fileUpload, getProductList, addProductItem, deleteProducItem, updateProductItem } from '@/api'
+import Dialog from '@vant/weapp/dialog/dialog'
+import store from '@/store'
+import Mstore from '../store'
+
+const errorTips = {
+  name: '请填写名称',
+  note: '请填写备注',
+  tag: '请填写标签',
+  price: '请填写价格',
+  belongclass: '请选择分类',
+  imgUrl: '请上传图片'
+}
+
+createComponent({
+  data: {
+    titlekeys: ['name', 'price'],
+    list: [],
+    loadingRequest: false,
+    isLoading: false,
+    show: false,
+    popupTitle: '新建',
+    product: {
+      name: '',
+      note: '',
+      tag: '',
+      price: '',
+      belongclass: '',
+      imgUrl: ''
+    }
+  },
+  ready() {
+    this.getList()
+  },
+  computed: {
+    ...store.mapState(['navBarStyle']),
+    ...Mstore.mapState(['class_list']),
+    class_array() {
+      return [{ text: '请选择分类', value: '' }].concat(this.class_list.map(item => ({
+        text: item.name,
+        value: item._id
+      })))
+    }
+  },
+  methods: {
+    async getList() {
+      this.loadingRequest = true
+      const res = await getProductList({})
+      this.list = res.data.list
+      this.loadingRequest = false
+    },
+    async afterRead(e) {
+      const res = await fileUpload(e.detail.file.thumb)
+      this.product.imgUrl = res.fileID
+    },
+    onChange(e) {
+      this.product[e.target.id] = e.detail
+    },
+    clearImg() {
+      this.product.imgUrl = ''
+    },
+    cancelHandel() {
+      this.show = false
+    },
+    async confirmHandel() {
+      if (!this.checkProductData()) return
+      this.isLoading = true
+      this._id ? await updateProductItem(Object.assign({}, this.product, { _id: this._id })) : await addProductItem(this.product)
+      this.isLoading = false
+      this.show = false
+      this._id = ''
+      this.getList()
+    },
+    handleAddBtn() {
+      this.show = true
+      this.popupTitle = '新建产品'
+      Object.keys(this.product).forEach(item => {
+        this.product[item] = ''
+      })
+    },
+    checkProductData() {
+      try {
+        Object.keys(this.product).forEach(item => {
+          if (!this.product[item]) {
+            throw (item)
+          }
+        })
+        return true
+      } catch (error) {
+        console.log(error, errorTips[error])
+        if (errorTips[error]) {
+          Dialog.alert({
+            title: '提示',
+            message: errorTips[error]
+          })
+        }
+        return false
+      }
+    },
+    edit(e) {
+      const obj = e.detail
+      Object.keys(this.product).forEach(item => {
+        this.product[item] = obj[item]
+      })
+      this.popupTitle = `编辑${obj.name}`
+      this.show = true
+      this._id = obj._id
+    },
+    async delete(e) {
+      const obj = e.detail
+      await deleteProducItem({ _id: obj._id })
+      this.getList()
+    }
+  }
+})
+
+</script>
+
+<style lang="stylus" scoped>
+.belongclass
+  display flex
+  align-items center
+.value-content
+  width 100%
+  height 100%
+  display flex
+  justify-content flex-end
+.value-content-value
+  margin-right 20rpx
+  box-shadow none
+.imgurl-container
+  position relative
+  .image-clear-icon
+    position absolute
+    top 0
+    right 0
+    color #fff
+    font-size 40rpx
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "van-field": "@vant/weapp/field/index",
+      "van-cell-group": "@vant/weapp/cell-group/index",
+      "van-cell": "@vant/weapp/cell/index",
+      "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
+      "van-dropdown-item": "@vant/weapp/dropdown-item/index",
+      "van-uploader": "@vant/weapp/uploader/index",
+      "van-image": "@vant/weapp/image/index",
+      "van-button": "@vant/weapp/button/index",
+      "van-icon": "@vant/weapp/icon/index",
+      "popup-container": "./base/popup-container.mpx",
+      "tab-item-container": "./base/tab-item-container",
+      "table-list": "./base/table-list.mpx"
+    }
+  }
+</script>

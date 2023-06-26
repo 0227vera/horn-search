@@ -23,11 +23,10 @@ export default createStore({
         isShowFooter: true,
         icon: 'wap-home'
       }, {
-        name: '发布',
-        key: 'release',
-        icon: 'add-square',
-        type: 'jumpPage',
-        url: '/release/pages/index'
+        name: '我的',
+        key: 'owner',
+        icon: 'friends',
+        isShowFooter: true
       }],
       currentkey: 'home',
       isShow: 'expend'

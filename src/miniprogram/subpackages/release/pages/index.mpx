@@ -2,10 +2,9 @@
   <custom-container
     title="发布需求"
     btnName="发布"
-    containerBg="#fff"
     bind:footer-btn="submitData"
   >
-    <van-cell-group slot="" class="form" border="{{false}}">
+    <van-cell-group slot="" class="form" border="{{false}}" inset>
       <van-field
         label="类别"
         value="{{ categoryName }}"
@@ -293,9 +292,6 @@ createPage({
       "van-datetime-picker": "@vant/weapp/datetime-picker/index",
       "van-nav-bar": "@vant/weapp/nav-bar/index"
     },
-    "navigationStyle": "custom",
-    "navigationBarBackgroundColor": "#eeeeee",
-    "navigationBarTitleText": "发布需求",
-    "navigationBarTextStyle": "black"
+    "navigationStyle": "custom"
   }
 </script>

@@ -1,0 +1,8 @@
+<script name="json">
+module.exports = {
+  pages: [
+    './pages/about-us',
+    './pages/contact-us'
+  ]
+}
+</script>

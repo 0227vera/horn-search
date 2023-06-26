@@ -2,6 +2,7 @@
   <custom-container
     title="首页"
     lefticon="exchange"
+    containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
     clickLeft="{{clickLeft}}"
   >
     <nav-list
@@ -34,7 +35,6 @@ createComponent({
       if (!this.text) {
         return 'test'
       }
-      console.log('========>', this.text)
       return `${this.text}的自定义模块`
     }
   },
@@ -44,7 +44,7 @@ createComponent({
     changeComponent(e) {
       this.text = e.detail.text
       this.params = JSON.stringify(e.detail.data?.params || {})
-      console.log(e.detail, this.text)
+      // console.log(e.detail, this.text)
     }
   }
 })
@@ -52,7 +52,6 @@ createComponent({
 
 <style lang="stylus" scoped>
 .container
-  background #ffffff
   border-radius 32rpx 32rpx 0 0
   padding 32rpx
   height 1000px

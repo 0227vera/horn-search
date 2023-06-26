@@ -1,33 +1,39 @@
 <template>
-  <view class="container">
-    <address-list />
-  </view>
+  <custom-container
+    title="地址管理"
+    btnName="去新增"
+    bind:footer-btn="gotoAddAddress"
+  >
+    <address-list showBtn="{{false}}" />
+  </custom-container>
 </template>
 
 <script>
-import { createPage } from '@mpxjs/core'
+import mpx, { createPage } from '@mpxjs/core'
+import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
 
-createPage({})
+createPage({
+  methods: {
+    gotoAddAddress() {
+      mpx.navigateTo({
+        url: AddAddressUrl
+      })
+    }
+  }
+})
 
 </script>
 
 <style lang="stylus" scoped>
-.container
-  width 100%
-  height 100vh
-  overflow hidden
-  box-sizing border-box
-  padding 32rpx
 </style>
 
 <script type="application/json">
   {
     "usingComponents": {
-      "address-list": "@/compontens/common/address-list"
+      "custom-container": "@/compontens/base/custom-container",
+      "address-list": "@/compontens/common/address-list",
+      "van-divider": "@vant/weapp/divider/index"
     },
-    "navigationStyle": "default",
-    "navigationBarBackgroundColor": "#eeeeee",
-    "navigationBarTitleText": "地址管理",
-    "navigationBarTextStyle": "black"
+    "navigationStyle": "custom"
   }
 </script>

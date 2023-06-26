@@ -1,0 +1,36 @@
+<template>
+  <custom-container title="加入我们">
+    <van-cell-group inset>
+      <van-cell title="电话" value="{{usInfo.phone}}" />
+      <van-cell title="微信" value="{{usInfo.wechat}}" />
+      <van-cell title="邮箱" value="{{usInfo.email}}" />
+    </van-cell-group>
+  </custom-container>
+</template>
+
+<script>
+import { createPage } from '@mpxjs/core'
+import store from '@/store'
+
+createPage({
+  computed: {
+    ...store.mapState(['usInfo'])
+  }
+})
+
+</script>
+
+<style lang="stylus" scoped>
+
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "custom-container": "@/compontens/base/custom-container",
+      "van-cell": "@vant/weapp/cell/index",
+      "van-cell-group": "@vant/weapp/cell-group/index"
+    },
+    "navigationStyle": "custom"
+  }
+</script>

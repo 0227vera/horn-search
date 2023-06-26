@@ -1,0 +1,208 @@
+<template>
+  <table-list
+    btn="添加banner"
+    bind:btnclick="showPopup"
+    list="{{list}}"
+    showListLoading="{{loadingList}}"
+    bind:edit="changeName"
+    bind:delete="deleteItem"
+  />
+  <popup-container
+    title="{{popupTitle}}"
+    show="{{show}}"
+    height="50%"
+    isLoading="{{isLoading}}"
+    bind:cancel="cancelPopup"
+    bind:confirm="confirmPopup"
+  >
+    <van-cell-group inset>
+      <van-field
+        value="{{ banner.name }}"
+        label="名称"
+        placeholder="请输入名称"
+        input-align="right"
+        border="{{ false }}"
+        id="name"
+        bind:change="onChange"
+        clearable
+        required
+      />
+      <van-field
+        value="{{ banner.url }}"
+        label="跳转链接"
+        placeholder="请输入跳转链接"
+        input-align="right"
+        border="{{ false }}"
+        id="url"
+        bind:change="onChange"
+        clearable
+      />
+      <van-cell title="跳转类型" custom-class="type">
+        <view class="value-content">
+          <van-dropdown-menu active-color="#333333" custom-class="value-content-value">
+            <van-dropdown-item
+              value="{{ banner.type }}"
+              options="{{ type_array }}"
+              id="type"
+              bind:change="onChange"
+            />
+          </van-dropdown-menu>
+        </view>
+      </van-cell>
+      <van-cell title="图片" required>
+        <view wx:if="{{banner.imgUrl}}" class="imgurl-container">
+          <van-image
+            width="80"
+            height="80"
+            src="{{banner.imgUrl}}"
+            radius="8"
+            fit="cover"
+          />
+          <van-icon name="clear" bindtap="clearImg" class="image-clear-icon"/>
+        </view>
+        <van-uploader
+          wx:else
+          bind:after-read="afterRead"
+          deletable
+        />
+      </van-cell>
+    </van-cell-group>
+  </popup-container>
+</template>
+
+<script>
+import mpx, { createComponent } from '@mpxjs/core'
+import { getBannerList, addBannerItem, deleteBannerItem, updateBannerItem, fileUpload } from '@/api'
+import Dialog from '@vant/weapp/dialog/dialog'
+
+createComponent({
+  data: {
+    show: false,
+    list: [],
+    banner: {
+      name: '',
+      url: '',
+      type: '',
+      imgUrl: ''
+    },
+    type_array: [{
+      text: '请选择跳转类型',
+      value: ''
+    }, {
+      text: '小程序页面',
+      value: 'mp'
+    }, {
+      text: 'H5页面',
+      value: 'H5'
+    }, {
+      text: '其他小程序',
+      value: 'other'
+    }],
+    isLoading: false,
+    loadingList: false,
+    popupTitle: '新建'
+  },
+  ready() {
+    this.getList()
+  },
+  methods: {
+    async getList() {
+      this.loadingList = true
+      const res = await getBannerList()
+      this.list = res.data.list
+      this.loadingList = false
+    },
+    showPopup() {
+      this.popupTitle = '新增banner'
+      this.show = true
+    },
+    onChange(e) {
+      this.banner[e.target.id] = e.detail
+    },
+    cancelPopup() {
+      this.show = false
+    },
+    async confirmPopup() {
+      if (!this.banner.name) {
+        Dialog.alert({
+          title: '提示',
+          message: '请输入banner名字'
+        })
+        return
+      }
+      if (!this.banner.imgUrl) {
+        Dialog.alert({
+          title: '提示',
+          message: '请上传图片'
+        })
+        return
+      }
+      this.isLoading = true
+      this._id ? await updateBannerItem(Object.assign({}, this.banner, { _id: this._id })) : await addBannerItem(this.banner)
+      this._id = ''
+      this.show = false
+      this.isLoading = false
+      this.getList()
+    },
+    changeName(e) {
+      const obj = e.detail
+      this.popupTitle = `编辑${obj.name}`
+      Object.keys(this.banner).forEach(item => {
+        this.banner[item] = obj[item]
+      })
+      this.show = true
+      this._id = obj._id
+    },
+    async deleteItem(e) {
+      const item = e.detail
+      await deleteBannerItem({ _id: item._id })
+      this.getList()
+    },
+    async afterRead(e) {
+      const res = await fileUpload(e.detail.file.thumb)
+      this.banner.imgUrl = res.fileID
+    }
+  }
+})
+
+</script>
+
+<style lang="stylus">
+.type
+  display flex
+  align-items center
+.value-content
+  width 100%
+  height 100%
+  display flex
+  justify-content flex-end
+.value-content-value
+  margin-right 20rpx
+  box-shadow none
+.imgurl-container
+  position relative
+  .image-clear-icon
+    position absolute
+    top 0
+    right 0
+    color #fff
+    font-size 40rpx
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "van-button": "@vant/weapp/button/index",
+      "van-cell": "@vant/weapp/cell/index",
+      "van-cell-group": "@vant/weapp/cell-group/index",
+      "van-field": "@vant/weapp/field/index",
+      "van-uploader": "@vant/weapp/uploader/index",
+      "van-image": "@vant/weapp/image/index",
+      "van-icon": "@vant/weapp/icon/index",
+      "popup-container": "./base/popup-container.mpx",
+      "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
+      "van-dropdown-item": "@vant/weapp/dropdown-item/index",
+      "table-list": "./base/table-list.mpx"
+    }
+  }
+</script>
