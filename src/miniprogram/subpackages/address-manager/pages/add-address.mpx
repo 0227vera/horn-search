@@ -28,7 +28,7 @@
       />
       <van-field
         label="省市区"
-        value="{{ address.area }}"
+        value="{{ addInfo.address.area }}"
         placeholder="请选择省市区"
         is-link
         readonly
@@ -38,7 +38,7 @@
       />
       <van-field
         label="地址"
-        value="{{ address.detail }}"
+        value="{{ addInfo.address.detail }}"
         placeholder="请输入地址"
         is-link
         readonly
@@ -49,7 +49,7 @@
       </van-cell>
       <van-field
         label="门牌号"
-        value="{{ address.door }}"
+        value="{{ addInfo.address.door }}"
         placeholder="请输入门牌号"
         border="{{ false }}"
         bind:change="onDoorChange"
@@ -107,6 +107,8 @@ import mpx, { createPage, onLoad } from '@mpxjs/core'
 import { areaList } from '@vant/area-data'
 import { debounce } from '@/utils'
 import store from '@/store'
+import addressStore from '@/compontens/common/address-list/store'
+import { addAddress } from '@/api'
 
 createPage({
   data: {
@@ -114,15 +116,13 @@ createPage({
       name: '',
       phone: null,
       address: {
+        areaProvice: '',
+        areaCode: '',
+        door: '',
+        detail: '',
         name: '',
         location: {}
       }
-    },
-    address: {
-      areaProvice: '',
-      areaCode: '',
-      detail: '',
-      door: ''
     },
     showPopup: false,
     areaList,
@@ -132,10 +132,10 @@ createPage({
   },
   async onLoad() {
     await this.setLocation()
-    this.address.areaProvice = this.adInfo.ad_info.province
-    this.address.area = `${this.adInfo.ad_info.province}${this.adInfo.ad_info.city}${this.adInfo.ad_info.district}`
-    this.address.areaCode = this.adInfo.ad_info.adcode
-    this.address.detail = this.adInfo.address
+    this.addInfo.address.areaProvice = this.adInfo.ad_info.province
+    this.addInfo.address.area = `${this.adInfo.ad_info.province}${this.adInfo.ad_info.city}${this.adInfo.ad_info.district}`
+    this.addInfo.address.areaCode = this.adInfo.ad_info.adcode
+    this.addInfo.address.detail = this.adInfo.address
     this.addInfo.address.location = this.adInfo.location
     this.$forceUpdate()
   },
@@ -144,12 +144,13 @@ createPage({
   },
   methods: {
     ...store.mapActions(['setLocation']),
+    ...addressStore.mapMutations(['addAddressItem']),
     // note: 字段变化
     onChange(e) {
       this.addInfo[e.target.id] = e.detail
     },
     onDoorChange(e) {
-      this.address.door = e.detail
+      this.addInfo.address.door = e.detail
     },
     // note: searth缓存
     onSearchChange(e) {
@@ -162,7 +163,7 @@ createPage({
         region_fix: 1,
         policy: 1,
         page_size: 5,
-        region: this.address.areaProvice,
+        region: this.addInfo.address.areaProvice,
         success: res => {
           this.searchResult = res.data
         }
@@ -173,9 +174,9 @@ createPage({
       this.searchResult = this.searchResult.map(f => Object.assign(f, {
         checked: f.id === item.id
       }))
-      this.address.area = `${this.address.areaProvice}${item.city}${item.district}`
-      this.address.areaCode = item.adcode
-      this.address.detail = item.title
+      this.addInfo.address.area = `${this.addInfo.address.areaProvice}${item.city}${item.district}`
+      this.addInfo.address.areaCode = item.adcode
+      this.addInfo.address.detail = item.title
       this.closePopupContainer()
     },
     // note: popup的处理
@@ -192,20 +193,29 @@ createPage({
       this.openPopupContainer()
     },
     onAreaConfirm(e) {
-      this.address.areaProvice = e.detail.values[0]?.name || ''
-      this.address.area = e.detail.values.map(item => item.name).join('')
-      this.address.areaCode = e.detail.values[2]?.code || ''
+      this.addInfo.address.areaProvice = e.detail.values[0]?.name || ''
+      this.addInfo.address.area = e.detail.values.map(item => item.name).join('')
+      this.addInfo.address.areaCode = e.detail.values[2]?.code || ''
       this.closePopupContainer()
     },
     // note: 详细地址
     openSearchDetail() {
       this.popupType = 'detail'
-      this.search = this.address.detail
+      this.search = this.addInfo.address.detail
       this.openPopupContainer()
     },
-    addAddress() {
-      this.addInfo.address.name = `${this.address.area}${this.address.detail}${this.address.door}`
-      console.log(this.addInfo)
+    async addAddress() {
+      this.addInfo.address.name = `${this.addInfo.address.area}${this.addInfo.address.detail}${this.addInfo.address.door}`
+      const res = await addAddress(this.addInfo)
+      if (res.code === 200) {
+        this.addAddressItem({ ...this.addInfo, _id: res.data })
+        mpx.navigateBack()
+      } else {
+        mpx.showToast({
+          title: res.msg,
+          icon: 'none'
+        })
+      }
     }
   }
 })

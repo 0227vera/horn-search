@@ -15,6 +15,7 @@ class BaseController extends Controller {
       console.error('OPENID is unfined')
       throw new AppError('OPENID is unfined', appCode.SVR)
     }
+    global.openid = openId
     global.PID = config.PID || event.PID
     this.dev_log({
       'event.PID': event.PID,

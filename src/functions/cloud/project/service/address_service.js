@@ -2,8 +2,7 @@ const BaseService = require('./base_service.js')
 const AddressModel = require('../model/address_model.js')
 
 class AddressManagerService extends BaseService {
-  async getList() {
-    let where = {}
+  async getList(where = {}) {
     let res = await AddressModel.getList(where)
     return res
   }

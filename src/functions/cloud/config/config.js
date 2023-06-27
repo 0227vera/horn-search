@@ -8,7 +8,7 @@ module.exports = {
   // ##################################################################
   PID: 'A00',
 
-  COLLECTION_NAME: `${Collection_Field_Prefix}admin|${Collection_Field_Prefix}class|${Collection_Field_Prefix}product|${Collection_Field_Prefix}home_banner|${Collection_Field_Prefix}home_diff|${Collection_Field_Prefix}article|${Collection_Field_Prefix}order|${Collection_Field_Prefix}us|${Collection_Field_Prefix}user|${Collection_Field_Prefix}log|${Collection_Field_Prefix}address`,
+  COLLECTION_NAME: `${Collection_Field_Prefix}admin|${Collection_Field_Prefix}class|${Collection_Field_Prefix}product|${Collection_Field_Prefix}home_banner|${Collection_Field_Prefix}home_diff|${Collection_Field_Prefix}article|${Collection_Field_Prefix}order|${Collection_Field_Prefix}us|${Collection_Field_Prefix}user|${Collection_Field_Prefix}log|${Collection_Field_Prefix}address|${Collection_Field_Prefix}release`,
 
   // ## 缓存相关
   IS_CACHE: true, // 是否开启缓存

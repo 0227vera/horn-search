@@ -10,6 +10,9 @@ AddressModel.CL = "shoe_washing_address"
 AddressModel.DB_STRUCTURE = {
   _pid: 'string|true',
   name: 'string|true',
+  phone: 'string|true',
+  address: 'object|true',
+  OPENID: 'string|true',
   ADDRESS_ID: 'string|true',
   ADDRESS_ADD_TIME: 'int|false',
   ADDRESS_EDIT_TIME: 'int|false',

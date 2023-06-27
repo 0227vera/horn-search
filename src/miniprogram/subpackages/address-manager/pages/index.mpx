@@ -4,14 +4,16 @@
     btnName="去新增"
     bind:footer-btn="gotoAddAddress"
   >
-    <address-list showBtn="{{false}}" />
+    <address-list
+      isCanChoose="{{false}}"
+      showBottomBtn="{{false}}"
+    />
   </custom-container>
 </template>
 
 <script>
 import mpx, { createPage } from '@mpxjs/core'
 import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
-
 createPage({
   methods: {
     gotoAddAddress() {

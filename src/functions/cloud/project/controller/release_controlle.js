@@ -1,18 +1,18 @@
 const BaseController = require('./base_controller')
-const AddressManagerService = require('../service/address_service.js')
+const ReleaseService = require('../service/release_service.js')
 
-class AddressManagerController extends BaseController {
+class ReleaseController extends BaseController {
   async getList() {
     const where = {
       OPENID: this._openId
     }
-    const service = new AddressManagerService()
+    const service = new ReleaseService()
     const res = await service.getList(where)
     return res
   }
 
   async create() {
-    const service = new AddressManagerService()
+    const service = new ReleaseService()
     const params = Object.assign({}, this._event.params, {
       OPENID: this._openId
     })
@@ -21,16 +21,10 @@ class AddressManagerController extends BaseController {
   }
 
   async update() {
-    const service = new AddressManagerService()
+    const service = new ReleaseService()
     const res = await service.update(this._event.params)
-    return res
-  }
-
-  async delete() {
-    const service = new AddressManagerService()
-    const res = await service.delete(this._event.params)
     return res
   }
 }
 
-module.exports = AddressManagerController
+module.exports = ReleaseController

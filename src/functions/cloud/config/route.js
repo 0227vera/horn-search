@@ -6,6 +6,11 @@ module.exports = {
   'address/delete': 'address_controller@delete',
   'address/create': 'address_controller@create',
 
+  // note: 发布相关
+  'release/get': 'release_controlle@getList',
+  'release/delete': 'release_controlle@delete',
+  'release/create': 'release_controlle@create',
+
   // note: 后台管理部分
   'admin/isadmin': 'admin/base_admin_controller@isAdmin',
 

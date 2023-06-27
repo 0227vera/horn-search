@@ -2,30 +2,74 @@
   <custom-container
     title="发布历史"
   >
-    <view>
-      发单的历史列表以及各个状态
+    <view wx:if="{{loading}}" class="loading">
+      <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
+    </view>
+    <view wx:elif="{{list.length}}">
+      <van-card
+        wx:for="{{list}}"
+        wx:key="*this"
+        price="{{item.price}}"
+        desc="{{item.poi.name}}"
+        title="{{item.category}}"
+        thumb="{{ item.images[0] || [] }}"
+      >
+        <!-- <view slot="footer">
+          <van-button size="mini">按钮</van-button>
+          <van-button size="mini">按钮</van-button>
+        </view> -->
+      </van-card>
+    </view>
+    <view wx:else class="loading empty">
+      <van-empty description="暂无数据，点击我去发布一个吧" bind:tap="gotoRelease" />
     </view>
   </custom-container>
 </template>
 
 <script>
-import { createPage } from '@mpxjs/core'
+import mpx, { createPage } from '@mpxjs/core'
 import { fileUpload } from '@/api'
 import { categoryItems } from '@/setting/common'
 import store from '@/store'
+import { getReleaseList } from '@/api'
 
 createPage({
+  data: {
+    loading: true,
+    list: []
+  },
+  async onLoad() {
+    const res = await getReleaseList()
+    this.list = res?.data?.list || []
+    this.loading = false
+  },
+  methods: {
+    gotoRelease() {
+      mpx.navigateTo({
+        url: '/release/pages/index'
+      })
+    }
+  }
 })
 
 </script>
 
 <style lang="stylus" scoped>
+.loading
+  width 100%
+  height 70vh
+  display flex
+  align-items center
+  justify-content center
 </style>
 
 <script type="application/json">
   {
     "usingComponents": {
-      "custom-container": "@/compontens/base/custom-container"
+      "van-empty": "@vant/weapp/empty/index",
+      "van-loading": "@vant/weapp/loading/index",
+      "custom-container": "@/compontens/base/custom-container",
+      "van-card": "@vant/weapp/card/index"
     },
     "navigationStyle": "custom"
   }

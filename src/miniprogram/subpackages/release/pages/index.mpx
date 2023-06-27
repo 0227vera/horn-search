@@ -30,7 +30,7 @@
         required
         is-link
         readonly
-        value="{{address}}"
+        value="{{updateObj.poi.name}}"
         input-align="right"
         placeholder="点击进入详细地址选择"
         bind:tap="showPopupContainer('address')"
@@ -114,28 +114,24 @@
         right-text="确定"
         title="请选择地址"
         bind:click-left="closePopupContainer"
-        bind:click-right="onClickRight"
+        bind:click-right="onAddressClickRight"
         safe-area-inset-top="{{false}}"
       />
-      <view class="address-list-container">
-        <address-list />
-      </view>
+      <address-list bind:choose-item="addressChange" />
     </view>
   </van-popup>
 </template>
 
 <script>
-import { createPage } from '@mpxjs/core'
+import mpx, { createPage } from '@mpxjs/core'
 import { fileUpload } from '@/api'
 import { categoryItems } from '@/setting/common'
 import store from '@/store'
+import { addRelease } from '@/api'
 
 createPage({
   computed: {
     ...store.mapState(['adInfo']),
-    address() {
-      return this.adInfo.address
-    },
     categoryName() {
       return this.selectedOptions.map(item => item.text).join('/')
     },
@@ -146,8 +142,8 @@ createPage({
       return '点击下方可上传图片'
     },
     timeInfo() {
-      if (this.updateObj.time) {
-        const time = new Date(this.updateObj.time)
+      if (this.updateObj.ownTime) {
+        const time = new Date(this.updateObj.ownTime)
         const year = time.getFullYear()
         const month = time.getMonth() + 1
         const day = time.getDate()
@@ -166,6 +162,7 @@ createPage({
     selectedOptions: [],
     minDate: Date.now(),
     currentDate: Date.now(),
+    address: {},
     formatter(type, value) {
       const types = {
         year: '年',
@@ -181,19 +178,18 @@ createPage({
       note: '',
       price: '',
       tel: '',
-      time: '',
+      ownTime: '',
       images: [],
       poi: {}
     }
   },
   async onLoad() {
     await this.setLocation()
-    console.log(this.adInfo.address)
+    console.log(this.adInfo)
     this.updateObj.poi = {
       ...this.adInfo.location,
-      address: this.adInfo.address
+      name: this.adInfo.address
     }
-    this.$forceUpdate()
   },
   methods: {
     ...store.mapActions(['setLocation']),
@@ -211,7 +207,6 @@ createPage({
     },
     // note: 弹窗处理
     showPopupContainer(type) {
-      console.log(5555)
       this.showPopup = true
       this.popupType = type
     },
@@ -228,22 +223,40 @@ createPage({
     // note: 时间处理
     onTimeClick() {
       this.showPopupContainer('time')
-      this.currentDate = this.updateObj.time || this.currentDate
+      this.currentDate = this.updateObj.ownTime || this.currentDate
     },
     onTimeInput(e) {
       this.currentDate = e.detail
     },
     onTimeConfirm() {
-      this.updateObj.time = this.currentDate
+      this.updateObj.ownTime = this.currentDate
       this.closePopupContainer()
     },
     // note: 地址处理
-    onClickRight() {
+    onAddressClickRight() {
       this.closePopupContainer()
+      this.updateObj.poi = this.address.address
+      this.updateObj.tel = this.address.phone
+    },
+    addressChange(e) {
+      const { detail } = e || {}
+      this.address = detail
     },
     // note: 提交操作
-    submitData() {
+    async submitData() {
       console.log(this.updateObj)
+      const res = await addRelease(this.updateObj)
+      console.log(res)
+      if (res.code === 200) {
+        mpx.navigateTo({
+          url: '/release/pages/list'
+        })
+      } else {
+        mpx.showToast({
+          title: res.msg,
+          icon: 'none'
+        })
+      }
     }
   }
 })
@@ -271,9 +284,6 @@ createPage({
     right 0
     color #fff
     font-size 40rpx
-.address-list-container
-  padding 0 32rpx
-  box-sizing border-box
 </style>
 
 <script type="application/json">

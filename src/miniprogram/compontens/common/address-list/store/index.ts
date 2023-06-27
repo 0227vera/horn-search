@@ -3,7 +3,7 @@ import { createStoreWithThis } from '@mpxjs/core'
 import { getAddressList } from '@/api'
 
 interface AddressItem {
-  address: string
+  address: Record<string, any>
   phone: string
 }
 
@@ -12,17 +12,18 @@ export default createStoreWithThis({
     list: [] as Array<AddressItem>
   },
   mutations: {
-    addAddress(item: AddressItem) {
-      this.state.list.push(item)
+    addAddressItem(data: AddressItem) {
+      this.state.list.push(data)
     },
     setAddressList(data: AddressItem[]) {
       this.state.list = data
     }
   },
   actions: {
-    getAddressList() {
-      getAddressList()
-      console.log('get')
+    async getAddressList() {
+      const res = await getAddressList()
+      const list = res?.data?.list || []
+      this.commit('setAddressList', list)
     }
   }
 })
