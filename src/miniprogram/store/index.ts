@@ -1,6 +1,6 @@
 import mpx, { createStore } from '@mpxjs/core'
 import MapSdk from '@/wx-map-sdk/qqmap-wx-jssdk.min.js'
-import { getUsList } from '../api'
+import { getUsList } from '@/api'
 import { categoryItems } from '@/setting/common'
 
 export default createStore({
@@ -43,7 +43,7 @@ export default createStore({
   },
   getters: {},
   mutations: {
-    initNavBarStyle(state: any) {
+    initNavBarStyle(state) {
       const rect = mpx.getMenuButtonBoundingClientRect()
       state.navBarStyle = Object.assign(state.navBarStyle, {
         top: rect.top,
