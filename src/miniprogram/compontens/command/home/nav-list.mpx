@@ -177,7 +177,7 @@ createComponent({
   box-sizing border-box
   .item
     margin-right 32rpx
-    font-size 24rpx
+    font-size 28rpx
     color #333333
     font-weight 500
     padding 5rpx 0
