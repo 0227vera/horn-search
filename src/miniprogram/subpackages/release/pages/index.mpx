@@ -241,11 +241,41 @@ createPage({
       const { detail } = e || {}
       this.address = detail
     },
+    validate() {
+      const result = {
+        success: false,
+        text: ''
+      }
+      if (!this.updateObj.category) {
+        result.text = '请选择类别'
+        return result
+      }
+      if (!this.updateObj.price) {
+        result.text = '请输入单价'
+        return result
+      }
+      if (!this.updateObj.tel) {
+        result.text = '请输入手机号'
+        return result
+      }
+      if (!/^(?:(?:\+|00)86)?1[3-9]\d{9}$/.test(this.this.updateObj.tel)) {
+        result.text = '请输入正确的手机号'
+        return result
+      }
+      result.success = true
+      return result
+    },
     // note: 提交操作
     async submitData() {
-      console.log(this.updateObj)
+      const vali = this.validate()
+      if (!vali.success) {
+        mpx.showToast({
+          title: vali.text,
+          icon: 'none'
+        })
+        return
+      }
       const res = await addRelease(this.updateObj)
-      console.log(res)
       if (res.code === 200) {
         mpx.navigateTo({
           url: '/release/pages/list'

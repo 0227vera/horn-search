@@ -53,7 +53,6 @@
         placeholder="请输入门牌号"
         border="{{ false }}"
         bind:change="onDoorChange"
-        required
         input-align="right"
       />
     </van-cell-group>
@@ -204,7 +203,35 @@ createPage({
       this.search = this.addInfo.address.detail
       this.openPopupContainer()
     },
+    validate() {
+      const result = {
+        success: false,
+        text: ''
+      }
+      if (!this.addInfo.name) {
+        result.text = '请输入姓名'
+        return result
+      }
+      if (!this.updateObj.phone) {
+        result.text = '请输入电话'
+        return result
+      }
+      if (!/^(?:(?:\+|00)86)?1[3-9]\d{9}$/.test(this.updateObj.phone)) {
+        result.text = '请输入正确的手机号'
+        return result
+      }
+      result.success = true
+      return result
+    },
     async addAddress() {
+      const vali = this.validate()
+      if (!vali.success) {
+        mpx.showToast({
+          title: vali.text,
+          icon: 'none'
+        })
+        return
+      }
       this.addInfo.address.name = `${this.addInfo.address.area}${this.addInfo.address.detail}${this.addInfo.address.door}`
       const res = await addAddress(this.addInfo)
       if (res.code === 200) {
