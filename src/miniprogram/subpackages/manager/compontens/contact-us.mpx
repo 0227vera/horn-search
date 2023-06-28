@@ -1,6 +1,6 @@
 <template>
-  <tab-item-container>
-    <van-cell-group style="flex: 1" inset>
+  <view style="margin-top: 32rpx">
+    <van-cell-group inset>
       <van-field
         label="微信"
         value="{{ contact.wechat }}"
@@ -16,6 +16,7 @@
         border="{{ false }}"
         id="phone"
         bind:change="onChange"
+        type="number"
       />
       <van-field
         label="邮箱"
@@ -26,15 +27,12 @@
         bind:change="onChange"
       />
     </van-cell-group>
-    <view>
-      <van-button custom-class="btn" round type="primary" bind:tap="confirm">确定修改</van-button>
-    </view>
-  </tab-item-container>
+  </view>
 </template>
 
 <script>
 import { createComponent } from '@mpxjs/core'
-import { getUsList, updateUsItem } from '@/api'
+import { getUsList } from '@/api'
 import Dialog from '@vant/weapp/dialog/dialog'
 
 createComponent({
@@ -51,35 +49,23 @@ createComponent({
     Object.keys(this.contact).forEach(item => {
       this.contact[item] = obj[item]
     })
+    this.triggerEvent('submitData', this.contact)
   },
   methods: {
     onChange(e) {
       this.contact[e.target.id] = e.detail
-    },
-    async confirm() {
-      const res = await updateUsItem(this.contact)
-      Dialog.alert({
-        title: '提示',
-        message: res.code === 200 ? '修改成功' : '修改失败'
-      })
+      this.triggerEvent('submitData', this.contact)
     }
   }
 })
 
 </script>
 
-<style lang="stylus">
-.btn
-  width 100%
-</style>
-
 <script type="application/json">
   {
     "usingComponents": {
-      "tab-item-container": "./base/tab-item-container.mpx",
       "van-field": "@vant/weapp/field/index",
-      "van-cell-group": "@vant/weapp/cell-group/index",
-      "van-button": "@vant/weapp/button/index"
+      "van-cell-group": "@vant/weapp/cell-group/index"
     }
   }
 </script>

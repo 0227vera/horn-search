@@ -1,84 +1,86 @@
 <template>
-  <view class="manager-container">
-    <nav-bar />
-    <view class="content" style="padding-top: {{navBarStyle.top + navBarStyle.height + navBarStyle.paddingBottom}}px">
-      <van-tabs
-        swipeable
-        animated
-        ellipsis=false
-        swipe-threshold=4
+  <custom-container
+    title="后台管理"
+    btnName="{{currentActiveItem.btnName}}"
+    bind:footer-btn="footerBtnClick"
+  >
+    <van-tabs
+      swipeable
+      animated
+      sticky
+      ellipsis=false
+      swipe-threshold=4
+      active="{{ active }}"
+      bind:change="tabChange"
+    >
+      <van-tab
+        title="{{item.text}}"
+        wx:for="{{navTabs}}"
+        wx:key="*this"
+        name="{{item.com}}"
       >
-        <van-tab title="分类管理">
-          <class-manager />
-        </van-tab>
-        <van-tab title="产品管理">
-          <product-manager />
-        </van-tab>
-        <van-tab title="banner">
-          <banner-manager />
-        </van-tab>
-        <van-tab title="用户管理">
-          <user-manager />
-        </van-tab>
-        <van-tab title="关于我们">
-          <about-us />
-        </van-tab>
-        <van-tab title="联系我们">
-          <contact-us />
-        </van-tab>
-      </van-tabs>
-    </view>
-    <van-dialog id="van-dialog" />
-  </view>
+        <component is="{{item.com}}" ref="com" bind:submitData="changeSubmitData" />
+      </van-tab>
+    </van-tabs>
+  </custom-container>
 </template>
 
 <script>
 import mpx, { createPage } from '@mpxjs/core'
-import store from '@/store'
+import { updateUsItem } from '@/api'
 
 createPage({
-  computed: {
-    ...store.mapState(['navBarStyle'])
+  data: {
+    active: 'user-manager',
+    navTabs: [{
+      text: '用户管理',
+      com: 'user-manager'
+    }, {
+      text: '关于我们',
+      com: 'about-us',
+      btnName: '确认修改',
+      updateInterface: updateUsItem
+    }, {
+      text: '联系我们',
+      com: 'contact-us',
+      btnName: '确认修改',
+      updateInterface: updateUsItem
+    }],
+    submitData: null
   },
-  created() {
-    this.setNavBarStyle({
-      title: '后台管理',
-      lefticon: 'arrow-left',
-      bg: '#eee',
-      clickLeft: () => {
-        mpx.navigateBack()
-      }
-    })
+  computed: {
+    currentActiveItem() {
+      return this.navTabs.find(item => item.com === this.active) || {}
+    }
   },
   methods: {
-    ...store.mapMutations(['setNavBarStyle', 'setCurrentKey'])
+    tabChange(e) {
+      this.active = e.detail.name
+    },
+    changeSubmitData(e) {
+      this.submitData = e.detail
+    },
+    async footerBtnClick() {
+      if (!this.currentActiveItem.btnName) return
+      const res = await this.currentActiveItem.updateInterface(this.submitData)
+      mpx.showToast({
+        title: res.code === 200 ? '修改成功' : '修改失败',
+        icon: res.code === 200 ? 'success' : 'fail'
+      })
+    }
   }
 })
 </script>
 
-<style lang="stylus">
-.manager-container
-  width 100%
-  height 100vh
-  background #eee
-  .content
-    box-sizing border-box
-    padding 32rpx
-</style>
-
 <script type="application/json">
   {
     "usingComponents": {
-      "nav-bar": "@/compontens/base/nav-bar",
+      "custom-container": "@/compontens/base/custom-container",
       "van-tab": "@vant/weapp/tab/index",
       "van-tabs": "@vant/weapp/tabs/index",
-      "class-manager":"../compontens/class-manager",
-      "product-manager":"../compontens/product-manager",
-      "banner-manager":"../compontens/banner-manager",
       "user-manager":"../compontens/user-manager",
       "about-us":"../compontens/about-us",
-      "contact-us":"../compontens/contact-us",
-      "van-dialog": "@vant/weapp/dialog/index"
+      "contact-us":"../compontens/contact-us"
     },
     "navigationStyle": "custom"
   }

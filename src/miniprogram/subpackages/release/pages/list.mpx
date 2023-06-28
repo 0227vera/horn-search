@@ -28,10 +28,9 @@
 
 <script>
 import mpx, { createPage } from '@mpxjs/core'
-import { fileUpload } from '@/api'
+import { fileUpload, getReleaseList } from '@/api'
 import { categoryItems } from '@/setting/common'
 import store from '@/store'
-import { getReleaseList } from '@/api'
 
 createPage({
   data: {

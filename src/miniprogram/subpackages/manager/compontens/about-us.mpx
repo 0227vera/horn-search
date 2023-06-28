@@ -1,27 +1,25 @@
 <template>
-  <tab-item-container>
-    <van-cell-group inset>
+  <view style="margin-top: 32rpx">
+    <van-cell-group inset style="margin-top: 32rpx">
       <van-field
         label="关于我们"
         value="{{ value }}"
         placeholder="请输入相关信息"
         border="{{ false }}"
         bind:change="onChange"
+        type="textarea"
       />
     </van-cell-group>
     <view class="preview">
       预览：
       <text>{{value}}</text>
     </view>
-    <view>
-      <van-button custom-class="btn" round type="primary" bind:tap="confirm">确定修改</van-button>
-    </view>
-  </tab-item-container>
+  </view>
 </template>
 
 <script>
 import { createComponent } from '@mpxjs/core'
-import { getUsList, updateUsItem } from '@/api'
+import { getUsList } from '@/api'
 import Dialog from '@vant/weapp/dialog/dialog'
 
 createComponent({
@@ -31,18 +29,15 @@ createComponent({
   async ready() {
     const res = await getUsList()
     this.value = res.data?.list?.[0]?.text
+    this.triggerEvent('submitData', {
+      text: this.value
+    })
   },
   methods: {
     onChange(e) {
       this.value = e.detail
-    },
-    async confirm() {
-      const res = await updateUsItem({
+      this.triggerEvent('submitData', {
         text: this.value
-      })
-      Dialog.alert({
-        title: '提示',
-        message: +res.code === 200 ? '修改成功' : '修改失败'
       })
     }
   }
@@ -52,22 +47,17 @@ createComponent({
 
 <style lang="stylus">
 .preview
-  flex: 1
   font-size 32rpx
   color #666666
-  padding 28rpx
+  padding 32rpx
   box-sizing border-box
-.btn
-  width 100%
 </style>
 
 <script type="application/json">
   {
     "usingComponents": {
-      "tab-item-container": "./base/tab-item-container.mpx",
       "van-field": "@vant/weapp/field/index",
-      "van-cell-group": "@vant/weapp/cell-group/index",
-      "van-button": "@vant/weapp/button/index"
+      "van-cell-group": "@vant/weapp/cell-group/index"
     }
   }
 </script>

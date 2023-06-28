@@ -124,10 +124,9 @@
 
 <script>
 import mpx, { createPage } from '@mpxjs/core'
-import { fileUpload } from '@/api'
+import { fileUpload, addRelease } from '@/api'
 import { categoryItems } from '@/setting/common'
 import store from '@/store'
-import { addRelease } from '@/api'
 
 createPage({
   computed: {

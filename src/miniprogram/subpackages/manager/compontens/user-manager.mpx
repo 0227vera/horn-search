@@ -21,23 +21,9 @@ createComponent({
 
 </script>
 
-<style lang="stylus">
-
-</style>
-
 <script type="application/json">
   {
     "usingComponents": {
-      "van-button": "@vant/weapp/button/index",
-      "van-cell": "@vant/weapp/cell/index",
-      "van-cell-group": "@vant/weapp/cell-group/index",
-      "van-field": "@vant/weapp/field/index",
-      "van-uploader": "@vant/weapp/uploader/index",
-      "van-image": "@vant/weapp/image/index",
-      "van-icon": "@vant/weapp/icon/index",
-      "popup-container": "./base/popup-container.mpx",
-      "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
-      "van-dropdown-item": "@vant/weapp/dropdown-item/index",
       "table-list": "./base/table-list.mpx"
     }
   }
