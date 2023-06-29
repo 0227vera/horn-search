@@ -4,12 +4,19 @@ import Dialog from '@vant/weapp/dialog/dialog'
 type JumpItem = {
   jumptype: 'mp' | 'alert' | 'setting' | 'h5',
   url: string,
-  message? : string
+  message? : string,
+  redirect? : boolean
 }
 
 const jumpAction = (item: JumpItem) => {
   const actions = {
     mp: () => {
+      if (item.redirect) {
+        mpx.redirectTo({
+          url: item.url
+        })
+        return
+      }
       mpx.navigateTo({
         url: item.url
       })

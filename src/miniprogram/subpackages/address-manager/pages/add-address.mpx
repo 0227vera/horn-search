@@ -37,9 +37,9 @@
         bind:tap="openArea"
       />
       <van-field
-        label="地址"
+        label="详细地址"
         value="{{ addInfo.address.detail }}"
-        placeholder="请输入地址"
+        placeholder="请输入详细地址"
         is-link
         readonly
         required
@@ -69,35 +69,9 @@
       title="请选择省市区"
       bind:confirm="onAreaConfirm"
       bind:cancel="closePopupContainer"
-      value="{{ address.areaCode }}"
+      value="{{ addInfo.address.areaCode }}"
       bind:finish="onFinish"
     />
-    <view wx:if="{{popupType === 'detail'}}">
-      <van-search
-        value="{{ search }}"
-        placeholder="街道楼牌号"
-        show-action
-        action-text="确定"
-        border="{{ false }}"
-        bind:change="onSearchChange"
-        bind:cancel="searchAction"
-        input-align="right"
-      >
-      </van-search>
-      <van-cell-group wx:if="{{searchResult.length}}">
-        <van-cell
-          wx:for="{{searchResult}}"
-          wx:key="id"
-          title="{{item.title}}"
-          label="{{item.address}}"
-          clickable
-          bind:tap="sureAddress(item)"
-        >
-          <van-icon wx:if="{{item.checked}}" name="success" />
-        </van-cell>
-      </van-cell-group>
-      <van-empty wx:else/>
-    </view>
   </van-popup>
 </template>
 
@@ -125,9 +99,7 @@ createPage({
     },
     showPopup: false,
     areaList,
-    search: '',
-    popupType: '',
-    searchResult: []
+    popupType: ''
   },
   async onLoad() {
     await this.setLocation()
@@ -136,7 +108,6 @@ createPage({
     this.addInfo.address.areaCode = this.adInfo.ad_info.adcode
     this.addInfo.address.detail = this.adInfo.address
     this.addInfo.address.location = this.adInfo.location
-    this.$forceUpdate()
   },
   computed: {
     ...store.mapState(['mapSdk', 'adInfo'])
@@ -151,33 +122,6 @@ createPage({
     onDoorChange(e) {
       this.addInfo.address.door = e.detail
     },
-    // note: searth缓存
-    onSearchChange(e) {
-      this.search = e.detail
-    },
-    // note: 地址检索
-    searchAction() {
-      this.mapSdk.getSuggestion({
-        keyword: this.search,
-        region_fix: 1,
-        policy: 1,
-        page_size: 5,
-        region: this.addInfo.address.areaProvice,
-        success: res => {
-          this.searchResult = res.data
-        }
-      })
-    },
-    // note: 确定地址
-    sureAddress(item) {
-      this.searchResult = this.searchResult.map(f => Object.assign(f, {
-        checked: f.id === item.id
-      }))
-      this.addInfo.address.area = `${this.addInfo.address.areaProvice}${item.city}${item.district}`
-      this.addInfo.address.areaCode = item.adcode
-      this.addInfo.address.detail = item.title
-      this.closePopupContainer()
-    },
     // note: popup的处理
     closePopupContainer() {
       this.showPopup = false
@@ -185,7 +129,6 @@ createPage({
     openPopupContainer() {
       this.showPopup = true
     },
-
     // note: 省市区
     openArea() {
       this.popupType = 'area'
@@ -199,9 +142,33 @@ createPage({
     },
     // note: 详细地址
     openSearchDetail() {
-      this.popupType = 'detail'
-      this.search = this.addInfo.address.detail
-      this.openPopupContainer()
+      const _this = this
+      console.log('0000000', this.addInfo.address.location)
+      wx.chooseLocation({
+        latitude: this.addInfo.address.location.lat,
+        longitude: this.addInfo.address.location.lng,
+        success(res) {
+          if (!res.name) {
+            return
+          }
+          _this.addInfo.address.detail = res.address + res.name
+          console.log('res--------->', res)
+          _this.mapSdk.reverseGeocoder({
+            location: {
+              latitude: res.latitude,
+              longitude: res.longitude
+            },
+            success(r) {
+              console.log('r----------->', r)
+              const re = r.result
+              _this.addInfo.address.areaProvice = re.ad_info.province
+              _this.addInfo.address.area = `${re.ad_info.province}${re.ad_info.city}${re.ad_info.district}`
+              _this.addInfo.address.areaCode = re.ad_info.adcode
+              _this.addInfo.address.location = re.location
+            }
+          })
+        }
+      })
     },
     validate() {
       const result = {
@@ -212,11 +179,11 @@ createPage({
         result.text = '请输入姓名'
         return result
       }
-      if (!this.updateObj.phone) {
+      if (!this.addInfo.phone) {
         result.text = '请输入电话'
         return result
       }
-      if (!/^(?:(?:\+|00)86)?1[3-9]\d{9}$/.test(this.updateObj.phone)) {
+      if (!/^(?:(?:\+|00)86)?1[3-9]\d{9}$/.test(this.addInfo.phone)) {
         result.text = '请输入正确的手机号'
         return result
       }
@@ -232,7 +199,7 @@ createPage({
         })
         return
       }
-      this.addInfo.address.name = `${this.addInfo.address.area}${this.addInfo.address.detail}${this.addInfo.address.door}`
+      this.addInfo.address.name = `${this.addInfo.address.area}-${this.addInfo.address.detail}-${this.addInfo.address.door}`
       const res = await addAddress(this.addInfo)
       if (res.code === 200) {
         this.addAddressItem({ ...this.addInfo, _id: res.data })
@@ -270,12 +237,9 @@ createPage({
       "van-cell": "@vant/weapp/cell/index",
       "van-cell-group": "@vant/weapp/cell-group/index",
       "van-field": "@vant/weapp/field/index",
-      "van-button": "@vant/weapp/button/index",
       "van-popup": "@vant/weapp/popup/index",
-      "van-search": "@vant/weapp/search/index",
       "van-area": "@vant/weapp/area/index",
-      "van-icon": "@vant/weapp/icon/index",
-      "van-empty": "@vant/weapp/empty/index"
+      "van-icon": "@vant/weapp/icon/index"
     },
     "navigationStyle": "custom"
   }

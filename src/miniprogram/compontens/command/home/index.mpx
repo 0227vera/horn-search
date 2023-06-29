@@ -5,24 +5,43 @@
     containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
     clickLeft="{{clickLeft}}"
   >
-    <nav-list
-      bind:component="changeComponent"
-    />
+    <nav-list bind:component="changeComponent"/>
     <view class="container">
-      <view>不同角色的广告模块</view>
-      <view>当前分类下发布了哪些需求的列表模块</view>
-      <view>{{customText}}</view>
-      <view>组件参数：{{params}}</view>
+      <!-- <view>不同角色的广告模块</view> -->
+      <view wx:if="{{loading}}" class="loading">
+        <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
+      </view>
+      <view wx:elif="{{list.length}}" class="list">
+        <van-card
+          wx:for="{{list}}"
+          wx:key="*this"
+          price="{{item.price}}"
+          desc="{{item.poi.name}}"
+          title="{{item.categoryName}}"
+          thumb="{{ item.images[0] || '' }}"
+        >
+          <view slot="footer">
+            <van-button size="mini" style="margin-right: 8rpx" round bind:tap="makePhone(item)">打电话</van-button>
+            <van-button size="mini" round bind:tap="gotoAddress(item)">导航前去</van-button>
+          </view>
+        </van-card>
+      </view>
+      <view wx:else class="loading empty">
+        <van-empty description="暂无数据" bind:tap="gotoRelease" />
+      </view>
+      <!-- <view>{{customText}}</view> -->
     </view>
   </custom-container>
 </template>
 
 <script>
 import mpx, { createComponent } from '@mpxjs/core'
+import { getReleaseList } from '@/api'
 createComponent({
   data: {
     text: '',
-    params: '',
+    loading: true,
+    list: [],
     clickLeft() {
       mpx.showToast({
         title: '身份切换',
@@ -41,10 +60,26 @@ createComponent({
   ready() {
   },
   methods: {
-    changeComponent(e) {
+    async changeComponent(e) {
       this.text = e.detail.text
-      this.params = JSON.stringify(e.detail.data?.params || {})
-      // console.log(e.detail, this.text)
+      this.loading = true
+      this.list = []
+      const res = await getReleaseList({ category: e.detail.value })
+      this.loading = false
+      this.list = res.data?.list || []
+    },
+    makePhone(item) {
+      wx.makePhoneCall({
+        phoneNumber: item.tel
+      })
+    },
+    gotoAddress(item) {
+      wx.openLocation({
+        latitude: item.poi.location.lat,
+        longitude: item.poi.location.lat,
+        name: item.poi.name,
+        address: item.poi.name
+      })
     }
   }
 })
@@ -52,10 +87,15 @@ createComponent({
 
 <style lang="stylus" scoped>
 .container
-  background #ffffff
   border-radius 32rpx 32rpx 0 0
   padding 32rpx
-  height 1000px
+  overflow hidden
+.loading
+  width 100%
+  height 50vh
+  display flex
+  align-items center
+  justify-content center
 </style>
 
 <script name="json">
@@ -63,7 +103,11 @@ module.exports = {
   component: true,
   usingComponents: {
     "custom-container": "@/compontens/base/custom-container",
-    "nav-list": "./nav-list"
+    "nav-list": "./nav-list",
+    "van-empty": "@vant/weapp/empty/index",
+    "van-loading": "@vant/weapp/loading/index",
+    "van-card": "@vant/weapp/card/index",
+    "van-button": "@vant/weapp/button/index"
   }
 }
 </script>

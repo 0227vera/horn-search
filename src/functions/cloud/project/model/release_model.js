@@ -10,10 +10,12 @@ AddressModel.CL = "shoe_washing_release"
 AddressModel.DB_STRUCTURE = {
   _pid: 'string|true',
   category: 'string|true',
+  categoryName: 'string|true',
   price: 'string|true',
   poi: 'object|true',
   tel: 'string|true',
   ownTime: 'int|false',
+  ownTimeName: 'string|false',
   images: 'array|false',
   note: 'string|false',
   OPENID: 'string|true',

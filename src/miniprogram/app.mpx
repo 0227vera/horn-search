@@ -36,6 +36,7 @@ createApp({
     "requiredPrivateInfos": [
       "chooseAddress",
       "choosePoi",
+      "chooseLocation",
       "getLocation"
     ],
     "permission": {

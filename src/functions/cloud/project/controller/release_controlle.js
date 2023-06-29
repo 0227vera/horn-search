@@ -6,6 +6,7 @@ class ReleaseController extends BaseController {
     const where = {
       OPENID: this._openId
     }
+    Object.assign(where, this._event.params || {})
     const service = new ReleaseService()
     const res = await service.getList(where)
     return res
@@ -23,6 +24,12 @@ class ReleaseController extends BaseController {
   async update() {
     const service = new ReleaseService()
     const res = await service.update(this._event.params)
+    return res
+  }
+
+  async delete() {
+    const service = new ReleaseService()
+    const res = await service.delete(this._event.params)
     return res
   }
 }

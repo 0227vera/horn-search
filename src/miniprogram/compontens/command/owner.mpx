@@ -43,7 +43,7 @@ createComponent({
         name: '发布需求',
         icon: 'add-o',
         jumptype: 'mp',
-        url: '/release/pages/index'
+        url: '/release/pages/index?isBack=false'
       },
       {
         name: '权益卡',

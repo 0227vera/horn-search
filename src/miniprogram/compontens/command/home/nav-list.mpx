@@ -4,56 +4,56 @@ todo: 这个地方处理的及其不优雅,但是想快点完成能力,之后再
 */
 
 <template>
-<view class="container">
-  <scroll-view scroll-x class="scroll">
-    <view class="level-item">
-      <view
-        wx:for="{{categoryItems.children}}"
-        wx:key="*this"
-        class="item {{item.value === categoryItems.selected ? 'selected': ''}}"
-        catchtap="levelItem(item)"
-      >
-        {{item.text}}
+  <view class="container">
+    <scroll-view scroll-x class="scroll">
+      <view class="level-item">
+        <view
+          wx:for="{{categoryItems.children}}"
+          wx:key="*this"
+          class="item {{item.value === categoryItems.selected ? 'selected': ''}}"
+          catchtap="levelItem(item)"
+        >
+          {{item.text}}
+        </view>
       </view>
-    </view>
-  </scroll-view>
-  <scroll-view scroll-x class="scroll" wx:if="{{level1List.children}}">
-    <view class="level-item">
-      <view
-        wx:for="{{level1List.children}}"
-        wx:key="*this"
-        class="item {{item.value === level1List.selected ? 'selected': ''}}"
-        catchtap="level1Item(item)"
-      >
-        {{item.text}}
+    </scroll-view>
+    <scroll-view scroll-x class="scroll" wx:if="{{level1List.children}}">
+      <view class="level-item">
+        <view
+          wx:for="{{level1List.children}}"
+          wx:key="*this"
+          class="item {{item.value === level1List.selected ? 'selected': ''}}"
+          catchtap="level1Item(item)"
+        >
+          {{item.text}}
+        </view>
       </view>
-    </view>
-  </scroll-view>
-  <scroll-view scroll-x class="scroll" wx:if="{{level2List.children}}">
-    <view class="level-item">
-      <view
-        wx:for="{{level2List.children}}"
-        wx:key="*this"
-        class="item {{item.value === level2List.selected ? 'selected': ''}}"
-        catchtap="level2Item(item)"
-      >
-        {{item.text}}
+    </scroll-view>
+    <scroll-view scroll-x class="scroll" wx:if="{{level2List.children}}">
+      <view class="level-item">
+        <view
+          wx:for="{{level2List.children}}"
+          wx:key="*this"
+          class="item {{item.value === level2List.selected ? 'selected': ''}}"
+          catchtap="level2Item(item)"
+        >
+          {{item.text}}
+        </view>
       </view>
-    </view>
-  </scroll-view>
-  <scroll-view scroll-x class="scroll" wx:if="{{level3List.children}}">
-    <view class="level-item">
-      <view
-        wx:for="{{level3List.children}}"
-        wx:key="*this"
-        class="item {{item.value === level3List.selected ? 'selected': ''}}"
-        catchtap="level3Item(item)"
-      >
-        {{item.text}}
+    </scroll-view>
+    <scroll-view scroll-x class="scroll" wx:if="{{level3List.children}}">
+      <view class="level-item">
+        <view
+          wx:for="{{level3List.children}}"
+          wx:key="*this"
+          class="item {{item.value === level3List.selected ? 'selected': ''}}"
+          catchtap="level3Item(item)"
+        >
+          {{item.text}}
+        </view>
       </view>
-    </view>
-  </scroll-view>
-</view>
+    </scroll-view>
+  </view>
 </template>
 
 <script>
@@ -167,6 +167,7 @@ createComponent({
 .container
   position sticky
   top 0
+  z-index 99
   background linear-gradient(#E3E0F3, #E3E0F3)
 .scroll
   width 100%

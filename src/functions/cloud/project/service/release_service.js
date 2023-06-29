@@ -17,6 +17,11 @@ class ReleaseManagerService extends BaseService {
     const res = await ReleaseModel.insertOrUpdate({ _id: data._id }, newData)
     return res
   }
+
+  async delete(data = {}) {
+    const res = await ReleaseModel.del({ _id: data._id })
+    return res
+  }
 }
 
 module.exports = ReleaseManagerService
