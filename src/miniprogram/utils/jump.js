@@ -1,14 +1,7 @@
 import mpx from '@mpxjs/core'
 import Dialog from '@vant/weapp/dialog/dialog'
 
-type JumpItem = {
-  jumptype: 'mp' | 'alert' | 'setting' | 'h5',
-  url: string,
-  message? : string,
-  redirect? : boolean
-}
-
-const jumpAction = (item: JumpItem) => {
+const jumpAction = item => {
   const actions = {
     mp: () => {
       if (item.redirect) {

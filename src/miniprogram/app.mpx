@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
 import mpx, { createApp } from '@mpxjs/core'
 import apiProxy from '@mpxjs/api-proxy'
 import store from './store'

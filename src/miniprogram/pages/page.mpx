@@ -4,7 +4,7 @@
   </view>
 </template>
 
-<script lang="ts">
+<script>
 import mpx, { createPage } from '@mpxjs/core'
 import chooseRolePageUrl from '@/subpackages/choose-role/pages/index.mpx?resolve'
 
@@ -15,7 +15,6 @@ createPage({
         url: chooseRolePageUrl
       })
     }, 1000)
-    
   }
 })
 </script>

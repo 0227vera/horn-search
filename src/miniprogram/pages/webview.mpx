@@ -2,7 +2,7 @@
   <view>webview的跳转页面</view>
 </template>
 
-<script lang="ts">
+<script>
 import { createPage } from '@mpxjs/core'
 
 createPage({

@@ -6,7 +6,7 @@
   </view>
 </template>
 
-<script lang="ts">
+<script>
 import mpx, { createPage } from '@mpxjs/core'
 import homepageUrl from '@/subpackages/homepage/pages/index.mpx?resolve'
 

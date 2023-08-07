@@ -25,7 +25,7 @@
   </view>
 </template>
 
-<script lang="ts">
+<script>
 import { createComponent } from '@mpxjs/core'
 import { getReleaseList } from '@/api'
 
@@ -38,7 +38,7 @@ createComponent({
   },
   data: {
     loading: true,
-    list: [],
+    list: []
   },
   watch: {
     category() {

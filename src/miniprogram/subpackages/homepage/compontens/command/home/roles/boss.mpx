@@ -102,7 +102,7 @@
   </van-popup>
 </template>
 
-<script lang="ts">
+<script>
 import mpx, { createComponent } from '@mpxjs/core'
 import { fileUpload, addRelease } from '@/api'
 const store = getApp().globalStore

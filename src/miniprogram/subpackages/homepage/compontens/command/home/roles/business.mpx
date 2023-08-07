@@ -3,7 +3,7 @@
   <view>找合作</view>
 </template>
 
-<script lang="ts">
+<script>
 import { createComponent } from '@mpxjs/core'
 
 createComponent({
