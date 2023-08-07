@@ -1,0 +1,101 @@
+<template>
+  <custom-container
+    title="{{title}}"
+    lefticon="{{lefticon}}"
+    containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
+    clickLeft="{{clickLeft}}"
+  >
+    <category-list bind:component="changeComponent"/>
+    <view class="content">
+      <component is="{{role}}" category="{{category}}"></component>
+    </view>
+  </custom-container>
+</template>
+
+<script>
+import mpx, { createComponent } from '@mpxjs/core'
+const store = getApp().globalStore
+
+createComponent({
+  data: {
+    category: '',
+    clickLeft: null
+  },
+  computed: {
+    ...store.mapState(['role']),
+    title() {
+      const options = {
+        worker: '我要找工作',
+        boss: '我要招人',
+        business: '找合作'
+      }
+      return options[this.role]
+    },
+    lefticon() {
+      const options = {
+        worker: 'friends',
+        boss: 'friends',
+        business: 'exchange'
+      }
+      return options[this.role]
+    }
+  },
+  ready() {
+    console.log(999999)
+    this.clickLeft = () => {
+      console.log(this.role)
+      const actions = {
+        worker: () => {
+          this.setCurrentKey('owner')
+        },
+        boss: () => {
+          console.log('44444')
+          this.setCurrentKey('owner')
+        },
+        business: () => {
+          mpx.showToast({
+            title: '身份切换',
+            icon: 'none'
+          })
+        }
+      }
+      actions[this.role]()
+    }
+  },
+  methods: {
+    ...store.mapMutations(['setCurrentKey']),
+    changeComponent(e) {
+      const { value, text } = e.detail
+      this.category = value
+    }
+  }
+})
+</script>
+
+<style lang="stylus" scoped>
+.content
+  padding-bottom 300rpx
+.container
+  border-radius 32rpx 32rpx 0 0
+  padding 32rpx
+  overflow hidden
+.loading
+  width 100%
+  height 50vh
+  display flex
+  align-items center
+  justify-content center
+</style>
+
+<script name="json">
+module.exports = {
+  component: true,
+  usingComponents: {
+    "custom-container": "@/compontens/base/custom-container",
+    "category-list": "@/compontens/common/category-list",
+    "worker": "./roles/worker",
+    "boss": "./roles/boss",
+    "business": "./roles/business"
+  }
+}
+</script>

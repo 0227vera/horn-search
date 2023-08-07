@@ -1,0 +1,26 @@
+<template>
+  <view>webview的跳转页面</view>
+</template>
+
+<script lang="ts">
+import { createPage } from '@mpxjs/core'
+
+createPage({
+  onLoad() {
+
+  },
+  onShareAppMessage() {
+    return {
+      title: '分享给朋友'
+    }
+  }
+})
+</script>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+    },
+    "disableScroll": true
+  }
+</script>

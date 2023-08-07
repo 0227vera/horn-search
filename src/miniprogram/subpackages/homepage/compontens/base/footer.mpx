@@ -1,10 +1,10 @@
 <template>
   <view class="footer {{!isShow && 'isShow'}}">
     <view
-      wx:for="{{footerNavBar.list}}"
+      wx:for="{{currentGooterList.list}}"
       wx:key="*this"
       class="footer-item"
-      wx:class="{{{'selectd': item.key === footerNavBar.currentkey}}}"
+      wx:class="{{{'selectd': item.key === currentGooterList.currentkey}}}"
       bind:tap="tapItem(item)"
     >
       <van-icon name="{{item.icon}}" style="font-size: 40rpx" />
@@ -19,9 +19,9 @@ import store from '@/store'
 
 createComponent({
   computed: {
-    ...store.mapState(['footerNavBar']),
+    ...store.mapGetters(['currentGooterList']),
     isShow() {
-      return this.footerNavBar.list.find(item => item.key === this.footerNavBar.currentkey).isShowFooter
+      return this.currentGooterList.list.find(item => item.key === this.currentGooterList.currentkey).isShowFooter
     }
   },
   methods: {
@@ -57,6 +57,7 @@ createComponent({
   display flex
   align-items center
   justify-content space-around
+  z-index 10
   .footer-item
     &.selectd
       color #333

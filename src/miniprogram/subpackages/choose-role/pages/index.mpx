@@ -1,0 +1,58 @@
+<template>
+  <view class="container">
+    <view class="item" bind:tap="choose('worker')">我要找工作</view>
+    <view class="item" bind:tap="choose('boss')">我要招人</view>
+    <view class="item" bind:tap="choose('business')">我要找合作</view>
+  </view>
+</template>
+
+<script lang="ts">
+import mpx, { createPage } from '@mpxjs/core'
+import homepageUrl from '@/subpackages/homepage/pages/index.mpx?resolve'
+
+createPage({
+  onLoad() {
+
+  },
+  onShareAppMessage() {
+    getApp().onShareAppMessage()
+  },
+  choose(role) {
+    console.log(`${homepageUrl}?role=${role}`)
+    mpx.redirectTo({
+      url: `${homepageUrl}?role=${role}`
+    })
+  }
+})
+</script>
+
+<style lang="stylus" scoped>
+.container
+  background-image url('../image/1.jpeg')
+  background-size 100% 100%
+  width 100vw
+  height 100vh
+  display flex
+  justify-content center
+  align-items center
+  flex-direction column
+  .item
+    background rgba(0, 0, 0, 0.6)
+    display flex
+    justify-content center
+    align-items center
+    width 400rpx
+    height 100rpx
+    border-radius 20rpx
+    margin-top 40rpx
+    color #ffffff
+    font-size 38rpx
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+    },
+    "disableScroll": true
+  }
+</script>

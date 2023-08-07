@@ -13,14 +13,11 @@ createPage({
     getApp().onShareAppMessage()
   },
   onLoad(params) {
-    console.log(params.role)
     this.setRole(params.role)
   },
   data: {
-    text: ''
   },
   computed: {
-    ...store.mapState(['navBarStyle']),
     ...store.mapGetters(['currentGooterList'])
   },
   methods: {

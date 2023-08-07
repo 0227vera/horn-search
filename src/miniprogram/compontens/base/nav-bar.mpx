@@ -3,7 +3,7 @@
     class="nav-bar"
     wx:style="{{ navStyle }}"
   >
-    <view class="left" bindtap="backClick">
+    <view wx:if="{{navBarStyle.lefticon}}" class="left" bindtap="backClick">
       <van-icon name="{{navBarStyle.lefticon}}" />
     </view>
     <view class="title" style="color: {{ navBarStyle.color }};">{{ navBarStyle.title }}</view>

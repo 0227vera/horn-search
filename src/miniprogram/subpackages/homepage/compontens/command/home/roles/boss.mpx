@@ -1,79 +1,76 @@
+
 <template>
-  <custom-container
-    title="发布需求"
-    btnName="发布"
-    bind:footer-btn="submitData"
-  >
-    <van-cell-group slot="" class="form" border="{{false}}" inset>
-      <category-list bind:component="changeComponent"/>
-      <van-field
-        label="单价"
-        required
-        value="{{ updateObj.price }}"
-        placeholder="请输入单价"
-        type="digit"
-        input-align="right"
-        bind:change="onFieldChange"
-        id="price"
-      />
-      <van-field
-        label="位置"
-        required
-        is-link
-        readonly
-        value="{{updateObj.poi.name}}"
-        input-align="right"
-        placeholder="点击进入详细地址选择"
-        bind:tap="showPopupContainer('address')"
-      />
-      <van-field
-        label="电话"
-        required
-        value="{{ updateObj.tel }}"
-        type="number"
-        placeholder="请输入联系方式"
-        input-align="right"
-        bind:change="onFieldChange"
-        id="tel"
-      />
-      <van-field
-        label="截止时间"
-        is-link
-        readonly
-        value="{{ timeInfo }}"
-        placeholder="点击确定截止时间"
-        bind:tap="onTimeClick"
-        input-align="right"
-      />
-      <van-cell title="图片" label="服装的要求" value="{{imagesValue}}" border="{{false}}" />
-      <view class="image-container">
-        <view class="iamge-content">
-          <van-uploader
-            bind:after-read="afterRead"
-            deletable
+  <van-cell-group slot="" class="form" inset custom-class="home-cell-group-container" style="background:#fff">
+    <van-field
+      label="单价"
+      required
+      value="{{ updateObj.price }}"
+      placeholder="请输入单价"
+      type="digit"
+      input-align="right"
+      bind:change="onFieldChange"
+      id="price"
+    />
+    <van-field
+      label="位置"
+      required
+      is-link
+      readonly
+      value="{{updateObj.poi.name}}"
+      input-align="right"
+      placeholder="点击进入详细地址选择"
+      bind:tap="showPopupContainer('address')"
+    />
+    <van-field
+      label="电话"
+      required
+      value="{{ updateObj.tel }}"
+      type="number"
+      placeholder="请输入联系方式"
+      input-align="right"
+      bind:change="onFieldChange"
+      id="tel"
+    />
+    <van-field
+      label="截止时间"
+      is-link
+      readonly
+      value="{{ timeInfo }}"
+      placeholder="点击确定截止时间"
+      bind:tap="onTimeClick"
+      input-align="right"
+    />
+    <van-cell title="图片" label="服装的要求" value="{{imagesValue}}" border="{{false}}" />
+    <view class="image-container">
+      <view class="iamge-content">
+        <van-uploader
+          bind:after-read="afterRead"
+          deletable
+        />
+        <view class="imgurl-container" wx:for="{{updateObj.images}}" wx:key="*this">
+          <van-image
+            width="80"
+            height="80"
+            src="{{item}}"
+            radius="8"
+            fit="cover"
           />
-          <view class="imgurl-container" wx:for="{{updateObj.images}}" wx:key="*this">
-            <van-image
-              width="80"
-              height="80"
-              src="{{item}}"
-              radius="8"
-              fit="cover"
-            />
-            <van-icon name="clear" bindtap="clearImg(item)" class="image-clear-icon"/>
-          </view>
+          <van-icon name="clear" bindtap="clearImg(item)" class="image-clear-icon"/>
         </view>
       </view>
-      <van-field
-        label="备注"
-        value="{{ updateObj.note }}"
-        placeholder="请输入备注信息"
-        input-align="right"
-        id="note"
-        bind:change="onFieldChange"
-      />
-    </van-cell-group>
-  </custom-container>
+    </view>
+    <van-field
+      label="备注"
+      value="{{ updateObj.note }}"
+      placeholder="请输入备注信息"
+      input-align="right"
+      id="note"
+      bind:change="onFieldChange"
+    />
+    <van-cell>
+      <van-button round type="primary" block bind:tap="submitData">发布</van-button>
+    </van-cell>
+  </van-cell-group>
   <van-popup
     show="{{ showPopup }}"
     round
@@ -105,33 +102,12 @@
   </van-popup>
 </template>
 
-<script>
-import mpx, { createPage } from '@mpxjs/core'
+<script lang="ts">
+import mpx, { createComponent } from '@mpxjs/core'
 import { fileUpload, addRelease } from '@/api'
-import store from '@/store'
+const store = getApp().globalStore
 
-createPage({
-  computed: {
-    ...store.mapState(['adInfo']),
-    imagesValue() {
-      if (this.updateObj.images.length) {
-        return `已上传${this.updateObj.images.length}张图片`
-      }
-      return '点击下方可上传图片'
-    },
-    timeInfo() {
-      if (this.updateObj.ownTime) {
-        const time = new Date(this.updateObj.ownTime)
-        const year = time.getFullYear()
-        const month = time.getMonth() + 1
-        const day = time.getDate()
-        const hour = time.getHours()
-        const min = time.getMinutes()
-        return `${year}年${month}月${day}日${hour}时${min}分`
-      }
-      return ''
-    }
-  },
+createComponent({
   data: {
     showPopup: false,
     popupType: '',
@@ -162,8 +138,28 @@ createPage({
       poi: {}
     }
   },
-  async onLoad(params) {
-    this.isBack = params.isBack === 'true'
+  computed: {
+    ...store.mapState(['adInfo']),
+    imagesValue() {
+      if (this.updateObj.images.length) {
+        return `已上传${this.updateObj.images.length}张图片`
+      }
+      return '点击下方可上传图片'
+    },
+    timeInfo() {
+      if (this.updateObj.ownTime) {
+        const time = new Date(this.updateObj.ownTime)
+        const year = time.getFullYear()
+        const month = time.getMonth() + 1
+        const day = time.getDate()
+        const hour = time.getHours()
+        const min = time.getMinutes()
+        return `${year}年${month}月${day}日${hour}时${min}分`
+      }
+      return ''
+    }
+  },
+  async attached() {
     await this.setLocation()
     this.updateObj.poi = {
       ...this.adInfo.location,
@@ -273,10 +269,8 @@ createPage({
     }
   }
 })
-
 </script>
-
-<style lang="stylus" scoped>
+<style lang="stylus">
 .submit
   margin-top 32rpx
   margin-bottom 20rpx
@@ -314,8 +308,9 @@ createPage({
       "van-cascader": "@vant/weapp/cascader/index",
       "van-datetime-picker": "@vant/weapp/datetime-picker/index",
       "van-nav-bar": "@vant/weapp/nav-bar/index",
+      "van-button": "@vant/weapp/button/index",
       "category-list": "@/compontens/common/category-list"
     },
-    "navigationStyle": "custom"
+    "disableScroll": true
   }
 </script>

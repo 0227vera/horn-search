@@ -2,6 +2,7 @@ import mpx, { createStore } from '@mpxjs/core'
 import MapSdk from '@/wx-map-sdk/qqmap-wx-jssdk.min.js'
 import { getUsList } from '@/api'
 import { categoryItems } from '@/setting/common'
+import footerNavBar from '@/const/footer'
 
 export default createStore({
   state: {
@@ -16,21 +17,8 @@ export default createStore({
       paddingBottom: 6,
       clickLeft: null
     },
-    footerNavBar: {
-      list: [{
-        name: '首页',
-        key: 'home',
-        isShowFooter: true,
-        icon: 'wap-home'
-      }, {
-        name: '我的',
-        key: 'owner',
-        icon: 'friends',
-        isShowFooter: true
-      }],
-      currentkey: 'home',
-      isShow: 'expend'
-    },
+    footerNavBar,
+    role: '',
     usInfo: {},
     mapSdk: new MapSdk({
       key: 'PECBZ-2K76U-PCTVV-2WL2B-V3YXE-PFBIR'
@@ -41,7 +29,11 @@ export default createStore({
       latitude: 0
     }
   },
-  getters: {},
+  getters: {
+    currentGooterList(state) {
+      return state.footerNavBar[state.role]
+    }
+  },
   mutations: {
     initNavBarStyle(state) {
       const rect = mpx.getMenuButtonBoundingClientRect()
@@ -53,8 +45,11 @@ export default createStore({
     setNavBarStyle(state, data) {
       Object.assign(state.navBarStyle, data)
     },
+    setRole(state, data) {
+      state.role = data
+    },
     setCurrentKey(state, data) {
-      state.footerNavBar.currentkey = data
+      state.footerNavBar[state.role].currentkey = data
     },
     setUsInfo(state, data = {}) {
       Object.assign(state.usInfo, data)
@@ -71,7 +66,7 @@ export default createStore({
   },
   actions: {
     async getUsInfo({ commit }) {
-      const res: any = await getUsList({})
+      const res = await getUsList({})
       commit('setUsInfo', res.data?.list?.[0] ?? {})
       return res.data?.list?.[0] ?? {}
     },

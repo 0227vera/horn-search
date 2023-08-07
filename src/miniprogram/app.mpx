@@ -14,6 +14,12 @@ createApp({
       env: setting.CLOUD_ID,
       traceUser: true
     })
+  },
+  globalStore: store,
+  onShareAppMessage() {
+    return {
+      title: '分享给朋友'
+    }
   }
 })
 </script>
@@ -21,9 +27,12 @@ createApp({
 <script type="application/json">
   {
     "pages": [
-      "./pages/index"
+      "./pages/page",
+      "./pages/webview"
     ],
     "packages": [
+      "./subpackages/homepage/app?root=homepage",
+      "./subpackages/choose-role/app?root=choose-role",
       "./subpackages/address-manager/app?root=address-manager",
       "./subpackages/manager/app?root=manager",
       "./subpackages/release/app?root=release",
