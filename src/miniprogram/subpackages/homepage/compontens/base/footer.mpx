@@ -1,16 +1,20 @@
 <template>
-  <view class="footer {{!isShow && 'isShow'}}">
-    <view
-      wx:for="{{currentGooterList.list}}"
+  <van-tabbar
+    wx:show="{{isShow}}"
+    active="{{ currentGooterList.currentkey }}"
+    bind:change="onChange"
+  >
+    <van-tabbar-item
       wx:key="*this"
-      class="footer-item"
-      wx:class="{{{'selectd': item.key === currentGooterList.currentkey}}}"
-      bind:tap="tapItem(item)"
+      wx:for="{{currentGooterList.list}}"
+      icon="{{item.icon}}"
+      info="{{item.info}}"
+      dot="{{item.dot}}"
+      name="{{item.key}}"
     >
-      <van-icon name="{{item.icon}}" style="font-size: 40rpx" />
-      <text>{{item.name}}</text>
-    </view>
-  </view>
+      {{item.name}}
+    </van-tabbar-item>
+  </van-tabbar>
 </template>
 
 <script>
@@ -21,11 +25,15 @@ createComponent({
   computed: {
     ...store.mapGetters(['currentGooterList']),
     isShow() {
-      return this.currentGooterList.list.find(item => item.key === this.currentGooterList.currentkey).isShowFooter
+      return this.currentGooterList?.list?.find(item => item.key === this.currentGooterList.currentkey).isShowFooter
     }
   },
   methods: {
     ...store.mapMutations(['setCurrentKey']),
+    onChange(e) {
+      const item = this.currentGooterList?.list?.find(item => item.key === e.detail)
+      this.tapItem(item)
+    },
     tapItem(item) {
       if (item.type === 'jumpPage') {
         mpx.navigateTo({
@@ -39,53 +47,11 @@ createComponent({
 })
 </script>
 
-<style lang="stylus">
-.footer
-  position fixed
-  bottom 50rpx
-  animation identifier 1s
-  transition bottom 0.3s
-  background rgba(255, 255, 255, 255, 0.1)
-  overflow hidden
-  margin-left 5%
-  padding 0 16rpx
-  border-radius 64rpx
-  box-sizing border-box
-  height 50 * 2rpx
-  width 90%
-  box-shadow #ddd 0px 0px 10px
-  display flex
-  align-items center
-  justify-content space-around
-  z-index 10
-  .footer-item
-    &.selectd
-      color #333
-      transform scale(1.1)
-      transition transform 0.3s
-    color #aaa
-    display flex
-    flex-direction column
-    align-items center
-    justify-content center
-    font-size 26rpx
-.isShow
-  bottom -100%
-  transition bottom 1s
-@-webkit-keyframes identifier {
-  0% {
-    bottom -100%
-  }
-  100% {
-    bottom 50rpx
-  }
-}
-</style>
-
 <script type="application/json">
   {
     "usingComponents": {
-      "van-icon": "@vant/weapp/icon/index"
+      "van-tabbar": "@vant/weapp/tabbar/index",
+      "van-tabbar-item": "@vant/weapp/tabbar-item/index"
     }
   }
 </script>

@@ -9,6 +9,7 @@
 <script>
 import mpx, { createPage } from '@mpxjs/core'
 import homepageUrl from '@/subpackages/homepage/pages/index.mpx?resolve'
+import { addUser } from '@/api'
 
 createPage({
   onLoad() {
@@ -18,7 +19,7 @@ createPage({
     getApp().onShareAppMessage()
   },
   choose(role) {
-    console.log(`${homepageUrl}?role=${role}`)
+    addUser({ role })
     mpx.redirectTo({
       url: `${homepageUrl}?role=${role}`
     })

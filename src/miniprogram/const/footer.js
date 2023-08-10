@@ -19,16 +19,19 @@ export default {
       name: '首页',
       key: 'home',
       isShowFooter: true,
-      icon: 'wap-home'
+      icon: 'wap-home',
+      dot: true
     }, {
       name: '订单详情',
       key: 'order',
-      icon: 'friends',
+      icon: 'comment',
+      info: 20,
       isShowFooter: true
     }, {
       name: '我的',
       key: 'owner',
       icon: 'friends',
+      info: null,
       isShowFooter: true
     }],
     currentkey: 'home',

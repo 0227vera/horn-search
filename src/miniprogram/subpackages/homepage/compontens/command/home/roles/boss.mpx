@@ -1,6 +1,6 @@
 
 <template>
-  <van-cell-group slot="" class="form" inset custom-class="home-cell-group-container" style="background:#fff">
+  <van-cell-group class="form" inset custom-class="home-cell-group-container" style="background:#fff">
     <van-field
       label="单价"
       required
@@ -10,7 +10,12 @@
       input-align="right"
       bind:change="onFieldChange"
       id="price"
-    />
+      center
+    >
+      <van-dropdown-menu slot="button">
+        <van-dropdown-item value="{{ updateObj.priceUnit }}" options="{{ unitList }}" />
+      </van-dropdown-menu>
+    </van-field>
     <van-field
       label="位置"
       required
@@ -126,11 +131,17 @@ createComponent({
       }
       return `${value}${types[type] || ''}`
     },
+    unitList: [
+      { text: '元/件', value: '元/件' },
+      { text: '元/小时', value: '元/小时' },
+      { text: 'K/月', value: 'K/月' }
+    ],
     updateObj: {
       category: '',
       categoryName: '',
       note: '',
       price: '',
+      priceUnit: '元/件',
       tel: '',
       ownTime: '',
       ownTimeName: '',
@@ -309,8 +320,9 @@ createComponent({
       "van-datetime-picker": "@vant/weapp/datetime-picker/index",
       "van-nav-bar": "@vant/weapp/nav-bar/index",
       "van-button": "@vant/weapp/button/index",
+      "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
+      "van-dropdown-item": "@vant/weapp/dropdown-item/index",
       "category-list": "@/compontens/common/category-list"
-    },
-    "disableScroll": true
+    }
   }
 </script>

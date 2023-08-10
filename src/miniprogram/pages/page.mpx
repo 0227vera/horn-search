@@ -7,14 +7,21 @@
 <script>
 import mpx, { createPage } from '@mpxjs/core'
 import chooseRolePageUrl from '@/subpackages/choose-role/pages/index.mpx?resolve'
+import homepageUrl from '@/subpackages/homepage/pages/index.mpx?resolve'
+import { getCurrentRole } from '@/api'
 
 createPage({
-  onLoad() {
-    setTimeout(() => {
+  async onLoad() {
+    const res = await getCurrentRole()
+    if (res?.data?.role) {
+      mpx.redirectTo({
+        url: `${homepageUrl}?role=${res.data.role}`
+      })
+    } else {
       mpx.redirectTo({
         url: chooseRolePageUrl
       })
-    }, 1000)
+    }
   }
 })
 </script>

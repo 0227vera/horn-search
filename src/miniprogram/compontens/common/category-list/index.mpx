@@ -171,17 +171,16 @@ createComponent({
   background linear-gradient(#E3E0F3, #E3E0F3)
 .scroll
   width 100%
-  padding 16rpx
+  padding 16rpx 32rpx
   box-sizing border-box
 .level-item
   display flex
   box-sizing border-box
   .item
-    margin-right 32rpx
     font-size 28rpx
     color #333333
     font-weight 500
-    padding 5rpx 20rpx
+    padding 5rpx 15rpx
     flex-shrink 0
     &.selected
       color #666666

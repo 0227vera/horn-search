@@ -12,6 +12,13 @@ module.exports = {
   'release/create': 'release_controlle@create',
   'release/update': 'release_controlle@update',
 
+  // note: 用户管理
+  'user/get': 'user_controlle@getList',
+  'user/delete': 'user_controlle@delete',
+  'user/create': 'user_controlle@create',
+  'user/update': 'user_controlle@update',
+  'user/currentcole': 'user_controlle@getOne',
+
   // note: 后台管理部分
   'admin/isadmin': 'admin/base_admin_controller@isAdmin',
 

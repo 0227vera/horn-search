@@ -18,11 +18,27 @@ const store = getApp().globalStore
 
 createComponent({
   data: {
-    category: '',
-    clickLeft: null
+    category: ''
   },
   computed: {
     ...store.mapState(['role']),
+    clickLeft() {
+      const actions = {
+        worker: () => {
+          this.setCurrentKey('owner')
+        },
+        boss: () => {
+          this.setCurrentKey('owner')
+        },
+        business: () => {
+          mpx.showToast({
+            title: '身份切换',
+            icon: 'none'
+          })
+        }
+      }
+      return actions[this.role]
+    },
     title() {
       const options = {
         worker: '我要找工作',
@@ -33,34 +49,14 @@ createComponent({
     },
     lefticon() {
       const options = {
-        worker: 'friends',
-        boss: 'friends',
+        worker: '',
+        boss: '',
         business: 'exchange'
       }
       return options[this.role]
     }
   },
   ready() {
-    console.log(999999)
-    this.clickLeft = () => {
-      console.log(this.role)
-      const actions = {
-        worker: () => {
-          this.setCurrentKey('owner')
-        },
-        boss: () => {
-          console.log('44444')
-          this.setCurrentKey('owner')
-        },
-        business: () => {
-          mpx.showToast({
-            title: '身份切换',
-            icon: 'none'
-          })
-        }
-      }
-      actions[this.role]()
-    }
   },
   methods: {
     ...store.mapMutations(['setCurrentKey']),

@@ -9,10 +9,10 @@ export const categoryItems = {
           text: '裁床',
           value: '1-1'
         }, {
-          text: '尾部（整烫）',
+          text: '尾部(整烫)',
           value: '1-2'
         }, {
-          text: '尾部（包装）',
+          text: '尾部(包装)',
           value: '1-3'
         }, {
           text: '平车',

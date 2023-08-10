@@ -1,0 +1,51 @@
+<template>
+    <custom-container
+        title="订单详情"
+        lefticon=""
+        containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
+    >
+        <van-collapse
+            value="{{ activeNames }}"
+            bind:change="onChange"
+        >
+            <van-collapse-item title="进行中" name="1">
+                代码是写出来给人看的，附带能在机器上运行
+            </van-collapse-item>
+            <van-collapse-item title="已有人询问" name="2">
+                代码是写出来给人看的，附带能在机器上运行
+            </van-collapse-item>
+            <van-collapse-item title="已完成" name="3">
+                代码是写出来给人看的，附带能在机器上运行
+            </van-collapse-item>
+        </van-collapse>
+    </custom-container>
+</template>
+
+<script>
+import { createComponent } from '@mpxjs/core'
+
+createComponent({
+  data: {
+    activeNames: ['1']
+  },
+  methods: {
+    onChange(e) {
+      this.activeNames = e.detail
+    }
+  }
+})
+</script>
+
+<style lang="stylus">
+
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+        "custom-container": "@/compontens/base/custom-container",
+        "van-collapse": "@vant/weapp/collapse/index",
+        "van-collapse-item": "@vant/weapp/collapse-item/index"
+    }
+  }
+</script>
