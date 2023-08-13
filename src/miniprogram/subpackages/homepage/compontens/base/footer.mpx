@@ -23,9 +23,10 @@ import store from '@/store'
 
 createComponent({
   computed: {
+    ...store.mapState(['showBottomNav']),
     ...store.mapGetters(['currentGooterList']),
     isShow() {
-      return this.currentGooterList?.list?.find(item => item.key === this.currentGooterList.currentkey).isShowFooter
+      return this.currentGooterList?.list?.find(item => item.key === this.currentGooterList.currentkey).isShowFooter && this.showBottomNav
     }
   },
   methods: {

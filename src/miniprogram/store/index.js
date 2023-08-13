@@ -27,7 +27,8 @@ export default createStore({
     location: {
       longitude: 0,
       latitude: 0
-    }
+    },
+    showBottomNav: true
   },
   getters: {
     currentGooterList(state) {
@@ -62,6 +63,9 @@ export default createStore({
     },
     updateCategoryItems(state, data) {
       state.categoryItems = data
+    },
+    setShowBottomNav(state, data) {
+      state.showBottomNav = data
     }
   },
   actions: {

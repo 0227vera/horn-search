@@ -1,11 +1,23 @@
 
 <template>
-  <van-cell-group class="form" inset custom-class="home-cell-group-container" style="background:#fff">
+  <van-cell-group class="form" custom-class="home-cell-group-container" style="background:#fff">
+    <van-field
+      label="品类名称"
+      required
+      value="{{ updateObj.categoryName }}"
+      placeholder="请输入自定义品类的名称"
+      input-align="right"
+      bind:change="onFieldChange"
+      id="categoryName"
+      center
+      wx:if="{{updateObj.category === '10'}}"
+    />
     <van-field
       label="单价"
+      title-width="80rpx"
       required
       value="{{ updateObj.price }}"
-      placeholder="请输入单价"
+      placeholder="请输入计时或者计件的单价"
       type="digit"
       input-align="right"
       bind:change="onFieldChange"
@@ -13,21 +25,23 @@
       center
     >
       <van-dropdown-menu slot="button">
-        <van-dropdown-item value="{{ updateObj.priceUnit }}" options="{{ unitList }}" />
+        <van-dropdown-item bind:change="changeUnit" value="{{ updateObj.priceUnit }}" options="{{ unitList }}" />
       </van-dropdown-menu>
     </van-field>
     <van-field
       label="位置"
+      title-width="80rpx"
       required
       is-link
       readonly
       value="{{updateObj.poi.name}}"
       input-align="right"
-      placeholder="点击进入详细地址选择"
+      placeholder="请点击进入输入我的详细地址"
       bind:tap="showPopupContainer('address')"
     />
     <van-field
       label="电话"
+      title-width="80rpx"
       required
       value="{{ updateObj.tel }}"
       type="number"
@@ -38,6 +52,7 @@
     />
     <van-field
       label="截止时间"
+      title-width="120rpx"
       is-link
       readonly
       value="{{ timeInfo }}"
@@ -45,15 +60,18 @@
       bind:tap="onTimeClick"
       input-align="right"
     />
-    <van-cell title="图片" label="服装的要求" value="{{imagesValue}}" border="{{false}}" />
+    <van-cell title="图片或者视频展示" value="{{imagesValue}}" border="{{false}}" />
     <view class="image-container">
       <view class="iamge-content">
         <van-uploader
           bind:after-read="afterRead"
+          accept="media"
           deletable
+          disabled="{{uploaderDisabled}}"
         />
         <view class="imgurl-container" wx:for="{{updateObj.images}}" wx:key="*this">
           <van-image
+            bind:click="previewMedia(index)"
             width="80"
             height="80"
             src="{{item}}"
@@ -65,10 +83,13 @@
       </view>
     </view>
     <van-field
-      label="备注"
+      label="要求"
+      title-width="60rpx"
       value="{{ updateObj.note }}"
-      placeholder="请输入备注信息"
+      placeholder="请输入您对所招工人的要求或者服装的要求"
       input-align="right"
+      type="textarea"
+      autosize
       id="note"
       bind:change="onFieldChange"
     />
@@ -102,7 +123,7 @@
         bind:click-right="onAddressClickRight"
         safe-area-inset-top="{{false}}"
       />
-      <address-list bind:choose-item="addressChange" />
+      <address-list showBottomBtn="{{false}}" bind:choose-item="addressChange" />
     </view>
   </van-popup>
 </template>
@@ -113,6 +134,16 @@ import { fileUpload, addRelease } from '@/api'
 const store = getApp().globalStore
 
 createComponent({
+  properties: {
+    category: {
+      type: String,
+      value: ''
+    },
+    categoryName: {
+      type: String,
+      value: ''
+    }
+  },
   data: {
     showPopup: false,
     popupType: '',
@@ -121,6 +152,7 @@ createComponent({
     minDate: Date.now(),
     currentDate: Date.now(),
     address: {},
+    uploaderDisabled: false,
     formatter(type, value) {
       const types = {
         year: '年',
@@ -147,6 +179,18 @@ createComponent({
       ownTimeName: '',
       images: [],
       poi: {}
+    }
+  },
+  watch: {
+    category(val) {
+      this.updateObj.category = val
+    },
+    categoryName(val) {
+      if (this.updateObj.category === '10') {
+        this.updateObj.categoryName = ''
+        return
+      }
+      this.updateObj.categoryName = val
     }
   },
   computed: {
@@ -179,25 +223,33 @@ createComponent({
   },
   methods: {
     ...store.mapActions(['setLocation']),
+    ...store.mapMutations(['setShowBottomNav']),
     // note: 修改字段值
     onFieldChange(e) {
       this.updateObj[e.target.id] = e.detail
     },
+    changeUnit(e) {
+      this.updateObj.priceUnit = e.detail
+    },
     // note: 图片相关处理
     async afterRead(e) {
-      const res = await fileUpload(e.detail.file.thumb)
+      this.uploaderDisabled = true
+      const res = await fileUpload(e.detail.file.url)
       this.updateObj.images.push(res.fileID)
+      this.uploaderDisabled = false
     },
     clearImg(item) {
       this.updateObj.images = this.updateObj.images.filter(f => f !== item)
     },
     // note: 弹窗处理
     showPopupContainer(type) {
+      this.setShowBottomNav(false)
       this.showPopup = true
       this.popupType = type
     },
     closePopupContainer() {
       this.showPopup = false
+      this.setShowBottomNav(true)
     },
     // note: 分类处理
     changeComponent(e) {
@@ -209,13 +261,13 @@ createComponent({
     onTimeClick() {
       this.showPopupContainer('time')
       this.currentDate = this.updateObj.ownTime || this.currentDate
-      this.updateObj.ownTimeName = this.timeInfo
     },
     onTimeInput(e) {
       this.currentDate = e.detail
     },
     onTimeConfirm() {
       this.updateObj.ownTime = this.currentDate
+      this.updateObj.ownTimeName = this.timeInfo
       this.closePopupContainer()
     },
     // note: 地址处理
@@ -237,6 +289,10 @@ createComponent({
         result.text = '请选择类别'
         return result
       }
+      if (this.updateObj.category === '10' && !this.updateObj.categoryName) {
+        result.text = '请输入自定义品类名称'
+        return result
+      }
       if (!this.updateObj.price) {
         result.text = '请输入单价'
         return result
@@ -252,8 +308,18 @@ createComponent({
       result.success = true
       return result
     },
+    previewMedia(index) {
+      console.log(index, this.updateObj.images)
+      wx.previewMedia({
+        current: index,
+        sources: this.updateObj.images.map(item => ({
+          url: item
+        }))
+      })
+    },
     // note: 提交操作
     async submitData() {
+      console.log(this.updateObj)
       const vali = this.validate()
       if (!vali.success) {
         mpx.showToast({
@@ -264,13 +330,6 @@ createComponent({
       }
       const res = await addRelease(this.updateObj)
       if (res.code === 200) {
-        if (this.isBack) {
-          mpx.navigateBack()
-        } else {
-          mpx.redirectTo({
-            url: '/release/pages/list'
-          })
-        }
       } else {
         mpx.showToast({
           title: res.msg,

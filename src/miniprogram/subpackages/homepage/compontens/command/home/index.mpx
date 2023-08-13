@@ -7,7 +7,7 @@
   >
     <category-list bind:component="changeComponent"/>
     <view class="content">
-      <component is="{{role}}" category="{{category}}"></component>
+      <component is="{{role}}" category="{{category}}" categoryName="{{categoryName}}"></component>
     </view>
   </custom-container>
 </template>
@@ -18,7 +18,8 @@ const store = getApp().globalStore
 
 createComponent({
   data: {
-    category: ''
+    category: '',
+    categoryName: ''
   },
   computed: {
     ...store.mapState(['role']),
@@ -62,7 +63,9 @@ createComponent({
     ...store.mapMutations(['setCurrentKey']),
     changeComponent(e) {
       const { value, text } = e.detail
+      console.log(e)
       this.category = value
+      this.categoryName = text
     }
   }
 })

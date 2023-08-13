@@ -31,6 +31,10 @@ export const categoryItems = {
           value: '1-2-8'
         }
       ]
+    },
+    {
+      text: '自定义',
+      value: '10'
     }
     // {
     //   text: '直播',
