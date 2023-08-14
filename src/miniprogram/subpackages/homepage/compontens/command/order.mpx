@@ -1,51 +1,112 @@
 <template>
-    <custom-container
-        title="订单详情"
-        lefticon=""
-        containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
-    >
-        <van-collapse
-            value="{{ activeNames }}"
-            bind:change="onChange"
-        >
-            <van-collapse-item title="进行中" name="1">
-                代码是写出来给人看的，附带能在机器上运行
-            </van-collapse-item>
-            <van-collapse-item title="已有人询问" name="2">
-                代码是写出来给人看的，附带能在机器上运行
-            </van-collapse-item>
-            <van-collapse-item title="已完成" name="3">
-                代码是写出来给人看的，附带能在机器上运行
-            </van-collapse-item>
-        </van-collapse>
-    </custom-container>
+  <custom-container
+    title="订单详情"
+    lefticon=""
+    containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
+  >
+    <view>
+      <view class="title">我发的订单：</view>
+      <van-collapse
+        value="{{ activeOwnNames }}"
+        bind:change="onChange"
+      >
+        <van-collapse-item wx:for="{{steps}}" title="{{item.desc}}" wx:key="status" name="{{item.status}}">
+          <view wx:for="{{list}}" wx:for-item="l" wx:key="_id">
+            <van-cell-group inset wx:if="{{item.status === l.status}}">
+              <van-cell title="类别" value="{{l.categoryName}}" />
+              <van-cell title="单价" value="{{'￥' + l.price}}" />
+              <van-cell title="截止时间" value="{{l.ownTimeName}}" />
+              <van-cell wx:if="{{l.images.length}}" title="图片" value="点击查看" clickable bind:tap="priviewImg(item)" />
+              <view>
+                <van-steps steps="{{ steps }}" active="{{ l.status }}" />
+              </view>
+            </van-cell-group>
+          </view>
+        </van-collapse-item>
+      </van-collapse>
+    </view>
+    <view>
+      <view class="title">我接的订单：</view>
+      <van-collapse
+        value="{{ activeSendNames }}"
+        bind:change="onSendChange"
+      >
+        <van-collapse-item title="进行中" name="1">
+          代码是写出来给人看的，附带能在机器上运行
+        </van-collapse-item>
+        <van-collapse-item title="已询问" name="2">
+          代码是写出来给人看的，附带能在机器上运行
+        </van-collapse-item>
+        <van-collapse-item title="已完成" name="3">
+          代码是写出来给人看的，附带能在机器上运行
+        </van-collapse-item>
+      </van-collapse>
+    </view>
+  </custom-container>
 </template>
 
 <script>
 import { createComponent } from '@mpxjs/core'
+import { getReleaseList } from '@/api'
+import { steps } from '@/setting/common'
 
 createComponent({
   data: {
-    activeNames: ['1']
+    activeOwnNames: ['1'],
+    activeSendNames: ['1'],
+    steps,
+    list: []
+  },
+  attached() {
+    this.getList()
+  },
+  pageLifetimes: {
+    show() {
+      this.getList()
+    }
   },
   methods: {
+    async getList() {
+      const res = await getReleaseList()
+      this.list = res.data.list
+      console.log(this.list)
+    },
     onChange(e) {
-      this.activeNames = e.detail
+      this.activeOwnNames = e.detail
+    },
+    onSendChange(e) {
+      this.activeSendNames = e.detail
     }
   }
 })
 </script>
 
 <style lang="stylus">
-
+.title
+  width 100%
+  height 60rpx
+  padding 0 15rpx
+  line-height 60rpx
+  font-weight 500
+  font-size 24rpx
+  box-sizing border-box
 </style>
 
 <script type="application/json">
   {
     "usingComponents": {
-        "custom-container": "@/compontens/base/custom-container",
-        "van-collapse": "@vant/weapp/collapse/index",
-        "van-collapse-item": "@vant/weapp/collapse-item/index"
+      "custom-container": "@/compontens/base/custom-container",
+      "van-collapse": "@vant/weapp/collapse/index",
+      "van-collapse-item": "@vant/weapp/collapse-item/index",
+      "van-cell": "@vant/weapp/cell/index",
+      "van-cell-group": "@vant/weapp/cell-group/index",
+      "van-empty": "@vant/weapp/empty/index",
+      "van-loading": "@vant/weapp/loading/index",
+      "van-card": "@vant/weapp/card/index",
+      "van-button": "@vant/weapp/button/index",
+      "van-steps": "@vant/weapp/steps/index",
+      "van-swipe-cell": "@vant/weapp/swipe-cell/index",
+      "van-dialog": "@vant/weapp/dialog/index"
     }
   }
 </script>

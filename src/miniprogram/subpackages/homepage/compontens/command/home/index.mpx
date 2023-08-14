@@ -7,7 +7,7 @@
   >
     <category-list bind:component="changeComponent"/>
     <view class="content">
-      <component is="{{role}}" category="{{category}}" categoryName="{{categoryName}}"></component>
+      <component is="{{role}}" category="{{category}}" categoryName="{{categoryName}}" bind:release-finish="releaseFinish"></component>
     </view>
   </custom-container>
 </template>
@@ -57,15 +57,15 @@ createComponent({
       return options[this.role]
     }
   },
-  ready() {
-  },
   methods: {
     ...store.mapMutations(['setCurrentKey']),
     changeComponent(e) {
       const { value, text } = e.detail
-      console.log(e)
       this.category = value
       this.categoryName = text
+    },
+    releaseFinish() {
+      this.setCurrentKey('order')
     }
   }
 })

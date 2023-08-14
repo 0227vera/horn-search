@@ -328,8 +328,14 @@ createComponent({
         })
         return
       }
-      const res = await addRelease(this.updateObj)
+      mpx.showLoading({
+        title: '提交中...',
+        mask: true
+      });
+      const res = await addRelease({ ...this.updateObj, status: 1 })
+      mpx.hideLoading()
       if (res.code === 200) {
+        this.triggerEvent('release-finish')
       } else {
         mpx.showToast({
           title: res.msg,

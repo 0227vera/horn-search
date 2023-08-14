@@ -85,3 +85,20 @@ export const categoryItems = {
     // }
   ]
 }
+
+export const steps = [{
+  desc: '已发布',
+  status: '1'
+}, {
+  desc: '已推送',
+  status: '2'
+}, {
+  desc: '已有人呼叫',
+  status: '3'
+}, {
+  desc: '已匹配成功',
+  status: '4'
+}, {
+  desc: '已完成',
+  status: '5'
+}]
