@@ -25,7 +25,6 @@ export default {
       name: '订单详情',
       key: 'order',
       icon: 'comment',
-      info: 20,
       isShowFooter: true
     }, {
       name: '我的',

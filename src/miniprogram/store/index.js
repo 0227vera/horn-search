@@ -1,6 +1,6 @@
 import mpx, { createStore } from '@mpxjs/core'
 import MapSdk from '@/wx-map-sdk/qqmap-wx-jssdk.min.js'
-import { getUsList } from '@/api'
+import { getUsList, getReleaseList } from '@/api'
 import { categoryItems } from '@/setting/common'
 import footerNavBar from '@/const/footer'
 
@@ -28,7 +28,9 @@ export default createStore({
       longitude: 0,
       latitude: 0
     },
-    showBottomNav: true
+    showBottomNav: true,
+    orderList: [],
+    orderListReqLoading: true
   },
   getters: {
     currentGooterList(state) {
@@ -52,6 +54,12 @@ export default createStore({
     setCurrentKey(state, data) {
       state.footerNavBar[state.role].currentkey = data
     },
+    setOrderNumInfo(state, data) {
+      state.footerNavBar[state.role].list = state.footerNavBar[state.role].list.map(item => {
+        item.key === 'order' && (item.info = data)
+        return item
+      })
+    },
     setUsInfo(state, data = {}) {
       Object.assign(state.usInfo, data)
     },
@@ -66,13 +74,30 @@ export default createStore({
     },
     setShowBottomNav(state, data) {
       state.showBottomNav = data
+    },
+    setOrderList(state, data) {
+      state.orderList = data
+    },
+    setOrderListReqLoading(state, data) {
+      state.orderListReqLoading = data
     }
   },
   actions: {
+    // node: 判断管理员使用
     async getUsInfo({ commit }) {
       const res = await getUsList({})
       commit('setUsInfo', res.data?.list?.[0] ?? {})
       return res.data?.list?.[0] ?? {}
+    },
+    // node: 如果是boss的状态下获取所有的订单情况，并添加对应的数量标注
+    async getReleaseList({ commit }) {
+      commit('setOrderListReqLoading', true)
+      const res = await getReleaseList()
+      const list = res.data.list
+      commit('setOrderList', list)
+      list.length && commit('setOrderNumInfo', list.length)
+      commit('setOrderListReqLoading', false)
+      console.log(list)
     },
     setLocation ({ state, commit }) {
       return new Promise((resolve, reject) => {

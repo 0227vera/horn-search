@@ -13,6 +13,8 @@ AddressModel.DB_STRUCTURE = {
   categoryName: 'string|true',
   price: 'string|true',
   priceUnit: 'string|true',
+  status: 'string|true',
+  callnum: 'int|false',
   poi: 'object|true',
   tel: 'string|true',
   ownTime: 'int|false',

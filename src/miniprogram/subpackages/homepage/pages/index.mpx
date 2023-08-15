@@ -14,6 +14,9 @@ createPage({
   },
   onLoad(params) {
     this.setRole(params.role)
+    if (params.role === 'boss') {
+      this.getReleaseList()
+    }
   },
   data: {
   },
@@ -22,6 +25,7 @@ createPage({
   },
   methods: {
     ...store.mapMutations(['setCurrentKey', 'setRole']),
+    ...store.mapActions(['getReleaseList']),
     tapItem(item) {
       this.setCurrentKey(item.key)
     }

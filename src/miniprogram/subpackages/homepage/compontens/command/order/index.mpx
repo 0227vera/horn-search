@@ -4,28 +4,18 @@
     lefticon=""
     containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
   >
-    <view>
+    <view class="container">
       <view class="title">我发的订单：</view>
       <van-collapse
         value="{{ activeOwnNames }}"
         bind:change="onChange"
       >
         <van-collapse-item wx:for="{{steps}}" title="{{item.desc}}" wx:key="status" name="{{item.status}}">
-          <view wx:for="{{list}}" wx:for-item="l" wx:key="_id">
-            <van-cell-group inset wx:if="{{item.status === l.status}}">
-              <van-cell title="类别" value="{{l.categoryName}}" />
-              <van-cell title="单价" value="{{'￥' + l.price}}" />
-              <van-cell title="截止时间" value="{{l.ownTimeName}}" />
-              <van-cell wx:if="{{l.images.length}}" title="图片" value="点击查看" clickable bind:tap="priviewImg(item)" />
-              <view>
-                <van-steps steps="{{ steps }}" active="{{ l.status }}" />
-              </view>
-            </van-cell-group>
-          </view>
+            <order-status list="{{orderList}}" status="{{item.status}}" loading="{{orderListReqLoading}}" />
         </van-collapse-item>
       </van-collapse>
     </view>
-    <view>
+    <!-- <view>
       <view class="title">我接的订单：</view>
       <van-collapse
         value="{{ activeSendNames }}"
@@ -41,7 +31,7 @@
           代码是写出来给人看的，附带能在机器上运行
         </van-collapse-item>
       </van-collapse>
-    </view>
+    </view> -->
   </custom-container>
 </template>
 
@@ -49,28 +39,20 @@
 import { createComponent } from '@mpxjs/core'
 import { getReleaseList } from '@/api'
 import { steps } from '@/setting/common'
+import store from '@/store'
 
 createComponent({
   data: {
     activeOwnNames: ['1'],
     activeSendNames: ['1'],
     steps,
-    list: []
+    list: [],
+    loading: true
   },
-  attached() {
-    this.getList()
-  },
-  pageLifetimes: {
-    show() {
-      this.getList()
-    }
+  computed: {
+    ...store.mapState(['orderList', 'orderListReqLoading'])
   },
   methods: {
-    async getList() {
-      const res = await getReleaseList()
-      this.list = res.data.list
-      console.log(this.list)
-    },
     onChange(e) {
       this.activeOwnNames = e.detail
     },
@@ -81,7 +63,10 @@ createComponent({
 })
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
+.container
+  padding-bottom 168rpx
+  box-sizing border-box
 .title
   width 100%
   height 60rpx
@@ -106,7 +91,8 @@ createComponent({
       "van-button": "@vant/weapp/button/index",
       "van-steps": "@vant/weapp/steps/index",
       "van-swipe-cell": "@vant/weapp/swipe-cell/index",
-      "van-dialog": "@vant/weapp/dialog/index"
+      "van-dialog": "@vant/weapp/dialog/index",
+      "order-status": "./order-status"
     }
   }
 </script>

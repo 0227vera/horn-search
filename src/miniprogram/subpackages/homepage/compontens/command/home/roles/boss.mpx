@@ -130,7 +130,7 @@
 
 <script>
 import mpx, { createComponent } from '@mpxjs/core'
-import { fileUpload, addRelease } from '@/api'
+import { fileUpload, addRelease, updateRelease } from '@/api'
 const store = getApp().globalStore
 
 createComponent({
@@ -222,7 +222,7 @@ createComponent({
     }
   },
   methods: {
-    ...store.mapActions(['setLocation']),
+    ...store.mapActions(['setLocation', 'getReleaseList']),
     ...store.mapMutations(['setShowBottomNav']),
     // note: 修改字段值
     onFieldChange(e) {
@@ -334,8 +334,27 @@ createComponent({
       });
       const res = await addRelease({ ...this.updateObj, status: 1 })
       mpx.hideLoading()
+      console.log('--------->', res)
       if (res.code === 200) {
-        this.triggerEvent('release-finish')
+        const self = this
+        mpx.showToast({
+          icon: 'success',
+          title: '您已发布成功!',
+          duration: 1000,
+          complete: async () => {
+            mpx.showLoading({
+              title: '正在为您推送……',
+              mask: true
+            })
+            await updateRelease({
+              _id: res.data,
+              status: '2'
+            })
+            mpx.hideLoading()
+            self.getReleaseList()
+            self.triggerEvent('release-finish')
+          }
+        })
       } else {
         mpx.showToast({
           title: res.msg,
