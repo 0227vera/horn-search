@@ -7,6 +7,11 @@ class ReleaseManagerService extends BaseService {
     return res
   }
 
+  async getOne(where = {}) {
+    let res = await ReleaseModel.getOne(where)
+    return res
+  }
+
   async create(data = {}) {
     const res = await ReleaseModel.insert(data)
     return res

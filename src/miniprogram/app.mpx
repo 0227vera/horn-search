@@ -32,6 +32,7 @@ createApp({
     ],
     "packages": [
       "./subpackages/homepage/app?root=homepage",
+      "./subpackages/order-detail/app?root=order-detail",
       "./subpackages/choose-role/app?root=choose-role",
       "./subpackages/address-manager/app?root=address-manager",
       "./subpackages/manager/app?root=manager",

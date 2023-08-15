@@ -1,0 +1,131 @@
+<template>
+  <custom-container
+    title="订单详情"
+    lefticon="arrow-left"
+    containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
+  >
+    <view wx:if="{{loading}}" class="status">
+      <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
+    </view>
+    <view wx:else>
+      <view class="title">基本信息：</view>
+      <van-cell-group slot="" class="form" border="{{false}}" inset>
+        <van-cell wx:for="{{renderList}}" wx:key="_id" title="{{item.title}}" value="{{item.value}}" clickable="{{item.islink}}" is-link="{{item.islink}}" bind:tap="priview(item)"></van-cell>
+      </van-cell-group>
+      <view class="title">流程信息：</view>
+      <van-steps steps="{{ steps }}" active="{{ active }}" />
+      <view wx:if="{{active === 2}}">
+        <view class="title">呼叫人信息：</view>
+        <van-cell-group slot="" class="form" border="{{false}}" inset>
+          <van-cell wx:for="{{calllist}}" wx:key="*this" title="电话" bind:tap="clickTel(item)" value="{{item.tel}}" clickable is-link></van-cell>
+        </van-cell-group>
+      </view>
+    </view>
+  </custom-container>
+</template>
+
+<script>
+import mpx, { createPage } from '@mpxjs/core'
+import { getReleaseOneById } from '@/api'
+import { steps } from '@/setting/common'
+
+createPage({
+  data: {
+    loading: true,
+    renderList: [],
+    steps,
+    active: '',
+    calllist: []
+  },
+  async onLoad(params) {
+    this.loading = true
+    const res = await getReleaseOneById(params)
+    console.log('res------>', res)
+    const { categoryName, price, priceUnit, poi, tel, images, ownTimeName, note, status, calllist } = res.data || {}
+    this.active = status - 1
+    this.renderList = [{
+      title: '分类',
+      value: categoryName
+    }, {
+      title: '单价',
+      value: `${price}${priceUnit}`
+    }, {
+      title: '位置',
+      value: poi.name
+    }, {
+      title: '电话',
+      value: tel
+    }]
+    if (ownTimeName) {
+      this.renderList.push({
+        title: '截止时间',
+        value: ownTimeName
+      })
+    }
+    if (images?.length) {
+      this.renderList.push({
+        title: '图片/视频',
+        value: '点击查看图片',
+        islink: true,
+        list: images
+      })
+    }
+    if (note) {
+      this.renderList.push({
+        title: '要求',
+        value: note
+      })
+    }
+    this.calllist = calllist
+    this.loading = false
+  },
+  clickTel(item) {
+    console.log(item)
+    wx.makePhoneCall({
+      phoneNumber: item.tel
+    })
+  },
+  priview(item) {
+    console.log(item)
+    wx.previewMedia({
+      current: 0,
+      sources: item.list.map(i => ({
+        url: i,
+        type: 'image'
+      }))
+    })
+  }
+})
+
+</script>
+
+<style lang="stylus" scoped>
+.status
+  width 100%
+  height 100%
+  display flex
+  justify-content center
+  align-items center
+.title
+  width 100%
+  height 80rpx
+  padding 0 32rpx
+  line-height 80rpx
+  font-weight 500
+  font-size 24rpx
+  box-sizing border-box
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "custom-container": "@/compontens/base/custom-container",
+      "van-cell": "@vant/weapp/cell/index",
+      "van-cell-group": "@vant/weapp/cell-group/index",
+      "van-image": "@vant/weapp/image/index",
+      "van-steps": "@vant/weapp/steps/index",
+      "van-loading": "@vant/weapp/loading/index"
+    },
+    "navigationStyle": "custom"
+  }
+</script>

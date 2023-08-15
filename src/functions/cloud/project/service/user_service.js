@@ -3,9 +3,7 @@ const UserModel = require('../model/user_model.js')
 
 class UserManagerService extends BaseService {
   async getOne(where = {}) {
-    console.log('there------->', where)
     let res = await UserModel.getOne(where)
-    console.log(res)
     return res
   }
 

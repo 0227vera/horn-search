@@ -11,6 +11,7 @@ module.exports = {
   'release/delete': 'release_controlle@delete',
   'release/create': 'release_controlle@create',
   'release/update': 'release_controlle@update',
+  'release/getonebyid': 'release_controlle@getOne',
 
   // note: 用户管理
   'user/get': 'user_controlle@getList',

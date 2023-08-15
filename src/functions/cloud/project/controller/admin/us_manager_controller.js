@@ -8,6 +8,16 @@ class UsManagerController extends BaseAdminController {
     return res
   }
 
+  async getOne() {
+    const where = {
+      OPENID: this._openId
+    }
+    Object.assign(where, this._event.params || {})
+    const service = new UsManagerService()
+    const res = await service.getOne(where)
+    return res
+  }
+
   async updateUsItem() {
     const service = new UsManagerService()
     const res = await service.updateUsItem(this._event.params)
