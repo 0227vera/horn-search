@@ -5,7 +5,7 @@ class LogModel extends BaseModel {
 }
 
 // 集合名
-LogModel.CL = "shoe_washing_log"
+LogModel.CL = "warrior_log"
 
 LogModel.DB_STRUCTURE = {
   _pid: 'string|true',

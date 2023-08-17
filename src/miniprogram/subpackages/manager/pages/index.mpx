@@ -1,8 +1,6 @@
 <template>
   <custom-container
     title="后台管理"
-    btnName="{{currentActiveItem.btnName}}"
-    bind:footer-btn="footerBtnClick"
   >
     <van-tabs
       swipeable
@@ -19,7 +17,7 @@
         wx:key="*this"
         name="{{item.com}}"
       >
-        <component is="{{item.com}}" ref="com" bind:submitData="changeSubmitData" />
+        <component is="{{item.com}}" ref="com"/>
       </van-tab>
     </van-tabs>
   </custom-container>
@@ -27,7 +25,6 @@
 
 <script>
 import mpx, { createPage } from '@mpxjs/core'
-import { updateUsItem } from '@/api'
 
 createPage({
   data: {
@@ -36,37 +33,13 @@ createPage({
       text: '用户管理',
       com: 'user-manager'
     }, {
-      text: '关于我们',
-      com: 'about-us',
-      btnName: '确认修改',
-      updateInterface: updateUsItem
-    }, {
-      text: '联系我们',
-      com: 'contact-us',
-      btnName: '确认修改',
-      updateInterface: updateUsItem
-    }],
-    submitData: null
-  },
-  computed: {
-    currentActiveItem() {
-      return this.navTabs.find(item => item.com === this.active) || {}
-    }
+      text: '公司信息',
+      com: 'company'
+    }]
   },
   methods: {
     tabChange(e) {
       this.active = e.detail.name
-    },
-    changeSubmitData(e) {
-      this.submitData = e.detail
-    },
-    async footerBtnClick() {
-      if (!this.currentActiveItem.btnName) return
-      const res = await this.currentActiveItem.updateInterface(this.submitData)
-      mpx.showToast({
-        title: res.code === 200 ? '修改成功' : '修改失败',
-        icon: res.code === 200 ? 'success' : 'fail'
-      })
     }
   }
 })
@@ -79,8 +52,7 @@ createPage({
       "van-tab": "@vant/weapp/tab/index",
       "van-tabs": "@vant/weapp/tabs/index",
       "user-manager":"../compontens/user-manager",
-      "about-us":"../compontens/about-us",
-      "contact-us":"../compontens/contact-us"
+      "company":"../compontens/company"
     },
     "navigationStyle": "custom"
   }

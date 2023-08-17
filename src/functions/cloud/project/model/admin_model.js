@@ -5,7 +5,7 @@ class AdminModel extends BaseModel {
 }
 
 // 集合名
-AdminModel.CL = "shoe_washing_admin"
+AdminModel.CL = "warrior_admin"
 
 AdminModel.DB_STRUCTURE = {
   _pid: 'string|true',

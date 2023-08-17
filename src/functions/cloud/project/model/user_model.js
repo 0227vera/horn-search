@@ -5,7 +5,7 @@ class AddressModel extends BaseModel {
 }
 
 // 集合名
-AddressModel.CL = "shoe_washing_user"
+AddressModel.CL = "warrior_user"
 
 AddressModel.DB_STRUCTURE = {
   _pid: 'string|true',

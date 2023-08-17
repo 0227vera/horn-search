@@ -20,25 +20,12 @@ module.exports = {
   'user/update': 'user_controlle@update',
   'user/currentcole': 'user_controlle@getOne',
 
-  // note: 后台管理部分
+  // node: 固定配置
+  'admin/getconstant': 'constant_controlle@getOne',
+  // note: 管理员权限
   'admin/isadmin': 'admin/base_admin_controller@isAdmin',
 
-  'admin/class_manager_list': 'admin/class_manager_controller@getList',
-  'admin/add_class_manager_item': 'admin/class_manager_controller@addClassItem',
-  'admin/update_class_manager_item': 'admin/class_manager_controller@updateClassItem',
-  'admin/delete_class_manager_item': 'admin/class_manager_controller@deleteClassItem',
-
-  'admin/product_manager_list': 'admin/product_manager_controller@getList',
-  'admin/add_product_manager_item': 'admin/product_manager_controller@addProductItem',
-  'admin/update_product_manager_item': 'admin/product_manager_controller@updateProductItem',
-  'admin/delete_product_manager_item': 'admin/product_manager_controller@deleteProductItem',
-
-  'admin/banner_manager_list': 'admin/banner_manager_controller@getList',
-  'admin/add_banner_manager_item': 'admin/banner_manager_controller@addBannerItem',
-  'admin/update_banner_manager_item': 'admin/banner_manager_controller@updateBannerItem',
-  'admin/delete_banner_manager_item': 'admin/banner_manager_controller@deleteBannerItem',
-
-  'admin/us_manager_list': 'admin/us_manager_controller@getList',
-  'admin/update_us_manager_item': 'admin/us_manager_controller@updateUsItem'
-
+  // 公司信息
+  'admin/get_company_info': 'admin/company_controller@getOne',
+  'admin/update_company_info': 'admin/company_controller@update'
 }

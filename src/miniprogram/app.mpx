@@ -37,7 +37,7 @@ createApp({
       "./subpackages/address-manager/app?root=address-manager",
       "./subpackages/manager/app?root=manager",
       "./subpackages/release/app?root=release",
-      "./subpackages/us/app?root=us"
+      "./subpackages/company/app?root=company"
     ],
     "window": {
       "navigationStyle": "custom",

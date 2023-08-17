@@ -1,4 +1,4 @@
-export * from './about-us'
+export * from './company'
 export * from './file'
 export * from './owner'
 export * from './address'

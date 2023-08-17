@@ -40,29 +40,17 @@ createComponent({
   data: {
     navbar: [
       {
-        name: '发布需求',
-        icon: 'add-o',
+        name: '发布历史',
+        icon: 'todo-list-o',
         jumptype: 'mp',
-        url: '/release/pages/index?isBack=false'
+        url: '/release/pages/list'
       },
       {
         name: '权益卡',
         icon: 'send-gift-o',
         jumptype: 'alert',
         message: '权益卡正在规划中，开通后第一时间通知您'
-      },
-      {
-        name: '充值卡',
-        icon: 'vip-card-o',
-        jumptype: 'alert',
-        message: '为保证的用户体验，暂不开发充值能力，之后将以更好的体验展示给您'
       }
-      // {
-      //   name: '账户余额',
-      //   icon: 'manager-o',
-      //   jumptype: 'alert',
-      //   message: '为保证用户体验和金钱安全前提，暂不对您的金额做第三方储存'
-      // }
     ],
     showManagerEntry: false
   },
@@ -71,32 +59,10 @@ createComponent({
       return [
         [
           {
-            name: '发布历史',
-            icon: 'todo-list-o',
-            jumptype: 'mp',
-            url: '/release/pages/list'
-          }
-        ],
-        [
-          {
-            name: '地址管理',
-            icon: 'logistics',
-            jumptype: 'mp',
-            url: '/address-manager/pages/index'
-          }
-        ],
-        [
-          {
             name: '关于我们',
             icon: 'question-o',
             jumptype: 'mp',
-            url: '/us/pages/about-us'
-          },
-          {
-            name: '加入我们',
-            icon: 'gem-o',
-            jumptype: 'mp',
-            url: '/us/pages/contact-us'
+            url: '/company/pages/index'
           }
         ],
         [
@@ -120,10 +86,8 @@ createComponent({
   },
   attached() {
     this.isAdmin()
-    this.getUsInfo()
   },
   methods: {
-    ...store.mapActions(['getUsInfo']),
     async isAdmin() {
       const res = await isAdmin()
       if (res.data.ADMIN_ID) {

@@ -1,6 +1,7 @@
 <template>
   <custom-container title="加入我们">
     <van-cell-group inset>
+      <van-cell title="描述" value="{{usInfo.text}}" />
       <van-cell title="电话" value="{{usInfo.phone}}" />
       <van-cell title="微信" value="{{usInfo.wechat}}" />
       <van-cell title="邮箱" value="{{usInfo.email}}" />
@@ -11,10 +12,17 @@
 <script>
 import { createPage } from '@mpxjs/core'
 import store from '@/store'
+import { getComPanyInfo } from '@/api'
 
 createPage({
-  computed: {
-    ...store.mapState(['usInfo'])
+  data: {
+    usInfo: {
+
+    }
+  },
+  async onLoad() {
+    const res = await getComPanyInfo()
+    this.usInfo = res.data || {}
   }
 })
 

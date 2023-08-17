@@ -86,7 +86,9 @@ createPage({
     })
   },
   priview(item) {
-    console.log(item)
+    if (!item.islink) {
+      return
+    }
     wx.previewMedia({
       current: 0,
       sources: item.list.map(i => ({

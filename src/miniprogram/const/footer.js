@@ -33,7 +33,7 @@ export default {
       info: null,
       isShowFooter: true
     }],
-    currentkey: 'order',
+    currentkey: 'owner',
     isShow: 'expend'
   },
   business: {

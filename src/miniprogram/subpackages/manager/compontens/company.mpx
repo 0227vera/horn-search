@@ -1,0 +1,101 @@
+<template>
+  <view style="margin-top: 32rpx">
+    <van-cell-group inset style="margin-top: 32rpx">
+      <van-field
+        label="描述信息"
+        value="{{ submitObj.text }}"
+        placeholder="公司描述"
+        border="{{ false }}"
+        bind:change="onChange"
+        type="textarea"
+        id="text"
+      />
+      <van-field
+        label="电话"
+        value="{{ submitObj.phone }}"
+        placeholder="电话号码"
+        border="{{ false }}"
+        bind:change="onChange"
+        type="number"
+        id="phone"
+      />
+      <van-field
+        label="微信"
+        value="{{ submitObj.wechat }}"
+        placeholder="微信"
+        border="{{ false }}"
+        bind:change="onChange"
+        type="textarea"
+        id="wechat"
+      />
+      <van-field
+        label="邮箱"
+        value="{{ submitObj.email }}"
+        placeholder="邮箱"
+        border="{{ false }}"
+        bind:change="onChange"
+        type="textarea"
+        id="email"
+      />
+    </van-cell-group>
+    <view class="submit">
+      <van-button type="primary" block round bind:tap="submitData">确认</van-button>
+    </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import mpx, { createComponent } from '@mpxjs/core'
+import { getComPanyInfo, updateComPanyInfo } from '@/api'
+import Dialog from '@vant/weapp/dialog/dialog'
+
+createComponent({
+  data: {
+    submitObj: {
+      text: '',
+      wechat: '',
+      email: '',
+      phone: ''
+    }
+  },
+  async ready() {
+    const res = await getComPanyInfo()
+    Object.keys(this.submitObj).forEach(item => {
+      this.submitObj[item] = res?.data?.[item]
+    })
+  },
+  methods: {
+    onChange(e) {
+      this.submitObj[e.target.id] = e.detail
+    },
+    async submitData() {
+      const res = await updateComPanyInfo(this.submitObj)
+      mpx.showToast({
+        title: res.code === 200 ? '更新成功' : '更新失败，请联系开发者',
+        icon: res.code === 200 ? 'success' : 'error',
+        mask: true
+      })
+    }
+  }
+})
+
+</script>
+
+<style lang="stylus">
+.submit
+  padding 32rpx
+  box-sizing border-box
+  margin-top 64rpx
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "van-button": "@vant/weapp/button/index",
+      "van-field": "@vant/weapp/field/index",
+      "van-cell-group": "@vant/weapp/cell-group/index",
+      "van-cell": "@vant/weapp/cell/index"
+    }
+  }
+</script>

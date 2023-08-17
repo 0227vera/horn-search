@@ -1,6 +1,6 @@
 import mpx, { createStore } from '@mpxjs/core'
 import MapSdk from '@/wx-map-sdk/qqmap-wx-jssdk.min.js'
-import { getUsList, getReleaseList } from '@/api'
+import { getReleaseList } from '@/api'
 import { categoryItems } from '@/setting/common'
 import footerNavBar from '@/const/footer'
 
@@ -83,12 +83,6 @@ export default createStore({
     }
   },
   actions: {
-    // node: 判断管理员使用
-    async getUsInfo({ commit }) {
-      const res = await getUsList({})
-      commit('setUsInfo', res.data?.list?.[0] ?? {})
-      return res.data?.list?.[0] ?? {}
-    },
     // node: 如果是boss的状态下获取所有的订单情况，并添加对应的数量标注
     async getReleaseList({ commit }) {
       commit('setOrderListReqLoading', true)
@@ -97,7 +91,6 @@ export default createStore({
       commit('setOrderList', list)
       list.length && commit('setOrderNumInfo', list.length)
       commit('setOrderListReqLoading', false)
-      console.log(list)
     },
     setLocation ({ state, commit }) {
       return new Promise((resolve, reject) => {
