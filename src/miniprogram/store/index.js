@@ -1,12 +1,9 @@
 import mpx, { createStore } from '@mpxjs/core'
 import MapSdk from '@/wx-map-sdk/qqmap-wx-jssdk.min.js'
 import { getReleaseList } from '@/api'
-import { categoryItems } from '@/setting/common'
-import footerNavBar from '@/const/footer'
 
 export default createStore({
   state: {
-    categoryItems: JSON.parse(JSON.stringify(categoryItems)),
     navBarStyle: {
       title: 'home',
       color: '#666',
@@ -17,7 +14,7 @@ export default createStore({
       paddingBottom: 6,
       clickLeft: null
     },
-    footerNavBar,
+    footerNavBar: [],
     role: '',
     usInfo: {},
     mapSdk: new MapSdk({
@@ -30,11 +27,13 @@ export default createStore({
     },
     showBottomNav: true,
     orderList: [],
-    orderListReqLoading: true
+    orderListReqLoading: true,
+    categoryItems: {},
+    steps: []
   },
   getters: {
     currentGooterList(state) {
-      return state.footerNavBar[state.role]
+      return state.footerNavBar?.[state.role]
     }
   },
   mutations: {
@@ -47,6 +46,9 @@ export default createStore({
     },
     setNavBarStyle(state, data) {
       Object.assign(state.navBarStyle, data)
+    },
+    initFooterNavBar(state, data) {
+      state.footerNavBar = data
     },
     setRole(state, data) {
       state.role = data
@@ -80,6 +82,9 @@ export default createStore({
     },
     setOrderListReqLoading(state, data) {
       state.orderListReqLoading = data
+    },
+    setSteps(state, data) {
+      state.steps = data
     }
   },
   actions: {

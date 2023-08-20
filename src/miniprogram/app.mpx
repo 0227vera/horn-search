@@ -2,18 +2,25 @@
 import mpx, { createApp } from '@mpxjs/core'
 import apiProxy from '@mpxjs/api-proxy'
 import store from './store'
+import { getCommonConfig } from '@/api'
 import setting from './setting/setting'
 
 mpx.use(apiProxy, { usePromise: true })
 
 createApp({
   ...store.mapMutations(['initNavBarStyle']),
-  onLaunch() {
+  async onLaunch() {
     this.initNavBarStyle()
     wx.cloud.init({
       env: setting.CLOUD_ID,
       traceUser: true
     })
+    const res = await getCommonConfig()
+    const { categoryItems, steps, roles } = res.data
+    store.commit('updateCategoryItems', categoryItems)
+    store.commit('setSteps', steps)
+    store.commit('initFooterNavBar', roles)
+    console.log(res.data)
   },
   globalStore: store,
   onShareAppMessage() {

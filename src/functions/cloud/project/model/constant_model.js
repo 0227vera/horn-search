@@ -1,15 +1,16 @@
 const BaseModel = require('./base_model.js');
 
-class AboutModel extends BaseModel {
+class ConstantModel extends BaseModel {
 
 }
 
 // 集合名
-AboutModel.CL = "warrior_constant"
+ConstantModel.CL = "warrior_constant"
 
-AboutModel.DB_STRUCTURE = {
+ConstantModel.DB_STRUCTURE = {
   _pid: 'string|true',
-  json: 'object|false',
+  categoryItems: 'object|true',
+  steps: 'array|true',
   CONSTANT_ID: 'string|true',
   CONSTANT_ADD_TIME: 'int|false',
   CONSTANT_EDIT_TIME: 'int|false',
@@ -18,6 +19,6 @@ AboutModel.DB_STRUCTURE = {
 }
 
 // 字段前缀
-AboutModel.FIELD_PREFIX = "CONSTANT"
+ConstantModel.FIELD_PREFIX = "CONSTANT_"
 
-module.exports = AboutModel
+module.exports = ConstantModel

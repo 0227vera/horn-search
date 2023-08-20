@@ -27,13 +27,12 @@
 <script>
 import mpx, { createPage } from '@mpxjs/core'
 import { getReleaseOneById } from '@/api'
-import { steps } from '@/setting/common'
+import store from '@/store'
 
 createPage({
   data: {
     loading: true,
     renderList: [],
-    steps,
     active: '',
     calllist: []
   },
@@ -78,6 +77,9 @@ createPage({
     }
     this.calllist = calllist
     this.loading = false
+  },
+  computed: {
+    ...store.mapState(['store'])
   },
   clickTel(item) {
     console.log(item)

@@ -31,7 +31,6 @@
 <script>
 import mpx, { createPage, onLoad } from '@mpxjs/core'
 import { fileUpload, getReleaseList, deleteRelease } from '@/api'
-import { categoryItems } from '@/setting/common'
 import store from '@/store'
 import Dialog from '@vant/weapp/dialog/dialog'
 

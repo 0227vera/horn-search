@@ -10,8 +10,8 @@
         value="{{ activeOwnNames }}"
         bind:change="onChange"
       >
-        <van-collapse-item wx:for="{{steps}}" title="{{item.desc}}" wx:key="status" name="{{item.status}}">
-            <order-status list="{{orderList}}" status="{{item.status}}" loading="{{orderListReqLoading}}" />
+        <van-collapse-item wx:for="{{steps}}" title="{{item.desc}}" wx:key="status" wx:if="{{item.showInList}}" name="{{item.status}}">
+          <order-status list="{{orderList}}" status="{{item.status}}" loading="{{orderListReqLoading}}" />
         </van-collapse-item>
       </van-collapse>
     </view>
@@ -38,19 +38,19 @@
 <script>
 import { createComponent } from '@mpxjs/core'
 import { getReleaseList } from '@/api'
-import { steps } from '@/setting/common'
 import store from '@/store'
 
 createComponent({
   data: {
-    activeOwnNames: ['1'],
+    activeOwnNames: [],
     activeSendNames: ['1'],
-    steps,
     list: [],
     loading: true
   },
   computed: {
-    ...store.mapState(['orderList', 'orderListReqLoading'])
+    ...store.mapState(['orderList', 'orderListReqLoading', 'steps'])
+  },
+  watch: {
   },
   methods: {
     onChange(e) {
