@@ -13,7 +13,13 @@
     <block wx:else>
       <item-container title="推送情况：">
         <view>
-          推送动效，正在推送中……
+          <view>正在推送中功能和动效</view>
+          <view>
+            1. 已经推送多少人；
+          </view>
+          <view>
+            2. 并在持续推送
+          </view>
         </view>
       </item-container>
       <item-container wx:if="{{active === 2}}" title="呼叫人信息：">
