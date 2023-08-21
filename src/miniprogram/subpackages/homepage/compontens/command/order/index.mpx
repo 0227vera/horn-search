@@ -1,6 +1,6 @@
 <template>
   <custom-container
-    title="订单详情"
+    title="订单列表"
     lefticon=""
     containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
   >

@@ -79,10 +79,9 @@ createPage({
     this.loading = false
   },
   computed: {
-    ...store.mapState(['store'])
+    ...store.mapState(['steps'])
   },
   clickTel(item) {
-    console.log(item)
     wx.makePhoneCall({
       phoneNumber: item.tel
     })

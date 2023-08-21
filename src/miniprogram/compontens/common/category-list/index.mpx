@@ -13,7 +13,10 @@ todo: 这个地方处理的及其不优雅,但是想快点完成能力,之后再
           class="item {{item.value === categoryItems.selected ? 'selected': ''}}"
           catchtap="levelItem(item)"
         >
-          {{item.text}}
+          <view class="content">
+            <van-icon wx:if="{{item.icon}}" name="{{item.icon}}" />
+            {{item.text}}
+          </view>
         </view>
       </view>
     </scroll-view>
@@ -25,31 +28,21 @@ todo: 这个地方处理的及其不优雅,但是想快点完成能力,之后再
           class="item {{item.value === level1List.selected ? 'selected': ''}}"
           catchtap="level1Item(item)"
         >
-          {{item.text}}
-        </view>
-      </view>
-    </scroll-view>
-    <scroll-view scroll-x class="scroll" wx:if="{{level2List.children}}">
-      <view class="level-item">
-        <view
-          wx:for="{{level2List.children}}"
-          wx:key="*this"
-          class="item {{item.value === level2List.selected ? 'selected': ''}}"
-          catchtap="level2Item(item)"
-        >
-          {{item.text}}
-        </view>
-      </view>
-    </scroll-view>
-    <scroll-view scroll-x class="scroll" wx:if="{{level3List.children}}">
-      <view class="level-item">
-        <view
-          wx:for="{{level3List.children}}"
-          wx:key="*this"
-          class="item {{item.value === level3List.selected ? 'selected': ''}}"
-          catchtap="level3Item(item)"
-        >
-          {{item.text}}
+          <view wx:if="{{item.editable && showInput}}" class="input">
+            <input
+              auto-focus
+              type="text"
+              wx:model="{{item.text}}"
+              bind:input="inputHandle"
+              bindblur="blurHandle"
+              id="{{item.value}}"
+            />
+          </view>
+          <view class="content" wx:else bind:tap="clickItem(item)">
+            <van-icon wx:if="{{item.icon  && item.value === level1List.selected}}" class="icon" name="{{item.icon}}" />
+            {{item.text}}
+            <text wx:if="{{item.tips && (item.value === level1List.selected || !item.text)}}" class="tips">({{item.tips}})</text>
+          </view>
         </view>
       </view>
     </scroll-view>
@@ -60,22 +53,14 @@ todo: 这个地方处理的及其不优雅,但是想快点完成能力,之后再
 import { createComponent } from '@mpxjs/core'
 import store from '@/store'
 createComponent({
+  data: {
+    showInput: false
+  },
   computed: {
     ...store.mapState(['categoryItems']),
     level1List() {
       return this.categoryItems.children?.find(item => item.value === this.categoryItems.selected) || {}
-    },
-    level2List() {
-      return this.level1List?.children?.find?.(item => item.value === this.level1List.selected) || {}
-    },
-    level3List() {
-      return this.level2List?.children?.find?.(item => item.value === this.level2List.selected) || {}
-    },
-    level4List() {
-      return this.level3List?.children?.find?.(item => item.value === this.level3List.selected) || {}
     }
-  },
-  watch: {
   },
   ready() {
     const newObj = this.getNewObj(JSON.parse(JSON.stringify(this.categoryItems)))
@@ -103,44 +88,6 @@ createComponent({
         this.triggerEvent('component', item)
       }
     },
-    level2Item(item) {
-      const cat = JSON.parse(JSON.stringify(this.categoryItems))
-      cat.children.forEach(c => {
-        if (c.value === cat.selected) {
-          c.children.forEach(cc => {
-            if (c.selected === cc.value) {
-              cc.selected = item.value
-            }
-          })
-        }
-      })
-      this.updateCategoryItems(this.getNewObj(cat))
-      if (!item.children?.length) {
-        // note: 设置配置的组件
-        this.triggerEvent('component', item)
-      }
-    },
-    level3Item(item) {
-      const cat = JSON.parse(JSON.stringify(this.categoryItems))
-      cat.children.forEach(c => {
-        if (c.value === cat.selected) {
-          c.children.forEach(cc => {
-            if (c.selected === cc.value) {
-              cc.children.forEach(ccc => {
-                if (cc.selected === ccc.value) {
-                  ccc.selected = item.value
-                }
-              })
-            }
-          })
-        }
-      })
-      this.updateCategoryItems(cat)
-      if (!item.children?.length) {
-        // note: 设置配置的组件
-        this.triggerEvent('component', item)
-      }
-    },
     getNewObj(obj) {
       if (obj.children?.length) {
         if (!obj.selected) {
@@ -157,6 +104,32 @@ createComponent({
         this.triggerEvent('component', obj)
       }
       return obj
+    },
+    clickItem(item) {
+      if (!item.editable) return
+      if (item.value !== this.level1List.selected) return
+      this.showInput = true
+    },
+    inputHandle(e) {
+      const id = e.target.id
+      const text = e.detail.value
+      const cat = JSON.parse(JSON.stringify(this.categoryItems))
+      cat.children.forEach(c => {
+        c.children.forEach(cc => {
+          if (cc.value === id) {
+            cc.text = text
+          }
+        })
+      })
+      console.log(cat)
+      this.updateCategoryItems(cat)
+      this.triggerEvent('component', {
+        text,
+        value: id
+      })
+    },
+    blurHandle() {
+      this.showInput = false
     }
   }
 })
@@ -177,20 +150,36 @@ createComponent({
   display flex
   box-sizing border-box
   .item
-    font-size 28rpx
-    color #333333
-    font-weight 500
-    padding 5rpx 15rpx
     flex-shrink 0
-    &.selected
-      color #666666
+    position relative
+    .input
       background #ffffff
+      color #333333
       border-radius 32rpx
+      font-size 24rpx
+      padding 0 15rpx
+    .content
+      padding 5rpx 15rpx
+      font-size 28rpx
+      color #333333
+      font-weight 500
+    .icon
+      font-weight 900
+      font-size 30rpx
+    .tips
+      padding-left 10rpx
+      color red
+    &.selected
+      .content
+        color #666666
+        background #ffffff
+        border-radius 32rpx
 </style>
 
 <script type="application/json">
   {
     "usingComponents": {
+      "van-icon": "@vant/weapp/icon/index"
     }
   }
 </script>

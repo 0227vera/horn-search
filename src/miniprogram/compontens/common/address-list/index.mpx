@@ -26,9 +26,12 @@
   <van-empty description="暂无数据，去新增一个吧" />
 </view>
 <view wx:if="{{showBottomBtn}}" class="btn-container">
-  <van-button  round type="primary" block bind:tap="openAddPage">
+  <van-button round type="primary" block bind:tap="openAddPage">
     去新增
   </van-button>
+</view>
+<view wx:elif="{{showBottomDivder}}"  class="btn-container">
+  <van-divider contentPosition="center" bind:tap="openAddPage">去新增</van-divider>
 </view>
 </template>
 
@@ -46,6 +49,10 @@ createComponent({
     showBottomBtn: {
       type: Boolean,
       value: true
+    },
+    showBottomDivder: {
+      type: Boolean,
+      value: false
     }
   },
   computed: {

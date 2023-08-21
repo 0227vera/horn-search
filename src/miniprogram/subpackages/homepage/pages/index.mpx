@@ -13,14 +13,15 @@ createPage({
     getApp().onShareAppMessage()
   },
   onLoad(params) {
-    this.setRole(params.role)
-    if (params.role === 'boss') {
-      this.getReleaseList()
-    }
+    params.role && this.setRole(params.role)
+    const role = params.role || this.role
+    role === 'boss' && this.getReleaseList()
+    params.currentKey && this.setCurrentKey(params.currentKey)
   },
   data: {
   },
   computed: {
+    ...store.mapState(['role']),
     ...store.mapGetters(['currentGooterList'])
   },
   methods: {

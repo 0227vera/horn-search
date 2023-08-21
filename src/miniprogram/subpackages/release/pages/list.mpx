@@ -58,8 +58,8 @@ createPage({
   },
   methods: {
     gotoRelease() {
-      mpx.navigateTo({
-        url: '/release/pages/index?isBack=true'
+      mpx.redirectTo({
+        url: '/homepage/pages/index?currentKey=home'
       })
     },
     priviewImg(item) {

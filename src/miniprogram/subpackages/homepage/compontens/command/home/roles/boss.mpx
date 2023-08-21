@@ -10,6 +10,7 @@
       bind:change="onFieldChange"
       id="categoryName"
       center
+      disabled
       wx:if="{{updateObj.category === '10'}}"
     />
     <van-field
@@ -123,7 +124,7 @@
         bind:click-right="onAddressClickRight"
         safe-area-inset-top="{{false}}"
       />
-      <address-list showBottomBtn="{{false}}" bind:choose-item="addressChange" />
+      <address-list showBottomBtn="{{false}}" showBottomDivder bind:choose-item="addressChange" />
     </view>
   </van-popup>
 </template>
@@ -186,10 +187,10 @@ createComponent({
       this.updateObj.category = val
     },
     categoryName(val) {
-      if (this.updateObj.category === '10') {
-        this.updateObj.categoryName = ''
-        return
-      }
+      // if (this.updateObj.category === '10') {
+      //   this.updateObj.categoryName = ''
+      //   return
+      // }
       this.updateObj.categoryName = val
     }
   },
@@ -352,7 +353,7 @@ createComponent({
             })
             mpx.hideLoading()
             self.getReleaseList()
-            self.triggerEvent('release-finish')
+            self.triggerEvent('release-finish', res.data)
           }
         })
       } else {

@@ -64,7 +64,8 @@ createComponent({
       this.category = value
       this.categoryName = text
     },
-    releaseFinish() {
+    releaseFinish(e) {
+      mpx.navigateTo({ url: `/order-detail/pages/index?id=${e.detail}` })
       this.setCurrentKey('order')
     }
   }
