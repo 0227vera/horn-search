@@ -60,6 +60,19 @@ createComponent({
       clickLeft: this.clickLeft
     })
   },
+  watch: {
+    'title, lefticon,bg,clickLeft': {
+      handler() {
+        this.setNavBarStyle({
+          title: this.title,
+          lefticon: this.lefticon,
+          bg: this.bg,
+          clickLeft: this.clickLeft
+        })
+      },
+      immediate: true
+    }
+  },
   pageLifetimes: {
     show() {
       this.setNavBarStyle({

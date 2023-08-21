@@ -1,0 +1,45 @@
+<template>
+  <view class="container">
+    <view class="title" wx:if="{{title}}">{{title}}</view>
+    <view class="content">
+      <slot />
+    </view>
+  </view>
+</template>
+
+<script>
+import mpx, { createComponent } from '@mpxjs/core'
+createComponent({
+  properties: {
+    title: {
+      type: String,
+      value: ''
+    }
+  }
+})
+</script>
+
+<style lang="stylus" scoped>
+.container
+  width 100%
+  box-sizing border-box
+  padding 0 32rpx
+.title
+  width 100%
+  height 80rpx
+  line-height 80rpx
+  font-weight 500
+  font-size 24rpx
+.content
+  width 100%
+  box-sizing border-box
+  border-radius 16rpx
+  overflow hidden
+  background-color #ffffff
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {}
+  }
+</script>

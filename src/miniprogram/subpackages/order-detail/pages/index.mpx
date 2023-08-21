@@ -1,26 +1,49 @@
 <template>
   <custom-container
-    title="订单详情"
+    title="{{pageTitle}}"
     lefticon="arrow-left"
     containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
   >
+    <item-container wx:if="{{active === 1}}" title="流程信息：">
+      <van-steps steps="{{ steps }}" active="{{ active }}" />
+    </item-container>
     <view wx:if="{{loading}}" class="status">
       <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
     </view>
-    <view wx:else>
-      <view class="title">基本信息：</view>
-      <van-cell-group slot="" class="form" border="{{false}}" inset>
-        <van-cell wx:for="{{renderList}}" wx:key="_id" title="{{item.title}}" value="{{item.value}}" clickable="{{item.islink}}" is-link="{{item.islink}}" bind:tap="priview(item)"></van-cell>
-      </van-cell-group>
-      <view class="title">流程信息：</view>
-      <van-steps steps="{{ steps }}" active="{{ active }}" />
-      <view wx:if="{{active === 2}}">
-        <view class="title">呼叫人信息：</view>
+    <block wx:else>
+      <item-container title="推送情况：">
+        <view>
+          推送动效，正在推送中……
+        </view>
+      </item-container>
+      <item-container wx:if="{{active === 2}}" title="呼叫人信息：">
         <van-cell-group slot="" class="form" border="{{false}}" inset>
-          <van-cell wx:for="{{calllist}}" wx:key="*this" title="电话" bind:tap="clickTel(item)" value="{{item.tel}}" clickable is-link></van-cell>
+          <van-cell
+          wx:for="{{calllist}}"
+          wx:key="*this"
+          title="电话"
+          bind:tap="clickTel(item)"
+          value="{{item.tel}}"
+          clickable
+          is-link
+        />
         </van-cell-group>
-      </view>
-    </view>
+      </item-container>
+      <item-container title="基本信息：">
+        <van-cell-group border="{{false}}">
+          <van-cell
+            wx:for="{{renderList}}"
+            title-width="120rpx"
+            wx:key="_id"
+            title="{{item.title}}"
+            value="{{item.value}}"
+            clickable="{{item.islink}}"
+            is-link="{{item.islink}}"
+            bind:tap="priview(item)"
+          />
+        </van-cell-group>
+      </item-container>
+    </block>
   </custom-container>
 </template>
 
@@ -79,7 +102,16 @@ createPage({
     this.loading = false
   },
   computed: {
-    ...store.mapState(['steps'])
+    ...store.mapState(['steps']),
+    pageTitle() {
+      if (this.active) {
+        console.log(this.active, this.steps)
+        const desc = this.steps.find(item => +item.status === this.active + 1).desc
+        console.log('desc======>', desc)
+        return `订单详情【${desc}】`
+      }
+      return '订单详情'
+    }
   },
   clickTel(item) {
     wx.makePhoneCall({
@@ -117,6 +149,13 @@ createPage({
   font-weight 500
   font-size 24rpx
   box-sizing border-box
+.proccess
+  width 100%
+  box-sizing border-box
+  padding 0 32rpx
+  &-content
+    overflow hidden
+    border-radius 16rpx
 </style>
 
 <script type="application/json">
@@ -127,7 +166,8 @@ createPage({
       "van-cell-group": "@vant/weapp/cell-group/index",
       "van-image": "@vant/weapp/image/index",
       "van-steps": "@vant/weapp/steps/index",
-      "van-loading": "@vant/weapp/loading/index"
+      "van-loading": "@vant/weapp/loading/index",
+      "item-container": "../components/item-container"
     },
     "navigationStyle": "custom"
   }
