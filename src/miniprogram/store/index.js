@@ -29,7 +29,8 @@ export default createStore({
     orderList: [],
     orderListReqLoading: true,
     categoryItems: {},
-    steps: []
+    steps: [],
+    addressList: []
   },
   getters: {
     currentGooterList(state) {
@@ -85,6 +86,9 @@ export default createStore({
     },
     setSteps(state, data) {
       state.steps = data
+    },
+    updateAddressList(state, data) {
+      state.addressList = data
     }
   },
   actions: {

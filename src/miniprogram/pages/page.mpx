@@ -9,12 +9,17 @@ import mpx, { createPage } from '@mpxjs/core'
 import chooseRolePageUrl from '@/subpackages/choose-role/pages/index.mpx?resolve'
 import homepageUrl from '@/subpackages/homepage/pages/index.mpx?resolve'
 import { getCurrentRole } from '@/api'
+import store from '@/store'
 
 createPage({
   async onLoad() {
     const res = await getCurrentRole()
     console.log('page----->', res)
-    if (res?.data?.role) {
+    const { role = '', address = [] } = res.data || {}
+    if (address.length) {
+      this.updateAddressList(address)
+    }
+    if (role) {
       mpx.redirectTo({
         url: `${homepageUrl}?role=${res.data.role}`
       })
@@ -23,6 +28,9 @@ createPage({
         url: chooseRolePageUrl
       })
     }
+  },
+  methods: {
+    ...store.mapMutations(['updateAddressList'])
   }
 })
 </script>

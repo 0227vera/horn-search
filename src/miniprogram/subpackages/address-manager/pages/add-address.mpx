@@ -78,10 +78,9 @@
 <script>
 import mpx, { createPage, onLoad } from '@mpxjs/core'
 import { areaList } from '@vant/area-data'
-import { debounce } from '@/utils'
 import store from '@/store'
-import addressStore from '@/compontens/common/address-list/store'
-import { addAddress } from '@/api'
+import { updateUserInfo } from '@/api'
+import guid from '@/utils'
 
 createPage({
   data: {
@@ -110,11 +109,11 @@ createPage({
     this.addInfo.address.location = this.adInfo.location
   },
   computed: {
-    ...store.mapState(['mapSdk', 'adInfo'])
+    ...store.mapState(['mapSdk', 'adInfo', 'addressList'])
   },
   methods: {
     ...store.mapActions(['setLocation']),
-    ...addressStore.mapMutations(['addAddressItem']),
+    ...store.mapMutations(['updateAddressList']),
     // note: 字段变化
     onChange(e) {
       this.addInfo[e.target.id] = e.detail
@@ -143,7 +142,6 @@ createPage({
     // note: 详细地址
     openSearchDetail() {
       const _this = this
-      console.log('0000000', this.addInfo.address.location)
       wx.chooseLocation({
         latitude: this.addInfo.address.location.lat,
         longitude: this.addInfo.address.location.lng,
@@ -152,14 +150,12 @@ createPage({
             return
           }
           _this.addInfo.address.detail = res.address + res.name
-          console.log('res--------->', res)
           _this.mapSdk.reverseGeocoder({
             location: {
               latitude: res.latitude,
               longitude: res.longitude
             },
             success(r) {
-              console.log('r----------->', r)
               const re = r.result
               _this.addInfo.address.areaProvice = re.ad_info.province
               _this.addInfo.address.area = `${re.ad_info.province}${re.ad_info.city}${re.ad_info.district}`
@@ -200,9 +196,19 @@ createPage({
         return
       }
       this.addInfo.address.name = `${this.addInfo.address.area}-${this.addInfo.address.detail}-${this.addInfo.address.door}`
-      const res = await addAddress(this.addInfo)
+      this.addInfo.id = guid()
+      const list = JSON.parse(JSON.stringify(this.addressList))
+      list.push(this.addInfo)
+      mpx.showLoading({
+        title: '加载中……',
+        mask: true
+      })
+      const res = await updateUserInfo({
+        address: list
+      })
+      mpx.hideLoading()
       if (res.code === 200) {
-        this.addAddressItem({ ...this.addInfo, _id: res.data })
+        this.updateAddressList(list)
         mpx.navigateBack()
       } else {
         mpx.showToast({

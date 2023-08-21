@@ -59,6 +59,14 @@ createComponent({
       return [
         [
           {
+            name: '地址管理',
+            icon: 'todo-list-o',
+            jumptype: 'mp',
+            url: '/address-manager/pages/index'
+          }
+        ],
+        [
+          {
             name: '关于我们',
             icon: 'question-o',
             jumptype: 'mp',

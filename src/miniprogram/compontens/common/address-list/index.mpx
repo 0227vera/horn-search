@@ -1,10 +1,7 @@
 <template>
-<view wx:if="{{loading}}" class="loading">
-  <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
-</view>
-<van-cell-group wx:elif="{{list.length}}" border="{{ false }}" inset>
+<van-cell-group wx:if="{{addressList.length}}" border="{{ false }}" inset>
   <van-cell
-    wx:for="{{ list }}"
+    wx:for="{{ addressList }}"
     wx:key="_id"
     title="{{ item.address.name }}"
     label="{{ item.name + '   ' + item.phone }}"
@@ -37,7 +34,7 @@
 
 <script>
 import mpx, { createComponent, onShow } from '@mpxjs/core'
-import store from './store'
+import store from '@/store'
 import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
 
 createComponent({
@@ -56,36 +53,17 @@ createComponent({
     }
   },
   computed: {
-    ...store.mapState(['list'])
-  },
-  data: {
-    loading: true
-  },
-  pageLifetimes: {
-    show() {
-      this.getList()
-    }
-  },
-  ready() {
-    this.getList()
+    ...store.mapState(['addressList'])
   },
   methods: {
-    ...store.mapActions(['getAddressList']),
-    ...store.mapMutations(['setAddressList']),
-    async getList() {
-      if (!this.list.length) {
-        this.loading = true
-        await this.getAddressList()
-        this.loading = false
-      }
-    },
+    ...store.mapMutations(['updateAddressList']),
     CellClickHandle(arg) {
       if (!this.isCanChoose) return
-      const list = JSON.parse(JSON.stringify(this.list))
+      const list = JSON.parse(JSON.stringify(this.addressList))
       list.forEach(item => {
-        item.checked = item._id === arg._id ? !item.checked : false
+        item.checked = item.id === arg.id ? !item.checked : false
       })
-      this.setAddressList(list)
+      this.updateAddressList(list)
       this.triggerEvent('choose-item', arg)
     },
     openAddPage() {
