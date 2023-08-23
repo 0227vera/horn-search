@@ -19,7 +19,7 @@ class UserManagerService extends BaseService {
 
   async update(data = {}) {
     const { _id, ...newData } = data
-    const res = await UserModel.insertOrUpdate({ _id: data._id }, newData)
+    const res = await UserModel.insertOrUpdate({ OPENID: data.OPENID }, newData)
     return res
   }
 

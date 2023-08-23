@@ -11,6 +11,7 @@ AddressModel.DB_STRUCTURE = {
   _pid: 'string|true',
   role: 'string|true',
   address: 'array|false',
+  subscribeInfo: 'array|false',
   OPENID: 'string|true',
   USER_ID: 'string|true',
   USER_ADD_TIME: 'int|false',

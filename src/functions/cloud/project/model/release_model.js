@@ -14,6 +14,7 @@ AddressModel.DB_STRUCTURE = {
   price: 'string|true',
   priceUnit: 'string|true',
   status: 'string|true',
+  subscribeInfo: 'object|false',
   callnum: 'int|false',
   poi: 'object|true',
   tel: 'string|true',

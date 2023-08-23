@@ -1,4 +1,3 @@
 module.exports = {
-  MINI_TEMP_CARD_HAS_TIME: 'VCb4GZ-3yK5j66iVxOH5U1MClzXd2f97vFTYlN-K5JU', // 有打卡时间
-  MINI_TEMP_CARD_NO_TIME: 'VCb4GZ-3yK5j66iVxOH5U3wurLqu2QjwYCSyDgn5CTw' // 无打卡时间
+  NEW_ORDER_NOTICE: 'FwPgLeCwk4f0dP5_nxd9b6V_616TlhG1RdlWGcR_czw' // 新订单提醒
 }

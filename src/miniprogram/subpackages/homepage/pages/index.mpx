@@ -6,17 +6,29 @@
 
 <script>
 import { createPage } from '@mpxjs/core'
+import { updateUserInfo } from '@/api'
+import Dialog from '@vant/weapp/dialog/dialog'
 const store = getApp().globalStore
 
 createPage({
   onShareAppMessage() {
     getApp().onShareAppMessage()
   },
-  onLoad(params) {
+  async onLoad(params) {
     params.role && this.setRole(params.role)
     const role = params.role || this.role
     role === 'boss' && this.getReleaseList()
     params.currentKey && this.setCurrentKey(params.currentKey)
+    await Dialog.alert({
+      title: '温馨提示',
+      message: '订阅消息，将为您更好的推送适合您的相关工作（先用文字，之后改为图片透传信息）'
+    })
+    const res = await wx.requestSubscribeMessage({
+      tmplIds: ['FwPgLeCwk4f0dP5_nxd9b6V_616TlhG1RdlWGcR_czw']
+    })
+    updateUserInfo({
+      subscribeInfo: res
+    })
   },
   data: {
   },

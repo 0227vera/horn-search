@@ -32,8 +32,12 @@ class UserController extends BaseController {
   }
 
   async update() {
+    const where = {
+      OPENID: this._openId
+    }
+    Object.assign(where, this._event.params || {})
     const service = new UserService()
-    const res = await service.update(this._event.params)
+    const res = await service.update(where)
     return res
   }
 

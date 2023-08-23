@@ -333,9 +333,11 @@ createComponent({
         title: '提交中...',
         mask: true
       });
-      const res = await addRelease({ ...this.updateObj, status: 1 })
+      const subscribe = await wx.requestSubscribeMessage({
+        tmplIds: ['FwPgLeCwk4f0dP5_nxd9b6V_616TlhG1RdlWGcR_czw']
+      })
+      const res = await addRelease({ ...this.updateObj, status: 1, subscribeInfo: subscribe })
       mpx.hideLoading()
-      console.log('--------->', res)
       if (res.code === 200) {
         const self = this
         mpx.showToast({

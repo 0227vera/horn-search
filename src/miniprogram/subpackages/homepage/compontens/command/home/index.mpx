@@ -66,7 +66,9 @@ createComponent({
     },
     releaseFinish(e) {
       mpx.navigateTo({ url: `/order-detail/pages/index?id=${e.detail}` })
-      this.setCurrentKey('order')
+      setTimeout(() => {
+        this.setCurrentKey('order')
+      }, 1000)
     }
   }
 })
