@@ -26,7 +26,10 @@ createComponent({
     clickLeft() {
       const actions = {
         worker: () => {
-          this.setCurrentKey('owner')
+          mpx.showToast({
+            title: '拉起地理位置筛选,选择位置之后对所有数据进行筛选',
+            icon: 'none'
+          })
         },
         boss: () => {
           this.setCurrentKey('owner')
@@ -50,7 +53,7 @@ createComponent({
     },
     lefticon() {
       const options = {
-        worker: '',
+        worker: 'location-o',
         boss: '',
         business: 'exchange'
       }

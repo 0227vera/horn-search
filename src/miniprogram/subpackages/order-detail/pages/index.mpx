@@ -23,7 +23,7 @@
         </view>
       </item-container>
       <item-container wx:if="{{active === 2}}" title="呼叫人信息：">
-        <van-cell-group slot="" class="form" border="{{false}}" inset>
+        <van-cell-group class="form" border="{{false}}">
           <van-cell
           wx:for="{{calllist}}"
           wx:key="*this"

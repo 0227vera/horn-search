@@ -4,8 +4,11 @@ const { sendToWorkers } = require('../../framework/utils/notice_util.js')
 
 class ReleaseController extends BaseController {
   async getList() {
-    const where = {
-      OPENID: this._openId
+    const where = {}
+    if (this._event.params.needOpenid) {
+      Object.assign(where, {
+        OPENID: this._openId
+      })
     }
     Object.assign(where, this._event.params || {})
     const service = new ReleaseService()

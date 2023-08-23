@@ -33,9 +33,18 @@ async function sendMiniOnceTempMsg(body, key = '') {
     cloudUtil.log('##sendOnceTempMsg[' + key + ']', err);
   }
 }
+
+async function customerServiceMessage(body) {
+  const cloud = cloudBase.getCloud();
+  try {
+    await cloud.openapi.customerServiceMessage.send(body)
+  } catch (err) {
+    cloudUtil.log('##customerServiceMessage', err);
+  }
+}
 module.exports = {
   sendMiniOnceTempMsg,
-
+  customerServiceMessage,
   fmtThing,
   fmtCharacterString,
   fmtPhrase

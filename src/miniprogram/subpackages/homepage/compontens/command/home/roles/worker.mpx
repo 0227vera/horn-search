@@ -8,9 +8,9 @@
       <van-card
         wx:for="{{list}}"
         wx:key="*this"
-        price="{{item.price}}"
-        desc="{{item.poi.name}}"
-        title="{{item.categoryName}}"
+        price="{{item.price + item.priceUnit}}"
+        desc="{{item.note}}"
+        title="{{item.poi.name}}"
         thumb="{{ item.images[0] || '' }}"
       >
         <view slot="footer">
@@ -60,8 +60,8 @@ createComponent({
     },
     gotoAddress(item) {
       wx.openLocation({
-        latitude: item.poi.location.lat,
-        longitude: item.poi.location.lat,
+        latitude: item.poi.lat,
+        longitude: item.poi.lat,
         name: item.poi.name,
         address: item.poi.name
       })
