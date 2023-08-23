@@ -24,7 +24,7 @@ const sendToWorkers = async function(id) {
           value: order.categoryName
         },
         amount4: {
-          value: order.price + order.priceUnit
+          value: +order.price
         },
         character_string3: {
           value: order._id
@@ -32,13 +32,6 @@ const sendToWorkers = async function(id) {
         thing8: {
           value: order.note
         }
-      }
-    })
-    customerServiceMessage({
-      touser: item.OPENID,
-      msgtype: 'text',
-      text: {
-        content: '收到'
       }
     })
   }
