@@ -1,0 +1,158 @@
+<template>
+  <custom-container
+    title="订单详情"
+    lefticon="arrow-left"
+    containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
+    clickLeft="{{clickLeft}}"
+  >
+    <view wx:if="{{loading}}" class="status">
+      <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
+    </view>
+    <block wx:else>
+      <item-container title="基本信息：">
+        <van-cell-group border="{{false}}">
+          <van-cell
+            wx:for="{{renderList}}"
+            title-width="120rpx"
+            wx:key="_id"
+            title="{{item.title}}"
+            value="{{item.value}}"
+            clickable="{{item.islink}}"
+            is-link="{{item.islink}}"
+            bind:tap="priview(item)"
+          />
+        </van-cell-group>
+      </item-container>
+    </block>
+  </custom-container>
+</template>
+
+<script>
+import mpx, { createPage } from '@mpxjs/core'
+import { getReleaseOneById } from '@/api'
+import store from '@/store'
+
+createPage({
+  data: {
+    loading: true,
+    renderList: [],
+    params: {}
+  },
+  async onLoad(params) {
+    this.params = params
+    if (!params.id) {
+      this.clickLeft()
+      return
+    }
+    this.loading = true
+    const res = await getReleaseOneById(params)
+    console.log('res------>', res)
+    const { categoryName, category, price, priceUnit, poi, tel, images, ownTimeName, note, status } = res.data || {}
+    this.category = category
+    this.renderList = [{
+      title: '分类',
+      value: categoryName
+    }, {
+      title: '单价',
+      value: `${price}${priceUnit}`
+    }, {
+      title: '位置',
+      value: poi.name
+    }, {
+      title: '电话',
+      value: tel
+    }]
+    if (ownTimeName) {
+      this.renderList.push({
+        title: '截止时间',
+        value: ownTimeName
+      })
+    }
+    if (images?.length) {
+      this.renderList.push({
+        title: '图片/视频',
+        value: '点击查看图片',
+        islink: true,
+        list: images
+      })
+    }
+    if (note) {
+      this.renderList.push({
+        title: '要求',
+        value: note
+      })
+    }
+    this.loading = false
+  },
+  computed: {
+    clickLeft() {
+      return () => {
+        if (this.params.isBack === 'true') {
+          mpx.navigateBack()
+        } else if (this.category) {
+          mpx.redirectTo(`/order-detail/pages/index?category=${this.category}`)
+        } else {
+          mpx.redirectTo('/order-detail/pages/index')
+        }
+      }
+    }
+  },
+  clickTel(item) {
+    wx.makePhoneCall({
+      phoneNumber: item.tel
+    })
+  },
+  priview(item) {
+    if (!item.islink) {
+      return
+    }
+    wx.previewMedia({
+      current: 0,
+      sources: item.list.map(i => ({
+        url: i,
+        type: 'image'
+      }))
+    })
+  }
+})
+
+</script>
+
+<style lang="stylus" scoped>
+.status
+  width 100%
+  height 100%
+  display flex
+  justify-content center
+  align-items center
+.title
+  width 100%
+  height 80rpx
+  padding 0 32rpx
+  line-height 80rpx
+  font-weight 500
+  font-size 24rpx
+  box-sizing border-box
+.proccess
+  width 100%
+  box-sizing border-box
+  padding 0 32rpx
+  &-content
+    overflow hidden
+    border-radius 16rpx
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "custom-container": "@/compontens/base/custom-container",
+      "van-cell": "@vant/weapp/cell/index",
+      "van-cell-group": "@vant/weapp/cell-group/index",
+      "van-image": "@vant/weapp/image/index",
+      "van-steps": "@vant/weapp/steps/index",
+      "van-loading": "@vant/weapp/loading/index",
+      "item-container": "../components/item-container"
+    },
+    "navigationStyle": "custom"
+  }
+</script>

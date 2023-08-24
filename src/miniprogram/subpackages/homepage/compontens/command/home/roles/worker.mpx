@@ -14,8 +14,9 @@
         thumb="{{ item.images[0] || '' }}"
       >
         <view slot="footer">
-          <van-button size="mini" style="margin-right: 8rpx" round bind:tap="makePhone(item)">打电话</van-button>
-          <van-button size="mini" round bind:tap="gotoAddress(item)">导航前去</van-button>
+          <van-button size="mini" style="margin-right: 8rpx" round type="primary" bind:tap="makePhone(item)">打电话</van-button>
+          <van-button size="mini" style="margin-right: 8rpx" round bind:tap="gotoAddress(item)">导航前去</van-button>
+          <van-button size="mini" round bind:tap="gotoDetail(item)">查看详情</van-button>
         </view>
       </van-card>
     </view>
@@ -26,7 +27,7 @@
 </template>
 
 <script>
-import { createComponent } from '@mpxjs/core'
+import mpx, { createComponent } from '@mpxjs/core'
 import { getReleaseList } from '@/api'
 
 createComponent({
@@ -65,6 +66,9 @@ createComponent({
         name: item.poi.name,
         address: item.poi.name
       })
+    },
+    gotoDetail(item) {
+      mpx.navigateTo({ url: `/order-detail/pages/detail-to-worker?id=${item._id}&isBack=true` })
     }
   }
 })

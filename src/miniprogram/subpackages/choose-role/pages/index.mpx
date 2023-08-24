@@ -10,6 +10,7 @@
 import mpx, { createPage } from '@mpxjs/core'
 import homepageUrl from '@/subpackages/homepage/pages/index.mpx?resolve'
 import { addUser } from '@/api'
+import store from '@/store'
 
 createPage({
   onLoad() {
@@ -18,11 +19,15 @@ createPage({
   onShareAppMessage() {
     getApp().onShareAppMessage()
   },
-  choose(role) {
-    addUser({ role })
-    mpx.redirectTo({
-      url: `${homepageUrl}?role=${role}`
-    })
+  methods: {
+    ...store.mapMutations(['setRole']),
+    choose(role) {
+      addUser({ role })
+      this.setRole(role)
+      mpx.redirectTo({
+        url: `${homepageUrl}?role=${role}`
+      })
+    }
   }
 })
 </script>

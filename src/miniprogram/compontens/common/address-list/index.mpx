@@ -2,7 +2,7 @@
 <van-cell-group wx:if="{{addressList.length}}" border="{{ false }}" inset>
   <van-cell
     wx:for="{{ addressList }}"
-    wx:key="_id"
+    wx:key="id"
     title="{{ item.address.name }}"
     label="{{ item.name + '   ' + item.phone }}"
     value-class="value-class"
@@ -19,7 +19,7 @@
     />
   </van-cell>
 </van-cell-group>
-<view wx:else class="loading empty">
+<view wx:else class="empty">
   <van-empty description="暂无数据，去新增一个吧" />
 </view>
 <view wx:if="{{showBottomBtn}}" class="btn-container">
@@ -55,6 +55,13 @@ createComponent({
   computed: {
     ...store.mapState(['addressList'])
   },
+  attached() {
+    console.log(this.addressList)
+    const item = this.addressList.find(item => item.checked)
+    if (item?.id) {
+      this.triggerEvent('choose-item', item)
+    }
+  },
   methods: {
     ...store.mapMutations(['updateAddressList']),
     CellClickHandle(arg) {
@@ -77,15 +84,12 @@ createComponent({
 </script>
 
 <style lang="stylus">
-.loading
+.empty
   width 100%
-  height 50%
   display flex
   justify-content center
   align-items center
   min-height 400rpx
-.empty
-  width 100%
   height 70%
 .checkbox
   float right
@@ -101,7 +105,6 @@ createComponent({
   {
     "usingComponents": {
       "van-empty": "@vant/weapp/empty/index",
-      "van-loading": "@vant/weapp/loading/index",
       "van-button": "@vant/weapp/button/index",
       "van-checkbox": "@vant/weapp/checkbox/index",
       "van-checkbox-group": "@vant/weapp/checkbox-group/index",

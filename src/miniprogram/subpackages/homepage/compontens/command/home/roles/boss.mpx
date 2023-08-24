@@ -127,11 +127,13 @@
       <address-list showBottomBtn="{{false}}" showBottomDivder bind:choose-item="addressChange" />
     </view>
   </van-popup>
+  <service-notice wx:ref="serviceNotice" tmplIds="{{tmplIds}}" />
 </template>
 
 <script>
 import mpx, { createComponent } from '@mpxjs/core'
 import { fileUpload, addRelease, updateRelease } from '@/api'
+import { ORDER_UPDATE } from '@/setting/noticeInfo.js'
 const store = getApp().globalStore
 
 createComponent({
@@ -147,6 +149,7 @@ createComponent({
   },
   data: {
     showPopup: false,
+    tmplIds: [ORDER_UPDATE],
     popupType: '',
     mainActiveIndex: 0,
     selectedOptions: [],
@@ -333,9 +336,7 @@ createComponent({
         title: '提交中...',
         mask: true
       });
-      const subscribe = await wx.requestSubscribeMessage({
-        tmplIds: ['FwPgLeCwk4f0dP5_nxd9b6V_616TlhG1RdlWGcR_czw']
-      })
+      const subscribe = await this.$refs.serviceNotice?.showServiceNotice?.()
       const res = await addRelease({ ...this.updateObj, status: 1, subscribeInfo: subscribe })
       mpx.hideLoading()
       if (res.code === 200) {
@@ -394,6 +395,7 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
+      "service-notice": "@/compontens/common/service-notice",
       "address-list": "@/compontens/common/address-list",
       "custom-container": "@/compontens/base/custom-container",
       "van-cell": "@vant/weapp/cell/index",

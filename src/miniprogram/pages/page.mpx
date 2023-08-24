@@ -6,31 +6,39 @@
 
 <script>
 import mpx, { createPage } from '@mpxjs/core'
-import chooseRolePageUrl from '@/subpackages/choose-role/pages/index.mpx?resolve'
-import homepageUrl from '@/subpackages/homepage/pages/index.mpx?resolve'
+
+import homePageUrl from '@/subpackages/homepage/pages/index.mpx?resolve'
 import { getCurrentRole } from '@/api'
+import chooseRolePageUrl from '@/subpackages/choose-role/pages/index.mpx?resolve'
 import store from '@/store'
 
 createPage({
-  async onLoad() {
+  async onLoad(params) {
+    // note: 确定身份
     const res = await getCurrentRole()
-    console.log('page----->', res)
     const { role = '', address = [] } = res.data || {}
     if (address.length) {
       this.updateAddressList(address)
     }
     if (role) {
-      mpx.redirectTo({
-        url: `${homepageUrl}?role=${res.data.role}`
-      })
-    } else {
-      mpx.redirectTo({
-        url: chooseRolePageUrl
-      })
+      this.setRole(role)
     }
+    // note: 跳转不同的类型
+    let url = chooseRolePageUrl
+    const { type = '', path = '' } = params
+    if (!type) {
+      if (role) {
+        url = homePageUrl
+      }
+    } else if (type === 'mp') {
+      url = decodeURIComponent(path)
+    } else if (type === 'h5') {
+      url = `//pages/webview?path=${path}`
+    }
+    mpx.redirectTo({ url })
   },
   methods: {
-    ...store.mapMutations(['updateAddressList'])
+    ...store.mapMutations(['updateAddressList', 'setRole'])
   }
 })
 </script>
