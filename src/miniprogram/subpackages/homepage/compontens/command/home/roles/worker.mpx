@@ -8,11 +8,27 @@
       <van-card
         wx:for="{{list}}"
         wx:key="*this"
+        tag="{{item.tag}}"
+        thumb="{{item.thumb}}"
+        thumb-mode="scaleToFill"
         price="{{item.price + item.priceUnit}}"
-        desc="{{item.note}}"
-        title="{{item.poi.name}}"
-        thumb="{{ item.images[0] || '' }}"
       >
+        <view slot="title">
+          <view class="item-info">
+            <text class="item-info-title">地址：</text>
+            <text>{{item.poi.name}}</text>
+          </view>
+        </view>
+        <view slot="desc">
+          <view class="item-info">
+            <text class="item-info-title">要求：</text>
+            <text>{{item.note}}</text>
+          </view class="item-info">
+          <view wx:if="{{item.category === '10'}}" class="item-info">
+            <text class="item-info-title">类别：</text>
+            <text>{{item.categoryName}}</text>
+          </view>
+        </view>
         <view slot="footer">
           <van-button size="mini" style="margin-right: 8rpx" round type="primary" bind:tap="makePhone(item)">打电话</van-button>
           <van-button size="mini" style="margin-right: 8rpx" round bind:tap="gotoAddress(item)">导航前去</van-button>
@@ -52,7 +68,11 @@ createComponent({
       this.list = []
       const res = await getReleaseList({ category: this.category })
       this.loading = false
-      this.list = res.data?.list || []
+      this.list = (res.data?.list || []).map(item => {
+        item.tag = item.calllist?.length ? `已有${item.calllist.length}人呼叫` : '暂无人呼叫'
+        item.thumb = item.images[0] || 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/image-cdn/none.png'
+        return item
+      })
     },
     makePhone(item) {
       wx.makePhoneCall({
@@ -61,8 +81,8 @@ createComponent({
     },
     gotoAddress(item) {
       wx.openLocation({
-        latitude: item.poi.lat,
-        longitude: item.poi.lat,
+        latitude: item.poi.location.lat,
+        longitude: item.poi.location.lat,
         name: item.poi.name,
         address: item.poi.name
       })
@@ -83,14 +103,10 @@ createComponent({
   display flex
   align-items center
   justify-content center
-.van-swipe-cell__right
-  width 65px
-  height 100%
-  background-color #ee0a24
-  color #ffffff
-  display flex
-  align-items center
-  justify-content center
+.item-info
+  margin-bottom 8rpx
+  &-title
+    font-weight 500
 </style>
 
 <script type="application/json">

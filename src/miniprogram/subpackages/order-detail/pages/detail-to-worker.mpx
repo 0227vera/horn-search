@@ -8,7 +8,7 @@
     <view wx:if="{{loading}}" class="status">
       <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
     </view>
-    <block wx:else>
+    <view wx:else class="container">
       <item-container title="基本信息：">
         <van-cell-group border="{{false}}">
           <van-cell
@@ -23,7 +23,18 @@
           />
         </van-cell-group>
       </item-container>
-    </block>
+      <item-container title="位置信息：">
+        <cus-map endInfo="{{poi}}" />
+      </item-container>
+      <view class="footer">
+        <view class="footer-item call">
+          <van-button type="primary" bind:tap="makePhone" size="large" hairline block>打电话询问</van-button>
+        </view>
+        <view class="footer-item">
+          <van-button type="default" bind:tap="gotoAddress" size="large" hairline block>导航去询问</van-button>
+        </view>
+      </view>
+    </view>
   </custom-container>
 </template>
 
@@ -36,7 +47,8 @@ createPage({
   data: {
     loading: true,
     renderList: [],
-    params: {}
+    params: {},
+    poi: {}
   },
   async onLoad(params) {
     this.params = params
@@ -46,8 +58,10 @@ createPage({
     }
     this.loading = true
     const res = await getReleaseOneById(params)
-    console.log('res------>', res)
     const { categoryName, category, price, priceUnit, poi, tel, images, ownTimeName, note, status } = res.data || {}
+    this.poi = poi
+    this.tel = tel
+    console.log(res)
     this.category = category
     this.renderList = [{
       title: '分类',
@@ -58,9 +72,6 @@ createPage({
     }, {
       title: '位置',
       value: poi.name
-    }, {
-      title: '电话',
-      value: tel
     }]
     if (ownTimeName) {
       this.renderList.push({
@@ -70,7 +81,7 @@ createPage({
     }
     if (images?.length) {
       this.renderList.push({
-        title: '图片/视频',
+        title: '图片',
         value: '点击查看图片',
         islink: true,
         list: images
@@ -97,9 +108,18 @@ createPage({
       }
     }
   },
-  clickTel(item) {
+  makePhone() {
     wx.makePhoneCall({
-      phoneNumber: item.tel
+      phoneNumber: this.tel
+    })
+  },
+  gotoAddress() {
+    console.log(this.poi)
+    wx.openLocation({
+      latitude: this.poi.location.lat,
+      longitude: this.poi.location.lat,
+      name: this.poi.name,
+      address: this.poi.name
     })
   },
   priview(item) {
@@ -119,6 +139,8 @@ createPage({
 </script>
 
 <style lang="stylus" scoped>
+.container
+  padding-bottom 60rpx
 .status
   width 100%
   height 100%
@@ -140,18 +162,32 @@ createPage({
   &-content
     overflow hidden
     border-radius 16rpx
+.footer
+  width 100%
+  height 98rpx
+  position fixed
+  bottom 0
+  left 0
+  display flex
+  overflow hidden
+  border-radius 16rpx 16rpx 0 0
+  &-item
+    width 50%
+    height 100%
 </style>
 
 <script type="application/json">
   {
     "usingComponents": {
       "custom-container": "@/compontens/base/custom-container",
+      "cus-map": "@/compontens/common/map",
       "van-cell": "@vant/weapp/cell/index",
       "van-cell-group": "@vant/weapp/cell-group/index",
       "van-image": "@vant/weapp/image/index",
       "van-steps": "@vant/weapp/steps/index",
       "van-loading": "@vant/weapp/loading/index",
-      "item-container": "../components/item-container"
+      "item-container": "../components/item-container",
+      "van-button": "@vant/weapp/button/index"
     },
     "navigationStyle": "custom"
   }

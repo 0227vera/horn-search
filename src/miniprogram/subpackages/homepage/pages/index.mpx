@@ -4,7 +4,7 @@
   <van-dialog id="van-dialog" />
   <van-overlay show="{{ showOverlay }}" z-index="100">
     <view class="sub-container">
-      <image src="../image/job.png" class="img" mode="widthFix"></image>
+      <image src="cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/image-cdn/job.png" class="img" mode="widthFix"></image>
       <van-button type="default" bind:tap="clickSub" round>点击订阅，为您推动更多优质订单</van-button>
     </view>
   </van-overlay>

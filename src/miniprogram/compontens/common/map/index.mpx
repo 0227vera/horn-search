@@ -18,46 +18,57 @@
 <script>
 import mpx, { createComponent, onShow } from '@mpxjs/core'
 import store from '@/store'
+import guid from '@/utils'
+
 createComponent({
+  properties: {
+    endInfo: {
+      type: Object,
+      value: {}
+    }
+  },
   data: {
-    scale: 16,
+    scale: 12,
     polyline: []
   },
   computed: {
-    ...store.mapState(['location', 'startInfo', 'endInfo', 'mapSdk']),
+    ...store.mapState(['location', 'mapSdk']),
     markers () {
-      const markers = [
-        {
+      const markers = []
+      if (this.location) {
+        markers.push({
           id: 1,
-          latitude: this.startInfo.location.lat,
-          longitude: this.startInfo.location.lng,
-          // iconPath: 'https://pt-starimg.didistatic.com/static/starimg/img/YLnzDZIRx31609740456044.png',
+          latitude: this.location.latitude,
+          longitude: this.location.longitude,
+          height: 18,
+          width: 12,
           callout: {
-            content: this.startInfo.address,
+            content: '当前位置',
             color: '#333333',
             fontSize: 14,
-            borderRadius: 8,
+            borderRadius: 4,
             bgColor: '#ffffff',
-            padding: 12,
-            display: 'ALWAYS', // BYCLICK | ALWAYS
+            padding: 6,
+            display: 'ALWAYS',
             textAlign: 'center'
           }
-        }
-      ]
-      if (this.endInfo.address) {
+        })
+      }
+      if (this.endInfo.detail) {
         markers.push({
           id: 2,
           latitude: this.endInfo.location.lat,
           longitude: this.endInfo.location.lng,
-          // iconPath: 'https://pt-starimg.didistatic.com/static/starimg/img/YLnzDZIRx31609740456044.png',
+          height: 18,
+          width: 12,
           callout: {
-            content: this.endInfo.address,
+            content: this.endInfo.detail,
             color: '#333333',
             fontSize: 14,
-            borderRadius: 8,
+            borderRadius: 4,
             bgColor: '#ffffff',
-            padding: 12,
-            display: 'ALWAYS', // BYCLICK | ALWAYS
+            padding: 6,
+            display: 'ALWAYS',
             textAlign: 'center'
           }
         })
@@ -70,17 +81,25 @@ createComponent({
       if (val.length === 2) {
         const _this = this
         this.mapSdk.direction({
-          mode: 'driving',
-          from: `${this.startInfo.location.lat},${this.startInfo.location.lng}`,
-          to: `${this.endInfo.location.lat},${this.endInfo.location.lng}`,
+          mode: 'walking',
+          from: {
+            latitude: val[0].latitude,
+            longitude: val[0].longitude
+          },
+          to: {
+            latitude: val[1].latitude,
+            longitude: val[1].longitude
+          },
           success (res) {
             _this.polyline = res.result.routes.map((item) => ({
               points: _this.changepolylineData(item.polyline),
               color: '#07c160',
-              width: 4
+              width: 10
             }))
-            console.log(res)
-            _this.scale = 10
+            _this.scale = 12
+          },
+          fail(err) {
+            console.log(err)
           }
         })
       }
@@ -88,10 +107,9 @@ createComponent({
   },
   async attached () {
     await this.setLocation()
-    await this.setStartInfo()
   },
   methods: {
-    ...store.mapActions(['setLocation', 'setStartInfo']),
+    ...store.mapActions(['setLocation']),
     changepolylineData (coors) {
       const kr = 1000000
       const pl = []
@@ -110,14 +128,13 @@ createComponent({
 <style lang="stylus" scoped>
 .container
   width 100%
-  height 300px
+  height 400px
   display flex
   flex-direction column
   .map
     flex 1
     width 100%
     overflow hidden
-    padding-bottom 60px
     map
       width 100%
       height 100%
