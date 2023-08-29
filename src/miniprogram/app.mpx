@@ -8,7 +8,7 @@ import setting from './setting/setting'
 mpx.use(apiProxy, { usePromise: true })
 
 createApp({
-  ...store.mapMutations(['initNavBarStyle']),
+  ...store.mapMutations(['initNavBarStyle', 'setState']),
   async onLaunch() {
     this.initNavBarStyle()
     wx.cloud.init({
@@ -17,10 +17,11 @@ createApp({
     })
     const res = await getCommonConfig()
     const { categoryItems, steps, roles } = res.data
-    store.commit('updateCategoryItems', categoryItems)
-    store.commit('setSteps', steps)
-    store.commit('initFooterNavBar', roles)
-    console.log(res.data)
+    this.setState({
+      categoryItems,
+      steps,
+      footerNavBar: roles
+    })
   },
   globalStore: store,
   onShareAppMessage() {

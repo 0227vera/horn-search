@@ -20,10 +20,12 @@ createPage({
     getApp().onShareAppMessage()
   },
   methods: {
-    ...store.mapMutations(['setRole']),
+    ...store.mapMutations(['setState']),
     choose(role) {
       addUser({ role })
-      this.setRole(role)
+      this.setState({
+        role
+      })
       mpx.redirectTo({
         url: `${homepageUrl}?role=${role}`
       })
@@ -34,7 +36,7 @@ createPage({
 
 <style lang="stylus" scoped>
 .container
-  background-image url('../image/1.jpeg')
+  background-image url('cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/image-cdn/1.jpeg')
   background-size 100% 100%
   width 100vw
   height 100vh

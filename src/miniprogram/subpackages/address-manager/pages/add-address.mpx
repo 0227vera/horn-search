@@ -113,7 +113,7 @@ createPage({
   },
   methods: {
     ...store.mapActions(['setLocation']),
-    ...store.mapMutations(['updateAddressList']),
+    ...store.mapMutations(['setState']),
     // note: 字段变化
     onChange(e) {
       this.addInfo[e.target.id] = e.detail
@@ -208,7 +208,9 @@ createPage({
       })
       mpx.hideLoading()
       if (res.code === 200) {
-        this.updateAddressList(list)
+        this.setState({
+          addressList: list
+        })
         mpx.navigateBack()
       } else {
         mpx.showToast({

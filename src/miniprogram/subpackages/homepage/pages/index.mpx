@@ -50,7 +50,7 @@ createPage({
     ...store.mapGetters(['currentGooterList'])
   },
   methods: {
-    ...store.mapMutations(['setCurrentKey', 'setRole']),
+    ...store.mapMutations(['setCurrentKey']),
     ...store.mapActions(['getReleaseList']),
     tapItem(item) {
       this.setCurrentKey(item.key)

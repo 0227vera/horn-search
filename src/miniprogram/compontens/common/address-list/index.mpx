@@ -63,14 +63,16 @@ createComponent({
     }
   },
   methods: {
-    ...store.mapMutations(['updateAddressList']),
+    ...store.mapMutations(['setState']),
     CellClickHandle(arg) {
       if (!this.isCanChoose) return
       const list = JSON.parse(JSON.stringify(this.addressList))
       list.forEach(item => {
         item.checked = item.id === arg.id ? !item.checked : false
       })
-      this.updateAddressList(list)
+      this.setState({
+        addressList: list
+      })
       this.triggerEvent('choose-item', arg)
     },
     openAddPage() {

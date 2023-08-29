@@ -48,11 +48,18 @@ export default createStore({
     setNavBarStyle(state, data) {
       Object.assign(state.navBarStyle, data)
     },
-    initFooterNavBar(state, data) {
-      state.footerNavBar = data
-    },
-    setRole(state, data) {
-      state.role = data
+    setState(state, obj) {
+      if (Object.prototype.toString.call(obj) !== '[object Object]') {
+        console.error('setState传参应为obj数据类型，请检查-->', obj)
+        return
+      }
+      Object.keys(obj).forEach(item => {
+        if (state[item] === undefined) {
+          console.error(`state中不含${item}的key，请检查key值`)
+        } else {
+          state[item] = obj[item]
+        }
+      })
     },
     setCurrentKey(state, data) {
       state.footerNavBar[state.role].currentkey = data
@@ -62,44 +69,22 @@ export default createStore({
         item.key === 'order' && (item.info = data)
         return item
       })
-    },
-    setUsInfo(state, data = {}) {
-      Object.assign(state.usInfo, data)
-    },
-    updateLocation(state, data) {
-      state.location = Object.assign(state.location, data)
-    },
-    updateAdInfo(state, data) {
-      state.adInfo = Object.assign(state.adInfo, data)
-    },
-    updateCategoryItems(state, data) {
-      state.categoryItems = data
-    },
-    setShowBottomNav(state, data) {
-      state.showBottomNav = data
-    },
-    setOrderList(state, data) {
-      state.orderList = data
-    },
-    setOrderListReqLoading(state, data) {
-      state.orderListReqLoading = data
-    },
-    setSteps(state, data) {
-      state.steps = data
-    },
-    updateAddressList(state, data) {
-      state.addressList = data
     }
   },
   actions: {
     // node: 如果是boss的状态下获取所有的订单情况，并添加对应的数量标注
     async getReleaseList({ commit }) {
-      commit('setOrderListReqLoading', true)
+      commit('setState', {
+        orderListReqLoading: true
+      })
       const res = await getReleaseList()
       const list = res.data.list
-      commit('setOrderList', list)
+      const obj = {
+        orderList: list,
+        orderListReqLoading: false
+      }
+      commit('setState', obj)
       list.length && commit('setOrderNumInfo', list.length)
-      commit('setOrderListReqLoading', false)
     },
     setLocation ({ state, commit }) {
       return new Promise((resolve, reject) => {
@@ -107,16 +92,20 @@ export default createStore({
           type: 'gcj02',
           success (res) {
             const { longitude, latitude } = res
-            commit('updateLocation', { longitude, latitude })
+            commit('setState', {
+              location: { longitude, latitude }
+            })
             state.mapSdk.reverseGeocoder({
               location: `${latitude},${longitude}`,
               success (res) {
                 const { result } = res || {}
-                commit('updateLocation', {
-                  longitude: result.location.lng || state.location.longitude,
-                  latitude: result.location.lat || state.location.latitude
+                commit('setState', {
+                  location: {
+                    longitude: result.location.lng || state.location.longitude,
+                    latitude: result.location.lat || state.location.latitude
+                  },
+                  adInfo: result
                 })
-                commit('updateAdInfo', result)
                 resolve(res)
               }
             })

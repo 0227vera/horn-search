@@ -75,8 +75,15 @@ createComponent({
       })
     },
     makePhone(item) {
+      const self = this
       wx.makePhoneCall({
-        phoneNumber: item.tel
+        phoneNumber: item.tel,
+        success(res) {
+          console.log(res)
+        },
+        fail(err) {
+          console.error(err)
+        }
       })
     },
     gotoAddress(item) {
@@ -107,6 +114,16 @@ createComponent({
   margin-bottom 8rpx
   &-title
     font-weight 500
+.sub-container
+  width 100%
+  height 80%
+  display flex
+  flex-direction column
+  align-items center
+  justify-content center
+  .img
+    width 540rpx
+    margin-bottom 40rpx
 </style>
 
 <script type="application/json">

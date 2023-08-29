@@ -227,7 +227,7 @@ createComponent({
   },
   methods: {
     ...store.mapActions(['setLocation', 'getReleaseList']),
-    ...store.mapMutations(['setShowBottomNav']),
+    ...store.mapMutations(['setState']),
     // note: 修改字段值
     onFieldChange(e) {
       this.updateObj[e.target.id] = e.detail
@@ -247,13 +247,17 @@ createComponent({
     },
     // note: 弹窗处理
     showPopupContainer(type) {
-      this.setShowBottomNav(false)
+      this.setState({
+        showBottomNav: false
+      })
       this.showPopup = true
       this.popupType = type
     },
     closePopupContainer() {
       this.showPopup = false
-      this.setShowBottomNav(true)
+      this.setState({
+        showBottomNav: true
+      })
     },
     // note: 分类处理
     changeComponent(e) {

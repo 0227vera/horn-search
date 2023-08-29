@@ -64,15 +64,16 @@ createComponent({
   },
   ready() {
     const newObj = this.getNewObj(JSON.parse(JSON.stringify(this.categoryItems)))
-    this.updateCategoryItems(newObj)
+    this.setState({
+      categoryItems: newObj
+    })
   },
   methods: {
-    ...store.mapMutations(['updateCategoryItems']),
+    ...store.mapMutations(['setState']),
     levelItem(item) {
-      this.updateCategoryItems(Object.assign(this.categoryItems, {
-        selected: item.value
-      }))
-      this.updateCategoryItems(this.getNewObj(this.categoryItems))
+      this.setState({
+        categoryItems: this.getNewObj(this.categoryItems)
+      })
       this.$forceUpdate()
     },
     level1Item(item) {
@@ -82,7 +83,9 @@ createComponent({
           c.selected = item.value
         }
       })
-      this.updateCategoryItems(this.getNewObj(cat))
+      this.setState({
+        categoryItems: this.getNewObj(cat)
+      })
       if (!item.children?.length) {
         // note: 设置配置的组件
         this.triggerEvent('component', item)
@@ -122,8 +125,9 @@ createComponent({
           }
         })
       })
-      console.log(cat)
-      this.updateCategoryItems(cat)
+      this.setState({
+        categoryItems: cat
+      })
       this.triggerEvent('component', {
         text,
         value: id

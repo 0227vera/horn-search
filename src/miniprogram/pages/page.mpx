@@ -14,15 +14,20 @@ import store from '@/store'
 
 createPage({
   async onLoad(params) {
+    console.log('========+>', params)
     // note: 确定身份
     const res = await getCurrentRole()
     const { role = '', address = [] } = res.data || {}
+    const obj = {}
     if (address.length) {
-      this.updateAddressList(address)
+      Object.assign(obj, {
+        addressList: address
+      })
     }
     if (role) {
-      this.setRole(role)
+      Object.assign(obj, { role })
     }
+    this.setState(obj)
     // note: 跳转不同的类型
     let url = chooseRolePageUrl
     const { type = '', path = '' } = params
@@ -38,7 +43,7 @@ createPage({
     mpx.redirectTo({ url })
   },
   methods: {
-    ...store.mapMutations(['updateAddressList', 'setRole'])
+    ...store.mapMutations(['setState'])
   }
 })
 </script>
