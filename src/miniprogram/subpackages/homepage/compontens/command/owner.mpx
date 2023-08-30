@@ -81,7 +81,6 @@ createComponent({
             name: '地址管理',
             icon: 'todo-list-o',
             jumptype: 'mp',
-            hide: this.isWorker,
             url: '/address-manager/pages/index'
           }
         ],

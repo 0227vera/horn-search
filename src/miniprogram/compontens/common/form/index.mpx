@@ -2,18 +2,19 @@
 <template>
   <van-cell-group class="form" custom-class="home-cell-group-container" style="background:#fff">
     <van-field
-      label="品类名称"
+      label="技能选择"
       required
       value="{{ updateObj.categoryName }}"
-      placeholder="请输入自定义品类的名称"
+      placeholder="请选择擅长的技能"
       input-align="right"
       bind:change="onFieldChange"
       id="categoryName"
+      bind:tap="showPopupContainer('category')"
+      is-link
+      readonly
       center
-      disabled
-      wx:if="{{updateObj.category === '10'}}"
     />
-    <van-field
+    <!-- <van-field
       label="单价"
       title-width="80rpx"
       required
@@ -28,7 +29,7 @@
       <van-dropdown-menu slot="button">
         <van-dropdown-item bind:change="changeUnit" value="{{ updateObj.priceUnit }}" options="{{ unitList }}" />
       </van-dropdown-menu>
-    </van-field>
+    </van-field> -->
     <van-field
       label="位置"
       title-width="80rpx"
@@ -126,6 +127,15 @@
       />
       <address-list showBottomBtn="{{false}}" showBottomDivder bind:choose-item="addressChange" />
     </view>
+    <view wx:elif="{{popupType === 'category'}}">
+      <van-tree-select
+        items="{{ items }}"
+        main-active-index="{{ mainActiveIndex }}"
+        active-id="{{ activeId }}"
+        bind:click-nav="onClickNav"
+        bind:click-item="onClickItem"
+      />
+    </view>
   </van-popup>
   <service-notice wx:ref="serviceNotice" tmplIds="{{tmplIds}}" />
 </template>
@@ -151,6 +161,9 @@ createComponent({
     showPopup: false,
     tmplIds: [ORDER_UPDATE],
     popupType: '',
+    mainActiveIndex: 0,
+    activeId: [],
+    selectedOptions: [],
     minDate: Date.now(),
     currentDate: Date.now(),
     address: {},
@@ -188,15 +201,11 @@ createComponent({
       this.updateObj.category = val
     },
     categoryName(val) {
-      // if (this.updateObj.category === '10') {
-      //   this.updateObj.categoryName = ''
-      //   return
-      // }
       this.updateObj.categoryName = val
     }
   },
   computed: {
-    ...store.mapState(['adInfo']),
+    ...store.mapState(['adInfo', 'categoryItems']),
     imagesValue() {
       if (this.updateObj.images.length) {
         return `已上传${this.updateObj.images.length}张图片`
@@ -214,9 +223,20 @@ createComponent({
         return `${year}年${month}月${day}日${hour}时${min}分`
       }
       return ''
+    },
+    items() {
+      return this.categoryItems.children.map(item => {
+        item.id = item.value
+        item.children.filter(f => +f.value !== 10)
+        item.children.forEach(item => {
+          item.id = item.value
+        })
+        return item
+      })
     }
   },
   async attached() {
+    console.log(this.categoryItems)
     await this.setLocation()
     this.updateObj.poi = {
       ...this.adInfo.location,
@@ -232,6 +252,13 @@ createComponent({
     },
     changeUnit(e) {
       this.updateObj.priceUnit = e.detail
+    },
+    onClickItem(e) {
+      if (this.activeId.includes(e.detail.id)) {
+        this.activeId = this.activeId.filter(item => item !== e.detail.id)
+      } else {
+        this.activeId.push(e.detail.id)
+      }
     },
     // note: 图片相关处理
     async afterRead(e) {
@@ -338,8 +365,8 @@ createComponent({
         title: '提交中...',
         mask: true
       });
-      const subscribe = await this.$refs.serviceNotice?.showServiceNotice?.()
-      const res = await addRelease({ ...this.updateObj, status: 1, subscribeInfo: subscribe })
+      await this.$refs.serviceNotice?.showServiceNotice?.()
+      const res = await addRelease({ ...this.updateObj, status: 1 })
       mpx.hideLoading()
       if (res.code === 200) {
         const self = this
@@ -398,6 +425,7 @@ createComponent({
   {
     "usingComponents": {
       "service-notice": "@/compontens/common/service-notice",
+      "van-tree-select": "@vant/weapp/tree-select/index",
       "address-list": "@/compontens/common/address-list",
       "custom-container": "@/compontens/base/custom-container",
       "van-cell": "@vant/weapp/cell/index",
