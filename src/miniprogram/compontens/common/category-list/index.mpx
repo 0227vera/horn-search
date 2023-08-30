@@ -39,9 +39,9 @@ todo: 这个地方处理的及其不优雅,但是想快点完成能力,之后再
             />
           </view>
           <view class="content" wx:else bind:tap="clickItem(item)">
-            <van-icon wx:if="{{item.icon  && item.value === level1List.selected && role === 'boss'}}" class="icon" name="{{item.icon}}" />
+            <van-icon wx:if="{{item.icon  && item.value === level1List.selected && isBoss}}" class="icon" name="{{item.icon}}" />
             {{item.text}}
-            <text wx:if="{{item.tips && (item.value === level1List.selected || !item.text ) && role === 'boss'}}" class="tips">({{item.tips}})</text>
+            <text wx:if="{{item.tips && (item.value === level1List.selected || !item.text ) && isBoss}}" class="tips">({{item.tips}})</text>
           </view>
         </view>
       </view>
@@ -57,7 +57,8 @@ createComponent({
     showInput: false
   },
   computed: {
-    ...store.mapState(['categoryItems', 'role']),
+    ...store.mapState(['categoryItems']),
+    ...store.mapGetters(['isWorker', 'isBoss']),
     level1List() {
       return this.categoryItems.children?.find(item => item.value === this.categoryItems.selected) || {}
     }
@@ -111,7 +112,7 @@ createComponent({
     clickItem(item) {
       if (!item.editable) return
       if (item.value !== this.level1List.selected) return
-      if (this.role !== 'boss') return
+      if (this.isWorker) return
       this.showInput = true
     },
     inputHandle(e) {

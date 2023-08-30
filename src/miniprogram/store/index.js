@@ -35,6 +35,15 @@ export default createStore({
   getters: {
     currentGooterList(state) {
       return state.footerNavBar?.[state.role]
+    },
+    isWorker(state) {
+      return state.role === 'worker'
+    },
+    isBoss(state) {
+      return state.role === 'boss'
+    },
+    isBusiness(state) {
+      return state.role === 'business'
     }
   },
   mutations: {

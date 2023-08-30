@@ -20,6 +20,7 @@
             clickable="{{item.islink}}"
             is-link="{{item.islink}}"
             bind:tap="priview(item)"
+            value-class="right-class"
           />
         </van-cell-group>
       </item-container>
@@ -58,7 +59,7 @@ createPage({
     }
     this.loading = true
     const res = await getReleaseOneById(params)
-    const { categoryName, category, price, priceUnit, poi, tel, images, ownTimeName, note, status } = res.data || {}
+    const { categoryName, category, price, priceUnit, poi, tel, images, ownTimeName, note, status, calllist } = res.data || {}
     this.poi = poi
     this.tel = tel
     console.log(res)
@@ -93,6 +94,10 @@ createPage({
         value: note
       })
     }
+    this.renderList.push({
+      title: '呼叫情况',
+      value: calllist?.length ? `已有${calllist.length}人呼叫` : '暂时无人呼叫'
+    })
     this.loading = false
   },
   computed: {
@@ -114,7 +119,6 @@ createPage({
     })
   },
   gotoAddress() {
-    console.log(this.poi)
     wx.openLocation({
       latitude: this.poi.location.lat,
       longitude: this.poi.location.lat,
@@ -137,6 +141,12 @@ createPage({
 })
 
 </script>
+
+<style lang="stylus">
+.right-class
+  color #000000 !important
+  font-weight bold
+</style>
 
 <style lang="stylus" scoped>
 .container

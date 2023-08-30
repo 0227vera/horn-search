@@ -37,7 +37,7 @@
       </van-card>
     </view>
     <view wx:else class="loading empty">
-      <van-empty description="暂无数据" bind:tap="gotoRelease" />
+      <van-empty description="暂无数据，去发布一个空闲时间吧" bind:tap="gotoRelease" />
     </view>
   </view>
 </template>
@@ -96,6 +96,9 @@ createComponent({
     },
     gotoDetail(item) {
       mpx.navigateTo({ url: `/order-detail/pages/detail-to-worker?id=${item._id}&isBack=true` })
+    },
+    gotoRelease(item) {
+      mpx.navigateTo({ url: `/release/pages/worker` })
     }
   }
 })

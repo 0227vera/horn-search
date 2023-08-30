@@ -32,13 +32,13 @@ createPage({
       this.setCurrentKey(params.currentKey)
     }
     // note: boss身份的时候将发布列表请求到，目的是为了给元素加下标
-    if (this.role === 'boss') {
+    if (this.isBoss) {
       this.getReleaseList({
         needOpenid: true
       })
     }
     // node: 如果是求职者，进入就需要订阅消息，方便之后的推送
-    if (this.role === 'worker') {
+    if (this.isWorker) {
       const subscribeInfo = await mpx.getSetting({ withSubscriptions: true })
       // todo: 如果是已经订阅（总是允许）的情况不再弹窗引导
       if (subscribeInfo.subscriptionsSetting?.itemSettings?.[NEW_ORDER_NOTICE] === 'accept') return
@@ -47,7 +47,7 @@ createPage({
   },
   computed: {
     ...store.mapState(['role']),
-    ...store.mapGetters(['currentGooterList'])
+    ...store.mapGetters(['currentGooterList', 'isBoss', 'isWorker'])
   },
   methods: {
     ...store.mapMutations(['setCurrentKey']),
