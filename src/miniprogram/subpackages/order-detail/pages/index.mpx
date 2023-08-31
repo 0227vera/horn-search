@@ -12,15 +12,7 @@
     </view>
     <block wx:else>
       <item-container title="推送情况：">
-        <view>
-          <view>正在推送中功能和动效</view>
-          <view>
-            1. 已经推送多少人；
-          </view>
-          <view>
-            2. 并在持续推送
-          </view>
-        </view>
+        <finder />
       </item-container>
       <item-container wx:if="{{active === 2}}" title="呼叫人信息：">
         <van-cell-group class="form" border="{{false}}">
@@ -172,7 +164,8 @@ createPage({
       "van-image": "@vant/weapp/image/index",
       "van-steps": "@vant/weapp/steps/index",
       "van-loading": "@vant/weapp/loading/index",
-      "item-container": "../components/item-container"
+      "item-container": "../components/item-container",
+      "finder": "@/compontens/base/finder.mpx"
     },
     "navigationStyle": "custom"
   }
