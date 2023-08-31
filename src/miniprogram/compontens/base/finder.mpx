@@ -1,0 +1,129 @@
+<template>
+  <view class="container">
+    <view class="title">
+      {{title}}
+    </view>
+    <view class="subTitle">
+      <mutil-style-text text="{{subTitle}}" rules="{{rules}}" />
+    </view>
+    <view class="loader">
+      <text class="loader-child"></text>
+    </view>
+    <view class="text">
+      {{text}}
+    </view>
+  </view>
+</template>
+
+<script>
+import { createComponent } from '@mpxjs/core'
+createComponent({
+  properties: {
+    text: {
+      type: String,
+      value: '正在持续推送中……'
+    },
+    title: {
+      type: String,
+      value: '以为您推送给所有用户'
+    },
+    subTitle: {
+      type: String,
+      value: '已有{58}人阅读你发出的订单'
+    }
+  },
+  data: {
+    rules: {
+      '{x}': {
+        style: 'font-size: 50rpx; color: #07c160;'
+      }
+    }
+  }
+})
+</script>
+
+<style lang="stylus" scoped>
+.container
+  width 100%
+  display flex
+  flex-direction column
+  justify-content center
+  align-items center
+  padding 20rpx 0
+  box-sizing border-box
+  .title
+    font-size 30rpx
+    margin-bottom 20rpx
+  .subTitle
+    font-size 40rpx
+    font-weight bold
+    margin-bottom 20rpx
+  .text
+    font-size 24rpx
+    color #333333
+    margin-top 20rpx
+.loader
+  position relative
+  width 150rpx
+  height 150rpx
+  background transparent
+  border-radius 50%
+  box-shadow 25rpx 25rpx 75rpx rgba(0,0,0,0.25)
+  border 1px solid #999999
+  display flex
+  align-items center
+  justify-content center
+  overflow hidden
+.loader::before
+  content ''
+  position absolute
+  inset 20rpx
+  background transparent
+  border 1px dashed #999999
+  border-radius 50%
+  box-shadow inset -5rpx -5rpx 25rpx rgba(0,0,0,0.25),
+  inset 5rpx 5rpx 35rpx rgba(0,0,0,0.25)
+.loader::after
+  content ''
+  position absolute
+  width 50rpx
+  height 50rpx
+  border-radius 50%
+  border 1rpx dashed #bbbbbb
+  box-shadow inset -5rpx -5rpx 25rpx rgba(0,0,0,0.25),
+  inset 5rpx 5rpx 35rpx rgba(0,0,0,0.25)
+.loader-child
+  position absolute
+  top 50%
+  left 50%
+  width 50%
+  height 100%
+  background transparent
+  transform-origin top left
+  animation radar81 2s linear infinite
+  border-top 1px dashed #fff
+.loader-child::before
+  content ''
+  position absolute
+  top 0
+  left 0
+  width 100%
+  height 100%
+  background #07c160
+  transform-origin top left
+  transform rotate(-55deg)
+  filter blur(30rpx) drop-shadow(20rpx 20rpx 20rpx #07c160)
+@-webkit-keyframes radar81
+  0%
+    transform rotate(0deg)
+  100%
+    transform rotate(360deg)
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "mutil-style-text": "@/compontens/base/mutil-style-text.mpx"
+    }
+  }
+</script>

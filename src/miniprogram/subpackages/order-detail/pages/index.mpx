@@ -113,7 +113,6 @@ createPage({
       if (this.active) {
         console.log(this.active, this.steps)
         const desc = this.steps.find(item => +item.status === this.active + 1).desc
-        console.log('desc======>', desc)
         return `订单详情【${desc}】`
       }
       return '订单详情'

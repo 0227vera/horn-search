@@ -2,7 +2,7 @@
 module.exports = {
   pages: [
     './pages/index',
-    './pages/index',
+    './pages/detail-to-worker',
     './pages/worker-detail'
   ]
 }

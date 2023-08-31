@@ -5,7 +5,7 @@
     containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
     clickLeft="{{clickLeft}}"
   >
-    <category-list bind:component="changeComponent"/>
+    <category-list bind:component="changeComponent" categoryId="{{categoryId}}"/>
     <view class="content">
       <component is="{{role}}" category="{{category}}" categoryName="{{categoryName}}" bind:release-finish="releaseFinish"></component>
     </view>
@@ -17,6 +17,12 @@ import mpx, { createComponent } from '@mpxjs/core'
 const store = getApp().globalStore
 
 createComponent({
+  properties: {
+    categoryId: {
+      type: String,
+      value: ''
+    }
+  },
   data: {
     category: '',
     categoryName: ''

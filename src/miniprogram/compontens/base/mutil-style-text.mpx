@@ -1,0 +1,116 @@
+<template>
+  <view class="mpx-special-text" wx:style="{{containerStyle}}">
+    <slot name="before"></slot>
+    <view wx:for="{{textArr}}" class="special-text-item" wx:key="index" data-index="{{index}}" wx:style="{{verticalAlign}};{{item.style}}">{{item.text}}</view>
+    <slot name="after"></slot>
+  </view>
+</template>
+
+<script>
+import { createComponent } from '@mpxjs/core'
+
+const defaultRules = {
+  '{x}': {
+    style: 'color: #07c160'
+  },
+  '[x]': {
+    style: 'font-size: 16px'
+  },
+  '#x#': {
+    style: 'color: #07c160; font-size: 16px'
+  }
+}
+
+createComponent({
+  options: {
+    multipleSlots: true
+  },
+  properties: {
+    text: {
+      type: String,
+      value: ''
+    },
+    rules: {
+      type: Object,
+      default: () => {}
+    },
+    enableDefault: {
+      type: Boolean,
+      value: true
+    },
+    verticalAlign: {
+      type: String,
+      value: ''
+    },
+    containerStyle: String
+  },
+
+  computed: {
+    textArr () {
+      return this.parseStr()
+    }
+  },
+
+  methods: {
+    parseStr () {
+      const arr = []
+      const str = this.text || ''
+      const rules = Object.assign({}, this.enableDefault !== false ? defaultRules : {}, this.rules)
+      const separators = Object.keys(rules).sort((a, b) => b.length - a.length)
+      str.replace(this.getRegex(separators), (str, $1, ...rest) => {
+        const matches = rest.slice(0, separators.length)
+        $1 && arr.push({
+          text: $1
+        })
+        for (let i = 0; i < matches.length; i++) {
+          if (matches[i]) {
+            const rule = rules[separators[i]]
+            arr.push({
+              style: rule.style || '',
+              text: matches[i]
+            })
+            break
+          }
+        }
+      })
+      return arr
+    },
+
+    getRegex(separators) {
+      const regs = []
+      const delimiter = []
+      separators.forEach(item => {
+        const reg = item.replace(/\w|(\W)/g, (str, $1) => {
+          if (str === 'x') {
+            return '(.+?)'
+          } else if ($1) {
+            const escapeStr = `\\${$1}`
+            $1 === ']' || $1 === '-' ? delimiter.push(escapeStr) : delimiter.push($1)
+            // 特殊字符，尽量转义下
+            return escapeStr
+          } else {
+            delimiter.push(str)
+            return str
+          }
+        })
+        regs.push(reg)
+      })
+      regs.unshift(`([^${delimiter.join('')}]+)`)
+      return new RegExp(regs.join('|'), 'g')
+    }
+  }
+})
+</script>
+
+<style lang="stylus">
+  .mpx-special-text
+    display: inline
+    & > .special-text-item
+      display inline
+</style>
+
+<script type="application/json">
+  {
+    "component": true
+  }
+</script>

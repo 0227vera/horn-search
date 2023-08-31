@@ -1,8 +1,3 @@
-/**
-@file:
-todo: 这个地方处理的及其不优雅,但是想快点完成能力,之后再优化吧
-*/
-
 <template>
   <view class="container">
     <scroll-view scroll-x class="scroll">
@@ -53,6 +48,12 @@ todo: 这个地方处理的及其不优雅,但是想快点完成能力,之后再
 import { createComponent } from '@mpxjs/core'
 import store from '@/store'
 createComponent({
+  properties: {
+    categoryId: {
+      type: String,
+      value: ''
+    }
+  },
   data: {
     showInput: false
   },
@@ -63,10 +64,18 @@ createComponent({
       return this.categoryItems.children?.find(item => item.value === this.categoryItems.selected) || {}
     }
   },
-  ready() {
-    const newObj = this.getNewObj(JSON.parse(JSON.stringify(this.categoryItems)))
+  attached() {
+    const newObj = this.getNewObj(JSON.parse(JSON.stringify(this.categoryItems)), true)
+    if (this.categoryId) {
+      newObj.children = newObj.children.map(item => {
+        if (item.value === newObj.selected) {
+          item.selected = this.categoryId
+        }
+        return item
+      })
+    }
     this.setState({
-      categoryItems: newObj
+      categoryItems: this.getNewObj(newObj)
     })
   },
   methods: {
@@ -92,7 +101,7 @@ createComponent({
         this.triggerEvent('component', item)
       }
     },
-    getNewObj(obj) {
+    getNewObj(obj, disComponent = false) {
       if (obj.children?.length) {
         if (!obj.selected) {
           obj.selected = obj.children[0].value
@@ -104,7 +113,7 @@ createComponent({
             }
           })
         }
-      } else {
+      } else if (!disComponent) {
         this.triggerEvent('component', obj)
       }
       return obj

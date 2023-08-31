@@ -3,6 +3,8 @@
     title="{{pageTitle}}"
     lefticon="arrow-left"
     containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
+    btnName="去看看同类型订单"
+    bind:footer-btn="gotoHome"
   >
     <item-container wx:if="{{active === 1}}" title="流程信息：">
       <van-steps steps="{{ steps }}" active="{{ active }}" />
@@ -12,15 +14,7 @@
     </view>
     <block wx:else>
       <item-container title="推送情况：">
-        <view>
-          <view>正在推送中功能和动效</view>
-          <view>
-            1. 已经推送多少人；
-          </view>
-          <view>
-            2. 并在持续推送
-          </view>
-        </view>
+        <finder />
       </item-container>
       <item-container wx:if="{{active === 2}}" title="呼叫人信息：">
         <van-cell-group class="form" border="{{false}}">
@@ -68,8 +62,9 @@ createPage({
   async onLoad(params) {
     this.loading = true
     const res = await getWorkerReleaseOneById(params)
-    const { categoryName, price, priceUnit, poi, tel, images, ownTimeName, note, status, calllist } = res.data || {}
+    const { categoryName, category, poi, tel, images, ownTimeName, status, calllist } = res.data || {}
     this.active = status - 1
+    this.category = category
     this.renderList = [{
       title: '分类',
       value: categoryName
@@ -88,7 +83,7 @@ createPage({
     }
     if (images?.length) {
       this.renderList.push({
-        title: '图片/视频',
+        title: '图片',
         value: '点击查看图片',
         islink: true,
         list: images
@@ -124,6 +119,11 @@ createPage({
         url: i,
         type: 'image'
       }))
+    })
+  },
+  gotoHome() {
+    mpx.redirectTo({
+      url: `/homepage/pages/index?currentKey=home&category=${this.category[0]}`
     })
   }
 })
@@ -163,7 +163,8 @@ createPage({
       "van-image": "@vant/weapp/image/index",
       "van-steps": "@vant/weapp/steps/index",
       "van-loading": "@vant/weapp/loading/index",
-      "item-container": "../components/item-container"
+      "item-container": "../components/item-container",
+      "finder": "@/compontens/base/finder.mpx"
     },
     "navigationStyle": "custom"
   }

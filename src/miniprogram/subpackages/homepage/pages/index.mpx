@@ -1,5 +1,5 @@
 <template>
-  <component is="{{currentGooterList.currentkey}}"></component>
+  <component is="{{currentGooterList.currentkey}}" categoryId="{{category}}"></component>
   <footer />
   <van-dialog id="van-dialog" />
   <van-overlay show="{{ showOverlay }}" z-index="100">
@@ -23,13 +23,16 @@ createPage({
   },
   data: {
     showOverlay: false,
+    category: '',
     tmplIds: [NEW_ORDER_NOTICE]
   },
   async onLoad(params) {
-    const { currentKey } = params
+    const { currentKey, category } = params
+    console.log(category)
+    this.category = category
     // note: 如果外部需要决定进入首页的type
     if (currentKey) {
-      this.setCurrentKey(params.currentKey)
+      this.setCurrentKey(currentKey)
     }
     // note: boss身份的时候将发布列表请求到，目的是为了给元素加下标
     if (this.isBoss) {
