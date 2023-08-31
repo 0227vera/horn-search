@@ -14,22 +14,6 @@
       readonly
       center
     />
-    <!-- <van-field
-      label="单价"
-      title-width="80rpx"
-      required
-      value="{{ updateObj.price }}"
-      placeholder="请输入计时或者计件的单价"
-      type="digit"
-      input-align="right"
-      bind:change="onFieldChange"
-      id="price"
-      center
-    >
-      <van-dropdown-menu slot="button">
-        <van-dropdown-item bind:change="changeUnit" value="{{ updateObj.priceUnit }}" options="{{ unitList }}" />
-      </van-dropdown-menu>
-    </van-field> -->
     <van-field
       label="位置"
       title-width="80rpx"
@@ -84,17 +68,6 @@
         </view>
       </view>
     </view>
-    <van-field
-      label="要求"
-      title-width="60rpx"
-      value="{{ updateObj.note }}"
-      placeholder="请输入您对所招工人的要求或者服装的要求"
-      input-align="right"
-      type="textarea"
-      autosize
-      id="note"
-      bind:change="onFieldChange"
-    />
     <van-cell>
       <van-button round type="primary" block bind:tap="submitData">发布</van-button>
     </van-cell>
@@ -128,6 +101,14 @@
       <address-list showBottomBtn="{{false}}" showBottomDivder bind:choose-item="addressChange" />
     </view>
     <view wx:elif="{{popupType === 'category'}}">
+      <van-nav-bar
+        left-text="取消"
+        right-text="确定"
+        title="请选择技能"
+        bind:click-left="closePopupContainer"
+        bind:click-right="onCategoryClickRight"
+        safe-area-inset-top="{{false}}"
+      />
       <van-tree-select
         items="{{ items }}"
         main-active-index="{{ mainActiveIndex }}"
@@ -142,28 +123,17 @@
 
 <script>
 import mpx, { createComponent } from '@mpxjs/core'
-import { fileUpload, addRelease, updateRelease } from '@/api'
+import { fileUpload, addWorkerRelease, updateWorkerRelease } from '@/api'
 import { ORDER_UPDATE } from '@/setting/noticeInfo.js'
 const store = getApp().globalStore
 
 createComponent({
-  properties: {
-    category: {
-      type: String,
-      value: ''
-    },
-    categoryName: {
-      type: String,
-      value: ''
-    }
-  },
   data: {
     showPopup: false,
     tmplIds: [ORDER_UPDATE],
     popupType: '',
     mainActiveIndex: 0,
     activeId: [],
-    selectedOptions: [],
     minDate: Date.now(),
     currentDate: Date.now(),
     address: {},
@@ -178,30 +148,14 @@ createComponent({
       }
       return `${value}${types[type] || ''}`
     },
-    unitList: [
-      { text: '元/件', value: '元/件' },
-      { text: '元/小时', value: '元/小时' },
-      { text: 'K/月', value: 'K/月' }
-    ],
     updateObj: {
       category: '',
       categoryName: '',
-      note: '',
-      price: '',
-      priceUnit: '元/件',
       tel: '',
       ownTime: '',
       ownTimeName: '',
       images: [],
       poi: {}
-    }
-  },
-  watch: {
-    category(val) {
-      this.updateObj.category = val
-    },
-    categoryName(val) {
-      this.updateObj.categoryName = val
     }
   },
   computed: {
@@ -227,7 +181,7 @@ createComponent({
     items() {
       return this.categoryItems.children.map(item => {
         item.id = item.value
-        item.children.filter(f => +f.value !== 10)
+        item.children = item.children.filter(f => +f.value !== 10)
         item.children.forEach(item => {
           item.id = item.value
         })
@@ -236,22 +190,18 @@ createComponent({
     }
   },
   async attached() {
-    console.log(this.categoryItems)
     await this.setLocation()
     this.updateObj.poi = {
-      ...this.adInfo.location,
+      location: this.adInfo.location,
       name: this.adInfo.address
     }
   },
   methods: {
-    ...store.mapActions(['setLocation', 'getReleaseList']),
+    ...store.mapActions(['setLocation']),
     ...store.mapMutations(['setState']),
     // note: 修改字段值
     onFieldChange(e) {
       this.updateObj[e.target.id] = e.detail
-    },
-    changeUnit(e) {
-      this.updateObj.priceUnit = e.detail
     },
     onClickItem(e) {
       if (this.activeId.includes(e.detail.id)) {
@@ -259,6 +209,11 @@ createComponent({
       } else {
         this.activeId.push(e.detail.id)
       }
+    },
+    onCategoryClickRight() {
+      this.updateObj.category = this.activeId
+      this.updateObj.categoryName = this.items[this.mainActiveIndex].children.filter(item => this.activeId.includes(item.id)).map(item => item.text).join('/')
+      this.closePopupContainer()
     },
     // note: 图片相关处理
     async afterRead(e) {
@@ -272,23 +227,11 @@ createComponent({
     },
     // note: 弹窗处理
     showPopupContainer(type) {
-      this.setState({
-        showBottomNav: false
-      })
       this.showPopup = true
       this.popupType = type
     },
     closePopupContainer() {
       this.showPopup = false
-      this.setState({
-        showBottomNav: true
-      })
-    },
-    // note: 分类处理
-    changeComponent(e) {
-      const { value, text } = e.detail
-      this.updateObj.category = value
-      this.updateObj.categoryName = text
     },
     // note: 时间处理
     onTimeClick() {
@@ -318,16 +261,8 @@ createComponent({
         success: false,
         text: ''
       }
-      if (!this.updateObj.category) {
-        result.text = '请选择类别'
-        return result
-      }
-      if (this.updateObj.category === '10' && !this.updateObj.categoryName) {
-        result.text = '请输入自定义品类名称'
-        return result
-      }
-      if (!this.updateObj.price) {
-        result.text = '请输入单价'
+      if (!this.updateObj.category.length) {
+        result.text = '请选择技能'
         return result
       }
       if (!this.updateObj.tel) {
@@ -342,7 +277,6 @@ createComponent({
       return result
     },
     previewMedia(index) {
-      console.log(index, this.updateObj.images)
       wx.previewMedia({
         current: index,
         sources: this.updateObj.images.map(item => ({
@@ -366,7 +300,8 @@ createComponent({
         mask: true
       });
       await this.$refs.serviceNotice?.showServiceNotice?.()
-      const res = await addRelease({ ...this.updateObj, status: 1 })
+      // todo: 换成worker的发布表中去
+      const res = await addWorkerRelease({ ...this.updateObj, status: 1 })
       mpx.hideLoading()
       if (res.code === 200) {
         const self = this
@@ -379,12 +314,11 @@ createComponent({
               title: '正在为您推送……',
               mask: true
             })
-            await updateRelease({
+            await updateWorkerRelease({
               _id: res.data,
               status: '2'
             })
             mpx.hideLoading()
-            self.getReleaseList()
             self.triggerEvent('release-finish', res.data)
           }
         })

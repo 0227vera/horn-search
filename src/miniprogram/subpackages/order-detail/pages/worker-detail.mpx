@@ -1,0 +1,170 @@
+<template>
+  <custom-container
+    title="{{pageTitle}}"
+    lefticon="arrow-left"
+    containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
+  >
+    <item-container wx:if="{{active === 1}}" title="流程信息：">
+      <van-steps steps="{{ steps }}" active="{{ active }}" />
+    </item-container>
+    <view wx:if="{{loading}}" class="status">
+      <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
+    </view>
+    <block wx:else>
+      <item-container title="推送情况：">
+        <view>
+          <view>正在推送中功能和动效</view>
+          <view>
+            1. 已经推送多少人；
+          </view>
+          <view>
+            2. 并在持续推送
+          </view>
+        </view>
+      </item-container>
+      <item-container wx:if="{{active === 2}}" title="呼叫人信息：">
+        <van-cell-group class="form" border="{{false}}">
+          <van-cell
+          wx:for="{{calllist}}"
+          wx:key="*this"
+          title="电话"
+          bind:tap="clickTel(item)"
+          value="{{item.tel}}"
+          clickable
+          is-link
+        />
+        </van-cell-group>
+      </item-container>
+      <item-container title="基本信息：">
+        <van-cell-group border="{{false}}">
+          <van-cell
+            wx:for="{{renderList}}"
+            title-width="120rpx"
+            wx:key="_id"
+            title="{{item.title}}"
+            value="{{item.value}}"
+            clickable="{{item.islink}}"
+            is-link="{{item.islink}}"
+            bind:tap="priview(item)"
+          />
+        </van-cell-group>
+      </item-container>
+    </block>
+  </custom-container>
+</template>
+
+<script>
+import mpx, { createPage } from '@mpxjs/core'
+import { getWorkerReleaseOneById } from '@/api'
+import store from '@/store'
+
+createPage({
+  data: {
+    loading: true,
+    renderList: [],
+    active: '',
+    calllist: []
+  },
+  async onLoad(params) {
+    this.loading = true
+    const res = await getWorkerReleaseOneById(params)
+    const { categoryName, price, priceUnit, poi, tel, images, ownTimeName, note, status, calllist } = res.data || {}
+    this.active = status - 1
+    this.renderList = [{
+      title: '分类',
+      value: categoryName
+    }, {
+      title: '位置',
+      value: poi.name
+    }, {
+      title: '电话',
+      value: tel
+    }]
+    if (ownTimeName) {
+      this.renderList.push({
+        title: '截止时间',
+        value: ownTimeName
+      })
+    }
+    if (images?.length) {
+      this.renderList.push({
+        title: '图片/视频',
+        value: '点击查看图片',
+        islink: true,
+        list: images
+      })
+    }
+    this.calllist = calllist
+    this.loading = false
+  },
+  computed: {
+    ...store.mapState(['steps']),
+    pageTitle() {
+      if (this.active) {
+        console.log(this.active, this.steps)
+        const desc = this.steps.find(item => +item.status === this.active + 1).desc
+        console.log('desc======>', desc)
+        return `订单详情【${desc}】`
+      }
+      return '订单详情'
+    }
+  },
+  clickTel(item) {
+    wx.makePhoneCall({
+      phoneNumber: item.tel
+    })
+  },
+  priview(item) {
+    if (!item.islink) {
+      return
+    }
+    wx.previewMedia({
+      current: 0,
+      sources: item.list.map(i => ({
+        url: i,
+        type: 'image'
+      }))
+    })
+  }
+})
+
+</script>
+
+<style lang="stylus" scoped>
+.status
+  width 100%
+  height 100%
+  display flex
+  justify-content center
+  align-items center
+.title
+  width 100%
+  height 80rpx
+  padding 0 32rpx
+  line-height 80rpx
+  font-weight 500
+  font-size 24rpx
+  box-sizing border-box
+.proccess
+  width 100%
+  box-sizing border-box
+  padding 0 32rpx
+  &-content
+    overflow hidden
+    border-radius 16rpx
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "custom-container": "@/compontens/base/custom-container",
+      "van-cell": "@vant/weapp/cell/index",
+      "van-cell-group": "@vant/weapp/cell-group/index",
+      "van-image": "@vant/weapp/image/index",
+      "van-steps": "@vant/weapp/steps/index",
+      "van-loading": "@vant/weapp/loading/index",
+      "item-container": "../components/item-container"
+    },
+    "navigationStyle": "custom"
+  }
+</script>

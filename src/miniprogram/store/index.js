@@ -82,11 +82,11 @@ export default createStore({
   },
   actions: {
     // node: 如果是boss的状态下获取所有的订单情况，并添加对应的数量标注
-    async getReleaseList({ commit }) {
+    async getReleaseList({ commit }, params) {
       commit('setState', {
         orderListReqLoading: true
       })
-      const res = await getReleaseList()
+      const res = await getReleaseList(params)
       const list = res.data.list
       const obj = {
         orderList: list,

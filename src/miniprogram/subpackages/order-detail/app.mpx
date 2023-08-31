@@ -2,7 +2,8 @@
 module.exports = {
   pages: [
     './pages/index',
-    './pages/detail-to-worker'
+    './pages/index',
+    './pages/worker-detail'
   ]
 }
 </script>

@@ -1,8 +1,8 @@
 const BaseController = require('./base_controller')
-const ReleaseService = require('../service/release_service.js')
+const WorkerReleaseService = require('../service/worker_release_service.js')
 const { sendToWorkers } = require('../../framework/utils/notice_util.js')
 
-class ReleaseController extends BaseController {
+class WorkerReleaseController extends BaseController {
   async getList() {
     const where = {}
     const { needOpenid, ...newParams } = this._event.params || {}
@@ -12,7 +12,7 @@ class ReleaseController extends BaseController {
       })
     }
     Object.assign(where, newParams || {})
-    const service = new ReleaseService()
+    const service = new WorkerReleaseService()
     const res = await service.getList(where)
     return res
   }
@@ -24,34 +24,34 @@ class ReleaseController extends BaseController {
     const where = {
       _id: this._event.params.id
     }
-    const service = new ReleaseService()
+    const service = new WorkerReleaseService()
     const res = await service.getOne(where)
     return res
   }
 
   async create() {
-    const service = new ReleaseService()
+    const service = new WorkerReleaseService()
     const params = Object.assign({}, this._event.params, {
       OPENID: this._openId
     })
     const res = await service.create(params)
-    if (res) {
-      sendToWorkers(res)
-    }
+    // if (res) {
+    //   sendToWorkers(res)
+    // }
     return res
   }
 
   async update() {
-    const service = new ReleaseService()
+    const service = new WorkerReleaseService()
     const res = await service.update(this._event.params)
     return res
   }
 
   async delete() {
-    const service = new ReleaseService()
+    const service = new WorkerReleaseService()
     const res = await service.delete(this._event.params)
     return res
   }
 }
 
-module.exports = ReleaseController
+module.exports = WorkerReleaseController

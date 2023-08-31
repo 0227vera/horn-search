@@ -13,6 +13,14 @@ module.exports = {
   'release/update': 'release_controlle@update',
   'release/getonebyid': 'release_controlle@getOne',
 
+  // note: worker发布相关
+
+  'worker-release/get': 'worker_release_controlle@getList',
+  'worker-release/delete': 'worker_release_controlle@delete',
+  'worker-release/create': 'worker_release_controlle@create',
+  'worker-release/update': 'worker_release_controlle@update',
+  'worker-release/getonebyid': 'worker_release_controlle@getOne',
+
   // note: 用户管理
   'user/get': 'user_controlle@getList',
   'user/delete': 'user_controlle@delete',

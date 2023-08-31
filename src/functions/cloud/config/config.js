@@ -12,6 +12,7 @@ module.exports = {
     'warrior_user', // 用户管理: 包括角色、地址信息
     'warrior_log', // node: 日志信息
     'warrior_release', // 发布的的订单信息
+    'warrior_worker_release', // worker发出的订单
     'warrior_constant' // node: 常量配置
   ],
   // ## 缓存相关

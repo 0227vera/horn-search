@@ -2,7 +2,7 @@
   <custom-container
     title="我要找工作"
   >
-    <form-worker />
+    <form-worker bind:release-finish="releaseFinish" />
   </custom-container>
   <van-dialog id="van-dialog" />
 </template>
@@ -19,6 +19,9 @@ createPage({
   async onLoad() {
   },
   methods: {
+    releaseFinish(e) {
+      mpx.redirectTo({ url: `/order-detail/pages/worker-detail?id=${e.detail}` })
+    }
   }
 })
 
