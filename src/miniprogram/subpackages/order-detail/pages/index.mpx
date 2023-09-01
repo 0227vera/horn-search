@@ -27,6 +27,9 @@
         />
         </van-cell-group>
       </item-container>
+      <item-container title="人才市场信息：">
+        <worker-list category="{{category}}" />
+      </item-container>
       <item-container title="基本信息：">
         <van-cell-group border="{{false}}">
           <van-cell
@@ -55,14 +58,16 @@ createPage({
     loading: true,
     renderList: [],
     active: '',
-    calllist: []
+    calllist: [],
+    category: ''
   },
   async onLoad(params) {
     this.loading = true
     const res = await getReleaseOneById(params)
     console.log('res------>', res)
-    const { categoryName, price, priceUnit, poi, tel, images, ownTimeName, note, status, calllist } = res.data || {}
+    const { category, categoryName, price, priceUnit, poi, tel, images, ownTimeName, note, status, calllist } = res.data || {}
     this.active = status - 1
+    this.category = category
     this.renderList = [{
       title: '分类',
       value: categoryName
@@ -110,22 +115,24 @@ createPage({
       return '订单详情'
     }
   },
-  clickTel(item) {
-    wx.makePhoneCall({
-      phoneNumber: item.tel
-    })
-  },
-  priview(item) {
-    if (!item.islink) {
-      return
+  methods: {
+    clickTel(item) {
+      wx.makePhoneCall({
+        phoneNumber: item.tel
+      })
+    },
+    priview(item) {
+      if (!item.islink) {
+        return
+      }
+      wx.previewMedia({
+        current: 0,
+        sources: item.list.map(i => ({
+          url: i,
+          type: 'image'
+        }))
+      })
     }
-    wx.previewMedia({
-      current: 0,
-      sources: item.list.map(i => ({
-        url: i,
-        type: 'image'
-      }))
-    })
   }
 })
 
@@ -165,7 +172,8 @@ createPage({
       "van-steps": "@vant/weapp/steps/index",
       "van-loading": "@vant/weapp/loading/index",
       "item-container": "../components/item-container",
-      "finder": "@/compontens/base/finder.mpx"
+      "finder": "@/compontens/base/finder.mpx",
+      "worker-list": "../components/worker-list.mpx"
     },
     "navigationStyle": "custom"
   }

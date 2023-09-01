@@ -1,0 +1,104 @@
+<template>
+  <view wx:if="{{loading}}" class="loading">
+    <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
+  </view>
+  <view class="container" wx:elif="{{list.length}}">
+    <view wx:for="{{list}}" wx:key="_id" class="item">
+      <view class="item-per">
+        <text class="item-per_label">技能：</text>
+        <text class="item-per_value">{{item.categoryName}}</text>
+      </view>
+      <view class="item-per">
+        <text class="item-per_label">位置：</text>
+        <text class="item-per_value">{{item.poi.name}}</text>
+      </view>
+      <view class="item-btn">
+        <van-button type="primary" size="mini" round bind:tap="makePhone(item)">打电话</van-button>
+      </view>
+    </view>
+  </view>
+  <view wx:else class="loading empty">
+    <van-empty description="暂无工人发类似的信息" bind:tap="gotoRelease" />
+  </view>
+</template>
+
+<script>
+import { createComponent } from '@mpxjs/core'
+import { getWorkerReleaseList } from '@/api'
+createComponent({
+  properties: {
+    category: {
+      type: String,
+      value: ''
+    }
+  },
+  data: {
+    loading: true,
+    list: []
+  },
+  async attached() {
+    this.loading = true
+    const res = await getWorkerReleaseList({
+      category: this.category
+    })
+    this.list = res.data?.list || []
+    if (!this.list.length) {
+      this.triggerEvent('no-data')
+    }
+    this.loading = false
+  },
+  methods: {
+    makePhone(item) {
+      const self = this
+      wx.makePhoneCall({
+        phoneNumber: item.tel,
+        success(res) {
+          console.log(res)
+        },
+        fail(err) {
+          console.error(err)
+        }
+      })
+    }
+  }
+})
+</script>
+
+<style lang="stylus" scoped>
+.loading
+  display flex
+  align-items center
+  justify-content center
+  height 450rpx
+.container
+  box-sizing border-box
+  padding 16rpx
+  .item
+    border-bottom 2rpx solid #eeeeee
+    padding-bottom 20rpx
+    margin-bottom 20rpx
+    color #333333
+    font-size 24rpx
+    &:last-child
+      margin-bottom 0
+      padding-bottom 0
+      border none
+    &-per
+      margin-bottom 20rpx
+      &_value
+        color #000000
+        font-weight bold
+    &-btn
+      display flex
+      justify-content flex-end
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "van-loading": "@vant/weapp/loading/index",
+      "van-button": "@vant/weapp/button/index",
+      "van-empty": "@vant/weapp/empty/index"
+    }
+  }
+</script>
