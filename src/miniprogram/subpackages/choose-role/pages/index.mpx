@@ -9,7 +9,7 @@
 <script>
 import mpx, { createPage } from '@mpxjs/core'
 import homepageUrl from '@/subpackages/homepage/pages/index.mpx?resolve'
-import { addUser } from '@/api'
+import { addUser, getCurrentRole } from '@/api'
 import store from '@/store'
 
 createPage({
@@ -21,11 +21,18 @@ createPage({
   },
   methods: {
     ...store.mapMutations(['setState']),
-    choose(role) {
-      addUser({ role })
+    async choose(role) {
+      await addUser({ role })
       this.setState({
         role
       })
+      const res = await getCurrentRole()
+      const { OPENID } = res.data || {}
+      if (OPENID) {
+        this.setState({
+          opneid: OPENID
+        })
+      }
       mpx.redirectTo({
         url: `${homepageUrl}?role=${role}`
       })

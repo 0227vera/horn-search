@@ -27,9 +27,18 @@ createComponent({
       type: String,
       value: '以为您推送给所有用户'
     },
-    subTitle: {
-      type: String,
-      value: '已有{58}人阅读你发出的订单'
+    readlist: {
+      type: Array,
+      value: []
+    }
+  },
+  computed: {
+    subTitle() {
+      console.log(this.readlist.length)
+      if (this.readlist?.length) {
+        return `已有{${this.readlist.length}}人阅读你发出的订单`
+      }
+      return '正在为您疯狂推送中'
     }
   },
   data: {

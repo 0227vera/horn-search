@@ -4,7 +4,7 @@
     lefticon="arrow-left"
     containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
   >
-    <item-container wx:if="{{active === 1}}" title="流程信息：">
+    <item-container title="流程信息：">
       <van-steps steps="{{ steps }}" active="{{ active }}" />
     </item-container>
     <view wx:if="{{loading}}" class="status">
@@ -12,20 +12,15 @@
     </view>
     <block wx:else>
       <item-container title="推送情况：">
-        <finder />
+        <finder readlist="{{readlist}}" />
       </item-container>
       <item-container wx:if="{{active === 2}}" title="呼叫人信息：">
-        <van-cell-group class="form" border="{{false}}">
-          <van-cell
-          wx:for="{{calllist}}"
-          wx:key="*this"
-          title="电话"
-          bind:tap="clickTel(item)"
-          value="{{item.tel}}"
-          clickable
-          is-link
-        />
-        </van-cell-group>
+        <view class="call-container">
+          <view wx:for="{{calllist}}" wx:key="opneid" class="call-item">
+            <image class="call-item-image" src="{{item.avatarUrl}}"></image>
+            <text class="call-item-num">{{item.times}}</text>
+          </view>
+        </view>
       </item-container>
       <item-container title="人才市场信息：">
         <worker-list category="{{category}}" />
@@ -59,15 +54,18 @@ createPage({
     renderList: [],
     active: '',
     calllist: [],
+    readlist: [],
     category: ''
   },
   async onLoad(params) {
     this.loading = true
     const res = await getReleaseOneById(params)
     console.log('res------>', res)
-    const { category, categoryName, price, priceUnit, poi, tel, images, ownTimeName, note, status, calllist } = res.data || {}
+    const { category, categoryName, price, priceUnit, poi, tel, images, ownTimeName, note, status, calllist, readlist } = res.data || {}
     this.active = status - 1
     this.category = category
+    console.log('readlist', readlist)
+    this.readlist = readlist
     this.renderList = [{
       title: '分类',
       value: categoryName
@@ -89,7 +87,7 @@ createPage({
     }
     if (images?.length) {
       this.renderList.push({
-        title: '图片/视频',
+        title: '图片',
         value: '点击查看图片',
         islink: true,
         list: images
@@ -145,6 +143,32 @@ createPage({
   display flex
   justify-content center
   align-items center
+.call-container
+  display flex
+  box-sizing border-box
+  padding 20rpx
+.call-item
+  position relative
+  height 60rpx
+  margin-left -10rpx
+  &-image
+    width 60rpx
+    height 60rpx
+    border-radius 50%
+    border 2rpx solid #fff
+  &-num
+    position absolute
+    top 0
+    left 10rpx
+    font-size 20rpx
+    background red
+    width 24rpx
+    height 24rpx
+    border-radius 50%
+    display flex
+    align-items center
+    justify-content center
+    color #ffffff
 .title
   width 100%
   height 80rpx

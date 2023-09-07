@@ -1,13 +1,13 @@
 const BaseModel = require('./base_model.js');
 
-class AddressModel extends BaseModel {
+class ReleaseModel extends BaseModel {
 
 }
 
 // 集合名
-AddressModel.CL = "warrior_release"
+ReleaseModel.CL = "warrior_release"
 
-AddressModel.DB_STRUCTURE = {
+ReleaseModel.DB_STRUCTURE = {
   _pid: 'string|true',
   category: 'string|true',
   categoryName: 'string|true',
@@ -15,7 +15,8 @@ AddressModel.DB_STRUCTURE = {
   priceUnit: 'string|true',
   status: 'string|true',
   subscribeInfo: 'object|false',
-  callnum: 'int|false',
+  calllist: 'array|false',
+  readlist: 'array|false',
   poi: 'object|true',
   tel: 'string|true',
   ownTime: 'int|false',
@@ -31,6 +32,6 @@ AddressModel.DB_STRUCTURE = {
 }
 
 // 字段前缀
-AddressModel.FIELD_PREFIX = "RELEASE_"
+ReleaseModel.FIELD_PREFIX = "RELEASE_"
 
-module.exports = AddressModel
+module.exports = ReleaseModel

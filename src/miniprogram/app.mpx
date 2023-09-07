@@ -26,7 +26,6 @@ createApp({
   globalStore: store,
   onShareAppMessage() {
     return {
-      title: '分享给朋友',
       path: '/pages/page'
     }
   }

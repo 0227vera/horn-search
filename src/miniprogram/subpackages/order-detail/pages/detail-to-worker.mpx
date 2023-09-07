@@ -34,6 +34,9 @@
         <view class="footer-item">
           <van-button type="default" bind:tap="gotoAddress" size="large" hairline block>导航去询问</van-button>
         </view>
+        <view class="footer-item">
+          <van-button type="default" open-type="share" size="large" hairline block>分享给好友</van-button>
+        </view>
       </view>
     </view>
   </custom-container>
@@ -41,10 +44,19 @@
 
 <script>
 import mpx, { createPage } from '@mpxjs/core'
-import { getReleaseOneById } from '@/api'
+import { getReleaseOneById, updateRelease } from '@/api'
 import store from '@/store'
+import makePhoneToBoss from '@/utils/makePhoneToBoss'
 
 createPage({
+  onShareAppMessage() {
+    const path = encodeURIComponent(`/order-detail/pages/detail-to-worker?id=${this._id}`)
+    return {
+      title: this.categoryName,
+      path: `/pages/page?type=mp&path=${path}`,
+      imageUrl: this.images?.[0] || ''
+    }
+  },
   data: {
     loading: true,
     renderList: [],
@@ -59,9 +71,12 @@ createPage({
     }
     this.loading = true
     const res = await getReleaseOneById(params)
-    const { categoryName, category, price, priceUnit, poi, tel, images, ownTimeName, note, status, calllist } = res.data || {}
+    const { categoryName, category, price, priceUnit, poi, tel, images, ownTimeName, note, status, calllist, _id, readlist } = res.data || {}
     this.poi = poi
     this.tel = tel
+    this._id = _id
+    this.images = images
+    this.categoryName = categoryName
     console.log(res)
     this.category = category
     this.renderList = [{
@@ -99,44 +114,90 @@ createPage({
       value: calllist?.length ? `已有${calllist.length}人呼叫` : '暂时无人呼叫'
     })
     this.loading = false
+    this.readlistFunc(readlist)
   },
   computed: {
+    ...store.mapState(['openid']),
     clickLeft() {
       return () => {
         if (this.params.isBack === 'true') {
           mpx.navigateBack()
         } else if (this.category) {
-          mpx.redirectTo(`/order-detail/pages/index?category=${this.category}`)
+          mpx.redirectTo({
+            url: `/homepage/pages/index?currentKey=home&category=${this.category}`
+          })
         } else {
-          mpx.redirectTo('/order-detail/pages/index')
+          mpx.redirectTo({
+            url: `/homepage/pages/index?currentKey=home`
+          })
         }
       }
     }
   },
-  makePhone() {
-    wx.makePhoneCall({
-      phoneNumber: this.tel
-    })
-  },
-  gotoAddress() {
-    wx.openLocation({
-      latitude: this.poi.location.lat,
-      longitude: this.poi.location.lat,
-      name: this.poi.name,
-      address: this.poi.name
-    })
-  },
-  priview(item) {
-    if (!item.islink) {
-      return
+  methods: {
+    makePhone() {
+      const item = {
+        tel: this.tel,
+        calllist: this.calllist,
+        _id: this._id
+      }
+      makePhoneToBoss(item)
+    },
+    readlistFunc(readlist) {
+      if (readlist?.length) {
+        const isReaded = readlist.find(item => item.openid === this.openid)
+        if (isReaded) {
+          updateRelease({
+            _id: this._id,
+            readlist: readlist.map(item => {
+              if (item.openid === store.state.openid) {
+                item.times++
+              }
+              item.time.push(Date.now())
+              return item
+            })
+          })
+        } else {
+          updateRelease({
+            _id: this._id,
+            readlist: readlist.concat({
+              openid: this.openid,
+              times: 1,
+              time: [Date.now()]
+            })
+          })
+        }
+      } else {
+        updateRelease({
+          _id: this._id,
+          readlist: [{
+            openid: this.openid,
+            times: 1,
+            time: [Date.now()]
+          }]
+        })
+      }
+    },
+    gotoAddress() {
+      wx.openLocation({
+        latitude: this.poi.location.lat,
+        longitude: this.poi.location.lat,
+        name: this.poi.name,
+        address: this.poi.name
+      })
+    },
+    priview(item) {
+      if (!item.islink) {
+        return
+      }
+      wx.previewMedia({
+        current: 0,
+        sources: item.list.map(i => ({
+          url: i,
+          type: 'image'
+        }))
+      })
     }
-    wx.previewMedia({
-      current: 0,
-      sources: item.list.map(i => ({
-        url: i,
-        type: 'image'
-      }))
-    })
   }
 })
 
@@ -182,7 +243,7 @@ createPage({
   overflow hidden
   border-radius 16rpx 16rpx 0 0
   &-item
-    width 50%
+    width 33.33%
     height 100%
 </style>
 

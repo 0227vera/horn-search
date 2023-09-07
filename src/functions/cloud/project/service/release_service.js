@@ -19,6 +19,7 @@ class ReleaseManagerService extends BaseService {
 
   async update(data = {}) {
     const { _id, ...newData } = data
+    console.log('newData---------->', newData)
     const res = await ReleaseModel.insertOrUpdate({ _id: data._id }, newData)
     return res
   }

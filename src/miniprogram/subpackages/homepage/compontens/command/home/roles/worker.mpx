@@ -44,7 +44,9 @@
 
 <script>
 import mpx, { createComponent } from '@mpxjs/core'
-import { getReleaseList } from '@/api'
+import { getReleaseList, updateRelease } from '@/api'
+import store from '@/store'
+import makePhoneToBoss from '@/utils/makePhoneToBoss'
 
 createComponent({
   properties: {
@@ -56,6 +58,9 @@ createComponent({
   data: {
     loading: true,
     list: []
+  },
+  computed: {
+    ...store.mapState(['openid'])
   },
   watch: {
     category() {
@@ -74,17 +79,8 @@ createComponent({
         return item
       })
     },
-    makePhone(item) {
-      const self = this
-      wx.makePhoneCall({
-        phoneNumber: item.tel,
-        success(res) {
-          console.log(res)
-        },
-        fail(err) {
-          console.error(err)
-        }
-      })
+    async makePhone(item) {
+      makePhoneToBoss(item)
     },
     gotoAddress(item) {
       wx.openLocation({
