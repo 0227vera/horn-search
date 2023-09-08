@@ -9,3 +9,5 @@ export const deleteRelease = params => request({ route: 'release/delete', params
 export const updateRelease = params => request({ route: 'release/update', params })
 
 export const getReleaseOneById = params => request({ route: 'release/getonebyid', params })
+
+export const getReleaseCount = params => request({ params, route: 'release/getcount' })

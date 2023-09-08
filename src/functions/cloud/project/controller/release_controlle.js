@@ -29,6 +29,15 @@ class ReleaseController extends BaseController {
     return res
   }
 
+  async getCount() {
+    const where = {
+      ...(this._event.params || {})
+    }
+    const service = new ReleaseService()
+    const res = await service.getCount(where)
+    return res
+  }
+
   async create() {
     const service = new ReleaseService()
     const params = Object.assign({}, this._event.params, {

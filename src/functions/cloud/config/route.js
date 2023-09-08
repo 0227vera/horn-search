@@ -12,6 +12,7 @@ module.exports = {
   'release/create': 'release_controlle@create',
   'release/update': 'release_controlle@update',
   'release/getonebyid': 'release_controlle@getOne',
+  'release/getcount': 'release_controlle@getCount',
 
   // note: worker发布相关
 

@@ -179,7 +179,8 @@ createComponent({
       return ''
     },
     items() {
-      return this.categoryItems.children.map(item => {
+      const copyCategory = JSON.parse(JSON.stringify(this.categoryItems.children))
+      return copyCategory.map(item => {
         item.id = item.value
         item.children = item.children.filter(f => +f.value !== 10)
         item.children.forEach(item => {

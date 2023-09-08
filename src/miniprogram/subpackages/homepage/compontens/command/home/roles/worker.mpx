@@ -47,6 +47,7 @@ import mpx, { createComponent } from '@mpxjs/core'
 import { getReleaseList, updateRelease } from '@/api'
 import store from '@/store'
 import makePhoneToBoss from '@/utils/makePhoneToBoss'
+import unreadFun from '@/utils/unread'
 
 createComponent({
   properties: {
@@ -66,6 +67,9 @@ createComponent({
     category() {
       this.changeComponent()
     }
+  },
+  attached() {
+    unreadFun()
   },
   methods: {
     async changeComponent() {
