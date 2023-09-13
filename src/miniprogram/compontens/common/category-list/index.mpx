@@ -37,6 +37,7 @@
             <van-icon wx:if="{{item.icon  && item.value === level1List.selected && isBoss}}" class="icon" name="{{item.icon}}" />
             {{item.text}}
             <text wx:if="{{item.tips && (item.value === level1List.selected || !item.text ) && isBoss}}" class="tips">({{item.tips}})</text>
+            <text class="unread" wx:if="{{item.unread}}">({{item.unread}})</text>
           </view>
         </view>
       </view>
@@ -178,6 +179,15 @@ createComponent({
       font-size 28rpx
       color #333333
       font-weight 500
+      display flex
+      align-items center
+      justify-content center
+      position relative
+      .unread
+        margin-left 6rpx
+        color red
+        font-weight bold
+        font-size 20rpx
     .icon
       font-weight 900
       font-size 30rpx

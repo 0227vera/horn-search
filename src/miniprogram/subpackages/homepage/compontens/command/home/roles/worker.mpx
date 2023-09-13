@@ -29,6 +29,11 @@
             <text>{{item.categoryName}}</text>
           </view>
         </view>
+        <view wx:if="{{item.tags}}" slot="tags" class="tags">
+          <view wx:for="{{item.tags}}" wx:for-item="tag" class="tags-item">
+            <view>{{tag.text}}</view>
+          </view>
+        </view>
         <view slot="footer">
           <van-button size="mini" style="margin-right: 8rpx" round type="primary" bind:tap="makePhone(item)">打电话</van-button>
           <van-button size="mini" style="margin-right: 8rpx" round bind:tap="gotoAddress(item)">导航前去</van-button>
@@ -80,6 +85,28 @@ createComponent({
       this.list = (res.data?.list || []).map(item => {
         item.tag = item.calllist?.length ? `已有${item.calllist.length}人呼叫` : '暂无人呼叫'
         item.thumb = item.images[0] || 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/image-cdn/none.png'
+        if (item.calllist) {
+          const isCall = item.calllist.find(f => f.openid === this.openid)
+          if (isCall) {
+            item.tags = [{
+              text: `您已呼叫${isCall.times}次`
+            }]
+          }
+        }
+        if (item.readlist) {
+          const isRead = item.readlist.find(f => f.openid === this.openid)
+          if (isRead) {
+            if (item.tags) {
+              item.tags.push({
+                text: `您已阅读${isRead.times}次`
+              })
+            } else {
+              item.tags = [{
+                text: `您已阅读${isRead.times}次`
+              }]
+            }
+          }
+        }
         return item
       })
     },
@@ -113,6 +140,17 @@ createComponent({
   display flex
   align-items center
   justify-content center
+.tags
+  display flex
+  margin-bottom 10rpx
+  &-item
+    color red
+    font-size 20rpx
+    border 2rpx dashed red
+    padding 4rpx 6rpx
+    border-radius 4rpx
+    margin-right 6rpx
+    background rgba(0,0,0,0.1)
 .item-info
   margin-bottom 8rpx
   &-title

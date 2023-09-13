@@ -27,17 +27,7 @@
       <item-container title="位置信息：">
         <cus-map endInfo="{{poi}}" />
       </item-container>
-      <view class="footer">
-        <view class="footer-item call">
-          <van-button type="primary" bind:tap="makePhone" size="large" hairline block>打电话询问</van-button>
-        </view>
-        <view class="footer-item">
-          <van-button type="default" bind:tap="gotoAddress" size="large" hairline block>导航去询问</van-button>
-        </view>
-        <view class="footer-item">
-          <van-button type="default" open-type="share" size="large" hairline block>分享给好友</van-button>
-        </view>
-      </view>
+      <nav-footer list="{{footerList}}" />
     </view>
   </custom-container>
 </template>
@@ -132,17 +122,41 @@ createPage({
           })
         }
       }
+    },
+    footerList() {
+      return [{
+        name: '打电话',
+        icon: 'phone-o',
+        id: 'call',
+        click: () => {
+          const item = {
+            tel: this.tel,
+            calllist: this.calllist,
+            _id: this._id
+          }
+          makePhoneToBoss(item)
+        }
+      }, {
+        name: '导航去询问',
+        icon: 'location-o',
+        id: 'nav',
+        click: () => {
+          wx.openLocation({
+            latitude: this.poi.location.lat,
+            longitude: this.poi.location.lat,
+            name: this.poi.name,
+            address: this.poi.name
+          })
+        }
+      }, {
+        name: '分享给好友',
+        icon: 'share-o',
+        id: 'share',
+        share: true
+      }]
     }
   },
   methods: {
-    makePhone() {
-      const item = {
-        tel: this.tel,
-        calllist: this.calllist,
-        _id: this._id
-      }
-      makePhoneToBoss(item)
-    },
     readlistFunc(readlist) {
       if (readlist?.length) {
         const isReaded = readlist.find(item => item.openid === this.openid)
@@ -177,14 +191,6 @@ createPage({
           }]
         })
       }
-    },
-    gotoAddress() {
-      wx.openLocation({
-        latitude: this.poi.location.lat,
-        longitude: this.poi.location.lat,
-        name: this.poi.name,
-        address: this.poi.name
-      })
     },
     priview(item) {
       if (!item.islink) {
@@ -233,18 +239,6 @@ createPage({
   &-content
     overflow hidden
     border-radius 16rpx
-.footer
-  width 100%
-  height 98rpx
-  position fixed
-  bottom 0
-  left 0
-  display flex
-  overflow hidden
-  border-radius 16rpx 16rpx 0 0
-  &-item
-    width 33.33%
-    height 100%
 </style>
 
 <script type="application/json">
@@ -258,7 +252,8 @@ createPage({
       "van-steps": "@vant/weapp/steps/index",
       "van-loading": "@vant/weapp/loading/index",
       "item-container": "../components/item-container",
-      "van-button": "@vant/weapp/button/index"
+      "van-button": "@vant/weapp/button/index",
+      "nav-footer": "@/compontens/base/nav-footer.mpx"
     },
     "navigationStyle": "custom"
   }
