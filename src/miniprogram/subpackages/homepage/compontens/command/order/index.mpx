@@ -5,33 +5,24 @@
     containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
   >
     <view class="container">
-      <view class="title">我发的订单：</view>
-      <van-collapse
-        value="{{ activeOwnNames }}"
-        bind:change="onChange"
-      >
-        <van-collapse-item wx:for="{{steps}}" title="{{item.desc}}" wx:key="status" wx:if="{{item.showInList}}" name="{{item.status}}">
-          <order-status list="{{orderList}}" status="{{item.status}}" loading="{{orderListReqLoading}}" />
-        </van-collapse-item>
-      </van-collapse>
+      <view class="types">
+        <view class="types-item {{typeSelect === 'worker' ? 'selected' : ''}}" bind:tap="clickTypes('worker')">招工订单</view>
+        <view class="types-item {{typeSelect === 'business' ? 'selected' : ''}}" bind:tap="clickTypes('business')">合作订单</view>
+      </view>
+      <view wx:if="{{typeSelect === 'worker'}}">
+        <view class="order-type">
+          <view wx:if="{{callNum}}" class="order-type-item {{orderSelect === 'push' ? 'selected' : ''}}" bind:tap="clickOrderTypes('push')">
+            <view wx:if="{{pushNum}}" class="num">{{pushNum}}</view>
+            <view class="text">已推送</view>
+          </view>
+          <view wx:if="{{callNum}}" class="order-type-item {{orderSelect === 'call' ? 'selected' : ''}}" bind:tap="clickOrderTypes('call')">
+            <view class="num">{{callNum}}</view>
+            <view class="text">已有人呼叫</view>
+          </view>
+        </view>
+        <order-status wx:if="{{status}}" list="{{orderList}}" status="{{status}}" loading="{{orderListReqLoading}}" />
+      </view>
     </view>
-    <!-- <view>
-      <view class="title">我接的订单：</view>
-      <van-collapse
-        value="{{ activeSendNames }}"
-        bind:change="onSendChange"
-      >
-        <van-collapse-item title="进行中" name="1">
-          代码是写出来给人看的，附带能在机器上运行
-        </van-collapse-item>
-        <van-collapse-item title="已询问" name="2">
-          代码是写出来给人看的，附带能在机器上运行
-        </van-collapse-item>
-        <van-collapse-item title="已完成" name="3">
-          代码是写出来给人看的，附带能在机器上运行
-        </van-collapse-item>
-      </van-collapse>
-    </view> -->
   </custom-container>
 </template>
 
@@ -42,22 +33,31 @@ import store from '@/store'
 
 createComponent({
   data: {
-    activeOwnNames: [],
-    activeSendNames: ['1'],
-    list: [],
-    loading: true
+    typeSelect: 'worker',
+    orderSelect: 'push'
   },
   computed: {
-    ...store.mapState(['orderList', 'orderListReqLoading', 'steps'])
+    ...store.mapState(['orderList', 'orderListReqLoading']),
+    status() {
+      if (this.orderSelect === 'push') return '2'
+      if (this.orderSelect === 'call') return '3'
+      return ''
+    },
+    pushNum() {
+      return this.orderList.filter(item => item.status === '2').length
+    },
+    callNum() {
+      return this.orderList.filter(item => item.status === '3').length
+    }
   },
   watch: {
   },
   methods: {
-    onChange(e) {
-      this.activeOwnNames = e.detail
+    clickTypes(type) {
+      this.typeSelect = type
     },
-    onSendChange(e) {
-      this.activeSendNames = e.detail
+    clickOrderTypes(type) {
+      this.orderSelect = type
     }
   }
 })
@@ -65,33 +65,76 @@ createComponent({
 
 <style lang="stylus" scoped>
 .container
-  padding-bottom 168rpx
-  box-sizing border-box
-.title
   width 100%
-  height 60rpx
-  padding 0 15rpx
-  line-height 60rpx
-  font-weight 500
-  font-size 24rpx
   box-sizing border-box
+  padding 0 32rpx 150rpx
+  .types
+    display flex
+    &-item
+      font-size 30rpx
+      margin-right 20rpx
+      color #333333
+      transition all 0.3s
+      will-change color font-size opacity
+      opacity 0.6
+      &.selected
+        font-size 32rpx
+        color #1989fa
+        font-weight bold
+        position relative
+        opacity 0.8
+        &::after
+          content ''
+          width 60%
+          height 6rpx
+          background #1989fa
+          border-radius 6rpx
+          position absolute
+          bottom -6rpx
+          left 20%
+.order-type
+  display flex
+  font-size 28rpx
+  overflow hidden
+  padding-top 40rpx
+  margin-bottom 20rpx
+  &-item
+    position relative
+    margin-right 20rpx
+    padding 4rpx 16rpx
+    border-radius 28rpx
+    border 2rpx solid #999999
+    color #999999
+    transition all 0.3s
+    will-change border background font-weight color
+    &.selected
+      color #333333
+      background #ffffff
+      border 2rpx solid #ee0a24
+      font-weight bold
+      font-size 30rpx
+      .num
+        font-size 24rpx
+        right -12rpx
+        top -18rpx
+        background #ee0a24
+        transition all 0.3s
+        will-change font-size right top background
+    .num
+      position absolute
+      right -10rpx
+      top -16rpx
+      background #999999
+      padding 0 8rpx
+      border-radius 20rpx
+      font-size 20rpx
+      color #ffffff
 </style>
 
 <script type="application/json">
   {
     "usingComponents": {
       "custom-container": "@/compontens/base/custom-container",
-      "van-collapse": "@vant/weapp/collapse/index",
-      "van-collapse-item": "@vant/weapp/collapse-item/index",
-      "van-cell": "@vant/weapp/cell/index",
-      "van-cell-group": "@vant/weapp/cell-group/index",
-      "van-empty": "@vant/weapp/empty/index",
-      "van-loading": "@vant/weapp/loading/index",
-      "van-card": "@vant/weapp/card/index",
-      "van-button": "@vant/weapp/button/index",
-      "van-steps": "@vant/weapp/steps/index",
-      "van-swipe-cell": "@vant/weapp/swipe-cell/index",
-      "van-dialog": "@vant/weapp/dialog/index",
       "order-status": "./order-status"
     }
   }

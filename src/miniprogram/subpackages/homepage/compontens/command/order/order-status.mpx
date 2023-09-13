@@ -2,16 +2,7 @@
 <view wx:if="{{loading}}" class="status">
   <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
 </view>
-<view class="container" wx:elif="{{renderList.length}}">
-  <view wx:for="{{renderList}}" wx:key="_id" class="item">
-    <van-cell-group inset>
-      <van-cell title-width="80rpx" title="类别" value="{{item.categoryName}}" />
-      <van-cell title-width="120rpx" title="截止时间" value="{{item.ownTimeName}}" />
-      <van-cell wx:if="{{item.status === '3'}}" title="呼叫人数" value="{{item.callnum}}"></van-cell>
-      <van-cell title="点击查看详情" clickable is-link bind:tap="gotoDetail(item)"></van-cell>
-    </van-cell-group>
-  </view>
-</view>
+<card wx:elif="{{renderList.length}}" list="{{renderList}}" buttons="{{buttons}}" bind:footer-btn="footerBtn" />
 <view wx:else class="status">
   <van-empty description="{{emptyText}}" />
 </view>
@@ -38,12 +29,23 @@ createComponent({
       value: '暂无数据'
     }
   },
+  data: {
+    buttons: [{
+      text: '查看详情',
+      type: 'primary',
+      id: 'gotoDetail'
+    }]
+  },
   computed: {
     renderList() {
       return this.list.filter(item => item.status === this.status)
     }
   },
   methods: {
+    footerBtn(e) {
+      const info = e.detail
+      this.gotoDetail(info.item)
+    },
     gotoDetail(item) {
       mpx.navigateTo({
         url: `/order-detail/pages/index?id=${item._id}`
@@ -54,14 +56,6 @@ createComponent({
 </script>
 
 <style lang="stylus" scoped>
-.container
-  background #eeeeee
-  box-sizing border-box
-  padding 32rpx 0
-  .item
-    margin-top 32rpx
-    &:first-child
-      margin-top 0
 .status
   width 100%
   height 350rpx
@@ -73,10 +67,9 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-        "van-cell": "@vant/weapp/cell/index",
-        "van-cell-group": "@vant/weapp/cell-group/index",
-        "van-empty": "@vant/weapp/empty/index",
-        "van-loading": "@vant/weapp/loading/index"
+      "card": "@/subpackages/homepage/compontens/base/card.mpx",
+      "van-loading": "@vant/weapp/loading/index",
+      "van-empty": "@vant/weapp/empty/index"
     }
   }
 </script>

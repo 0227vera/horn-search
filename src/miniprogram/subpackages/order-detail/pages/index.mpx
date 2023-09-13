@@ -41,14 +41,23 @@
       </item-container>
     </block>
   </custom-container>
+  <nav-footer list="{{footerList}}" />
 </template>
 
 <script>
 import mpx, { createPage } from '@mpxjs/core'
-import { getReleaseOneById } from '@/api'
+import { getReleaseOneById, updateRelease } from '@/api'
 import store from '@/store'
 
 createPage({
+  onShareAppMessage() {
+    const path = encodeURIComponent(`/order-detail/pages/detail-to-worker?id=${this._id}`)
+    return {
+      title: this.categoryName,
+      path: `/pages/page?type=mp&path=${path}`,
+      imageUrl: this.images?.[0] || ''
+    }
+  },
   data: {
     loading: true,
     renderList: [],
@@ -60,11 +69,11 @@ createPage({
   async onLoad(params) {
     this.loading = true
     const res = await getReleaseOneById(params)
-    console.log('res------>', res)
-    const { category, categoryName, price, priceUnit, poi, tel, images, ownTimeName, note, status, calllist, readlist } = res.data || {}
+    const { category, categoryName, price, priceUnit, poi, tel, images, ownTimeName, note, status, calllist, readlist, _id, OPENID } = res.data || {}
     this.active = status - 1
     this.category = category
-    console.log('readlist', readlist)
+    this.OPENID = OPENID
+    this._id = _id
     this.readlist = readlist
     this.renderList = [{
       title: '分类',
@@ -103,7 +112,7 @@ createPage({
     this.loading = false
   },
   computed: {
-    ...store.mapState(['steps']),
+    ...store.mapState(['steps', 'openid']),
     pageTitle() {
       if (this.active) {
         console.log(this.active, this.steps)
@@ -111,6 +120,32 @@ createPage({
         return `订单详情【${desc}】`
       }
       return '订单详情'
+    },
+    footerList() {
+      return [{
+        name: '关单',
+        icon: 'passed',
+        id: 'close',
+        click: async () => {
+          if (this.OPENID !== this.openid) {
+            mpx.showToast({
+              icon: 'none',
+              title: '您不是发单人，不可关单'
+            })
+            return
+          }
+          const res = await updateRelease({
+            _id: this._id,
+            status: '4'
+          })
+          mpx.navigateBack()
+        }
+      }, {
+        name: '分享给好友',
+        icon: 'share-o',
+        id: 'share',
+        share: true
+      }]
     }
   },
   methods: {
@@ -197,7 +232,8 @@ createPage({
       "van-loading": "@vant/weapp/loading/index",
       "item-container": "../components/item-container",
       "finder": "@/compontens/base/finder.mpx",
-      "worker-list": "../components/worker-list.mpx"
+      "worker-list": "../components/worker-list.mpx",
+      "nav-footer": "@/compontens/base/nav-footer.mpx"
     },
     "navigationStyle": "custom"
   }
