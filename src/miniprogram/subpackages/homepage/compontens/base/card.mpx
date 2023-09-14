@@ -2,46 +2,49 @@
 <template>
   <view class="container">
     <van-card
-        wx:for="{{renderList}}"
-        wx:key="*this"
-        tag="{{item.tag}}"
-        thumb="{{item.thumb}}"
-        thumb-mode="scaleToFill"
-        price="{{item.price + item.priceUnit}}"
+      wx:for="{{renderList}}"
+      custom-class="card"
+      wx:key="_id"
+      tag="{{item.tag}}"
+      thumb="{{item.thumb}}"
+      thumb-mode="scaleToFill"
+      price="{{item.price + item.priceUnit}}"
+    >
+      <view slot="title">
+        <view class="item-info">
+          <text class="item-info-title">地址：</text>
+          <text>{{item.poi.name}}</text>
+        </view>
+      </view>
+      <view slot="desc">
+        <view class="item-info">
+        <text class="item-info-title">要求：</text>
+        <text>{{item.note}}</text>
+        </view class="item-info">
+        <view wx:if="{{item.category === '10'}}" class="item-info">
+        <text class="item-info-title">类别：</text>
+        <text>{{item.categoryName}}</text>
+        </view>
+      </view>
+      <view wx:if="{{item.tags}}" slot="tags" class="tags">
+        <view wx:for="{{item.tags}}" wx:key="id" wx:for-item="tag" class="tags-item">
+          <view>{{tag.text}}</view>
+        </view>
+      </view>
+      <view slot="footer" wx:if="{{buttons.length}}">
+        <van-button
+          wx:for="{{buttons}}"
+          size="mini"
+          style="margin-left: 8rpx"
+          wx:for-item="b"
+          round
+          type="{{b.type || 'default'}}"
+          bind:tap="clickBtn(item, b)"
+          icon="{{b.icon || ''}}"
         >
-        <view slot="title">
-            <view class="item-info">
-            <text class="item-info-title">地址：</text>
-            <text>{{item.poi.name}}</text>
-            </view>
-        </view>
-        <view slot="desc">
-            <view class="item-info">
-            <text class="item-info-title">要求：</text>
-            <text>{{item.note}}</text>
-            </view class="item-info">
-            <view wx:if="{{item.category === '10'}}" class="item-info">
-            <text class="item-info-title">类别：</text>
-            <text>{{item.categoryName}}</text>
-            </view>
-        </view>
-        <view wx:if="{{item.tags}}" slot="tags" class="tags">
-            <view wx:for="{{item.tags}}" wx:for-item="tag" class="tags-item">
-            <view>{{tag.text}}</view>
-            </view>
-        </view>
-        <view slot="footer" wx:if="{{buttons.length}}">
-            <van-button
-                wx:for="{{buttons}}"
-                size="mini"
-                style="margin-left: 8rpx"
-                wx:for-item="b"
-                round
-                type="{{b.type || 'info'}}"
-                bind:tap="clickBtn(item, b)"
-            >{{b.text}}
-            </van-button>
-        </view>
+          {{b.text}}
+        </van-button>
+      </view>
     </van-card>
   </view>
 </template>
@@ -65,30 +68,46 @@ createComponent({
     }
   },
   computed: {
-    ...store.mapState(['openid']),
+    ...store.mapState(['openid', 'role']),
     renderList() {
       const items = this.list.map(item => {
         item.tag = item.calllist?.length ? `已有${item.calllist.length}人呼叫` : '暂无人呼叫'
         item.thumb = item.images[0] || 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/image-cdn/none.png'
-        if (item.calllist) {
-          const isCall = item.calllist.find(f => f.openid === this.openid)
-          if (isCall) {
-            item.tags = [{
-              text: `您已呼叫${isCall.times}次`
-            }]
-          }
-        }
-        if (item.readlist) {
-          const isRead = item.readlist.find(f => f.openid === this.openid)
-          if (isRead) {
-            if (item.tags) {
+        if (this.role === 'boss') {
+          if (item.calllist?.length || item.readlist?.length) {
+            item.tags = []
+            if (item.calllist?.length) {
               item.tags.push({
-                text: `您已阅读${isRead.times}次`
+                text: `已被${item.calllist.length}人呼叫过`
               })
-            } else {
+            }
+            if (item.readlist?.length) {
+              item.tags.push({
+                text: `已有${item.readlist.length}人阅读`
+              })
+            }
+          }
+        } else if (this.role === 'worker') {
+          if (item.calllist) {
+            const isCall = item.calllist.find(f => f.openid === this.openid)
+            if (isCall) {
               item.tags = [{
-                text: `您已阅读${isRead.times}次`
+                text: `您已呼叫${isCall.times}次`
               }]
+            }
+          }
+          if (item.readlist) {
+            const isRead = item.readlist.find(f => f.openid === this.openid)
+            if (isRead) {
+              if (item.tags) {
+                item.tags.push({
+                  text: `您已阅读${isRead.times}次`
+                })
+              } else {
+                item.tags = [{
+                  text: `您已阅读${isRead.times}次`
+                }]
+              }
             }
           }
         }
@@ -106,6 +125,9 @@ createComponent({
 </script>
 
 <style lang="stylus" scoped>
+.card
+  margin-bottom 20rpx
+  border-radius 16rpx
 .tags
   display flex
   margin-bottom 10rpx

@@ -5,41 +5,7 @@
       <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
     </view>
     <view wx:elif="{{list.length}}" class="list">
-      <van-card
-        wx:for="{{list}}"
-        wx:key="*this"
-        tag="{{item.tag}}"
-        thumb="{{item.thumb}}"
-        thumb-mode="scaleToFill"
-        price="{{item.price + item.priceUnit}}"
-      >
-        <view slot="title">
-          <view class="item-info">
-            <text class="item-info-title">地址：</text>
-            <text>{{item.poi.name}}</text>
-          </view>
-        </view>
-        <view slot="desc">
-          <view class="item-info">
-            <text class="item-info-title">要求：</text>
-            <text>{{item.note}}</text>
-          </view class="item-info">
-          <view wx:if="{{item.category === '10'}}" class="item-info">
-            <text class="item-info-title">类别：</text>
-            <text>{{item.categoryName}}</text>
-          </view>
-        </view>
-        <view wx:if="{{item.tags}}" slot="tags" class="tags">
-          <view wx:for="{{item.tags}}" wx:for-item="tag" class="tags-item">
-            <view>{{tag.text}}</view>
-          </view>
-        </view>
-        <view slot="footer">
-          <van-button size="mini" style="margin-right: 8rpx" round type="primary" bind:tap="makePhone(item)">打电话</van-button>
-          <van-button size="mini" style="margin-right: 8rpx" round bind:tap="gotoAddress(item)">导航前去</van-button>
-          <van-button size="mini" round bind:tap="gotoDetail(item)">查看详情</van-button>
-        </view>
-      </van-card>
+      <card list="{{list}}" buttons="{{buttons}}" bind:footer-btn="footerBtn" />
     </view>
     <view wx:else class="loading empty">
       <van-empty description="暂无数据，去发布一个空闲时间吧" bind:tap="gotoRelease" />
@@ -63,7 +29,21 @@ createComponent({
   },
   data: {
     loading: true,
-    list: []
+    list: [],
+    buttons: [{
+      text: '打电话',
+      id: 'call',
+      type: 'primary',
+      icon: 'phone-o'
+    }, {
+      text: '导航前去',
+      id: 'nav',
+      icon: 'location-o'
+    }, {
+      text: '查看详情',
+      id: 'gotoDetail',
+      icon: 'eye-o'
+    }]
   },
   computed: {
     ...store.mapState(['openid'])
@@ -110,6 +90,21 @@ createComponent({
         return item
       })
     },
+    footerBtn(e) {
+      const { item, buttonInfo } = e.detail
+      switch (buttonInfo.id) {
+        case 'call':
+          this.makePhone(item)
+          break
+        case 'nav':
+          this.gotoAddress(item)
+          break
+        case 'gotoDetail':
+          this.gotoDetail(item)
+          break
+      }
+      console.log(e)
+    },
     async makePhone(item) {
       makePhoneToBoss(item)
     },
@@ -140,6 +135,9 @@ createComponent({
   display flex
   align-items center
   justify-content center
+.list
+  padding 0 32rpx
+  box-sizing border-box
 .tags
   display flex
   margin-bottom 10rpx
@@ -170,6 +168,7 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
+      "card": "@/subpackages/homepage/compontens/base/card.mpx",
       "van-loading": "@vant/weapp/loading/index",
       "van-card": "@vant/weapp/card/index",
       "van-button": "@vant/weapp/button/index",

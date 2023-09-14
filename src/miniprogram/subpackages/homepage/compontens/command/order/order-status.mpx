@@ -33,6 +33,7 @@ createComponent({
     buttons: [{
       text: '查看详情',
       type: 'primary',
+      icon: 'eye-o',
       id: 'gotoDetail'
     }]
   },
