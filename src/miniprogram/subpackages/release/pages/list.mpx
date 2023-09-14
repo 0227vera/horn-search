@@ -2,24 +2,20 @@
   <custom-container
     title="发布历史"
   >
+    <van-tabs active="{{ active }}" bind:change="onTypeChange" ellipsis="{{false}}" animated sticky color="#1989fa">
+      <van-tab wx:for="{{steps}}" wx:key="desc" title="{{item.desc}}" name="{{item.status}}"></van-tab>
+    </van-tabs>
     <view wx:if="{{loading}}" class="loading">
       <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
     </view>
-    <view wx:elif="{{list.length}}" class="list-container">
-      <view wx:for="{{list}}" wx:key="_id" style="margin-top: 16rpx" >
-        <van-cell-group inset>
-          <van-swipe-cell right-width="{{ 65 }}">
-            <van-cell title="类别" value="{{item.categoryName}}" />
-            <van-cell title="单价" value="{{'￥' + item.price}}" />
-            <van-cell title="截止时间" value="{{item.ownTimeName}}" />
-            <van-cell wx:if="{{item.images.length}}" title="图片" value="点击查看" clickable bind:tap="priviewImg(item)" />
-            <view>
-              <van-steps steps="{{ steps }}" active="{{ active }}" />
-            </view>
-            <view slot="right" class="van-swipe-cell__right" bind:tap="delete(item)">删除</view>
-          </van-swipe-cell>
-        </van-cell-group>
-      </view>
+    <view class="list-container" wx:elif="{{list.length}}">
+      <card
+        list="{{list}}"
+        buttons="{{buttons}}"
+        canDelete
+        bind:footer-btn="footerBtn"
+        bind:delete="delete"
+      />
     </view>
     <view wx:else class="loading empty">
       <van-empty description="暂无数据，点击我去发布一个吧" bind:tap="gotoRelease" />
@@ -38,32 +34,40 @@ createPage({
   data: {
     loading: true,
     list: [],
-    steps: [{
-      desc: '发布'
-    }, {
-      desc: '推送'
-    }, {
-      desc: '已有人呼叫'
-    }, {
-      desc: '匹配成功'
-    }, {
-      desc: '完成'
+    active: '2',
+    buttons: [{
+      text: '查看详情',
+      type: 'primary',
+      icon: 'eye-o',
+      id: 'gotoDetail'
     }]
   },
+  computed: {
+    ...store.mapState(['steps'])
+  },
   async onLoad() {
-    this.loading = true
-    const res = await getReleaseList()
-    this.list = res?.data?.list || []
-    this.loading = false
+    this.getList()
   },
   methods: {
+    async getList() {
+      this.loading = true
+      const res = await getReleaseList({
+        needOpenid: true,
+        status: this.active
+      })
+      this.list = res?.data?.list || []
+      this.loading = false
+    },
+    onTypeChange(e) {
+      this.active = e.detail.name
+      this.getList()
+    },
     gotoRelease() {
       mpx.redirectTo({
         url: '/homepage/pages/index?currentKey=home'
       })
     },
     priviewImg(item) {
-      console.log(item)
       wx.previewMedia({
         current: 0,
         sources: item.images.map(item => ({
@@ -72,7 +76,8 @@ createPage({
         }))
       })
     },
-    delete(item) {
+    delete(e) {
+      const item = e.detail
       Dialog.confirm({
         title: '提示',
         message: `确认删除类别为：${item.categoryName}的数据吗？`
@@ -83,6 +88,15 @@ createPage({
           }
         })
       })
+    },
+    footerBtn(e) {
+      const info = e.detail
+      this.gotoDetail(info.item)
+    },
+    gotoDetail(item) {
+      mpx.navigateTo({
+        url: `/order-detail/pages/index?id=${item._id}`
+      })
     }
   }
 })
@@ -91,7 +105,7 @@ createPage({
 
 <style lang="stylus" scoped>
 .list-container
-  padding-bottom 50rpx
+  padding 16rpx 32rpx 50rpx
 .loading
   width 100%
   height 70vh
@@ -111,16 +125,12 @@ createPage({
 <script type="application/json">
   {
     "usingComponents": {
-      "van-cell": "@vant/weapp/cell/index",
-      "van-cell-group": "@vant/weapp/cell-group/index",
+      "van-tab": "@vant/weapp/tab/index",
+      "van-tabs": "@vant/weapp/tabs/index",
       "van-empty": "@vant/weapp/empty/index",
       "van-loading": "@vant/weapp/loading/index",
       "custom-container": "@/compontens/base/custom-container",
-      "van-card": "@vant/weapp/card/index",
-      "van-button": "@vant/weapp/button/index",
-      "van-steps": "@vant/weapp/steps/index",
-      "van-swipe-cell": "@vant/weapp/swipe-cell/index",
-      "van-dialog": "@vant/weapp/dialog/index"
+      "card": "@/subpackages/homepage/compontens/base/card.mpx"
     },
     "navigationStyle": "custom"
   }

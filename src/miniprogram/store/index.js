@@ -4,6 +4,7 @@ import { getReleaseList } from '@/api'
 
 export default createStore({
   state: {
+    appReady: true,
     openid: '',
     navBarStyle: {
       title: 'home',

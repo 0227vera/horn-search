@@ -14,41 +14,33 @@ import store from '@/store'
 
 createPage({
   async onLoad(params) {
-    console.log('========+>', params)
-    // note: 确定身份
-    const res = await getCurrentRole()
-    const { role = '', address = [], OPENID } = res.data || {}
-    const obj = {}
-    if (address.length) {
-      Object.assign(obj, {
-        addressList: address
-      })
+    this.params = params
+    this.appReady && this.jumpAction()
+  },
+  computed: {
+    ...store.mapState(['role', 'appReady'])
+  },
+  watch: {
+    appReady(val) {
+      val && this.jumpAction()
     }
-    if (role) {
-      Object.assign(obj, { role })
-    }
-    if (OPENID) {
-      Object.assign(obj, {
-        openid: OPENID
-      })
-    }
-    this.setState(obj)
-    // note: 跳转不同的类型
-    let url = chooseRolePageUrl
-    const { type = '', path = '' } = params
-    if (!type) {
-      if (role) {
-        url = homePageUrl
-      }
-    } else if (type === 'mp') {
-      url = decodeURIComponent(path)
-    } else if (type === 'h5') {
-      url = `//pages/webview?path=${path}`
-    }
-    mpx.redirectTo({ url })
   },
   methods: {
-    ...store.mapMutations(['setState'])
+    ...store.mapMutations(['setState']),
+    jumpAction() {
+      let url = chooseRolePageUrl
+      const { type = '', path = '' } = this.params
+      if (!type) {
+        if (this.role) {
+          url = homePageUrl
+        }
+      } else if (type === 'mp') {
+        url = decodeURIComponent(path)
+      } else if (type === 'h5') {
+        url = `/pages/webview?path=${path}`
+      }
+      mpx.redirectTo({ url })
+    }
   }
 })
 </script>

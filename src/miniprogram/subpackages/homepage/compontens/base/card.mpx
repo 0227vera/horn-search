@@ -1,57 +1,57 @@
 
 <template>
   <view class="container">
-    <van-card
-      wx:for="{{renderList}}"
-      custom-class="card"
-      wx:key="_id"
-      tag="{{item.tag}}"
-      thumb="{{item.thumb}}"
-      thumb-mode="scaleToFill"
-      price="{{item.price + item.priceUnit}}"
-    >
-      <view slot="title">
-        <view class="item-info">
-          <text class="item-info-title">地址：</text>
-          <text>{{item.poi.name}}</text>
+    <van-swipe-cell wx:for="{{renderList}}" wx:key="_id" right-width="{{ canDelete ? 65 : 0 }}">
+      <view wx:if="{{canDelete}}" slot="right" bind:tap="delete(item)">删除</view>
+      <van-card
+        custom-class="card"
+        tag="{{item.tag}}"
+        thumb="{{item.thumb}}"
+        thumb-mode="scaleToFill"
+        price="{{item.price + item.priceUnit}}"
+      >
+        <view slot="title">
+          <view class="item-info">
+            <text class="item-info-title">地址：</text>
+            <text>{{item.poi.name}}</text>
+          </view>
         </view>
-      </view>
-      <view slot="desc">
-        <view class="item-info">
-        <text class="item-info-title">要求：</text>
-        <text>{{item.note}}</text>
-        </view class="item-info">
-        <view wx:if="{{item.category === '10'}}" class="item-info">
-        <text class="item-info-title">类别：</text>
-        <text>{{item.categoryName}}</text>
+        <view slot="desc">
+          <view class="item-info">
+          <text class="item-info-title">要求：</text>
+          <text>{{item.note}}</text>
+          </view class="item-info">
+          <view wx:if="{{item.category === '10'}}" class="item-info">
+          <text class="item-info-title">类别：</text>
+          <text>{{item.categoryName}}</text>
+          </view>
         </view>
-      </view>
-      <view wx:if="{{item.tags}}" slot="tags" class="tags">
-        <view wx:for="{{item.tags}}" wx:key="id" wx:for-item="tag" class="tags-item">
-          <view>{{tag.text}}</view>
+        <view wx:if="{{item.tags}}" slot="tags" class="tags">
+          <view wx:for="{{item.tags}}" wx:key="id" wx:for-item="tag" class="tags-item">
+            <view>{{tag.text}}</view>
+          </view>
         </view>
-      </view>
-      <view slot="footer" wx:if="{{buttons.length}}">
-        <van-button
-          wx:for="{{buttons}}"
-          size="mini"
-          style="margin-left: 8rpx"
-          wx:for-item="b"
-          round
-          type="{{b.type || 'default'}}"
-          bind:tap="clickBtn(item, b)"
-          icon="{{b.icon || ''}}"
-        >
-          {{b.text}}
-        </van-button>
-      </view>
-    </van-card>
+        <view slot="footer" wx:if="{{buttons.length}}">
+          <van-button
+            wx:for="{{buttons}}"
+            size="mini"
+            style="margin-left: 8rpx"
+            wx:for-item="b"
+            round
+            type="{{b.type || 'default'}}"
+            bind:tap="clickBtn(item, b)"
+            icon="{{b.icon || ''}}"
+          >
+            {{b.text}}
+          </van-button>
+        </view>
+      </van-card>
+    </van-swipe-cell>
   </view>
 </template>
 
 <script>
 import mpx, { createComponent } from '@mpxjs/core'
-import { getReleaseList, updateRelease } from '@/api'
 import store from '@/store'
 import makePhoneToBoss from '@/utils/makePhoneToBoss'
 import unreadFun from '@/utils/unread'
@@ -65,6 +65,10 @@ createComponent({
     buttons: {
       type: Array,
       value: []
+    },
+    canDelete: {
+      type: Boolean,
+      value: false
     }
   },
   computed: {
@@ -119,6 +123,9 @@ createComponent({
   methods: {
     clickBtn(item, b) {
       this.triggerEvent('footer-btn', { item, buttonInfo: b })
+    },
+    delete(item) {
+      this.triggerEvent('delete', item)
     }
   }
 })
@@ -128,6 +135,7 @@ createComponent({
 .card
   margin-bottom 20rpx
   border-radius 16rpx
+  box-shadow 0px 4px 20px 0px rgba(0,0,0,0.1)
 .tags
   display flex
   margin-bottom 10rpx
@@ -149,7 +157,8 @@ createComponent({
   {
     "usingComponents": {
       "van-card": "@vant/weapp/card/index",
-      "van-button": "@vant/weapp/button/index"
+      "van-button": "@vant/weapp/button/index",
+      "van-swipe-cell": "@vant/weapp/swipe-cell/index"
     },
     "disableScroll": true
   }

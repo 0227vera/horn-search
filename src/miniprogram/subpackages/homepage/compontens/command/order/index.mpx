@@ -28,7 +28,6 @@
 
 <script>
 import { createComponent } from '@mpxjs/core'
-import { getReleaseList } from '@/api'
 import store from '@/store'
 
 createComponent({

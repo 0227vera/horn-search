@@ -9,15 +9,7 @@
 
 <script>
 import mpx, { createPage } from '@mpxjs/core'
-import { fileUpload, getReleaseList } from '@/api'
-import store from '@/store'
-import Dialog from '@vant/weapp/dialog/dialog'
-
 createPage({
-  data: {
-  },
-  async onLoad() {
-  },
   methods: {
     releaseFinish(e) {
       mpx.redirectTo({ url: `/order-detail/pages/worker-detail?id=${e.detail}` })
