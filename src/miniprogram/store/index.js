@@ -2,10 +2,20 @@ import mpx, { createStore } from '@mpxjs/core'
 import MapSdk from '@/wx-map-sdk/qqmap-wx-jssdk.min.js'
 import { getReleaseList } from '@/api'
 
+export function checkIpx () {
+  const systemInfo = wx.getSystemInfoSync()
+  // 支付宝会把iphone8判定为iphone10 排除iphone10的判断
+  if (systemInfo && systemInfo.model && ~systemInfo.model.search(/iPhone ?(X|1[1-9]+)/)) {
+    return true
+  }
+  return false
+}
+
 export default createStore({
   state: {
     appReady: true,
     openid: '',
+    isIphoneX: checkIpx(),
     navBarStyle: {
       title: 'home',
       color: '#666',
@@ -17,7 +27,6 @@ export default createStore({
       clickLeft: null
     },
     footerNavBar: [],
-    role: '',
     usInfo: {},
     mapSdk: new MapSdk({
       key: 'PECBZ-2K76U-PCTVV-2WL2B-V3YXE-PFBIR'

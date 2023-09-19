@@ -18,22 +18,18 @@ createApp({
     this.setState({
       appReady: false
     })
-    const [constant, roleInfo] = await Promise.all([getCommonConfig(), getCurrentRole()])
-    const { categoryItems, steps, roles } = constant.data
-    const { role = '', address = [], OPENID } = roleInfo.data
+    const [constant, userInfo] = await Promise.all([getCommonConfig(), getCurrentRole()])
+    const { steps, categoryItems } = constant.data
+    const { address = [], OPENID } = userInfo.data
+    console.log(categoryItems)
     let obj = {
-      categoryItems,
       steps,
-      footerNavBar: roles,
       appReady: true
     }
     if (address.length) {
       Object.assign(obj, {
         addressList: address
       })
-    }
-    if (role) {
-      Object.assign(obj, { role })
     }
     if (OPENID) {
       Object.assign(obj, {
@@ -59,8 +55,9 @@ createApp({
     ],
     "packages": [
       "./subpackages/homepage/app?root=homepage",
+      "./subpackages/person-center/app?root=person-center",
+      "./subpackages/superstream/app?root=superstream",
       "./subpackages/order-detail/app?root=order-detail",
-      "./subpackages/choose-role/app?root=choose-role",
       "./subpackages/address-manager/app?root=address-manager",
       "./subpackages/manager/app?root=manager",
       "./subpackages/release/app?root=release",

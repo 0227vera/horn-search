@@ -1,0 +1,94 @@
+<template>
+  <view class="subcri" wx:if="{{show}}" style="bottom: {{bottom}};">
+    <view class="info">
+        <view class="mainTitle">消息订阅提醒</view>
+        <view class="subTitle">点击订阅，有新订单、动态等第一时间通知您</view>
+    </view>
+    <view class="btn">
+        <van-button size="mini" type="primary" bind:tap="clickSub">消息订阅</van-button>
+    </view>
+    <view class="close" bind:tap="close">
+        <van-icon name="cross" />
+    </view>
+  </view>
+  <service-notice tmplIds="{{tmplIds}}" wx:ref="service" />
+</template>
+
+<script>
+import { createComponent } from '@mpxjs/core'
+import { NEW_ORDER_NOTICE, ORDER_UPDATE } from '@/setting/noticeInfo.js'
+import store from '@/store'
+
+createComponent({
+  data: {
+    tmplIds: [NEW_ORDER_NOTICE, ORDER_UPDATE],
+    show: true
+  },
+  computed: {
+    ...store.mapState(['isIphoneX']),
+    bottom() {
+      if (this.isIphoneX) {
+        return '80rpx'
+      } else {
+        return '20rpx'
+      }
+    }
+  },
+  methods: {
+    clickSub() {
+      this.$refs.service?.showServiceNotice?.()
+    },
+    close() {
+      this.show = false
+    }
+  }
+})
+</script>
+
+<style lang="stylus" scoped>
+  .subcri
+    width 94%
+    box-sizing border-box
+    padding 16rpx 32rpx
+    box-shadow 0px 4px 20px 0px rgba(0,0,0,0.2)
+    border-radius 12rpx
+    display flex
+    align-items center
+    position fixed
+    left 3%
+    background #ffffff
+    overflow hidden
+    animation showIn 0.5s
+    .info
+      flex 1
+      font-size 24rpx
+      font-weight bold
+      color #333333
+      .subTitle
+        color #666666
+    .close
+      position absolute
+      top 0
+      right 0
+      font-size 20rpx
+      background rgba(0, 0, 0, 0.5)
+      color #ffffff
+      border-radius 0 12rpx 0 12rpx
+@-webkit-keyframes showIn
+  from
+    left -100%
+    opacity 0
+  to
+    left 3%
+    opacity 1
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+        "van-button": "@vant/weapp/button/index",
+        "van-icon": "@vant/weapp/icon/index",
+        "service-notice": "./index"
+    }
+  }
+</script>

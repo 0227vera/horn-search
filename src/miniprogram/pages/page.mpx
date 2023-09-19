@@ -9,7 +9,6 @@ import mpx, { createPage } from '@mpxjs/core'
 
 import homePageUrl from '@/subpackages/homepage/pages/index.mpx?resolve'
 import { getCurrentRole } from '@/api'
-import chooseRolePageUrl from '@/subpackages/choose-role/pages/index.mpx?resolve'
 import store from '@/store'
 
 createPage({
@@ -18,7 +17,7 @@ createPage({
     this.appReady && this.jumpAction()
   },
   computed: {
-    ...store.mapState(['role', 'appReady'])
+    ...store.mapState(['appReady'])
   },
   watch: {
     appReady(val) {
@@ -26,15 +25,10 @@ createPage({
     }
   },
   methods: {
-    ...store.mapMutations(['setState']),
     jumpAction() {
-      let url = chooseRolePageUrl
+      let url = homePageUrl
       const { type = '', path = '' } = this.params
-      if (!type) {
-        if (this.role) {
-          url = homePageUrl
-        }
-      } else if (type === 'mp') {
+      if (type === 'mp') {
         url = decodeURIComponent(path)
       } else if (type === 'h5') {
         url = `/pages/webview?path=${path}`

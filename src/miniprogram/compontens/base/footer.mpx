@@ -1,12 +1,11 @@
 <template>
   <van-tabbar
-    wx:show="{{isShow}}"
-    active="{{ currentGooterList.currentkey }}"
+    active="{{ active }}"
     bind:change="onChange"
   >
     <van-tabbar-item
-      wx:key="*this"
-      wx:for="{{currentGooterList.list}}"
+      wx:key="key"
+      wx:for="{{list}}"
       icon="{{item.icon}}"
       info="{{item.info}}"
       dot="{{item.dot}}"
@@ -19,20 +18,33 @@
 
 <script>
 import mpx, { createComponent } from '@mpxjs/core'
-import store from '@/store'
 
 createComponent({
-  computed: {
-    ...store.mapState(['showBottomNav']),
-    ...store.mapGetters(['currentGooterList']),
-    isShow() {
-      return this.currentGooterList?.list?.find(item => item.key === this.currentGooterList.currentkey).isShowFooter && this.showBottomNav
+  properties: {
+    list: {
+      type: Array,
+      value: []
+    },
+    initActive: {
+      type: String,
+      value: ''
+    }
+  },
+  data: {
+    active: ''
+  },
+  attached() {
+    if (this.list.length) {
+      this.active = this.list[0].key
+    }
+    if (this.initActive) {
+      this.active = this.initActive
     }
   },
   methods: {
-    ...store.mapMutations(['setCurrentKey']),
     onChange(e) {
-      const item = this.currentGooterList?.list?.find(item => item.key === e.detail)
+      this.active = e.detail
+      const item = this.list.find(item => item.key === this.active)
       this.tapItem(item)
     },
     tapItem(item) {
@@ -42,7 +54,7 @@ createComponent({
         })
         return
       }
-      this.setCurrentKey(item.key)
+      this.triggerEvent('tab-change', item)
     }
   }
 })

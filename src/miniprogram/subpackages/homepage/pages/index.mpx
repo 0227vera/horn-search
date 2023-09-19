@@ -1,96 +1,127 @@
 <template>
-  <component is="{{currentGooterList.currentkey}}" categoryId="{{category}}"></component>
-  <footer />
-  <van-dialog id="van-dialog" />
-  <van-overlay show="{{ showOverlay }}" z-index="100">
-    <view class="sub-container">
-      <image src="cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/image-cdn/job.png" class="img" mode="widthFix"></image>
-      <van-button type="default" bind:tap="clickSub" round>点击订阅，为您推动更多优质订单</van-button>
+  <custom-container
+    title="首页"
+    lefticon="friends"
+    clickLeft="{{clickLeft}}"
+  >
+    <view class="container">
+      <view class="list">
+        <view wx:for="{{list}}" wx:key="*this" class="list-item {{index % 2 === 0 ? 'jishu' : 'oushu'}}">
+          <view wx:for="{{item}}" wx:for-item="m" wx:key="*this" class="list-item_line" bind:tap="jump(m)">
+            <image class="image" src="{{m.icon}}"></image>
+            <view class="text">{{m.text}}</view>
+            <view class="tips" wx:if="{{m.tips}}">{{m.tips}}</view>
+            <view class="dot" wx:if="{{m.dot && !m.tips}}"></view>
+          </view>
+        </view>
+      </view>
     </view>
-  </van-overlay>
-  <service-notice wx:ref="serviceNotice" tmplIds="{{tmplIds}}" />
+  </custom-container>
+  <guide-subcri />
 </template>
 
 <script>
 import mpx, { createPage } from '@mpxjs/core'
-import Dialog from '@vant/weapp/dialog/dialog'
-import { NEW_ORDER_NOTICE } from '@/setting/noticeInfo.js'
-const store = getApp().globalStore
+import jumpAction from '@/utils/jump.js'
+import list from '@/constant/home.js'
+import ParsonCenter from '@/subpackages/person-center/pages/index.mpx?resolve'
 
 createPage({
-  onShareAppMessage() {
-    getApp().onShareAppMessage()
-  },
   data: {
-    showOverlay: false,
-    category: '',
-    tmplIds: [NEW_ORDER_NOTICE]
-  },
-  async onLoad(params) {
-    const { currentKey, category } = params
-    console.log(category)
-    this.category = category
-    // note: 如果外部需要决定进入首页的type
-    if (currentKey) {
-      this.setCurrentKey(currentKey)
-    }
-    // note: boss身份的时候将发布列表请求到，目的是为了给元素加下标
-    console.log('isBoss======>', this.role, this.isBoss)
-    if (this.isBoss) {
-      this.getReleaseList({
-        needOpenid: true
+    list,
+    clickLeft: () => {
+      mpx.navigateTo({
+        url: ParsonCenter
       })
     }
-    // node: 如果是求职者，进入就需要订阅消息，方便之后的推送
-    if (this.isWorker) {
-      const subscribeInfo = await mpx.getSetting({ withSubscriptions: true })
-      // todo: 如果是已经订阅（总是允许）的情况不再弹窗引导
-      if (subscribeInfo.subscriptionsSetting?.itemSettings?.[NEW_ORDER_NOTICE] === 'accept') return
-      this.showOverlay = true
-    }
-  },
-  computed: {
-    ...store.mapState(['role']),
-    ...store.mapGetters(['currentGooterList', 'isBoss', 'isWorker'])
   },
   methods: {
-    ...store.mapMutations(['setCurrentKey']),
-    ...store.mapActions(['getReleaseList']),
-    tapItem(item) {
-      this.setCurrentKey(item.key)
-    },
-    clickSub() {
-      this.showOverlay = false
-      this.$refs.serviceNotice?.showServiceNotice?.()
+    jump(m) {
+      jumpAction(m.action)
     }
   }
 })
 </script>
 
 <style lang="stylus" scoped>
-.sub-container
-  width 100%
-  height 80%
-  display flex
-  flex-direction column
-  align-items center
-  justify-content center
-  .img
-    width 540rpx
-    margin-bottom 40rpx
+.container
+  padding 16rpx 32rpx 100rpx
+  box-sizing border-box
+  overflow hidden
+  .list
+    display flex
+    flex-direction column
+    &-item
+      display flex
+      align-items center
+      justify-content space-between
+      margin-bottom 32rpx
+      border-bottom 2rpx dashed #999999
+      &.jishu
+        animation showInJishu 0.5s
+      &.oushu
+        animation showInOushu 0.5s
+      &_line
+        width 50%
+        padding 16rpx
+        box-sizing border-box
+        display flex
+        align-items center
+        justify-content center
+        flex-direction column
+        position relative
+        .image
+          width 80rpx
+          height 80rpx
+          border-radius 50%
+          border 2rpx solid #dddddd
+          padding 8rpx
+          box-sizing border-box
+          margin-bottom 16rpx
+          background #ffffff
+          box-shadow 0px 4px 20px 0px rgba(0,0,0,0.2)
+        .text
+          font-size 28rpx
+          color #333333
+          font-weight bolder
+        .tips
+          position absolute
+          top 0
+          left 200rpx
+          background red
+          padding 3rpx 8rpx
+          color #ffffff
+          border-radius 20rpx
+          font-size 20rpx
+          font-weight bold
+        .dot
+          position absolute
+          width 12rpx
+          height 12rpx
+          border-radius 12rpx
+          background red
+          top 84rpx
+          left 150rpx
+@-webkit-keyframes showInJishu
+  from
+    transform translateX(-100%)
+    opacity 0
+  to
+    transform translateX(1)
+    opacity 1
+@-webkit-keyframes showInOushu
+  from
+    transform translateX(100%)
+  to
+    transform translateX(1)
+    opacity 1
 </style>
-<script type="application/json">
-  {
-    "usingComponents": {
-      "van-dialog": "@vant/weapp/dialog/index",
-      "van-overlay": "@vant/weapp/overlay/index",
-      "van-button": "@vant/weapp/button/index",
-      "service-notice": "@/compontens/common/service-notice",
-      "footer": "../compontens/base/footer",
-      "home": "../compontens/command/home",
-      "order": "../compontens/command/order",
-      "owner": "../compontens/command/owner"
-    },
-    "disableScroll": true
+
+<script name="json">
+module.exports = {
+  usingComponents: {
+    "custom-container": "@/compontens/base/custom-container",
+    "guide-subcri": "@/compontens/common/service-notice/guide.mpx"
   }
+}
 </script>

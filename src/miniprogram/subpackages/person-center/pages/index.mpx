@@ -1,0 +1,157 @@
+<template>
+<custom-container
+  title="个人中心"
+  lefticon="wap-home"
+  containerBg="linear-gradient(#449eff, #E3E0F3, #ffffff)"
+>
+    <view class="navbar">
+      <view class="navbar-content">
+        <view wx:for="{{navbar}}" wx:key="*this" class="navbar-content-item" wx:if="{{!item.hide}}" bindtap="itemtaphandle(item)">
+          <van-icon name="{{item.icon}}" class="navbar-content-item-icon" />
+          <view class="navbar-content-item-name">{{item.name}}</view>
+        </view>
+      </view>
+    </view>
+    <view class="list">
+      <view wx:for="{{list}}" wx:key="*this" style="margin-top: 16rpx">
+        <van-cell-group inset>
+          <van-cell
+            wx:for="{{item}}"
+            wx:for-item="subitem"
+            wx:key="name"
+            title="{{subitem.name}}"
+            icon="{{subitem.icon}}"
+            is-link
+            bindtap="itemtaphandle(subitem)"
+            wx:if="{{!subitem.hide}}"
+          />
+        </van-cell-group>
+      </view>
+    </view>
+</custom-container>
+<van-dialog id="van-dialog" />
+</template>
+
+<script>
+import mpx, { createPage } from '@mpxjs/core'
+import { isAdmin } from '@/api'
+import Dialog from '@vant/weapp/dialog/dialog'
+
+import jumpAction from '@/utils/jump'
+
+createPage({
+  data: {
+    showManagerEntry: false
+  },
+  computed: {
+    navbar() {
+      return [
+        {
+          name: '发布历史',
+          icon: 'todo-list-o',
+          jumptype: 'mp',
+          url: '/release/pages/list'
+        },
+        {
+          name: '权益卡',
+          icon: 'send-gift-o',
+          jumptype: 'alert',
+          message: '权益卡正在规划中，开通后第一时间通知您'
+        }
+      ]
+    },
+    list() {
+      return [
+        [
+          {
+            name: '地址管理',
+            icon: 'todo-list-o',
+            jumptype: 'mp',
+            url: '/address-manager/pages/index'
+          }
+        ],
+        [
+          {
+            name: '关于我们',
+            icon: 'question-o',
+            jumptype: 'mp',
+            url: '/company/pages/index'
+          }
+        ],
+        [
+          {
+            name: '设置',
+            icon: 'setting-o',
+            jumptype: 'setting'
+          }
+        ],
+        [
+          {
+            name: '后台管理',
+            icon: 'edit',
+            hide: !this.showManagerEntry,
+            jumptype: 'mp',
+            url: '/manager/pages/index'
+          }
+        ]
+      ]
+    }
+  },
+  onLoad() {
+    this.isAdmin()
+  },
+  methods: {
+    async isAdmin() {
+      const res = await isAdmin()
+      if (res.data.ADMIN_ID) {
+        this.showManagerEntry = true
+      }
+    },
+    itemtaphandle(item) {
+      jumpAction(item)
+    }
+  }
+})
+</script>
+
+<style lang="stylus">
+.navbar
+  width 100%
+  box-sizing border-box
+  padding 0 32rpx
+  margin-top 32rpx
+  .navbar-content
+    background #ffffff
+    box-shadow #ddd 0px 0px 10px
+    border-radius 16rpx
+    display flex
+    align-items center
+    justify-content space-around
+    padding 16rpx
+    overflow hidden
+    .navbar-content-item
+      display flex
+      flex-direction column
+      align-items center
+      justify-content center
+      color #333
+      .navbar-content-item-icon
+        font-size 50rpx
+      .navbar-content-item-name
+        font-size 26rpx
+        margin-top 12rpx
+.list
+  padding-top 32rpx
+</style>
+
+<script name="json">
+module.exports = {
+  usingComponents: {
+    "custom-container": "@/compontens/base/custom-container",
+    "van-dialog": "@vant/weapp/dialog/index",
+    "van-icon": "@vant/weapp/icon/index",
+    "van-cell": "@vant/weapp/cell/index",
+    "van-cell-group": "@vant/weapp/cell-group/index"
+  }
+}
+</script>

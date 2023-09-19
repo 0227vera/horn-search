@@ -1,18 +1,31 @@
 import mpx from '@mpxjs/core'
 import Dialog from '@vant/weapp/dialog/dialog'
 
+const handleUrlParams = (url, params) => {
+  const str = Object.keys(params).map(item => `${item}=${params[item]}`).join('&')
+  if (url.includes('?')) {
+    url += str
+  } else {
+    url += `?${str}`
+  }
+  return url
+}
+
 const jumpAction = item => {
+  let url = item.link || item.url
+  if (item.params) {
+    url = handleUrlParams(url, item.params)
+  }
+  if (!url) {
+    return
+  }
   const actions = {
     mp: () => {
       if (item.redirect) {
-        mpx.redirectTo({
-          url: item.url
-        })
+        mpx.redirectTo({ url })
         return
       }
-      mpx.navigateTo({
-        url: item.url
-      })
+      mpx.navigateTo({ url })
     },
     alert: () => {
       Dialog.alert({
@@ -24,7 +37,7 @@ const jumpAction = item => {
       mpx.openSetting()
     }
   }
-  actions?.[item.jumptype]?.()
+  actions?.[item.jumptype || item.type]?.()
 }
 
 export default jumpAction

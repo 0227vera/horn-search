@@ -21,8 +21,6 @@ createComponent({
   },
   methods: {
     cliclItem(item) {
-    //   console.log(item)
-    //   item.click?.()
       this.list.find(f => f.id === item.id)?.click?.()
     }
   }

@@ -1,0 +1,67 @@
+<template>
+  <custom-container title="{{title}}">
+    <component is="{{currentCom}}"></component>
+    <footer wx:if="{{currentCom}}" list="{{footerList}}" initActive="{{currentCom}}" bind:tab-change="tabChange" />
+  </custom-container>
+  <back-home />
+</template>
+
+<script>
+// node: 超级流转组件，最核心的功能和流转流程
+import mpx, { createPage } from '@mpxjs/core'
+const store = getApp().globalStore
+
+createPage({
+  onShareAppMessage() {
+    getApp().onShareAppMessage()
+  },
+  data: {
+    currentCom: ''
+  },
+  async onLoad(params) {
+    if (params.key) {
+      this.currentCom = params.key
+    }
+    console.log(params)
+  },
+  computed: {
+    footerList() {
+      return [{
+        name: '发单',
+        title: '我要招工',
+        icon: 'upgrade',
+        key: 'release'
+      }, {
+        name: '订单列表',
+        title: '订单列表',
+        icon: 'comment',
+        key: 'order'
+      }]
+    },
+    title() {
+      return this.footerList.find(item => item.key === this.currentCom)?.title || ''
+    }
+  },
+  methods: {
+    tabChange(e) {
+      this.currentCom = e.detail.key
+    }
+  }
+})
+</script>
+
+<style lang="stylus" scoped>
+
+</style>
+<script type="application/json">
+  {
+    "usingComponents": {
+      "custom-container": "@/compontens/base/custom-container",
+      "back-home": "@/compontens/base/back-home.mpx",
+      "footer": "@/compontens/base/footer.mpx",
+      "order": "@/subpackages/superstream/compontens/order",
+      "release":"@/subpackages/superstream/compontens/release"
+    },
+    "disableScroll": true
+  }
+</script>

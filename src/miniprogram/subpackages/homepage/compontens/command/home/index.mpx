@@ -1,101 +1,113 @@
 <template>
   <custom-container
-    title="{{title}}"
-    lefticon="{{lefticon}}"
-    containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
+    title="首页"
+    lefticon="friends"
     clickLeft="{{clickLeft}}"
   >
-    <category-list bind:component="changeComponent" categoryId="{{categoryId}}"/>
-    <view class="content">
-      <component is="{{role}}" category="{{category}}" categoryName="{{categoryName}}" bind:release-finish="releaseFinish"></component>
+    <view class="container">
+      <view class="list">
+        <view wx:for="{{list}}" wx:key="*this" class="list-item {{index % 2 === 0 ? 'jishu' : 'oushu'}}">
+          <view wx:for="{{item}}" wx:for-item="m" wx:key="*this" class="list-item_line">
+            <image class="image" src="{{m.icon}}"></image>
+            <view class="text">{{m.text}}</view>
+            <view class="tips" wx:if="{{m.tips}}">{{m.tips}}</view>
+            <view class="dot" wx:if="{{m.dot && !m.tips}}"></view>
+          </view>
+        </view>
+      </view>
     </view>
   </custom-container>
+  <guide-subcri />
 </template>
 
 <script>
 import mpx, { createComponent } from '@mpxjs/core'
-const store = getApp().globalStore
+import list from '@/constant/home.js'
 
 createComponent({
-  properties: {
-    categoryId: {
-      type: String,
-      value: ''
-    }
-  },
   data: {
-    category: '',
-    categoryName: ''
-  },
-  computed: {
-    ...store.mapState(['role']),
-    clickLeft() {
-      const actions = {
-        worker: () => {
-          mpx.showToast({
-            title: '拉起地理位置筛选,选择位置之后对所有数据进行筛选',
-            icon: 'none'
-          })
-        },
-        boss: () => {
-          this.setCurrentKey('owner')
-        },
-        business: () => {
-          mpx.showToast({
-            title: '身份切换',
-            icon: 'none'
-          })
-        }
-      }
-      return actions[this.role]
-    },
-    title() {
-      const options = {
-        worker: '我要找工作',
-        boss: '我要招人',
-        business: '找合作'
-      }
-      return options[this.role]
-    },
-    lefticon() {
-      const options = {
-        worker: 'location-o',
-        boss: '',
-        business: 'exchange'
-      }
-      return options[this.role]
-    }
-  },
-  methods: {
-    ...store.mapMutations(['setCurrentKey']),
-    changeComponent(e) {
-      const { value, text } = e.detail
-      this.category = value
-      this.categoryName = text
-    },
-    releaseFinish(e) {
-      mpx.navigateTo({ url: `/order-detail/pages/index?id=${e.detail}` })
-      setTimeout(() => {
-        this.setCurrentKey('order')
-      }, 1000)
+    list,
+    clickLeft: () => {
+      mpx.navigateTo({
+        url: ''
+      })
     }
   }
 })
 </script>
 
 <style lang="stylus" scoped>
-.content
-  padding-bottom 120rpx
 .container
-  border-radius 32rpx 32rpx 0 0
-  padding 32rpx
+  padding 16rpx 32rpx 200rpx
+  box-sizing border-box
   overflow hidden
-.loading
-  width 100%
-  height 50vh
-  display flex
-  align-items center
-  justify-content center
+  .list
+    display flex
+    flex-direction column
+    &-item
+      display flex
+      align-items center
+      justify-content space-between
+      margin-bottom 32rpx
+      border-bottom 2rpx dashed #999999
+      &.jishu
+        animation showInJishu 0.5s
+      &.oushu
+        animation showInOushu 0.5s
+      &_line
+        width 50%
+        padding 16rpx
+        box-sizing border-box
+        display flex
+        align-items center
+        justify-content center
+        flex-direction column
+        position relative
+        .image
+          width 80rpx
+          height 80rpx
+          border-radius 50%
+          border 2rpx solid #dddddd
+          padding 8rpx
+          box-sizing border-box
+          margin-bottom 16rpx
+          background #ffffff
+          box-shadow 0px 4px 20px 0px rgba(0,0,0,0.2)
+        .text
+          font-size 28rpx
+          color #333333
+          font-weight bolder
+        .tips
+          position absolute
+          top 0
+          left 200rpx
+          background red
+          padding 3rpx 8rpx
+          color #ffffff
+          border-radius 20rpx
+          font-size 20rpx
+          font-weight bold
+        .dot
+          position absolute
+          width 12rpx
+          height 12rpx
+          border-radius 12rpx
+          background red
+          top 84rpx
+          left 150rpx
+@-webkit-keyframes showInJishu
+  from
+    transform translateX(-100%)
+    opacity 0
+  to
+    transform translateX(1)
+    opacity 1
+@-webkit-keyframes showInOushu
+  from
+    transform translateX(100%)
+  to
+    transform translateX(1)
+    opacity 1
 </style>
 
 <script name="json">
@@ -103,10 +115,7 @@ module.exports = {
   component: true,
   usingComponents: {
     "custom-container": "@/compontens/base/custom-container",
-    "category-list": "@/compontens/common/category-list",
-    "worker": "./roles/worker",
-    "boss": "./roles/boss",
-    "business": "./roles/business"
+    "guide-subcri": "@/compontens/common/service-notice/guide.mpx"
   }
 }
 </script>

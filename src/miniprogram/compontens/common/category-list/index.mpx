@@ -3,9 +3,9 @@
     <scroll-view scroll-x class="scroll">
       <view class="level-item">
         <view
-          wx:for="{{categoryItems.children}}"
-          wx:key="*this"
-          class="item {{item.value === categoryItems.selected ? 'selected': ''}}"
+          wx:for="{{list}}"
+          wx:key="value"
+          class="item {{item.value === selected ? 'selected': ''}}"
           catchtap="levelItem(item)"
         >
           <view class="content">
@@ -15,137 +15,31 @@
         </view>
       </view>
     </scroll-view>
-    <scroll-view scroll-x class="scroll" wx:if="{{level1List.children}}">
-      <view class="level-item">
-        <view
-          wx:for="{{level1List.children}}"
-          wx:key="*this"
-          class="item {{item.value === level1List.selected ? 'selected': ''}}"
-          catchtap="level1Item(item)"
-        >
-          <view wx:if="{{item.editable && showInput}}" class="input">
-            <input
-              auto-focus
-              type="text"
-              wx:model="{{item.text}}"
-              bind:input="inputHandle"
-              bindblur="blurHandle"
-              id="{{item.value}}"
-            />
-          </view>
-          <view class="content" wx:else bind:tap="clickItem(item)">
-            <van-icon wx:if="{{item.icon  && item.value === level1List.selected && isBoss}}" class="icon" name="{{item.icon}}" />
-            {{item.text}}
-            <text wx:if="{{item.tips && (item.value === level1List.selected || !item.text ) && isBoss}}" class="tips">({{item.tips}})</text>
-            <text class="unread" wx:if="{{item.unread}}">({{item.unread}})</text>
-          </view>
-        </view>
-      </view>
-    </scroll-view>
   </view>
 </template>
 
 <script>
 import { createComponent } from '@mpxjs/core'
-import store from '@/store'
 createComponent({
   properties: {
+    list: {
+      type: Array,
+      value: []
+    },
     categoryId: {
       type: String,
       value: ''
     }
   },
   data: {
-    showInput: false
+    showInput: false,
+    selected: ''
   },
   computed: {
-    ...store.mapState(['categoryItems']),
-    ...store.mapGetters(['isWorker', 'isBoss']),
-    level1List() {
-      return this.categoryItems.children?.find(item => item.value === this.categoryItems.selected) || {}
-    }
-  },
-  attached() {
-    const newObj = this.getNewObj(JSON.parse(JSON.stringify(this.categoryItems)), true)
-    if (this.categoryId) {
-      newObj.children = newObj.children.map(item => {
-        if (item.value === newObj.selected) {
-          item.selected = this.categoryId
-        }
-        return item
-      })
-    }
-    this.setState({
-      categoryItems: this.getNewObj(newObj)
-    })
   },
   methods: {
-    ...store.mapMutations(['setState']),
     levelItem(item) {
-      this.setState({
-        categoryItems: this.getNewObj(this.categoryItems)
-      })
-      this.$forceUpdate()
-    },
-    level1Item(item) {
-      const cat = JSON.parse(JSON.stringify(this.categoryItems))
-      cat.children.forEach(c => {
-        if (c.value === cat.selected) {
-          c.selected = item.value
-        }
-      })
-      this.setState({
-        categoryItems: this.getNewObj(cat)
-      })
-      if (!item.children?.length) {
-        // note: 设置配置的组件
-        this.triggerEvent('component', item)
-      }
-    },
-    getNewObj(obj, disComponent = false) {
-      if (obj.children?.length) {
-        if (!obj.selected) {
-          obj.selected = obj.children[0].value
-          obj.children[0] = this.getNewObj(obj.children[0])
-        } else if (obj.selected) {
-          obj.children.forEach(item => {
-            if (item.value === obj.selected) {
-              item = this.getNewObj(item)
-            }
-          })
-        }
-      } else if (!disComponent) {
-        this.triggerEvent('component', obj)
-      }
-      return obj
-    },
-    clickItem(item) {
-      if (!item.editable) return
-      if (item.value !== this.level1List.selected) return
-      if (this.isWorker) return
-      this.showInput = true
-    },
-    inputHandle(e) {
-      const id = e.target.id
-      const text = e.detail.value
-      const cat = JSON.parse(JSON.stringify(this.categoryItems))
-      cat.children.forEach(c => {
-        c.children.forEach(cc => {
-          if (cc.value === id) {
-            cc.text = text
-          }
-        })
-      })
-      this.setState({
-        categoryItems: cat
-      })
-      this.triggerEvent('component', {
-        text,
-        value: id
-      })
-    },
-    blurHandle() {
-      this.showInput = false
+      this.selected = item.value
     }
   }
 })
@@ -153,15 +47,13 @@ createComponent({
 </script>
 
 <style lang="stylus" scoped>
-.container
-  position sticky
-  top 0
-  z-index 99
-  background linear-gradient(#E3E0F3, #E3E0F3)
 .scroll
   width 100%
-  padding 16rpx 32rpx
+  padding 16rpx
   box-sizing border-box
+  z-index 100000
+  position sticky
+  top 0
 .level-item
   display flex
   box-sizing border-box

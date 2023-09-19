@@ -1,29 +1,23 @@
 <template>
-  <custom-container
-    title="订单列表"
-    lefticon=""
-    containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
-  >
-    <view class="container">
-      <view class="types">
-        <view class="types-item {{typeSelect === 'worker' ? 'selected' : ''}}" bind:tap="clickTypes('worker')">招工订单</view>
-        <view class="types-item {{typeSelect === 'business' ? 'selected' : ''}}" bind:tap="clickTypes('business')">合作订单</view>
-      </view>
-      <view wx:if="{{typeSelect === 'worker'}}">
-        <view class="order-type">
-          <view wx:if="{{callNum}}" class="order-type-item {{orderSelect === 'push' ? 'selected' : ''}}" bind:tap="clickOrderTypes('push')">
-            <view wx:if="{{pushNum}}" class="num">{{pushNum}}</view>
-            <view class="text">已推送</view>
-          </view>
-          <view wx:if="{{callNum}}" class="order-type-item {{orderSelect === 'call' ? 'selected' : ''}}" bind:tap="clickOrderTypes('call')">
-            <view class="num">{{callNum}}</view>
-            <view class="text">已有人呼叫</view>
-          </view>
-        </view>
-        <order-status wx:if="{{status}}" list="{{orderList}}" status="{{status}}" loading="{{orderListReqLoading}}" />
-      </view>
+  <view class="container">
+    <view class="types">
+      <view class="types-item {{typeSelect === 'worker' ? 'selected' : ''}}" bind:tap="clickTypes('worker')">招工订单</view>
+      <view class="types-item {{typeSelect === 'business' ? 'selected' : ''}}" bind:tap="clickTypes('business')">合作订单</view>
     </view>
-  </custom-container>
+    <view wx:if="{{typeSelect === 'worker'}}">
+      <view class="order-type">
+        <view wx:if="{{callNum}}" class="order-type-item {{orderSelect === 'push' ? 'selected' : ''}}" bind:tap="clickOrderTypes('push')">
+          <view wx:if="{{pushNum}}" class="num">{{pushNum}}</view>
+          <view class="text">已推送</view>
+        </view>
+        <view wx:if="{{callNum}}" class="order-type-item {{orderSelect === 'call' ? 'selected' : ''}}" bind:tap="clickOrderTypes('call')">
+          <view class="num">{{callNum}}</view>
+          <view class="text">已有人呼叫</view>
+        </view>
+      </view>
+      <order-status wx:if="{{status}}" list="{{orderList}}" status="{{status}}" loading="{{orderListReqLoading}}" />
+    </view>
+  </view>
 </template>
 
 <script>
@@ -133,7 +127,6 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "custom-container": "@/compontens/base/custom-container",
       "order-status": "./order-status"
     }
   }
