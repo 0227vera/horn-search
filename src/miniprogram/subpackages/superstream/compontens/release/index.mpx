@@ -1,5 +1,5 @@
 <template>
-  <category-list list="{{categoryList}}" />
+  <category-list list="{{categoryList}}" bind:change="categoryChange" />
   <van-cell-group class="form" custom-class="home-cell-group-container" style="background:#fff">
     <van-field
       label="品类名称"
@@ -230,6 +230,13 @@ createComponent({
   methods: {
     ...store.mapActions(['setLocation', 'getReleaseList']),
     ...store.mapMutations(['setState']),
+    // note: 类别修改
+    categoryChange(e) {
+      console.log(e.detail)
+      const { text, value } = e.detail
+      this.updateObj.category = text
+      this.updateObj.categoryName = value
+    },
     // note: 修改字段值
     onFieldChange(e) {
       this.updateObj[e.target.id] = e.detail

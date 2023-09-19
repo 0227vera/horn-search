@@ -1,21 +1,21 @@
 <template>
-  <view class="container">
-    <scroll-view scroll-x class="scroll">
-      <view class="level-item">
-        <view
-          wx:for="{{list}}"
-          wx:key="value"
-          class="item {{item.value === selected ? 'selected': ''}}"
-          catchtap="levelItem(item)"
-        >
-          <view class="content">
-            <van-icon wx:if="{{item.icon}}" name="{{item.icon}}" />
-            {{item.text}}
-          </view>
+  <van-search value="{{ value }}" placeholder="请输入工人的类别" />
+  <scroll-view scroll-x class="scroll" paging-enabled>
+    <view class="list-item">
+      <view
+        wx:for="{{list}}"
+        wx:key="value"
+        class="item {{item.value === selected ? 'selected': ''}}"
+        id="id{{index}}"
+        catchtap="itemClickHandle(item)"
+      >
+        <view class="content">
+          <van-icon wx:if="{{item.icon}}" name="{{item.icon}}" />
+          {{item.text}}
         </view>
       </view>
-    </scroll-view>
-  </view>
+    </view>
+  </scroll-view>
 </template>
 
 <script>
@@ -32,14 +32,14 @@ createComponent({
     }
   },
   data: {
-    showInput: false,
     selected: ''
   },
   computed: {
   },
   methods: {
-    levelItem(item) {
+    itemClickHandle(item) {
       this.selected = item.value
+      this.triggerEvent('change', item)
     }
   }
 })
@@ -51,35 +51,23 @@ createComponent({
   width 100%
   padding 16rpx
   box-sizing border-box
-  z-index 100000
+  z-index 10
   position sticky
   top 0
-.level-item
+  background #ffffff
+.list-item
   display flex
   box-sizing border-box
   .item
     flex-shrink 0
     position relative
-    .input
-      background #ffffff
-      color #333333
-      border-radius 32rpx
-      font-size 24rpx
-      padding 0 15rpx
     .content
       padding 5rpx 15rpx
       font-size 28rpx
       color #333333
-      font-weight 500
       display flex
       align-items center
       justify-content center
-      position relative
-      .unread
-        margin-left 6rpx
-        color red
-        font-weight bold
-        font-size 20rpx
     .icon
       font-weight 900
       font-size 30rpx
@@ -88,14 +76,24 @@ createComponent({
       color red
     &.selected
       .content
-        color #666666
-        background #ffffff
+        color #1989fa
+        font-size 30rpx
+        font-weight bold
         border-radius 32rpx
+      &::after
+        content ''
+        width 60%
+        height 6rpx
+        background #1989fa
+        position absolute
+        left 20%
+        bottom 0
 </style>
 
 <script type="application/json">
   {
     "usingComponents": {
+      "van-search": "@vant/weapp/search/index",
       "van-icon": "@vant/weapp/icon/index"
     }
   }
