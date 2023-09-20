@@ -1,17 +1,15 @@
 <template>
-  <category-list list="{{categoryList}}" bind:change="categoryChange" />
   <van-cell-group class="form" custom-class="home-cell-group-container" style="background:#fff">
     <van-field
-      label="品类名称"
+      label="分类"
+      title-width="80rpx"
       required
-      value="{{ updateObj.categoryName }}"
-      placeholder="请输入自定义品类的名称"
+      is-link
+      readonly
+      value="{{updateObj.categoryName}}"
       input-align="right"
-      bind:change="onFieldChange"
-      id="categoryName"
-      center
-      disabled
-      wx:if="{{updateObj.category === '10'}}"
+      placeholder="请点击选择分类"
+      bind:tap="showPopupContainer('category')"
     />
     <van-field
       label="单价"
@@ -29,6 +27,27 @@
         <van-dropdown-item bind:change="changeUnit" value="{{ updateObj.priceUnit }}" options="{{ unitList }}" />
       </van-dropdown-menu>
     </van-field>
+    <van-field
+      label="数量"
+      title-width="80rpx"
+      required
+      value="{{ updateObj.num }}"
+      type="digit"
+      placeholder="请输入数量"
+      input-align="right"
+      bind:change="onFieldChange"
+      id="num"
+    />
+    <van-field
+      label="货源(品质层次)"
+      title-width="240rpx"
+      required
+      value="{{ updateObj.origin }}"
+      placeholder="货源(品质层次)"
+      input-align="right"
+      bind:change="onFieldChange"
+      id="origin"
+    />
     <van-field
       label="位置"
       title-width="80rpx"
@@ -126,6 +145,29 @@
       />
       <address-list showBottomBtn="{{false}}" showBottomDivder bind:choose-item="addressChange" />
     </view>
+    <view wx:elif="{{popupType === 'category'}}">
+      <van-nav-bar
+        left-text="取消"
+        right-text="确定"
+        title="请输入/选择分类"
+        bind:click-left="closePopupContainer"
+        bind:click-right="onCategoryClickRight"
+        safe-area-inset-top="{{false}}"
+      />
+      <view class="category-container">
+        <van-search value="{{ value }}" placeholder="输入可添加类别" />
+        <view wx:for="{{categoryList}}" class="category-container-item" bind:tap="clickCategory(item)" wx:key="value">
+          <view class="text">{{item.text}}</view>
+          <view>
+            <van-checkbox
+              checked-color="#FF9671"
+              value="{{ activeCategory === item.value }}"
+              custom-class="address-checkbox"
+            />
+          </view>
+        </view>
+      </view>
+    </view>
   </van-popup>
   <service-notice wx:ref="serviceNotice" tmplIds="{{tmplIds}}" />
 </template>
@@ -155,6 +197,7 @@ createComponent({
     minDate: Date.now(),
     currentDate: Date.now(),
     address: {},
+    activeCategory: '',
     uploaderDisabled: false,
     formatter(type, value) {
       const types = {
@@ -189,10 +232,6 @@ createComponent({
       this.updateObj.category = val
     },
     categoryName(val) {
-      // if (this.updateObj.category === '10') {
-      //   this.updateObj.categoryName = ''
-      //   return
-      // }
       this.updateObj.categoryName = val
     }
   },
@@ -236,6 +275,9 @@ createComponent({
       const { text, value } = e.detail
       this.updateObj.category = text
       this.updateObj.categoryName = value
+    },
+    clickCategory(item) {
+      this.activeCategory = item.value
     },
     // note: 修改字段值
     onFieldChange(e) {
@@ -403,6 +445,19 @@ createComponent({
     right 0
     color #fff
     font-size 40rpx
+.category-container
+  width 100%
+  padding 16rpx 32rpx
+  box-sizing border-box
+  &-item
+    display flex
+    padding 32rpx 0
+    box-sizing border-box
+    border-top 2rpx solid #eee
+    .text
+      flex 1
+      color #333333
+      font-size 28rpx
 </style>
 
 <script type="application/json">
@@ -416,8 +471,10 @@ createComponent({
       "van-uploader": "@vant/weapp/uploader/index",
       "van-field": "@vant/weapp/field/index",
       "van-image": "@vant/weapp/image/index",
+      "van-search": "@vant/weapp/search/index",
       "van-icon": "@vant/weapp/icon/index",
       "van-popup": "@vant/weapp/popup/index",
+      "van-checkbox": "@vant/weapp/checkbox/index",
       "van-cascader": "@vant/weapp/cascader/index",
       "van-datetime-picker": "@vant/weapp/datetime-picker/index",
       "van-nav-bar": "@vant/weapp/nav-bar/index",

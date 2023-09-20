@@ -1,5 +1,12 @@
 <template>
-  <van-search value="{{ value }}" placeholder="请输入工人的类别" />
+  <view class="category-container">
+    <van-search value="{{ value }}" placeholder="请输入工人的类别" />
+    <view class="right">
+      <van-dropdown-menu slot="button">
+        <van-dropdown-item bind:change="changeUnit" value="{{ updateObj.priceUnit }}" options="{{ unitList }}" />
+      </van-dropdown-menu>
+    </view>
+  </view>
   <scroll-view scroll-x class="scroll" paging-enabled>
     <view class="list-item">
       <view
@@ -47,6 +54,8 @@ createComponent({
 </script>
 
 <style lang="stylus" scoped>
+.category-container
+  display flex
 .scroll
   width 100%
   padding 16rpx

@@ -45,7 +45,7 @@ export default [[{
   link: '',
   extraInfo: {}
 }], [{
-  text: '工厂店面转认发布',
+  text: '工厂店面转让发布',
   icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/3.1 转让.png',
   id: '',
   dot: true,
