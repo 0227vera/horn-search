@@ -22,9 +22,9 @@
           </view>
         </view>
       </item-container>
-      <item-container title="人才市场信息：">
+      <!-- <item-container title="人才市场信息：">
         <worker-list category="{{category}}" />
-      </item-container>
+      </item-container> -->
       <item-container title="基本信息：">
         <van-cell-group border="{{false}}">
           <van-cell
@@ -69,7 +69,7 @@ createPage({
   async onLoad(params) {
     this.loading = true
     const res = await getReleaseOneById(params)
-    const { category, categoryName, price, priceUnit, poi, tel, images, ownTimeName, note, status, calllist, readlist, _id, OPENID } = res.data || {}
+    const { category, categoryName, price, priceUnitName, poi, tel, images, ownTimeName, note, status, calllist, readlist, _id, OPENID } = res.data || {}
     this.active = status - 1
     this.category = category
     this.OPENID = OPENID
@@ -80,7 +80,7 @@ createPage({
       value: categoryName
     }, {
       title: '单价',
-      value: `${price}${priceUnit}`
+      value: `${price}${priceUnitName}`
     }, {
       title: '位置',
       value: poi.name

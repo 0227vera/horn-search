@@ -18,13 +18,25 @@ class UserController extends BaseController {
     }
     Object.assign(where, this._event.params || {})
     const service = new UserService()
-    const res = await service.getOne(where)
+    let res = await service.getOne(where)
+    if (!res) {
+      // note: 查不到用户就先在库里建立一个use在返回相关信息
+      const user = await this.create({
+        address: [],
+        OPENID: this._openId
+      })
+      res = await service.getOne(where)
+    }
     return res
   }
 
-  async create() {
+  async create(data) {
     const service = new UserService()
-    const params = Object.assign({}, this._event.params, {
+    let params = {}
+    if (data) {
+      params = data
+    }
+    params = Object.assign({}, this._event.params, {
       OPENID: this._openId
     })
     const res = await service.create(params)

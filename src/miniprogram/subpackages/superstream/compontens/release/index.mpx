@@ -3,17 +3,17 @@
     <view class="category-container">
       <van-field
         class="category-content"
-        label="分类"
+        label="岗位"
         title-width="80rpx"
         required
         is-link
         readonly
         value="{{updateObj.categoryName}}"
         input-align="right"
-        placeholder="请点击选择分类"
+        placeholder="请点击选择需要招的岗位"
         bind:tap="showPopupContainer('category')"
       />
-      <van-dropdown-menu wx:if="{{showCategoryType}}">
+      <van-dropdown-menu wx:if="{{showCategoryType}}" title-class="dropdown">
         <van-dropdown-item bind:change="changeCategoryType" value="{{ updateObj.categoryType }}" options="{{ categoryTypeList }}" />
       </van-dropdown-menu>
     </view>
@@ -41,6 +41,23 @@
       id="price"
       center
     >
+      <view slot="input" class="area-container" wx:if="{{updateObj.priceUnit === '3'}}">
+        <input
+          type="digit"
+          value="{{updateObj.priceMin}}"
+          id="priceMin"
+          bind:input="onAreaFieldChange"
+          placeholder="最低"
+        />
+        <text class="middle">~</text>
+        <input
+          type="digit"
+          value="{{updateObj.priceMax}}"
+          id="priceMax"
+          bind:input="onAreaFieldChange"
+          placeholder="最高"
+        />
+      </view>
       <van-dropdown-menu slot="button">
         <van-dropdown-item bind:change="changeUnit" value="{{ updateObj.priceUnit }}" options="{{ unitList }}" />
       </van-dropdown-menu>
@@ -56,11 +73,30 @@
       input-align="right"
       bind:change="onFieldChange"
       id="num"
-    />
+    >
+      <view slot="input" class="area-container">
+        <input
+          type="digit"
+          value="{{updateObj.numMin}}"
+          id="numMin"
+          bind:input="onAreaFieldChange"
+          placeholder="最少"
+        />
+        <text class="middle">~</text>
+        <input
+          type="digit"
+          value="{{updateObj.numMax}}"
+          id="numMax"
+          bind:input="onAreaFieldChange"
+          placeholder="最多"
+        />
+      </view>
+      <view slot="right-icon" style="color: #333; font-weight: bold;">件</view>
+    </van-field>
     <van-field
       label="货源(品质层次)"
       title-width="240rpx"
-      required
+      required="{{false}}"
       value="{{ updateObj.origin }}"
       placeholder="货源(品质层次)"
       input-align="right"
@@ -122,14 +158,25 @@
       </view>
     </view>
     <van-field
-      label="要求"
-      title-width="60rpx"
+      label="岗位要求"
+      title-width="120rpx"
       value="{{ updateObj.note }}"
       placeholder="请输入您对所招工人的要求或者服装的要求"
-      input-align="right"
+      input-align="left"
       type="textarea"
       autosize
       id="note"
+      bind:change="onFieldChange"
+    />
+    <van-field
+      label="待遇补充"
+      title-width="120rpx"
+      value="{{ updateObj.add }}"
+      placeholder="请输入您可以额外提供的待遇"
+      input-align="left"
+      type="textarea"
+      autosize
+      id="add"
       bind:change="onFieldChange"
     />
     <van-cell>
@@ -183,8 +230,12 @@ createComponent({
       categoryName: '',
       categorySub: '',
       origin: '',
+      numMin: '',
+      numMax: '',
       note: '',
       price: '',
+      priceMin: '',
+      priceMax: '',
       priceUnit: '1',
       priceUnitName: '元/件',
       tel: '',
@@ -236,8 +287,7 @@ createComponent({
     closePopupContainer() {
       this.showPopup = false
     },
-    onConfirmHandle({detail = {}} = {}) {
-      console.log(detail)
+    onConfirmHandle({ detail = {} } = {}) {
       const { data, type } = detail
       const actions = {
         category: () => {
@@ -246,6 +296,7 @@ createComponent({
           this.showCategoryType = data.showCategoryType
           if (data.showCategoryType) {
             this.updateObj.categoryType = '1'
+            this.setUnitList()
           }
           if (data.needDetail) {
             this.subCategoryInfo.show = true
@@ -271,6 +322,9 @@ createComponent({
     onFieldChange(e) {
       this.updateObj[e.target.id] = e.detail
     },
+    onAreaFieldChange(e) {
+      this.updateObj[e.target.id] = e.detail.value
+    },
     changeUnit(e) {
       const name = this.unitList.find(item => item.value === e.detail).name
       this.updateObj.priceUnitName = name
@@ -280,7 +334,10 @@ createComponent({
       const name = this.categoryTypeList.find(item => item.value === e.detail).name
       this.updateObj.categoryType = e.detail
       this.updateObj.categoryTypeName = name
-      if (e.detail === '2') {
+      this.setUnitList()
+    },
+    setUnitList() {
+      if (this.updateObj.categoryType === '2') {
         this.updateObj.priceUnit = '3'
         this.unitList = unitList.filter(item => item.value === '3')
       } else {
@@ -321,18 +378,42 @@ createComponent({
         result.text = this.subCategoryInfo.placeholder
         return result
       }
-      if (!this.updateObj.price) {
+      if (this.updateObj.priceUnit !== '3' && !this.updateObj.price) {
         result.text = '请输入单价'
         return result
       }
-      if (this.updateObj.categoryType === '1' && !this.updateObj.num) {
-        result.text = '请输入数量'
-        return result
+      if (this.updateObj.priceUnit === '3') {
+        if (!this.updateObj.priceMin) {
+          result.text = '请输入最低单价'
+          return result
+        }
+        if (!this.updateObj.priceMax) {
+          result.text = '请输入最高单价'
+          return result
+        }
+        if (this.updateObj.priceMin > this.updateObj.priceMax) {
+          result.text = '最高单价不得小于最低单价'
+          return result
+        }
       }
-      if (!this.updateObj.origin) {
-        result.text = '请输入货源'
-        return result
+      if (this.updateObj.categoryType === '1') {
+        if (!this.updateObj.numMin) {
+          result.text = '请输入最少的数量'
+          return result
+        }
+        if (!this.updateObj.numMax) {
+          result.text = '请输入最多的数量'
+          return result
+        }
+        if (this.updateObj.numMin > this.updateObj.numMax) {
+          result.text = '最高单价不得小于最低单价'
+          return result
+        }
       }
+      // if (!this.updateObj.origin) {
+      //   result.text = '请输入货源'
+      //   return result
+      // }
       if (!this.updateObj.tel) {
         result.text = '请输入手机号'
         return result
@@ -394,9 +475,28 @@ createComponent({
 })
 </script>
 <style lang="stylus">
+.dropdown
+  color #000
+  font-size 34rpx
+  font-weight bold
 .submit
   margin-top 32rpx
   margin-bottom 20rpx
+.area-container
+  display flex
+  .middle
+    padding 0 16rpx
+    font-size 36rpx
+    color #333
+    font-weight bold
+  input
+    text-align center
+    font-size 32rpx
+    background-color #f9f9f9
+    border-radius 6rpx
+    font-weight bold
+    height 36rpx
+    lint-height 36rpx
 .image-container
   background #ffffff
   padding 20rpx 32rpx

@@ -8,7 +8,7 @@
 import mpx, { createPage } from '@mpxjs/core'
 
 import homePageUrl from '@/subpackages/homepage/pages/index.mpx?resolve'
-import { getCurrentRole } from '@/api'
+import { getCurrentUser } from '@/api'
 import store from '@/store'
 
 createPage({

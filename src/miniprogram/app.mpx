@@ -2,7 +2,7 @@
 import mpx, { createApp } from '@mpxjs/core'
 import apiProxy from '@mpxjs/api-proxy'
 import store from './store'
-import { getCommonConfig, getCurrentRole } from '@/api'
+import { getCommonConfig, getCurrentUser } from '@/api'
 import setting from './setting/setting'
 
 mpx.use(apiProxy, { usePromise: true })
@@ -18,9 +18,10 @@ createApp({
     this.setState({
       appReady: false
     })
-    const [constant, userInfo] = await Promise.all([getCommonConfig(), getCurrentRole()])
+    const [constant, userInfo] = await Promise.all([getCommonConfig(), getCurrentUser()])
     const { steps, categoryItems } = constant.data
     const { address = [], OPENID } = userInfo.data
+    console.log('===========>', userInfo)
     console.log(categoryItems)
     let obj = {
       steps,

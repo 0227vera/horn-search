@@ -8,4 +8,4 @@ export const deleteUser = params => request({ route: 'user/delete', params })
 
 export const updateUserInfo = params => request({ route: 'user/update', params })
 
-export const getCurrentRole = params => request({ route: 'user/currentcole', params })
+export const getCurrentUser = params => request({ route: 'user/currentcole', params })
