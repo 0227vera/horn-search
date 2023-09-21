@@ -1,0 +1,156 @@
+<template>
+  <van-popup
+    show="{{ show }}"
+    round
+    position="bottom"
+    bind:close="close"
+  >
+    <van-datetime-picker
+      wx:if="{{type === 'time'}}"
+      type="datetime"
+      title="选择截止时间"
+      value="{{ currentDate }}"
+      min-date="{{ minDate }}"
+      bind:input="onTimeInput"
+      bind:confirm="onTimeConfirm"
+      bind:cancel="close"
+      formatter="{{formatter}}"
+    />
+    <block wx:elif="{{type === 'address'}}">
+      <van-nav-bar
+        left-text="取消"
+        right-text="确定"
+        title="请选择地址"
+        bind:click-left="close"
+        bind:click-right="onAddressClickRight"
+        safe-area-inset-top="{{false}}"
+      />
+      <address-list showBottomBtn="{{false}}" showBottomDivder bind:choose-item="addressChange" />
+    </block>
+    <block wx:elif="{{type === 'category'}}">
+      <van-nav-bar
+        left-text="取消"
+        right-text="确定"
+        title="请选择分类"
+        bind:click-left="close"
+        bind:click-right="onCategoryClickRight"
+        safe-area-inset-top="{{false}}"
+      />
+      <van-tree-select
+        height="75vh"
+        items="{{ categoryList }}"
+        main-active-index="{{ mainActiveIndex }}"
+        active-id="{{ activeId }}"
+        bind:click-nav="onClickNav"
+        bind:click-item="onClickItem"
+      />
+    </block>
+  </van-popup>
+</template>
+
+<script>
+import {createComponent} from '@mpxjs/core'
+createComponent({
+    properties: {
+        show: {
+            type: Boolean,
+            value: false
+        },
+        type: {
+            type: String,
+            value: ''
+        },
+        ownTime: {
+            type: Number,
+            value: 0
+        },
+        categoryList: {
+            type: Array,
+            value: []
+        }
+    },
+    attached() {
+        this.currentDate = this.ownTime || this.currentDate
+    },
+    data: {
+        // node: 分类相关
+        mainActiveIndex: 0,
+        activeId: '',
+        activeCategory: {},
+        // note: 地址相关
+        address: {},
+        // note: 时间相关
+        minDate: Date.now(),
+        currentDate: Date.now(),
+        formatter(type, value) {
+            const types = {
+                year: '年',
+                month: '月',
+                day: '日',
+                hour: '时',
+                minute: '分'
+            }
+            return `${value}${types[type] || ''}`
+        }
+    },
+    methods: {
+        close() {
+            this.triggerEvent('close')
+        },
+        confirm(data) {
+            this.triggerEvent('confirm', {
+                type: this.type,
+                data
+            })
+        },
+        // note: 时间
+        onTimeInput(e) {
+            this.currentDate = e.detail
+        },
+        onTimeConfirm() {
+            this.confirm({ ownTime: this.currentDate })
+        },
+        // node: 位置
+        addressChange(e) {
+            const { detail } = e || {}
+            this.address = detail
+        },
+        onAddressClickRight() {
+            this.confirm({
+                poi: this.address.address,
+                tel: this.address.phone
+            })
+        },
+        // node: 分类
+        onClickNav({ detail = {} }) {
+            this.mainActiveIndex = detail.index
+        },
+        onClickItem({ detail = {} }) {
+            const activeId = this.activeId === detail.id ? null : detail.id
+            this.activeId = activeId
+            this.activeCategory = detail
+        },
+        onCategoryClickRight() {
+            const obj = JSON.parse(JSON.stringify(this.activeCategory))
+            this.confirm(obj)
+        }
+    }
+})
+
+</script>
+
+<style lang="stylus">
+
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+        "van-popup": "@vant/weapp/popup/index",
+        "address-list": "@/compontens/common/address-list",
+        "van-datetime-picker": "@vant/weapp/datetime-picker/index",
+        "van-nav-bar": "@vant/weapp/nav-bar/index",
+        "van-tree-select": "@vant/weapp/tree-select/index"
+    }
+  }
+</script>

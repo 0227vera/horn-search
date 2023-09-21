@@ -8,12 +8,12 @@ const category = [
       { text: "大烫/中烫", id: "2-4", showCategoryType: true },
       { text: "剪线工", id: "2-5", showCategoryType: true },
       { text: "包装工", id: "2-6", showCategoryType: true },
-      { text: "手工类", id: "2-7", needDetail: true },
+      { text: "手工类", id: "2-7", needDetail: true, showCategoryType: true },
       { text: "四线/五线/打边", id: "2-7.1", showCategoryType: true },
-      { text: "专机类", id: "2-8", needDetail: true },
+      { text: "专机类", id: "2-8", needDetail: true, showCategoryType: true },
       { text: "平车工", id: "2-9", showCategoryType: true },
       { text: "冚车工", id: "2-10", showCategoryType: true },
-      { text: "卷边", id: "2-11" },
+      { text: "卷边", id: "2-11", showCategoryType: true },
       { text: "做饭阿姨", id: "2-12", showCategoryType: true }
     ]
   },

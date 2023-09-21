@@ -13,8 +13,8 @@
         placeholder="请点击选择分类"
         bind:tap="showPopupContainer('category')"
       />
-      <van-dropdown-menu wx:if="{{updateObj.categoryName}}">
-        <van-dropdown-item bind:change="changeUnit" value="{{ updateObj.categoryType }}" options="{{ categoryTypeList }}" />
+      <van-dropdown-menu wx:if="{{showCategoryType}}">
+        <van-dropdown-item bind:change="changeCategoryType" value="{{ updateObj.categoryType }}" options="{{ categoryTypeList }}" />
       </van-dropdown-menu>
     </view>
     </van-field>
@@ -46,6 +46,7 @@
       </van-dropdown-menu>
     </van-field>
     <van-field
+      wx:if="{{updateObj.categoryType === '1'}}"
       label="数量"
       title-width="80rpx"
       required
@@ -95,7 +96,7 @@
       readonly
       value="{{ timeInfo }}"
       placeholder="点击确定截止时间"
-      bind:tap="onTimeClick"
+      bind:tap="showPopupContainer('time')"
       input-align="right"
     />
     <van-cell title="图片或者视频展示" value="{{imagesValue}}" border="{{false}}" />
@@ -135,53 +136,13 @@
       <van-button round type="primary" block bind:tap="submitData">发布</van-button>
     </van-cell>
   </van-cell-group>
-  <van-popup
-    show="{{ showPopup }}"
-    round
-    position="bottom"
+  <popup
+    show="{{showPopup}}"
+    type="{{popupType}}"
+    categoryList="{{categoryList}}"
     bind:close="closePopupContainer"
-  >
-    <van-datetime-picker
-      wx:if="{{popupType === 'time'}}"
-      type="datetime"
-      title="选择截止时间"
-      value="{{ currentDate }}"
-      min-date="{{ minDate }}"
-      bind:input="onTimeInput"
-      bind:confirm="onTimeConfirm"
-      bind:cancel="closePopupContainer"
-      formatter="{{formatter}}"
-    />
-    <block wx:elif="{{popupType === 'address'}}">
-      <van-nav-bar
-        left-text="取消"
-        right-text="确定"
-        title="请选择地址"
-        bind:click-left="closePopupContainer"
-        bind:click-right="onAddressClickRight"
-        safe-area-inset-top="{{false}}"
-      />
-      <address-list showBottomBtn="{{false}}" showBottomDivder bind:choose-item="addressChange" />
-    </block>
-    <block wx:elif="{{popupType === 'category'}}">
-      <van-nav-bar
-        left-text="取消"
-        right-text="确定"
-        title="请选择分类"
-        bind:click-left="closePopupContainer"
-        bind:click-right="onCategoryClickRight"
-        safe-area-inset-top="{{false}}"
-      />
-      <van-tree-select
-        height="75vh"
-        items="{{ categoryList }}"
-        main-active-index="{{ mainActiveIndex }}"
-        active-id="{{ activeId }}"
-        bind:click-nav="onClickNav"
-        bind:click-item="onClickItem"
-      />
-    </block>
-  </van-popup>
+    bind:confirm="onConfirmHandle"
+  />
   <service-notice wx:ref="serviceNotice" tmplIds="{{tmplIds}}" />
 </template>
 
@@ -192,47 +153,24 @@ import { ORDER_UPDATE } from '@/setting/noticeInfo.js'
 import config from '@/constant/release.js'
 const store = getApp().globalStore
 
+const unitList = [
+  { text: '元/件', value: '1' },
+  { text: '元/小时', value: '2' },
+  { text: 'K/月', value: '3' }
+]
+
 createComponent({
-  properties: {
-    category: {
-      type: String,
-      value: ''
-    },
-    categoryName: {
-      type: String,
-      value: ''
-    }
-  },
   data: {
     showPopup: false,
-    activeId: '1-1',
-    mainActiveIndex: 0,
-    tmplIds: [ORDER_UPDATE],
     popupType: '',
-    minDate: Date.now(),
-    currentDate: Date.now(),
-    address: {},
-    activeCategory: '',
+    tmplIds: [ORDER_UPDATE],
     uploaderDisabled: false,
-    formatter(type, value) {
-      const types = {
-        year: '年',
-        month: '月',
-        day: '日',
-        hour: '时',
-        minute: '分'
-      }
-      return `${value}${types[type] || ''}`
-    },
+    showCategoryType: false,
     categoryTypeList: [
-      { text: '临工', value: '临工' },
-      { text: '长工', value: '长工' }
+      { text: '临工', value: '1' },
+      { text: '长工', value: '2' }
     ],
-    unitList: [
-      { text: '元/件', value: '元/件' },
-      { text: '元/小时', value: '元/小时' },
-      { text: 'K/月', value: 'K/月' }
-    ],
+    unitList,
     subCategoryInfo: {
       show: false,
       label: '',
@@ -240,25 +178,19 @@ createComponent({
     },
     updateObj: {
       category: '',
-      categoryType: '临工',
+      categoryType: '1',
+      categoryTypeName: '临工',
       categoryName: '',
       categorySub: '',
       note: '',
       price: '',
-      priceUnit: '元/件',
+      priceUnit: '1',
+      priceUnitName: '元/件',
       tel: '',
       ownTime: '',
       ownTimeName: '',
       images: [],
       poi: {}
-    }
-  },
-  watch: {
-    category(val) {
-      this.updateObj.category = val
-    },
-    categoryName(val) {
-      this.updateObj.categoryName = val
     }
   },
   computed: {
@@ -295,28 +227,43 @@ createComponent({
   methods: {
     ...store.mapActions(['setLocation', 'getReleaseList']),
     ...store.mapMutations(['setState']),
-    // note: 类别修改
-    onClickNav({ detail = {} }) {
-      this.mainActiveIndex = detail.index
+    // note: 弹窗处理
+    showPopupContainer(type) {
+      this.showPopup = true
+      this.popupType = type
     },
-    onClickItem({ detail = {} }) {
+    closePopupContainer() {
+      this.showPopup = false
+    },
+    onConfirmHandle({detail = {}} = {}) {
       console.log(detail)
-      const activeId = this.activeId === detail.id ? null : detail.id
-      this.activeId = activeId
-      this.activeCategory = detail
-    },
-    onCategoryClickRight() {
-      const obj = JSON.parse(JSON.stringify(this.activeCategory))
-      console.log('=========>', obj)
-      this.updateObj.category = obj.id
-      this.updateObj.categoryName = obj.text
-      if (obj.needDetail) {
-        this.subCategoryInfo.show = true
-        this.subCategoryInfo.label = `${obj.text}(分类)`
-        this.subCategoryInfo.placeholder = `请输入${obj.text}的具体类别`
-      } else {
-        this.subCategoryInfo.show = false
+      const { data, type } = detail
+      const actions = {
+        category: () => {
+          this.updateObj.category = data.id
+          this.updateObj.categoryName = data.text
+          this.showCategoryType = data.showCategoryType
+          if (data.showCategoryType) {
+            this.updateObj.categoryType = '1'
+          }
+          if (data.needDetail) {
+            this.subCategoryInfo.show = true
+            this.subCategoryInfo.label = `${data.text}(分类)`
+            this.subCategoryInfo.placeholder = `请输入${data.text}的具体类别`
+          } else {
+            this.subCategoryInfo.show = false
+          }
+        },
+        time: () => {
+          this.updateObj.ownTime = data.ownTime
+          this.updateObj.ownTimeName = this.timeInfo
+        },
+        address: () => {
+          this.updateObj.poi = data.poi
+          this.updateObj.tel = data.tel
+        }
       }
+      actions?.[type]?.()
       this.closePopupContainer()
     },
     // note: 修改字段值
@@ -324,7 +271,21 @@ createComponent({
       this.updateObj[e.target.id] = e.detail
     },
     changeUnit(e) {
+      const name = this.unitList.find(item => item.value === e.detail).name
+      this.updateObj.priceUnitName = name
       this.updateObj.priceUnit = e.detail
+    },
+    changeCategoryType(e) {
+      const name = this.categoryTypeList.find(item => item.value === e.detail).name
+      this.updateObj.categoryType = e.detail
+      this.updateObj.categoryTypeName = name
+      if (e.detail === '2') {
+        this.updateObj.priceUnit = '3'
+        this.unitList = unitList.filter(item => item.value === '3')
+      } else {
+        this.updateObj.priceUnit = '1'
+        this.unitList = unitList.filter(item => item.value !== '3')
+      }
     },
     // note: 图片相关处理
     async afterRead(e) {
@@ -336,43 +297,16 @@ createComponent({
     clearImg(item) {
       this.updateObj.images = this.updateObj.images.filter(f => f !== item)
     },
-    // note: 弹窗处理
-    showPopupContainer(type) {
-      this.showPopup = true
-      this.popupType = type
+    previewMedia(index) {
+      console.log(index, this.updateObj.images)
+      wx.previewMedia({
+        current: index,
+        sources: this.updateObj.images.map(item => ({
+          url: item
+        }))
+      })
     },
-    closePopupContainer() {
-      this.showPopup = false
-    },
-    // note: 分类处理
-    changeComponent(e) {
-      const { value, text } = e.detail
-      this.updateObj.category = value
-      this.updateObj.categoryName = text
-    },
-    // note: 时间处理
-    onTimeClick() {
-      this.showPopupContainer('time')
-      this.currentDate = this.updateObj.ownTime || this.currentDate
-    },
-    onTimeInput(e) {
-      this.currentDate = e.detail
-    },
-    onTimeConfirm() {
-      this.updateObj.ownTime = this.currentDate
-      this.updateObj.ownTimeName = this.timeInfo
-      this.closePopupContainer()
-    },
-    // note: 地址处理
-    onAddressClickRight() {
-      this.closePopupContainer()
-      this.updateObj.poi = this.address.address
-      this.updateObj.tel = this.address.phone
-    },
-    addressChange(e) {
-      const { detail } = e || {}
-      this.address = detail
-    },
+    // note: 数据检验
     validate() {
       const result = {
         success: false,
@@ -400,15 +334,6 @@ createComponent({
       }
       result.success = true
       return result
-    },
-    previewMedia(index) {
-      console.log(index, this.updateObj.images)
-      wx.previewMedia({
-        current: index,
-        sources: this.updateObj.images.map(item => ({
-          url: item
-        }))
-      })
     },
     // note: 提交操作
     async submitData() {
@@ -502,25 +427,17 @@ createComponent({
   {
     "usingComponents": {
       "service-notice": "@/compontens/common/service-notice",
-      "address-list": "@/compontens/common/address-list",
       "custom-container": "@/compontens/base/custom-container",
+      "popup": "@/subpackages/superstream/compontens/popup/index.mpx",
       "van-cell": "@vant/weapp/cell/index",
       "van-cell-group": "@vant/weapp/cell-group/index",
       "van-uploader": "@vant/weapp/uploader/index",
       "van-field": "@vant/weapp/field/index",
       "van-image": "@vant/weapp/image/index",
-      "van-search": "@vant/weapp/search/index",
       "van-icon": "@vant/weapp/icon/index",
-      "van-popup": "@vant/weapp/popup/index",
-      "van-checkbox": "@vant/weapp/checkbox/index",
-      "van-cascader": "@vant/weapp/cascader/index",
-      "van-datetime-picker": "@vant/weapp/datetime-picker/index",
-      "van-nav-bar": "@vant/weapp/nav-bar/index",
       "van-button": "@vant/weapp/button/index",
       "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
-      "van-dropdown-item": "@vant/weapp/dropdown-item/index",
-      "van-tree-select": "@vant/weapp/tree-select/index",
-      "category-list": "@/compontens/common/category-list"
+      "van-dropdown-item": "@vant/weapp/dropdown-item/index"
     }
   }
 </script>
