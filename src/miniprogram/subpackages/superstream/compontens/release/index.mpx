@@ -182,6 +182,7 @@ createComponent({
       categoryTypeName: '临工',
       categoryName: '',
       categorySub: '',
+      origin: '',
       note: '',
       price: '',
       priceUnit: '1',
@@ -316,12 +317,20 @@ createComponent({
         result.text = '请选择类别'
         return result
       }
-      if (this.updateObj.category === '10' && !this.updateObj.categoryName) {
-        result.text = '请输入自定义品类名称'
+      if (this.subCategoryInfo.show && !this.updateObj.categorySub) {
+        result.text = this.subCategoryInfo.placeholder
         return result
       }
       if (!this.updateObj.price) {
         result.text = '请输入单价'
+        return result
+      }
+      if (this.updateObj.categoryType === '1' && !this.updateObj.num) {
+        result.text = '请输入数量'
+        return result
+      }
+      if (!this.updateObj.origin) {
+        result.text = '请输入货源'
         return result
       }
       if (!this.updateObj.tel) {
@@ -351,6 +360,7 @@ createComponent({
         mask: true
       });
       const subscribe = await this.$refs.serviceNotice?.showServiceNotice?.()
+      this.updateObj.num = +this.updateObj.num
       const res = await addRelease({ ...this.updateObj, status: 1, subscribeInfo: subscribe })
       mpx.hideLoading()
       if (res.code === 200) {
@@ -370,7 +380,7 @@ createComponent({
             })
             mpx.hideLoading()
             self.getReleaseList()
-            self.triggerEvent('release-finish', res.data)
+            mpx.redirectTo({ url: `/order-detail/pages/index?id=${res.data}` })
           }
         })
       } else {

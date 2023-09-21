@@ -7,18 +7,42 @@ class ReleaseModel extends BaseModel {
 // 集合名
 ReleaseModel.CL = "warrior_release"
 
+// {
+//   category: '',
+//   categoryType: '1',
+//   categoryTypeName: '临工',
+//   categoryName: '',
+//   categorySub: '',
+//   origin: '',
+//   note: '',
+//   price: '',
+//   priceUnit: '1',
+//   priceUnitName: '元/件',
+//   tel: '',
+//   ownTime: '',
+//   ownTimeName: '',
+//   images: [],
+//   poi: {}
+// }
+
 ReleaseModel.DB_STRUCTURE = {
   _pid: 'string|true',
   category: 'string|true',
   categoryName: 'string|true',
+  categoryType: 'string|false',
+  categoryTypeName: 'string|false',
+  categorySub: 'string|false',
   price: 'string|true',
   priceUnit: 'string|true',
+  priceUnitName: 'string|true',
+  origin: 'string|false',
   status: 'string|true',
   subscribeInfo: 'object|false',
   calllist: 'array|false',
   readlist: 'array|false',
   poi: 'object|true',
   tel: 'string|true',
+  num: 'int|false',
   ownTime: 'int|false',
   ownTimeName: 'string|false',
   images: 'array|false',
