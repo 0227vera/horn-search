@@ -1,15 +1,33 @@
 <template>
   <van-cell-group class="form" custom-class="home-cell-group-container" style="background:#fff">
+    <view class="category-container">
+      <van-field
+        class="category-content"
+        label="分类"
+        title-width="80rpx"
+        required
+        is-link
+        readonly
+        value="{{updateObj.categoryName}}"
+        input-align="right"
+        placeholder="请点击选择分类"
+        bind:tap="showPopupContainer('category')"
+      />
+      <van-dropdown-menu wx:if="{{updateObj.categoryName}}">
+        <van-dropdown-item bind:change="changeUnit" value="{{ updateObj.categoryType }}" options="{{ categoryTypeList }}" />
+      </van-dropdown-menu>
+    </view>
+    </van-field>
     <van-field
-      label="分类"
-      title-width="80rpx"
+      label="{{subCategoryInfo.label}}"
+      wx:if="{{subCategoryInfo.show}}"
+      title-width="240rpx"
       required
-      is-link
-      readonly
-      value="{{updateObj.categoryName}}"
+      value="{{ updateObj.categorySub }}"
+      placeholder="{{subCategoryInfo.placeholder}}"
       input-align="right"
-      placeholder="请点击选择分类"
-      bind:tap="showPopupContainer('category')"
+      bind:change="onFieldChange"
+      id="categorySub"
     />
     <van-field
       label="单价"
@@ -134,7 +152,7 @@
       bind:cancel="closePopupContainer"
       formatter="{{formatter}}"
     />
-    <view wx:elif="{{popupType === 'address'}}">
+    <block wx:elif="{{popupType === 'address'}}">
       <van-nav-bar
         left-text="取消"
         right-text="确定"
@@ -144,30 +162,25 @@
         safe-area-inset-top="{{false}}"
       />
       <address-list showBottomBtn="{{false}}" showBottomDivder bind:choose-item="addressChange" />
-    </view>
-    <view wx:elif="{{popupType === 'category'}}">
+    </block>
+    <block wx:elif="{{popupType === 'category'}}">
       <van-nav-bar
         left-text="取消"
         right-text="确定"
-        title="请输入/选择分类"
+        title="请选择分类"
         bind:click-left="closePopupContainer"
         bind:click-right="onCategoryClickRight"
         safe-area-inset-top="{{false}}"
       />
-      <view class="category-container">
-        <van-search value="{{ value }}" placeholder="输入可添加类别" />
-        <view wx:for="{{categoryList}}" class="category-container-item" bind:tap="clickCategory(item)" wx:key="value">
-          <view class="text">{{item.text}}</view>
-          <view>
-            <van-checkbox
-              checked-color="#FF9671"
-              value="{{ activeCategory === item.value }}"
-              custom-class="address-checkbox"
-            />
-          </view>
-        </view>
-      </view>
-    </view>
+      <van-tree-select
+        height="75vh"
+        items="{{ categoryList }}"
+        main-active-index="{{ mainActiveIndex }}"
+        active-id="{{ activeId }}"
+        bind:click-nav="onClickNav"
+        bind:click-item="onClickItem"
+      />
+    </block>
   </van-popup>
   <service-notice wx:ref="serviceNotice" tmplIds="{{tmplIds}}" />
 </template>
@@ -192,6 +205,8 @@ createComponent({
   },
   data: {
     showPopup: false,
+    activeId: '1-1',
+    mainActiveIndex: 0,
     tmplIds: [ORDER_UPDATE],
     popupType: '',
     minDate: Date.now(),
@@ -209,14 +224,25 @@ createComponent({
       }
       return `${value}${types[type] || ''}`
     },
+    categoryTypeList: [
+      { text: '临工', value: '临工' },
+      { text: '长工', value: '长工' }
+    ],
     unitList: [
       { text: '元/件', value: '元/件' },
       { text: '元/小时', value: '元/小时' },
       { text: 'K/月', value: 'K/月' }
     ],
+    subCategoryInfo: {
+      show: false,
+      label: '',
+      placeholder: ''
+    },
     updateObj: {
       category: '',
+      categoryType: '临工',
       categoryName: '',
+      categorySub: '',
       note: '',
       price: '',
       priceUnit: '元/件',
@@ -270,14 +296,28 @@ createComponent({
     ...store.mapActions(['setLocation', 'getReleaseList']),
     ...store.mapMutations(['setState']),
     // note: 类别修改
-    categoryChange(e) {
-      console.log(e.detail)
-      const { text, value } = e.detail
-      this.updateObj.category = text
-      this.updateObj.categoryName = value
+    onClickNav({ detail = {} }) {
+      this.mainActiveIndex = detail.index
     },
-    clickCategory(item) {
-      this.activeCategory = item.value
+    onClickItem({ detail = {} }) {
+      console.log(detail)
+      const activeId = this.activeId === detail.id ? null : detail.id
+      this.activeId = activeId
+      this.activeCategory = detail
+    },
+    onCategoryClickRight() {
+      const obj = JSON.parse(JSON.stringify(this.activeCategory))
+      console.log('=========>', obj)
+      this.updateObj.category = obj.id
+      this.updateObj.categoryName = obj.text
+      if (obj.needDetail) {
+        this.subCategoryInfo.show = true
+        this.subCategoryInfo.label = `${obj.text}(分类)`
+        this.subCategoryInfo.placeholder = `请输入${obj.text}的具体类别`
+      } else {
+        this.subCategoryInfo.show = false
+      }
+      this.closePopupContainer()
     },
     // note: 修改字段值
     onFieldChange(e) {
@@ -298,17 +338,11 @@ createComponent({
     },
     // note: 弹窗处理
     showPopupContainer(type) {
-      this.setState({
-        showBottomNav: false
-      })
       this.showPopup = true
       this.popupType = type
     },
     closePopupContainer() {
       this.showPopup = false
-      this.setState({
-        showBottomNav: true
-      })
     },
     // note: 分类处理
     changeComponent(e) {
@@ -446,9 +480,13 @@ createComponent({
     color #fff
     font-size 40rpx
 .category-container
+  background #fff
   width 100%
-  padding 16rpx 32rpx
-  box-sizing border-box
+  display flex
+  align-items center
+  .category-content
+    flex 1
+    height 100%
   &-item
     display flex
     padding 32rpx 0
@@ -481,6 +519,7 @@ createComponent({
       "van-button": "@vant/weapp/button/index",
       "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
       "van-dropdown-item": "@vant/weapp/dropdown-item/index",
+      "van-tree-select": "@vant/weapp/tree-select/index",
       "category-list": "@/compontens/common/category-list"
     }
   }

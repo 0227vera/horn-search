@@ -1,6 +1,8 @@
 <template>
   <custom-container title="{{title}}">
-    <component is="{{currentCom}}"></component>
+    <view class="component-container">
+      <component is="{{currentCom}}"></component>
+    </view>
     <footer wx:if="{{currentCom}}" list="{{footerList}}" initActive="{{currentCom}}" bind:tab-change="tabChange" />
   </custom-container>
   <back-home />
@@ -51,7 +53,9 @@ createPage({
 </script>
 
 <style lang="stylus" scoped>
-
+.component-container
+  box-sizing border-box
+  padding-bottom 150rpx
 </style>
 <script type="application/json">
   {
