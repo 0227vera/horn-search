@@ -1,9 +1,16 @@
 <template>
   <custom-container title="{{title}}">
-    <view class="component-container">
-      <component is="{{currentCom}}" bind:release-jump-done="releaseJumpDone"></component>
-    </view>
-    <footer wx:if="{{currentCom}}" list="{{footerList}}" initActive="{{currentCom}}" bind:tab-change="tabChange" />
+    <block wx:if="{{roleType === 'boss'}}">
+      <view class="component-container">
+        <component is="{{currentCom}}" bind:release-jump-done="releaseJumpDone"></component>
+      </view>
+      <footer wx:if="{{currentCom}}" list="{{footerList}}" initActive="{{currentCom}}" bind:tab-change="tabChange" />
+    </block>
+    <block wx:if="{{roleType === 'worker'}}">
+      <view>
+        乙方看到订单列表
+      </view>
+    </block>
   </custom-container>
   <back-home />
 </template>
@@ -18,12 +25,13 @@ createPage({
     getApp().onShareAppMessage()
   },
   data: {
-    currentCom: ''
+    currentCom: '',
+    roleType: ''
   },
   async onLoad(params) {
-    if (params.key) {
-      this.currentCom = params.key
-    }
+    const { type, key } = params
+    this.roleType = type
+    this.key = key
   },
   computed: {
     footerList() {
@@ -40,6 +48,7 @@ createPage({
       }]
     },
     title() {
+      if (this.roleType === 'worker') return '我要找工作'
       return this.footerList.find(item => item.key === this.currentCom)?.title || ''
     }
   },

@@ -9,7 +9,8 @@ export default [[{
     jumptype: 'mp',
     params: {
       key: 'release',
-      id: 'findWorker'
+      id: 'findWorker',
+      type: 'boss'
     }
   },
   extraInfo: {}
@@ -24,7 +25,8 @@ export default [[{
     jumptype: 'mp',
     params: {
       key: 'order',
-      id: 'findJob'
+      id: 'findJob',
+      type: 'worker'
     }
   },
   extraInfo: {}
