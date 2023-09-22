@@ -469,7 +469,12 @@ createComponent({
             })
             mpx.hideLoading()
             self.getReleaseList()
-            mpx.navigateTo({ url: `/order-detail/pages/detail-to-boss?isBack=true&id=${res.data}` })
+            mpx.navigateTo({
+              url: `/order-detail/pages/detail-to-boss?isBack=true&id=${res.data}`,
+              success() {
+                self.triggerEvent('release-jump-done')
+              }
+            })
           }
         })
       } else {

@@ -1,7 +1,7 @@
 <template>
   <custom-container title="{{title}}">
     <view class="component-container">
-      <component is="{{currentCom}}"></component>
+      <component is="{{currentCom}}" bind:release-jump-done="releaseJumpDone"></component>
     </view>
     <footer wx:if="{{currentCom}}" list="{{footerList}}" initActive="{{currentCom}}" bind:tab-change="tabChange" />
   </custom-container>
@@ -46,6 +46,11 @@ createPage({
   methods: {
     tabChange(e) {
       this.currentCom = e.detail.key
+    },
+    releaseJumpDone() {
+      setTimeout(() => {
+        this.currentCom = 'order'
+      }, 1000)
     }
   }
 })
