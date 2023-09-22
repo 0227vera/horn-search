@@ -104,7 +104,6 @@ export default createStore({
         orderListReqLoading: false
       }
       commit('setState', obj)
-      list.length && commit('setOrderNumInfo', list.length)
     },
     setLocation ({ state, commit }) {
       return new Promise((resolve, reject) => {

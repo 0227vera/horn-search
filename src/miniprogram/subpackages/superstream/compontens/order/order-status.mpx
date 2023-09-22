@@ -49,7 +49,7 @@ createComponent({
     },
     gotoDetail(item) {
       mpx.navigateTo({
-        url: `/order-detail/pages/detail-to-boss?id=${item._id}`
+        url: `/order-detail/pages/detail-to-boss?isBack=true&id=${item._id}`
       })
     }
   }
@@ -68,7 +68,7 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "card": "@/subpackages/homepage/compontens/base/card.mpx",
+      "card": "@/compontens/common/card/index.mpx",
       "van-loading": "@vant/weapp/loading/index",
       "van-empty": "@vant/weapp/empty/index"
     }

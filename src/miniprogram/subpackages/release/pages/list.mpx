@@ -130,7 +130,7 @@ createPage({
       "van-empty": "@vant/weapp/empty/index",
       "van-loading": "@vant/weapp/loading/index",
       "custom-container": "@/compontens/base/custom-container",
-      "card": "@/subpackages/homepage/compontens/base/card.mpx"
+      "card": "@/compontens/common/card/index.mpx"
     },
     "navigationStyle": "custom"
   }

@@ -332,12 +332,13 @@ createComponent({
       this.updateObj[e.target.id] = e.detail.value
     },
     changeUnit(e) {
-      const name = this.unitList.find(item => item.value === e.detail).name
+      const name = this.unitList.find(item => item.value === e.detail).text
       this.updateObj.priceUnitName = name
       this.updateObj.priceUnit = e.detail
     },
     changeCategoryType(e) {
-      const name = this.categoryTypeList.find(item => item.value === e.detail).name
+      const name = this.categoryTypeList.find(item => item.value === e.detail).text
+      console.log(this.categoryTypeList, e.detail, name)
       this.updateObj.categoryType = e.detail
       this.updateObj.categoryTypeName = name
       this.setUnitList()

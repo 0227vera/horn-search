@@ -1,22 +1,20 @@
 <template>
   <view class="container">
-    <view class="types">
+    <!-- <view class="types">
       <view class="types-item {{typeSelect === 'worker' ? 'selected' : ''}}" bind:tap="clickTypes('worker')">招工订单</view>
       <view class="types-item {{typeSelect === 'business' ? 'selected' : ''}}" bind:tap="clickTypes('business')">合作订单</view>
-    </view>
-    <view wx:if="{{typeSelect === 'worker'}}">
-      <view class="order-type">
-        <view wx:if="{{callNum}}" class="order-type-item {{orderSelect === 'push' ? 'selected' : ''}}" bind:tap="clickOrderTypes('push')">
-          <view wx:if="{{pushNum}}" class="num">{{pushNum}}</view>
-          <view class="text">已推送</view>
-        </view>
-        <view wx:if="{{callNum}}" class="order-type-item {{orderSelect === 'call' ? 'selected' : ''}}" bind:tap="clickOrderTypes('call')">
-          <view class="num">{{callNum}}</view>
-          <view class="text">已有人呼叫</view>
-        </view>
+    </view> -->
+    <view class="order-type">
+      <view class="order-type-item {{orderSelect === 'push' ? 'selected' : ''}}" bind:tap="clickOrderTypes('push')">
+        <view wx:if="{{pushNum}}" class="num">{{pushNum}}</view>
+        <view class="text">已推送</view>
       </view>
-      <order-status wx:if="{{status}}" list="{{orderList}}" status="{{status}}" loading="{{orderListReqLoading}}" />
+      <view class="order-type-item {{orderSelect === 'call' ? 'selected' : ''}}" bind:tap="clickOrderTypes('call')">
+        <view class="num" wx:if="{{callNum}}">{{callNum}}</view>
+        <view class="text">已有人呼叫</view>
+      </view>
     </view>
+    <order-status wx:if="{{status}}" list="{{orderList}}" status="{{status}}" loading="{{orderListReqLoading}}" />
   </view>
 </template>
 
@@ -26,8 +24,11 @@ import store from '@/store'
 
 createComponent({
   data: {
-    typeSelect: 'worker',
     orderSelect: 'push'
+  },
+  async attached() {
+    await this.getReleaseList()
+    console.log(this.orderList)
   },
   computed: {
     ...store.mapState(['orderList', 'orderListReqLoading']),
@@ -46,6 +47,7 @@ createComponent({
   watch: {
   },
   methods: {
+    ...store.mapActions(['getReleaseList']),
     clickTypes(type) {
       this.typeSelect = type
     },
@@ -61,35 +63,11 @@ createComponent({
   width 100%
   box-sizing border-box
   padding 0 32rpx 150rpx
-  .types
-    display flex
-    &-item
-      font-size 30rpx
-      margin-right 20rpx
-      color #333333
-      transition all 0.3s
-      will-change color font-size opacity
-      opacity 0.6
-      &.selected
-        font-size 32rpx
-        color #1989fa
-        font-weight bold
-        position relative
-        opacity 0.8
-        &::after
-          content ''
-          width 60%
-          height 6rpx
-          background #1989fa
-          border-radius 6rpx
-          position absolute
-          bottom -6rpx
-          left 20%
 .order-type
   display flex
   font-size 28rpx
   overflow hidden
-  padding-top 40rpx
+  padding-top 30rpx
   margin-bottom 20rpx
   &-item
     position relative

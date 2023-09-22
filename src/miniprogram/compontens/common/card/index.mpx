@@ -8,7 +8,7 @@
         tag="{{item.tag}}"
         thumb="{{item.thumb}}"
         thumb-mode="scaleToFill"
-        price="{{item.price + item.priceUnit}}"
+        price="{{item.priceText}}"
       >
         <view slot="title">
           <view class="item-info">
@@ -77,6 +77,13 @@ createComponent({
       const items = this.list.map(item => {
         item.tag = item.calllist?.length ? `已有${item.calllist.length}人呼叫` : '暂无人呼叫'
         item.thumb = item.images[0] || 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/image-cdn/none.png'
+        let priceText = ''
+        if (item.priceMin && item.priceMax) {
+          priceText = `${item.priceMin}${item.priceUnitName} ~ ${item.priceMax}${item.priceUnitName}`
+        } else if (item.price) {
+          priceText = `${item.price}${item.priceUnitName}`
+        }
+        item.priceText = priceText
         if (this.role === 'boss') {
           if (item.calllist?.length || item.readlist?.length) {
             item.tags = []
