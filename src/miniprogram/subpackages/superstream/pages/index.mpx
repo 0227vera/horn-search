@@ -24,7 +24,6 @@ createPage({
     if (params.key) {
       this.currentCom = params.key
     }
-    console.log(params)
   },
   computed: {
     footerList() {

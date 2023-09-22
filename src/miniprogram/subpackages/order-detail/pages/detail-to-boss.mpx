@@ -3,14 +3,15 @@
     title="{{pageTitle}}"
     lefticon="arrow-left"
     containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
+    clickLeft="{{clickLeft}}"
   >
-    <item-container title="流程信息：">
-      <van-steps steps="{{ steps }}" active="{{ active }}" />
-    </item-container>
     <view wx:if="{{loading}}" class="status">
       <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
     </view>
     <block wx:else>
+      <item-container title="流程信息：">
+        <van-steps steps="{{ steps }}" active="{{ active }}" />
+      </item-container>
       <item-container title="推送情况：">
         <finder readlist="{{readlist}}" />
       </item-container>
@@ -26,22 +27,13 @@
         <worker-list category="{{category}}" />
       </item-container> -->
       <item-container title="基本信息：">
-        <van-cell-group border="{{false}}">
-          <van-cell
-            wx:for="{{renderList}}"
-            title-width="120rpx"
-            wx:key="_id"
-            title="{{item.title}}"
-            value="{{item.value}}"
-            clickable="{{item.islink}}"
-            is-link="{{item.islink}}"
-            bind:tap="priview(item)"
-          />
-        </van-cell-group>
+        <base-info orderData="{{orderData}}" />
       </item-container>
+      <view class="bottom"></view>
     </block>
   </custom-container>
   <nav-footer list="{{footerList}}" />
+  <back-home showShare />
 </template>
 
 <script>
@@ -60,7 +52,7 @@ createPage({
   },
   data: {
     loading: true,
-    renderList: [],
+    orderData: {},
     active: '',
     calllist: [],
     readlist: [],
@@ -68,46 +60,21 @@ createPage({
   },
   async onLoad(params) {
     this.loading = true
+    if (!params.id) {
+      this.clickLeft()
+      return
+    }
+    this.params = params
     const res = await getReleaseOneById(params)
-    const { category, categoryName, price, priceUnitName, poi, tel, images, ownTimeName, note, status, calllist, readlist, _id, OPENID } = res.data || {}
+    this.orderData = res.data
+    const { category, categoryName, images, status, calllist, readlist, _id, OPENID } = res.data || {}
     this.active = status - 1
     this.category = category
+    this.categoryName = categoryName
     this.OPENID = OPENID
+    this.images = images
     this._id = _id
     this.readlist = readlist
-    this.renderList = [{
-      title: '分类',
-      value: categoryName
-    }, {
-      title: '单价',
-      value: `${price}${priceUnitName}`
-    }, {
-      title: '位置',
-      value: poi.name
-    }, {
-      title: '电话',
-      value: tel
-    }]
-    if (ownTimeName) {
-      this.renderList.push({
-        title: '截止时间',
-        value: ownTimeName
-      })
-    }
-    if (images?.length) {
-      this.renderList.push({
-        title: '图片',
-        value: '点击查看图片',
-        islink: true,
-        list: images
-      })
-    }
-    if (note) {
-      this.renderList.push({
-        title: '要求',
-        value: note
-      })
-    }
     this.calllist = calllist
     this.loading = false
   },
@@ -115,11 +82,21 @@ createPage({
     ...store.mapState(['steps', 'openid']),
     pageTitle() {
       if (this.active) {
-        console.log(this.active, this.steps)
         const desc = this.steps.find(item => +item.status === this.active + 1).desc
         return `订单详情【${desc}】`
       }
       return '订单详情'
+    },
+    clickLeft() {
+      return () => {
+        if (this.params.isBack === 'true') {
+          mpx.navigateBack()
+        } else {
+          mpx.reLaunch({
+            url: `/homepage/pages/index`
+          })
+        }
+      }
     },
     footerList() {
       return [{
@@ -152,18 +129,6 @@ createPage({
     clickTel(item) {
       wx.makePhoneCall({
         phoneNumber: item.tel
-      })
-    },
-    priview(item) {
-      if (!item.islink) {
-        return
-      }
-      wx.previewMedia({
-        current: 0,
-        sources: item.list.map(i => ({
-          url: i,
-          type: 'image'
-        }))
       })
     }
   }
@@ -219,6 +184,8 @@ createPage({
   &-content
     overflow hidden
     border-radius 16rpx
+.bottom
+  height 160rpx
 </style>
 
 <script type="application/json">
@@ -233,7 +200,9 @@ createPage({
       "item-container": "../components/item-container",
       "finder": "@/compontens/base/finder.mpx",
       "worker-list": "../components/worker-list.mpx",
-      "nav-footer": "@/compontens/base/nav-footer.mpx"
+      "nav-footer": "@/compontens/base/nav-footer.mpx",
+      "base-info": "../components/base-info.mpx",
+      "back-home": "@/compontens/base/back-home.mpx"
     },
     "navigationStyle": "custom"
   }

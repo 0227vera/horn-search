@@ -63,7 +63,7 @@
       </van-dropdown-menu>
     </van-field>
     <van-field
-      wx:if="{{updateObj.categoryType === '1'}}"
+      wx:if="{{updateObj.categoryType !== '2'}}"
       label="数量"
       title-width="80rpx"
       required
@@ -225,8 +225,8 @@ createComponent({
     },
     updateObj: {
       category: '',
-      categoryType: '1',
-      categoryTypeName: '临工',
+      categoryType: '',
+      categoryTypeName: '',
       categoryName: '',
       categorySub: '',
       origin: '',
@@ -272,7 +272,7 @@ createComponent({
   async attached() {
     await this.setLocation()
     this.updateObj.poi = {
-      ...this.adInfo.location,
+      ...this.adInfo,
       name: this.adInfo.address
     }
   },
@@ -296,6 +296,11 @@ createComponent({
           this.showCategoryType = data.showCategoryType
           if (data.showCategoryType) {
             this.updateObj.categoryType = '1'
+            this.updateObj.categoryTypeName = '临工'
+            this.setUnitList()
+          } else {
+            this.updateObj.categoryType = ''
+            this.updateObj.categoryTypeName = ''
             this.setUnitList()
           }
           if (data.needDetail) {
@@ -323,6 +328,7 @@ createComponent({
       this.updateObj[e.target.id] = e.detail
     },
     onAreaFieldChange(e) {
+      console.log(e)
       this.updateObj[e.target.id] = e.detail.value
     },
     changeUnit(e) {
@@ -340,9 +346,11 @@ createComponent({
       if (this.updateObj.categoryType === '2') {
         this.updateObj.priceUnit = '3'
         this.unitList = unitList.filter(item => item.value === '3')
-      } else {
+      } else if (this.updateObj.categoryType === '1') {
         this.updateObj.priceUnit = '1'
         this.unitList = unitList.filter(item => item.value !== '3')
+      } else {
+        this.unitList = unitList
       }
     },
     // note: 图片相关处理
@@ -391,7 +399,7 @@ createComponent({
           result.text = '请输入最高单价'
           return result
         }
-        if (this.updateObj.priceMin > this.updateObj.priceMax) {
+        if (+this.updateObj.priceMin > +this.updateObj.priceMax) {
           result.text = '最高单价不得小于最低单价'
           return result
         }
@@ -405,8 +413,8 @@ createComponent({
           result.text = '请输入最多的数量'
           return result
         }
-        if (this.updateObj.numMin > this.updateObj.numMax) {
-          result.text = '最高单价不得小于最低单价'
+        if (+this.updateObj.numMin > +this.updateObj.numMax) {
+          result.text = '最多数量不得小于最少数量'
           return result
         }
       }
@@ -461,7 +469,7 @@ createComponent({
             })
             mpx.hideLoading()
             self.getReleaseList()
-            mpx.redirectTo({ url: `/order-detail/pages/index?id=${res.data}` })
+            mpx.navigateTo({ url: `/order-detail/pages/detail-to-boss?isBack=true&id=${res.data}` })
           }
         })
       } else {

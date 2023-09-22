@@ -10,26 +10,15 @@
     </view>
     <view wx:else class="container">
       <item-container title="基本信息：">
-        <van-cell-group border="{{false}}">
-          <van-cell
-            wx:for="{{renderList}}"
-            title-width="120rpx"
-            wx:key="_id"
-            title="{{item.title}}"
-            value="{{item.value}}"
-            clickable="{{item.islink}}"
-            is-link="{{item.islink}}"
-            bind:tap="priview(item)"
-            value-class="right-class"
-          />
-        </van-cell-group>
+        <base-info orderData="{{orderData}}" needList />
       </item-container>
       <item-container title="位置信息：">
         <cus-map endInfo="{{poi}}" />
       </item-container>
-      <nav-footer list="{{footerList}}" />
     </view>
   </custom-container>
+  <nav-footer list="{{footerList}}" />
+  <back-home showShare />
 </template>
 
 <script>
@@ -49,7 +38,7 @@ createPage({
   },
   data: {
     loading: true,
-    renderList: [],
+    orderData: {},
     params: {},
     poi: {}
   },
@@ -61,48 +50,14 @@ createPage({
     }
     this.loading = true
     const res = await getReleaseOneById(params)
+    this.orderData = res.data || {}
     const { categoryName, category, price, priceUnit, poi, tel, images, ownTimeName, note, status, calllist, _id, readlist } = res.data || {}
     this.poi = poi
     this.tel = tel
     this._id = _id
     this.images = images
     this.categoryName = categoryName
-    console.log(res)
     this.category = category
-    this.renderList = [{
-      title: '分类',
-      value: categoryName
-    }, {
-      title: '单价',
-      value: `${price}${priceUnit}`
-    }, {
-      title: '位置',
-      value: poi.name
-    }]
-    if (ownTimeName) {
-      this.renderList.push({
-        title: '截止时间',
-        value: ownTimeName
-      })
-    }
-    if (images?.length) {
-      this.renderList.push({
-        title: '图片',
-        value: '点击查看图片',
-        islink: true,
-        list: images
-      })
-    }
-    if (note) {
-      this.renderList.push({
-        title: '要求',
-        value: note
-      })
-    }
-    this.renderList.push({
-      title: '呼叫情况',
-      value: calllist?.length ? `已有${calllist.length}人呼叫` : '暂时无人呼叫'
-    })
     this.loading = false
     this.readlistFunc(readlist)
   },
@@ -112,13 +67,9 @@ createPage({
       return () => {
         if (this.params.isBack === 'true') {
           mpx.navigateBack()
-        } else if (this.category) {
-          mpx.redirectTo({
-            url: `/homepage/pages/index?currentKey=home&category=${this.category}`
-          })
         } else {
-          mpx.redirectTo({
-            url: `/homepage/pages/index?currentKey=home`
+          mpx.reLaunch({
+            url: `/homepage/pages/index`
           })
         }
       }
@@ -209,12 +160,6 @@ createPage({
 
 </script>
 
-<style lang="stylus">
-.right-class
-  color #000000 !important
-  font-weight bold
-</style>
-
 <style lang="stylus" scoped>
 .container
   padding-bottom 60rpx
@@ -253,7 +198,9 @@ createPage({
       "van-loading": "@vant/weapp/loading/index",
       "item-container": "../components/item-container",
       "van-button": "@vant/weapp/button/index",
-      "nav-footer": "@/compontens/base/nav-footer.mpx"
+      "nav-footer": "@/compontens/base/nav-footer.mpx",
+      "base-info": "../components/base-info.mpx",
+      "back-home": "@/compontens/base/back-home.mpx"
     },
     "navigationStyle": "custom"
   }

@@ -95,7 +95,7 @@ createPage({
     },
     gotoDetail(item) {
       mpx.navigateTo({
-        url: `/order-detail/pages/index?id=${item._id}`
+        url: `/order-detail/pages/detail-to-boss?id=${item._id}`
       })
     }
   }

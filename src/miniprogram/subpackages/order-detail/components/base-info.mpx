@@ -1,0 +1,147 @@
+<template>
+<van-cell-group border="{{false}}">
+  <van-cell
+    wx:for="{{renderList}}"
+    title-width="{{item.titleWidth || '120rpx'}}"
+    wx:key="_id"
+    title="{{item.title}}"
+    value="{{item.value}}"
+    clickable="{{item.islink}}"
+    is-link="{{item.islink}}"
+    bind:tap="priview(item)"
+    value-class="right-class"
+  />
+</van-cell-group>
+  <nav-footer list="{{footerList}}" />
+</template>
+
+<script>
+import mpx, { createComponent } from '@mpxjs/core'
+
+createComponent({
+  properties: {
+    orderData: {
+      type: Object,
+      value: {}
+    }
+  },
+  computed: {
+    renderList() {
+      const { categoryName, categorySub, categoryType, categoryTypeName, priceMin, priceMax, price, priceUnitName, numMin, numMax, origin, poi, tel, ownTimeName, images, note, add, calllist } = this.orderData
+      const list = []
+      // note: 岗位
+      let categoryText = categoryName
+      if (categorySub) {
+        categoryText += `(${categorySub})`
+      }
+      if (categoryTypeName) {
+        categoryText += `--${categoryTypeName}`
+      }
+      list.push({
+        title: '岗位',
+        value: categoryText
+      })
+      // note: 价格
+      let priceText = ''
+      if (priceMin && priceMax) {
+        priceText = `${priceMin}${priceUnitName} ~ ${priceMax}${priceUnitName}`
+      } else if (price) {
+        priceText = `${price}${priceUnitName}`
+      }
+      list.push({
+        title: '单价',
+        value: priceText
+      })
+      // note: 数量
+      if (categoryType !== '2') {
+        list.push({
+          title: '数量',
+          value: `${numMin}件 ~ ${numMax}件`
+        })
+      }
+      // note: 货源
+      if (origin) {
+        list.push({
+          title: '货源(品质层次)',
+          value: origin,
+          titleWidth: '240rpx'
+        })
+      }
+      // note: 位置
+      list.push({
+        title: '位置',
+        value: poi.name
+      })
+      // note: 电话
+      list.push({
+        title: '电话',
+        value: tel
+      })
+      if (ownTimeName) {
+        list.push({
+          title: '截止时间',
+          value: ownTimeName
+        })
+      }
+      if (images?.length) {
+        list.push({
+          title: '图片',
+          value: '点击查看图片',
+          islink: true,
+          list: images
+        })
+      }
+      if (note) {
+        list.push({
+          title: '岗位要求',
+          value: note
+        })
+      }
+      if (add) {
+        list.push({
+          title: '待遇补充',
+          value: add
+        })
+      }
+      if (this.needList) {
+        list.push({
+          title: '呼叫情况',
+          value: calllist?.length ? `已有${calllist.length}人呼叫` : '暂时无人呼叫'
+        })
+      }
+      return list
+    }
+  },
+  methods: {
+    priview(item) {
+      if (!item.islink) {
+        return
+      }
+      wx.previewMedia({
+        current: 0,
+        sources: item.list.map(i => ({
+          url: i,
+          type: 'image'
+        }))
+      })
+    }
+  }
+})
+
+</script>
+<style lang="stylus">
+.right-class
+  color #000000 !important
+  font-weight bold
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "van-cell": "@vant/weapp/cell/index",
+      "van-cell-group": "@vant/weapp/cell-group/index",
+      "van-image": "@vant/weapp/image/index"
+    },
+    "navigationStyle": "custom"
+  }
+</script>
