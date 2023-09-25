@@ -240,10 +240,15 @@ import { ORDER_UPDATE } from '@/setting/noticeInfo.js'
 import validate from '@/subpackages/superstream/utils/validate.js'
 import { initUpdateObj, unitList, categoryTypeList } from '@/subpackages/superstream/utils/constant.js'
 import { timeInfo } from '@/subpackages/superstream/utils/utils.js'
-import config from '@/constant/release.js'
 const store = getApp().globalStore
 
 createComponent({
+  properties: {
+    categoryList: {
+      type: Array,
+      value: []
+    }
+  },
   data: {
     showPopup: false,
     popupType: '',
@@ -263,9 +268,6 @@ createComponent({
   },
   computed: {
     ...store.mapState(['adInfo']),
-    categoryList() {
-      return config.findWorker.category
-    },
     imagesValue() {
       if (this.updateObj.images.length) {
         return `已上传${this.updateObj.images.length}张图片`

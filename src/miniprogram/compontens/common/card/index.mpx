@@ -10,20 +10,18 @@
         thumb-mode="scaleToFill"
         price="{{item.priceText}}"
       >
-        <view slot="title">
-          <view class="item-info">
-            <text class="item-info-title">地址：</text>
-            <text>{{item.poi.name}}</text>
-          </view>
+        <view slot="title" class="item-info">
+          <text class="item-info-title">地址：</text>
+          <text>{{item.poi.name}}</text>
         </view>
         <view slot="desc">
           <view class="item-info">
-          <text class="item-info-title">要求：</text>
-          <text>{{item.note}}</text>
-          </view class="item-info">
-          <view wx:if="{{item.category === '10'}}" class="item-info">
-          <text class="item-info-title">类别：</text>
-          <text>{{item.categoryName}}</text>
+            <text class="item-info-title">要求：</text>
+            <text>{{item.note}}</text>
+          </view>
+          <view class="item-info">
+            <text class="item-info-title">类别：</text>
+            <text>{{item.categoryName}}</text>
           </view>
         </view>
         <view wx:if="{{item.tags}}" slot="tags" class="tags">

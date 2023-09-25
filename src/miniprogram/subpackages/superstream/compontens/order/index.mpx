@@ -1,69 +1,122 @@
 <template>
   <view class="container">
-    <!-- <view class="types">
-      <view class="types-item {{typeSelect === 'worker' ? 'selected' : ''}}" bind:tap="clickTypes('worker')">招工订单</view>
-      <view class="types-item {{typeSelect === 'business' ? 'selected' : ''}}" bind:tap="clickTypes('business')">合作订单</view>
-    </view> -->
-    <view class="order-type">
-      <view class="order-type-item {{orderSelect === 'push' ? 'selected' : ''}}" bind:tap="clickOrderTypes('push')">
-        <view wx:if="{{pushNum}}" class="num">{{pushNum}}</view>
-        <view class="text">已推送</view>
+    <view class="nav">
+      <view class="order-type">
+        <view class="order-type-item {{orderSelect === 'push' ? 'selected' : ''}}" bind:tap="clickOrderTypes('push')">
+          <view wx:if="{{pushNum}}" class="num">{{pushNum}}</view>
+          <view class="text">已推送</view>
+        </view>
+        <view class="order-type-item {{orderSelect === 'call' ? 'selected' : ''}}" bind:tap="clickOrderTypes('call')">
+          <view class="num" wx:if="{{callNum}}">{{callNum}}</view>
+          <view class="text">已有人呼叫</view>
+        </view>
       </view>
-      <view class="order-type-item {{orderSelect === 'call' ? 'selected' : ''}}" bind:tap="clickOrderTypes('call')">
-        <view class="num" wx:if="{{callNum}}">{{callNum}}</view>
-        <view class="text">已有人呼叫</view>
+      <view class="filter" wx:if="{{filterList.length}}">
+        <van-dropdown-menu custom-class="filter-container">
+          <van-dropdown-item bind:change="filterChange"  value="{{ filter }}" options="{{ filterList }}" />
+        </van-dropdown-menu>
       </view>
     </view>
-    <order-status wx:if="{{status}}" list="{{orderList}}" status="{{status}}" loading="{{orderListReqLoading}}" />
+    <order-status wx:if="{{status}}" list="{{orderList}}" status="{{status}}" loading="{{loading}}" />
   </view>
 </template>
 
 <script>
 import { createComponent } from '@mpxjs/core'
-import store from '@/store'
+import { getReleaseList, updateRelease } from '@/api'
 
 createComponent({
   data: {
-    orderSelect: 'push'
+    orderSelect: 'push',
+    orderList: [],
+    loading: true,
+    categoryList: [],
+    filter: '',
+    filterList: []
   },
-  async attached() {
-    await this.getReleaseList()
-    console.log(this.orderList)
+  attached() {
+    this.getList()
   },
   computed: {
-    ...store.mapState(['orderList', 'orderListReqLoading']),
     status() {
       if (this.orderSelect === 'push') return '2'
       if (this.orderSelect === 'call') return '3'
       return ''
-    },
-    pushNum() {
-      return this.orderList.filter(item => item.status === '2').length
-    },
-    callNum() {
-      return this.orderList.filter(item => item.status === '3').length
     }
   },
-  watch: {
-  },
   methods: {
-    ...store.mapActions(['getReleaseList']),
+    async getList(needUpdateList = true) {
+      this.loading = true
+      this.orderList = []
+      const params = {
+        needOpenid: true,
+        status: this.status
+      }
+      if (this.filter) {
+        Object.assign(params, {
+          category: this.filter
+        })
+      }
+      const res = await getReleaseList(params)
+      this.orderList = res.data.list || []
+      if (needUpdateList) {
+        this.getFilterList()
+      }
+      this.loading = false
+    },
+    getFilterList() {
+      const arr = []
+      this.orderList.forEach(item => {
+        if (!arr.includes(item.category)) {
+          arr.push(item.category)
+        }
+      })
+      const list = arr.map(item => {
+        const name = this.orderList.find(f => f.category === item).categoryName
+        return {
+          text: name,
+          value: item
+        }
+      })
+      if (list.length) {
+        list.unshift({
+          text: '全部',
+          value: ''
+        })
+      }
+      this.filterList = list
+    },
+    filterChange({ detail } = {}) {
+      this.filter = detail
+      this.getList(false)
+    },
     clickTypes(type) {
       this.typeSelect = type
     },
     clickOrderTypes(type) {
       this.orderSelect = type
+      this.filter = ''
+      this.getList()
     }
   }
 })
 </script>
 
+<style lang="stylus">
+.filter-container
+  border-radius 30rpx
+  height 60rpx
+</style>
 <style lang="stylus" scoped>
 .container
   width 100%
   box-sizing border-box
   padding 0 32rpx 150rpx
+.nav
+  display flex
+  align-items center
 .order-type
+  flex 1
   display flex
   font-size 28rpx
   overflow hidden
@@ -105,7 +158,10 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "order-status": "./order-status"
+      "order-status": "./order-status",
+      "van-icon": "@vant/weapp/icon/index",
+      "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
+      "van-dropdown-item": "@vant/weapp/dropdown-item/index"
     }
   }
 </script>
