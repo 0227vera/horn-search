@@ -1,20 +1,102 @@
 <template>
-  <view>
-    toast
-  </view>
+  <block wx:if="{{visible}}">
+    <view class="mask" bind:tap="clickLayer" wx:if="{{mask}}"></view>
+    <view class="container" >
+      <van-icon class="icon" name="{{icon}}" />
+      <mutil-style-text
+        class="text"
+        text="{{text}}"
+        rules="{{rules}}"
+      />
+    </view>
+  </block>
 </template>
 
 <script>
 import { createComponent } from '@mpxjs/core'
-createComponent({})
+createComponent({
+  properties: {
+    mask: {
+      type: Boolean,
+      value: true
+    },
+    icon: {
+      type: String,
+      value: 'info'
+    },
+    text: {
+      type: String,
+      value: 'toast'
+    },
+    rules: {
+      type: Object,
+      value: {
+        '{x}': {
+          style: 'color: #ff976a;'
+        }
+      }
+    }
+  },
+  data: {
+    visible: false
+  },
+  methods: {
+    show() {
+      if (this.visible) return
+      this.visible = true
+      setTimeout(() => {
+        if (!this.visible) return
+        this.hide()
+      }, this.text.length / 4 * 1000)
+    },
+    clickLayer() {
+      if (!this.mask) {
+        return
+      }
+      this.triggerEvent('clickLayer')
+      this.hide()
+    },
+    hide() {
+      this.visible = false
+    }
+  }
+})
 </script>
 
-<style lang="stylus">
-
+<style lang="stylus" scoped>
+.mask
+  width 100vw
+  height 100vh
+  position fixed
+  top 0
+  left 0
+  z-index 100000
+.container
+  background #000000
+  position fixed
+  z-index 10000
+  top 50%
+  left 50%
+  transform translate(-50%, -50%)
+  border-radius 20rpx
+  display flex
+  flex-direction column
+  padding 40rpx
+  color #ffffff
+  font-weight bold
+  .icon
+    font-size 40rpx
+  .text
+    font-size 32rpx
+    margin-top 8rpx
+    text-align center
 </style>
 
 <script type="application/json">
   {
-    "usingComponents": {}
+    "usingComponents": {
+      "van-icon": "@vant/weapp/icon/index",
+      "mutil-style-text": "@/compontens/base/mutil-style-text.mpx"
+    }
   }
 </script>

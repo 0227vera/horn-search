@@ -1,5 +1,6 @@
 <template>
   <van-cell-group class="form" custom-class="home-cell-group-container" style="background:#fff">
+    <!-- 岗位相关 -->
     <view class="category-container">
       <van-field
         class="category-content"
@@ -13,11 +14,22 @@
         placeholder="请点击选择需要招的岗位"
         bind:tap="showPopupContainer('category')"
       />
+      <view wx:if="{{showCategoryType}}" class="categoryNum">
+        <input
+          type="digit"
+          value="{{updateObj.categoryNum}}"
+          id="categoryNum"
+          bind:input="onAreaFieldChange"
+          placeholder="人数"
+          class="input"
+        />
+        <view>位</view>
+      </view>
       <van-dropdown-menu wx:if="{{showCategoryType}}" title-class="dropdown">
         <van-dropdown-item bind:change="changeCategoryType" value="{{ updateObj.categoryType }}" options="{{ categoryTypeList }}" />
       </van-dropdown-menu>
     </view>
-    </van-field>
+    <!-- 岗位子系列 -->
     <van-field
       label="{{subCategoryInfo.label}}"
       wx:if="{{subCategoryInfo.show}}"
@@ -29,8 +41,9 @@
       bind:change="onFieldChange"
       id="categorySub"
     />
+    <!-- 薪资相关 -->
     <van-field
-      label="单价"
+      label="{{updateObj.categoryType === '2' ? '薪资' : '单价'}}"
       title-width="80rpx"
       required
       value="{{ updateObj.price }}"
@@ -48,6 +61,7 @@
           id="priceMin"
           bind:input="onAreaFieldChange"
           placeholder="最低"
+          class="input"
         />
         <text class="middle">~</text>
         <input
@@ -56,12 +70,14 @@
           id="priceMax"
           bind:input="onAreaFieldChange"
           placeholder="最高"
+          class="input"
         />
       </view>
       <van-dropdown-menu slot="button">
         <van-dropdown-item bind:change="changeUnit" value="{{ updateObj.priceUnit }}" options="{{ unitList }}" />
       </van-dropdown-menu>
     </van-field>
+    <!-- 数量相关 -->
     <van-field
       wx:if="{{updateObj.categoryType !== '2'}}"
       label="数量"
@@ -74,13 +90,14 @@
       bind:change="onFieldChange"
       id="num"
     >
-      <view slot="input" class="area-container">
+      <!-- <view slot="input" class="area-container">
         <input
           type="digit"
           value="{{updateObj.numMin}}"
           id="numMin"
           bind:input="onAreaFieldChange"
           placeholder="最少"
+          class="input"
         />
         <text class="middle">~</text>
         <input
@@ -89,20 +106,12 @@
           id="numMax"
           bind:input="onAreaFieldChange"
           placeholder="最多"
+          class="input"
         />
-      </view>
+      </view> -->
       <view slot="right-icon" style="color: #333; font-weight: bold;">件</view>
     </van-field>
-    <van-field
-      label="货源(品质层次)"
-      title-width="240rpx"
-      required="{{false}}"
-      value="{{ updateObj.origin }}"
-      placeholder="货源(品质层次)"
-      input-align="right"
-      bind:change="onFieldChange"
-      id="origin"
-    />
+    <!-- 位置相关 -->
     <van-field
       label="位置"
       title-width="80rpx"
@@ -114,6 +123,7 @@
       placeholder="请点击进入输入我的详细地址"
       bind:tap="showPopupContainer('address')"
     />
+    <!-- 电话 -->
     <van-field
       label="电话"
       title-width="80rpx"
@@ -125,7 +135,21 @@
       bind:change="onFieldChange"
       id="tel"
     />
+    <!-- 货源(品质层次) -->
     <van-field
+      wx:if="{{updateObj.categoryType === '1'}}"
+      label="{{originLabel}}"
+      title-width="240rpx"
+      required="{{false}}"
+      value="{{ updateObj.origin }}"
+      placeholder="例如十三行写字楼品质"
+      input-align="right"
+      bind:change="onFieldChange"
+      id="origin"
+    />
+    <!-- 截止时间 -->
+    <van-field
+      wx:if="{{updateObj.categoryType === '2'}}"
       label="截止时间"
       title-width="120rpx"
       is-link
@@ -135,6 +159,7 @@
       bind:tap="showPopupContainer('time')"
       input-align="right"
     />
+    <!-- 图片 -->
     <van-cell title="图片或者视频展示" value="{{imagesValue}}" border="{{false}}" />
     <view class="image-container">
       <view class="iamge-content">
@@ -157,6 +182,7 @@
         </view>
       </view>
     </view>
+    <!-- 要求 -->
     <van-field
       label="岗位要求"
       title-width="120rpx"
@@ -168,6 +194,7 @@
       id="note"
       bind:change="onFieldChange"
     />
+    <!-- 待遇补充 -->
     <van-field
       label="待遇补充"
       title-width="120rpx"
@@ -177,6 +204,18 @@
       type="textarea"
       autosize
       id="add"
+      bind:change="onFieldChange"
+    />
+    <!-- 工厂名 -->
+    <van-field
+      label="工厂名"
+      title-width="120rpx"
+      value="{{ updateObj.company }}"
+      placeholder="请输入您的工厂或公司名称"
+      input-align="left"
+      type="textarea"
+      autosize
+      id="company"
       bind:change="onFieldChange"
     />
     <van-cell>
@@ -190,6 +229,7 @@
     bind:close="closePopupContainer"
     bind:confirm="onConfirmHandle"
   />
+  <toast wx:ref="toast" text="{{toastText}}" />
   <service-notice wx:ref="serviceNotice" tmplIds="{{tmplIds}}" />
 </template>
 
@@ -197,14 +237,11 @@
 import mpx, { createComponent } from '@mpxjs/core'
 import { fileUpload, addRelease, updateRelease } from '@/api'
 import { ORDER_UPDATE } from '@/setting/noticeInfo.js'
+import validate from '@/subpackages/superstream/utils/validate.js'
+import { initUpdateObj, unitList, categoryTypeList } from '@/subpackages/superstream/utils/constant.js'
+import { timeInfo } from '@/subpackages/superstream/utils/utils.js'
 import config from '@/constant/release.js'
 const store = getApp().globalStore
-
-const unitList = [
-  { text: '元/件', value: '1' },
-  { text: '元/小时', value: '2' },
-  { text: 'K/月', value: '3' }
-]
 
 createComponent({
   data: {
@@ -213,37 +250,16 @@ createComponent({
     tmplIds: [ORDER_UPDATE],
     uploaderDisabled: false,
     showCategoryType: false,
-    categoryTypeList: [
-      { text: '临工', value: '1' },
-      { text: '长工', value: '2' }
-    ],
+    categoryTypeList,
     unitList,
     subCategoryInfo: {
       show: false,
       label: '',
       placeholder: ''
     },
-    updateObj: {
-      category: '',
-      categoryType: '',
-      categoryTypeName: '',
-      categoryName: '',
-      categorySub: '',
-      origin: '',
-      numMin: '',
-      numMax: '',
-      note: '',
-      price: '',
-      priceMin: '',
-      priceMax: '',
-      priceUnit: '1',
-      priceUnitName: '元/件',
-      tel: '',
-      ownTime: '',
-      ownTimeName: '',
-      images: [],
-      poi: {}
-    }
+    originLabel: '货源(品质层次)',
+    updateObj: initUpdateObj,
+    toastText: ''
   },
   computed: {
     ...store.mapState(['adInfo']),
@@ -257,16 +273,7 @@ createComponent({
       return '点击下方可上传图片'
     },
     timeInfo() {
-      if (this.updateObj.ownTime) {
-        const time = new Date(this.updateObj.ownTime)
-        const year = time.getFullYear()
-        const month = time.getMonth() + 1
-        const day = time.getDate()
-        const hour = time.getHours()
-        const min = time.getMinutes()
-        return `${year}年${month}月${day}日${hour}时${min}分`
-      }
-      return ''
+      return timeInfo(this.updateObj.ownTime)
     }
   },
   async attached() {
@@ -295,8 +302,13 @@ createComponent({
           this.updateObj.categoryName = data.text
           this.showCategoryType = data.showCategoryType
           if (data.showCategoryType) {
-            this.updateObj.categoryType = '1'
-            this.updateObj.categoryTypeName = '临工'
+            if (data.categoryType === '2') {
+              this.updateObj.categoryType = '2'
+              this.updateObj.categoryTypeName = '长工'
+            } else {
+              this.updateObj.categoryType = '1'
+              this.updateObj.categoryTypeName = '临工'
+            }
             this.setUnitList()
           } else {
             this.updateObj.categoryType = ''
@@ -307,8 +319,10 @@ createComponent({
             this.subCategoryInfo.show = true
             this.subCategoryInfo.label = `${data.text}(分类)`
             this.subCategoryInfo.placeholder = `请输入${data.text}的具体类别`
+            this.originLabel = `${data.text}说明`
           } else {
             this.subCategoryInfo.show = false
+            this.originLabel = '货源(品质层次)'
           }
         },
         time: () => {
@@ -328,7 +342,6 @@ createComponent({
       this.updateObj[e.target.id] = e.detail
     },
     onAreaFieldChange(e) {
-      console.log(e)
       this.updateObj[e.target.id] = e.detail.value
     },
     changeUnit(e) {
@@ -338,7 +351,6 @@ createComponent({
     },
     changeCategoryType(e) {
       const name = this.categoryTypeList.find(item => item.value === e.detail).text
-      console.log(this.categoryTypeList, e.detail, name)
       this.updateObj.categoryType = e.detail
       this.updateObj.categoryTypeName = name
       this.setUnitList()
@@ -365,7 +377,6 @@ createComponent({
       this.updateObj.images = this.updateObj.images.filter(f => f !== item)
     },
     previewMedia(index) {
-      console.log(index, this.updateObj.images)
       wx.previewMedia({
         current: index,
         sources: this.updateObj.images.map(item => ({
@@ -373,76 +384,18 @@ createComponent({
         }))
       })
     },
-    // note: 数据检验
-    validate() {
-      const result = {
-        success: false,
-        text: ''
-      }
-      if (!this.updateObj.category) {
-        result.text = '请选择类别'
-        return result
-      }
-      if (this.subCategoryInfo.show && !this.updateObj.categorySub) {
-        result.text = this.subCategoryInfo.placeholder
-        return result
-      }
-      if (this.updateObj.priceUnit !== '3' && !this.updateObj.price) {
-        result.text = '请输入单价'
-        return result
-      }
-      if (this.updateObj.priceUnit === '3') {
-        if (!this.updateObj.priceMin) {
-          result.text = '请输入最低单价'
-          return result
-        }
-        if (!this.updateObj.priceMax) {
-          result.text = '请输入最高单价'
-          return result
-        }
-        if (+this.updateObj.priceMin > +this.updateObj.priceMax) {
-          result.text = '最高单价不得小于最低单价'
-          return result
-        }
-      }
-      if (this.updateObj.categoryType === '1') {
-        if (!this.updateObj.numMin) {
-          result.text = '请输入最少的数量'
-          return result
-        }
-        if (!this.updateObj.numMax) {
-          result.text = '请输入最多的数量'
-          return result
-        }
-        if (+this.updateObj.numMin > +this.updateObj.numMax) {
-          result.text = '最多数量不得小于最少数量'
-          return result
-        }
-      }
-      // if (!this.updateObj.origin) {
-      //   result.text = '请输入货源'
-      //   return result
-      // }
-      if (!this.updateObj.tel) {
-        result.text = '请输入手机号'
-        return result
-      }
-      if (!/^(?:(?:\+|00)86)?1[3-9]\d{9}$/.test(this.updateObj.tel)) {
-        result.text = '请输入正确的手机号'
-        return result
-      }
-      result.success = true
-      return result
-    },
     // note: 提交操作
     async submitData() {
       console.log(this.updateObj)
-      const vali = this.validate()
+      const vali = validate({
+        updateObj: this.updateObj,
+        subCategoryInfo: this.subCategoryInfo
+      })
       if (!vali.success) {
-        mpx.showToast({
-          title: vali.text,
-          icon: 'none'
-        })
+        this.toastText = vali.text
+        setTimeout(() => {
+          this.$refs.toast.show()
+        }, 0)
         return
       }
       mpx.showLoading({
@@ -493,6 +446,22 @@ createComponent({
   color #000
   font-size 34rpx
   font-weight bold
+.categoryNum
+  display flex
+  align-items center
+  justify-content center
+  padding-right 20rpx
+  .input
+    width 120rpx
+    margin-right 4rpx
+.input
+  text-align center
+  font-size 32rpx
+  background-color #f9f9f9
+  border-radius 6rpx
+  font-weight bold
+  height 36rpx
+  lint-height 36rpx
 .submit
   margin-top 32rpx
   margin-bottom 20rpx
@@ -503,14 +472,6 @@ createComponent({
     font-size 36rpx
     color #333
     font-weight bold
-  input
-    text-align center
-    font-size 32rpx
-    background-color #f9f9f9
-    border-radius 6rpx
-    font-weight bold
-    height 36rpx
-    lint-height 36rpx
 .image-container
   background #ffffff
   padding 20rpx 32rpx
@@ -553,6 +514,7 @@ createComponent({
       "service-notice": "@/compontens/common/service-notice",
       "custom-container": "@/compontens/base/custom-container",
       "popup": "@/subpackages/superstream/compontens/popup/index.mpx",
+      "toast": "@/compontens/base/toast.mpx",
       "van-cell": "@vant/weapp/cell/index",
       "van-cell-group": "@vant/weapp/cell-group/index",
       "van-uploader": "@vant/weapp/uploader/index",

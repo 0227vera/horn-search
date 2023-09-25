@@ -27,7 +27,7 @@ createComponent({
   },
   computed: {
     renderList() {
-      const { categoryName, categorySub, categoryType, categoryTypeName, priceMin, priceMax, price, priceUnitName, numMin, numMax, origin, poi, tel, ownTimeName, images, note, add, calllist } = this.orderData
+      const { categoryName, categorySub, categoryType, categoryTypeName, categoryNum, priceMin, priceMax, price, priceUnitName, num, numMin, numMax, origin, poi, tel, ownTimeName, images, note, add, calllist, company } = this.orderData
       const list = []
       // note: 岗位
       let categoryText = categoryName
@@ -35,7 +35,10 @@ createComponent({
         categoryText += `(${categorySub})`
       }
       if (categoryTypeName) {
-        categoryText += `--${categoryTypeName}`
+        categoryText += `-${categoryTypeName}`
+      }
+      if (categoryNum) {
+        categoryText += `-${categoryNum}人`
       }
       list.push({
         title: '岗位',
@@ -43,6 +46,7 @@ createComponent({
       })
       // note: 价格
       let priceText = ''
+      let priceTitle = categoryType === '2' ? '薪资' : '单价'
       if (priceMin && priceMax) {
         priceText = `${priceMin}${priceUnitName} ~ ${priceMax}${priceUnitName}`
       } else if (price) {
@@ -53,10 +57,10 @@ createComponent({
         value: priceText
       })
       // note: 数量
-      if (categoryType !== '2') {
+      if (num) {
         list.push({
-          title: '数量',
-          value: `${numMin}件 ~ ${numMax}件`
+          title: priceTitle,
+          value: `${num}件`
         })
       }
       // note: 货源
@@ -101,6 +105,12 @@ createComponent({
         list.push({
           title: '待遇补充',
           value: add
+        })
+      }
+      if (company) {
+        list.push({
+          title: '工厂名',
+          value: company
         })
       }
       if (this.needList) {

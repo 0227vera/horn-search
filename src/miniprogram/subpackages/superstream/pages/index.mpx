@@ -31,7 +31,7 @@ createPage({
   async onLoad(params) {
     const { type, key } = params
     this.roleType = type
-    this.key = key
+    this.currentCom = key
   },
   computed: {
     footerList() {

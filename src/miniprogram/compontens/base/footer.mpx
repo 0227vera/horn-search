@@ -33,6 +33,11 @@ createComponent({
   data: {
     active: ''
   },
+  watch: {
+    initActive(val) {
+      this.active = this.initActive
+    }
+  },
   attached() {
     if (this.list.length) {
       this.active = this.list[0].key
