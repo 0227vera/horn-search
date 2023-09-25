@@ -53,13 +53,13 @@ createComponent({
         priceText = `${price}${priceUnitName}`
       }
       list.push({
-        title: '单价',
+        title: priceTitle,
         value: priceText
       })
       // note: 数量
       if (num) {
         list.push({
-          title: priceTitle,
+          title: '数量',
           value: `${num}件`
         })
       }
@@ -75,11 +75,6 @@ createComponent({
       list.push({
         title: '位置',
         value: poi.name
-      })
-      // note: 电话
-      list.push({
-        title: '电话',
-        value: tel
       })
       if (ownTimeName) {
         list.push({

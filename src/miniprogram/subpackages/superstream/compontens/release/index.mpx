@@ -1,4 +1,5 @@
 <template>
+<view class="container">
   <van-cell-group class="form" custom-class="home-cell-group-container" style="background:#fff">
     <!-- 岗位相关 -->
     <view class="category-container">
@@ -218,10 +219,11 @@
       id="company"
       bind:change="onFieldChange"
     />
-    <van-cell>
-      <van-button round type="primary" block bind:tap="submitData">发布</van-button>
-    </van-cell>
   </van-cell-group>
+  <van-cell border="{{false}}">
+    <van-button round type="primary" block bind:tap="submitData">发布</van-button>
+  </van-cell>
+</view>
   <popup
     show="{{showPopup}}"
     type="{{popupType}}"
@@ -360,9 +362,11 @@ createComponent({
     setUnitList() {
       if (this.updateObj.categoryType === '2') {
         this.updateObj.priceUnit = '3'
+        this.updateObj.priceUnitName = 'K/月'
         this.unitList = unitList.filter(item => item.value === '3')
       } else if (this.updateObj.categoryType === '1') {
         this.updateObj.priceUnit = '1'
+        this.updateObj.priceUnitName = '元/件'
         this.unitList = unitList.filter(item => item.value !== '3')
       } else {
         this.unitList = unitList
@@ -444,6 +448,16 @@ createComponent({
 })
 </script>
 <style lang="stylus">
+.container
+  display flex
+  flex-direction column
+  height 100%
+  overflow hidden
+  padding-bottom 10rpx
+  box-sizing border-box
+  .form
+    flex 1
+    overflow-x hidden
 .dropdown
   color #000
   font-size 34rpx

@@ -34,7 +34,6 @@ createComponent({
   },
   computed: {
     subTitle() {
-      console.log(this.readlist.length)
       if (this.readlist?.length) {
         return `已有{${this.readlist.length}}人阅读你发出的订单`
       }

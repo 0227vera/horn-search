@@ -56,7 +56,6 @@ createComponent({
     ...store.mapState(['addressList'])
   },
   attached() {
-    console.log(this.addressList)
     const item = this.addressList.find(item => item.checked)
     if (item?.id) {
       this.triggerEvent('choose-item', item)

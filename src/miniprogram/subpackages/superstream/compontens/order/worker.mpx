@@ -102,7 +102,6 @@ createComponent({
           this.gotoDetail(item)
           break
       }
-      console.log(e)
     },
     async makePhone(item) {
       makePhoneToBoss(item)
