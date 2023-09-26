@@ -2,34 +2,28 @@
 <template>
   <view class="container">
     <van-swipe-cell wx:for="{{renderList}}" wx:key="_id" right-width="{{ canDelete ? 65 : 0 }}">
-      <view wx:if="{{canDelete}}" slot="right" bind:tap="delete(item)">删除</view>
-      <van-card
-        custom-class="card"
-        tag="{{item.tag}}"
-        thumb="{{item.thumb}}"
-        thumb-mode="scaleToFill"
-        price="{{item.priceText}}"
-      >
-        <view slot="title" class="item-info">
-          <text class="item-info-title">地址：</text>
-          <text>{{item.poi.name}}</text>
-        </view>
-        <view slot="desc">
-          <view class="item-info">
-            <text class="item-info-title">要求：</text>
-            <text>{{item.note}}</text>
-          </view>
-          <view class="item-info">
-            <text class="item-info-title">类别：</text>
-            <text>{{item.categoryName}}</text>
-          </view>
-        </view>
-        <view wx:if="{{item.tags}}" slot="tags" class="tags">
-          <view wx:for="{{item.tags}}" wx:key="id" wx:for-item="tag" class="tags-item">
-            <view>{{tag.text}}</view>
+      <view wx:if="{{canDelete}}" slot="right" class="van-swipe-cell__right" bind:tap="delete(item)">删除</view>
+      <view class="list-item">
+        <view wx:if="{{item.tag}}" class="tag">{{item.tag}}</view>
+        <view class="list-item_info">
+          <image class="list-item_info-img" bind:tap="priview(item)" src="{{item.thumb}}"></image>
+          <view class="list-item_info-content">
+            <view wx:for="{{item.contentList}}" wx:key="title" wx:for-item="content" class="list-item_info-content-item">
+              <block wx:if="{{content.type === 'map'}}">
+                <text class="list-item_info-content-item_text">{{content.text}}</text>
+                <mutil-style-text class="list-item_info-content-item_value" rules="{{content.rules || textRules}}" text="{{content.value}}" />
+              </block>
+              <block wx:elif="{{content.type === 'tag'}}">
+                <view class="list-item_info-content-item_tags">
+                  <view class="list-item_info-content-item_tags-item" wx:for="{{content.tags}}" wx:key="text" wx:for-item="tag">
+                    <mutil-style-text text="{{tag.text}}" rules="{{tag.rules || textRules}}" />
+                  </view>
+                </view>
+              </block>
+            </view>
           </view>
         </view>
-        <view slot="footer" wx:if="{{buttons.length}}">
+        <view class="list-item_ope" wx:if="{{buttons.length}}">
           <van-button
             wx:for="{{buttons}}"
             size="mini"
@@ -43,7 +37,7 @@
             {{b.text}}
           </van-button>
         </view>
-      </van-card>
+      </view>
     </van-swipe-cell>
   </view>
 </template>
@@ -51,6 +45,7 @@
 <script>
 import mpx, { createComponent } from '@mpxjs/core'
 import store from '@/store'
+import dayjs from 'dayjs'
 import makePhoneToBoss from '@/utils/makePhoneToBoss'
 import unreadFun from '@/utils/unread'
 
@@ -67,59 +62,108 @@ createComponent({
     canDelete: {
       type: Boolean,
       value: false
+    },
+    role: {
+      type: String,
+      value: 'boss'
+    }
+  },
+  data: {
+    textRules: {
+      '{x}': {
+        style: 'color: #ee0a24; font-weight: bold;'
+      }
     }
   },
   computed: {
-    ...store.mapState(['openid', 'role']),
+    ...store.mapState(['openid']),
+    isWorker() {
+      return this.role === 'worker'
+    },
+    isBoss() {
+      return this.role === 'boss'
+    },
     renderList() {
       const items = this.list.map(item => {
-        item.tag = item.calllist?.length ? `已有${item.calllist.length}人呼叫` : '暂无人呼叫'
+        console.log(item)
+        if (this.isWorker) {
+          item.tag = item.calllist?.length ? `已有${item.calllist.length}人呼叫` : '暂无人呼叫'
+        }
         item.thumb = item.images[0] || 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/image-cdn/none.png'
-        let priceText = ''
-        if (item.priceMin && item.priceMax) {
-          priceText = `${item.priceMin}${item.priceUnitName} ~ ${item.priceMax}${item.priceUnitName}`
-        } else if (item.price) {
-          priceText = `${item.price}${item.priceUnitName}`
+        const content = []
+        // 地址
+        content.push({
+          type: 'map',
+          text: '地址:',
+          value: item.poi.detail
+        })
+        let categoryValue = `${item.categoryName}${item.categorySub ? `(${item.categorySub})` : ''}-{${item.categoryNum}人}-${item.categoryTypeName}`
+        content.push({
+          type: 'map',
+          text: '岗位:',
+          value: categoryValue
+        })
+
+        // 薪资/单价
+        const priceText = item.categoryType === '2' ? '薪资:' : '单价:'
+        let priceValue = ''
+        if (item.categoryType === '2') {
+          priceValue = `{${item.priceMin}${item.priceUnitName}} ~ {${item.priceMax}${item.priceUnitName}}`
+        } else {
+          priceValue = `${item.price}${item.priceUnitName}`
         }
-        item.priceText = priceText
-        if (this.role === 'boss') {
-          if (item.calllist?.length || item.readlist?.length) {
-            item.tags = []
-            if (item.calllist?.length) {
-              item.tags.push({
-                text: `已被${item.calllist.length}人呼叫过`
-              })
-            }
-            if (item.readlist?.length) {
-              item.tags.push({
-                text: `已有${item.readlist.length}人阅读`
-              })
-            }
+        content.push({
+          type: 'map',
+          text: priceText,
+          value: priceValue
+        })
+        // 时效
+        let timeValue = dayjs(item.RELEASE_ADD_TIME).format('YYYY-MM-DD')
+        if (item.ownTime) {
+          timeValue += `~${dayjs(item.ownTime).format('YYYY-MM-DD')}`
+        } else {
+          timeValue += '以后'
+        }
+        content.push({
+          type: 'map',
+          text: '有效期:',
+          value: timeValue
+        })
+        const tags = []
+        if (this.isBoss) {
+          if (item.calllist?.length) {
+            tags.push({
+              text: `已被{${item.calllist.length}人呼叫过}`
+            })
           }
-        } else if (this.role === 'worker') {
-          if (item.calllist) {
-            const isCall = item.calllist.find(f => f.openid === this.openid)
-            if (isCall) {
-              item.tags = [{
-                text: `您已呼叫${isCall.times}次`
-              }]
-            }
+          if (item.readlist?.length) {
+            tags.push({
+              text: `已有{${item.readlist.length}人阅读}`
+            })
           }
-          if (item.readlist) {
-            const isRead = item.readlist.find(f => f.openid === this.openid)
-            if (isRead) {
-              if (item.tags) {
-                item.tags.push({
-                  text: `您已阅读${isRead.times}次`
-                })
-              } else {
-                item.tags = [{
-                  text: `您已阅读${isRead.times}次`
-                }]
-              }
-            }
+        } else if (this.isWorker) {
+          const isCall = item.calllist.find(f => f.openid === this.openid)
+          const isRead = item.readlist.find(f => f.openid === this.openid)
+          if (isCall) {
+            tags.push({
+              text: `您已{呼叫${isCall.times}次}`
+            })
+          }
+          if (isRead) {
+            tags.push({
+              text: `您已{阅读${isRead.times}次}`
+            })
           }
         }
+        tags.forEach(tag => {
+          tag.rules = {
+            '{x}': {
+              style: 'color: #ee0a24; font-weight: bold; margin-left: 4rpx;'
+            }
+          }
+        })
+        content.push({ type: 'tag', tags })
+        item.contentList = content
         return item
       })
       return items
@@ -129,6 +173,18 @@ createComponent({
     clickBtn(item, b) {
       this.triggerEvent('footer-btn', { item, buttonInfo: b })
     },
+    priview(item) {
+      if (!item.images.length) {
+        return
+      }
+      wx.previewMedia({
+        current: 0,
+        sources: item.images.map(i => ({
+          url: i,
+          type: 'image'
+        }))
+      })
+    },
     delete(item) {
       this.triggerEvent('delete', item)
     }
@@ -136,26 +192,78 @@ createComponent({
 })
 </script>
 
+<style lang="stylus">
+
+</style>
 <style lang="stylus" scoped>
-.card
-  margin-bottom 20rpx
-  border-radius 16rpx
-  box-shadow 0px 4px 20px 0px rgba(0,0,0,0.1)
-.tags
+.van-swipe-cell__right
+  width 65px
+  height 100%
+  background-color #ee0a24
+  color #ffffff
   display flex
-  margin-bottom 10rpx
-  &-item
-    color red
-    font-size 20rpx
-    border 2rpx dashed red
-    padding 4rpx 6rpx
-    border-radius 4rpx
-    margin-right 6rpx
-    background rgba(0,0,0,0.1)
-.item-info
-  margin-bottom 8rpx
-  &-title
-    font-weight 500
+  align-items center
+  justify-content center
+  border-radius 16rpx
+.list-item
+  background linear-gradient(#ffffff, #E3E0F3, #ffffff)
+  padding 16rpx
+  box-sizing border-box
+  border-radius 16rpx
+  position relative
+  .tag
+    position absolute
+    top 16rpx
+    left 16rpx
+    background #ee0a24
+    color #ffffff
+    font-size 24rpx
+    font-weight bold
+    padding 2rpx 8rpx
+    border-radius 0 28rpx 28rpx 0
+    opacity 0.7
+  &_info
+    display flex
+    align-items center
+    &-img
+      width 160rpx
+      height 240rpx
+    &-content
+      flex 1
+      height 240rpx
+      overflow hidden
+      margin-left 16rpx
+      font-size 28rpx
+      display flex
+      flex-direction column
+      justify-content space-between
+      &-item
+        display flex
+        align-items center
+        &_text
+          width 96rpx
+          text-align right
+          padding-right 16rpx
+        &_value
+          flex 1
+          overflow hidden
+          text-overflow ellipsis
+          white-space nowrap
+        &_tags
+          display flex
+          &-item
+            padding 2rpx 8rpx
+            box-sizing border-box
+            background #ffffff
+            border-radius 8rpx
+            box-shadow 0px 4px 20px 0px rgba(0,0,0,0.1)
+            margin-right 16rpx
+            color #1989fa
+            border 2rpx solid #1989fa
+  &_ope
+    display flex
+    justify-content flex-end
+    margin-top 8rpx
 </style>
 
 <script type="application/json">
@@ -163,7 +271,8 @@ createComponent({
     "usingComponents": {
       "van-card": "@vant/weapp/card/index",
       "van-button": "@vant/weapp/button/index",
-      "van-swipe-cell": "@vant/weapp/swipe-cell/index"
+      "van-swipe-cell": "@vant/weapp/swipe-cell/index",
+      "mutil-style-text": "@/compontens/base/mutil-style-text.mpx"
     },
     "disableScroll": true
   }

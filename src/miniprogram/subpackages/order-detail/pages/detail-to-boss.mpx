@@ -45,7 +45,7 @@ createPage({
   onShareAppMessage() {
     const path = encodeURIComponent(`/order-detail/pages/detail-to-worker?id=${this._id}`)
     return {
-      title: this.categoryName,
+      title: `${this.categoryName}${this.categorySub ? `(${this.categorySub})` : ''}-${this.categoryNum}人-${this.categoryTypeName}`,
       path: `/pages/page?type=mp&path=${path}`,
       imageUrl: this.images?.[0] || ''
     }
@@ -67,10 +67,13 @@ createPage({
     this.params = params
     const res = await getReleaseOneById(params)
     this.orderData = res.data
-    const { category, categoryName, images, status, calllist, readlist, _id, OPENID } = res.data || {}
+    const { category, categoryName, categorySub, categoryTypeName, categoryNum, images, status, calllist, readlist, _id, OPENID } = res.data || {}
     this.active = status - 1
     this.category = category
     this.categoryName = categoryName
+    this.categoryNum = categoryNum
+    this.categorySub = categorySub
+    this.categoryTypeName = categoryTypeName
     this.OPENID = OPENID
     this.images = images
     this._id = _id

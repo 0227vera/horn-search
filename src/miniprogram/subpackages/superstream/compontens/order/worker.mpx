@@ -5,7 +5,7 @@
       <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
     </view>
     <view wx:elif="{{list.length}}" class="list">
-      <card list="{{list}}" buttons="{{buttons}}" bind:footer-btn="footerBtn" />
+      <card list="{{list}}" buttons="{{buttons}}" role="worker" bind:footer-btn="footerBtn" />
     </view>
     <view wx:else class="loading empty">
       <van-empty description="暂无数据，去发布一个空闲时间吧" bind:tap="gotoRelease" />
@@ -35,11 +35,11 @@ createComponent({
       type: 'primary',
       icon: 'phone-o'
     }, {
-      text: '导航前去',
+      text: '导航去',
       id: 'nav',
       icon: 'location-o'
     }, {
-      text: '查看详情',
+      text: '看详情',
       id: 'gotoDetail',
       icon: 'eye-o'
     }]
@@ -61,33 +61,7 @@ createComponent({
       this.list = []
       const res = await getReleaseList()
       this.loading = false
-      this.list = (res.data?.list || []).map(item => {
-        item.tag = item.calllist?.length ? `已有${item.calllist.length}人呼叫` : '暂无人呼叫'
-        item.thumb = item.images[0] || 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/image-cdn/none.png'
-        if (item.calllist) {
-          const isCall = item.calllist.find(f => f.openid === this.openid)
-          if (isCall) {
-            item.tags = [{
-              text: `您已呼叫${isCall.times}次`
-            }]
-          }
-        }
-        if (item.readlist) {
-          const isRead = item.readlist.find(f => f.openid === this.openid)
-          if (isRead) {
-            if (item.tags) {
-              item.tags.push({
-                text: `您已阅读${isRead.times}次`
-              })
-            } else {
-              item.tags = [{
-                text: `您已阅读${isRead.times}次`
-              }]
-            }
-          }
-        }
-        return item
-      })
+      this.list = res.data?.list || []
     },
     footerBtn(e) {
       const { item, buttonInfo } = e.detail

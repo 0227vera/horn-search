@@ -17,7 +17,7 @@
         </van-dropdown-menu>
       </view>
     </view>
-    <order-status wx:if="{{status}}" list="{{orderList}}" status="{{status}}" loading="{{loading}}" />
+    <boss wx:if="{{status}}" list="{{orderList}}" status="{{status}}" loading="{{loading}}" />
   </view>
 </template>
 
@@ -158,7 +158,7 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "order-status": "./order-status",
+      "boss": "./boss",
       "van-icon": "@vant/weapp/icon/index",
       "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
       "van-dropdown-item": "@vant/weapp/dropdown-item/index"

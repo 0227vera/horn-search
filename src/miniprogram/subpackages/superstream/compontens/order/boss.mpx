@@ -2,7 +2,7 @@
 <view wx:if="{{loading}}" class="status">
   <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
 </view>
-<card wx:elif="{{renderList.length}}" list="{{renderList}}" buttons="{{buttons}}" bind:footer-btn="footerBtn" />
+<card wx:elif="{{renderList.length}}" role="boss" list="{{renderList}}" buttons="{{buttons}}" bind:footer-btn="footerBtn" />
 <view wx:else class="status">
   <van-empty description="{{emptyText}}" />
 </view>
@@ -31,7 +31,11 @@ createComponent({
   },
   data: {
     buttons: [{
-      text: '查看详情',
+      text: '关单',
+      icon: 'passed',
+      id: 'close'
+    },{
+      text: '看详情',
       type: 'primary',
       icon: 'eye-o',
       id: 'gotoDetail'
@@ -44,8 +48,15 @@ createComponent({
   },
   methods: {
     footerBtn(e) {
-      const info = e.detail
-      this.gotoDetail(info.item)
+      const { item, buttonInfo } = e.detail
+      switch (buttonInfo.id) {
+        case 'close':
+          console.log('close')
+          break
+        case 'gotoDetail':
+          this.gotoDetail(item)
+          break
+      }
     },
     gotoDetail(item) {
       mpx.navigateTo({
