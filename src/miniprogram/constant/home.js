@@ -8,7 +8,7 @@ export default [[{
     url: '/superstream/pages/index',
     jumptype: 'mp',
     params: {
-      key: 'release',
+      key: 'bossWorker',
       id: 'findWorker',
       type: 'partyA'
     }
@@ -40,7 +40,7 @@ export default [[{
     url: '/superstream/pages/index',
     jumptype: 'mp',
     params: {
-      key: 'release',
+      key: 'factoryCooper',
       id: 'findFactory',
       type: 'partyA'
     }

@@ -29,7 +29,7 @@ import makePhoneToBoss from '@/utils/makePhoneToBoss'
 
 createPage({
   onShareAppMessage() {
-    const path = encodeURIComponent(`/order-detail/pages/detail-to-worker?id=${this._id}`)
+    const path = encodeURIComponent(`/order-detail/pages/detail-to-worker?id=${this._id}&fromOrigin=${this.fromOrigin}`)
     return {
       title: this.categoryName,
       path: `/pages/page?type=mp&path=${path}`,
@@ -43,6 +43,9 @@ createPage({
     poi: {}
   },
   async onLoad(params) {
+    this.setState({
+      fromOrigin: params.fromOrigin
+    })
     this.params = params
     if (!params.id) {
       this.clickLeft()
@@ -62,7 +65,7 @@ createPage({
     this.readlistFunc(readlist)
   },
   computed: {
-    ...store.mapState(['openid']),
+    ...store.mapState(['openid', 'fromOrigin']),
     clickLeft() {
       return () => {
         if (this.params.isBack === 'true') {
@@ -108,6 +111,7 @@ createPage({
     }
   },
   methods: {
+    ...store.mapMutations(['setState']),
     readlistFunc(readlist) {
       if (readlist?.length) {
         const isReaded = readlist.find(item => item.openid === this.openid)

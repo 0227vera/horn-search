@@ -43,7 +43,7 @@ import store from '@/store'
 
 createPage({
   onShareAppMessage() {
-    const path = encodeURIComponent(`/order-detail/pages/detail-to-worker?id=${this._id}`)
+    const path = encodeURIComponent(`/order-detail/pages/detail-to-worker?id=${this._id}&fromOrigin=${this.fromOrigin}`)
     return {
       title: `${this.categoryName}${this.categorySub ? `(${this.categorySub})` : ''}-${this.categoryNum}人-${this.categoryTypeName}`,
       path: `/pages/page?type=mp&path=${path}`,
@@ -59,6 +59,9 @@ createPage({
     category: ''
   },
   async onLoad(params) {
+    this.setState({
+      fromOrigin: params.fromOrigin
+    })
     this.loading = true
     if (!params.id) {
       this.clickLeft()
@@ -82,7 +85,7 @@ createPage({
     this.loading = false
   },
   computed: {
-    ...store.mapState(['steps', 'openid']),
+    ...store.mapState(['steps', 'openid', 'fromOrigin']),
     pageTitle() {
       if (this.active) {
         const desc = this.steps.find(item => +item.status === this.active + 1).desc
@@ -129,6 +132,7 @@ createPage({
     }
   },
   methods: {
+    ...store.mapMutations(['setState']),
     clickTel(item) {
       wx.makePhoneCall({
         phoneNumber: item.tel

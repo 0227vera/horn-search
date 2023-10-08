@@ -1,13 +1,21 @@
 import request from "./request"
+import store from '@/store'
 
-export const getReleaseList = params => request({ route: 'release/get', params })
+const getCommonParams = (params = {}) => {
+  return {
+    ...params,
+    fromOrigin: store.state.fromOrigin
+  }
+}
 
-export const addRelease = params => request({ route: 'release/create', params })
+export const getReleaseList = params => request({ route: 'release/get', params: getCommonParams(params) })
 
-export const deleteRelease = params => request({ route: 'release/delete', params })
+export const addRelease = params => request({ route: 'release/create', params: getCommonParams(params) })
 
-export const updateRelease = params => request({ route: 'release/update', params })
+export const deleteRelease = params => request({ route: 'release/delete', params: getCommonParams(params) })
 
-export const getReleaseOneById = params => request({ route: 'release/getonebyid', params })
+export const updateRelease = params => request({ route: 'release/update', params: getCommonParams(params) })
 
-export const getReleaseCount = params => request({ params, route: 'release/getcount' })
+export const getReleaseOneById = params => request({ route: 'release/getonebyid', params: getCommonParams(params) })
+
+export const getReleaseCount = params => request({ params: getCommonParams(params), route: 'release/getcount' })

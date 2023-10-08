@@ -84,7 +84,7 @@ const findFactoryCategory = [
 export default {
   findWorker: {
     category: findWorkerCategory,
-    fromOrigin: 'boss-worker',
+    fromOrigin: 'bossWorker',
     partyA: {
       title: ['我要招工', '订单列表']
     },
@@ -94,7 +94,7 @@ export default {
   },
   findFactory: {
     category: findFactoryCategory,
-    fromOrigin: 'factory-cooper',
+    fromOrigin: 'factoryCooper',
     partyA: {
       title: ['我要找工厂', '订单列表']
     },

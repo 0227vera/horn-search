@@ -41,7 +41,8 @@ export default createStore({
     orderListReqLoading: true,
     categoryItems: {},
     steps: [],
-    addressList: []
+    addressList: [],
+    fromOrigin: ''
   },
   getters: {
     currentGooterList(state) {

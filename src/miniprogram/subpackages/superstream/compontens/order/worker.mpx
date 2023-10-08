@@ -45,7 +45,7 @@ createComponent({
     }]
   },
   computed: {
-    ...store.mapState(['openid'])
+    ...store.mapState(['openid', 'fromOrigin'])
   },
   watch: {
     category() {
@@ -89,7 +89,7 @@ createComponent({
       })
     },
     gotoDetail(item) {
-      mpx.navigateTo({ url: `/order-detail/pages/detail-to-worker?id=${item._id}&isBack=true` })
+      mpx.navigateTo({ url: `/order-detail/pages/detail-to-worker?id=${item._id}&isBack=true&fromOrigin=${this.fromOrigin}` })
     },
     gotoRelease(item) {
       mpx.navigateTo({ url: `/release/pages/worker` })

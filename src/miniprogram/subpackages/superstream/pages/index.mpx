@@ -5,7 +5,6 @@
         <component
           is="{{currentCom}}"
           categoryList="{{categoryList}}"
-          fromOrigin="{{fromOrigin}}"
           bind:release-jump-done="releaseJumpDone"
         ></component>
       </view>
@@ -40,11 +39,13 @@ createPage({
     const { type, key, id } = params
     // 当前的分类id，用于获取分类，常用配置等
     this.categoryTypeId = categoryMap[id]
-    console.log('========>', this.categoryConfig)
     // 当前的身份，展示不同的组件，主要是甲乙两方
     this.roleType = type
     // 当前的组件，用于甲方的切换
     this.currentCom = key
+    this.setState({
+      fromOrigin: this.fromOrigin
+    })
   },
   computed: {
     categoryConfig() {
@@ -67,7 +68,7 @@ createPage({
         name: '发单',
         title: this.partyA?.title?.[0],
         icon: 'upgrade',
-        key: 'release'
+        key: this.fromOrigin
       }, {
         name: '订单列表',
         title: this.partyA?.title?.[1],
@@ -81,6 +82,7 @@ createPage({
     }
   },
   methods: {
+    ...store.mapMutations(['setState']),
     tabChange(e) {
       this.currentCom = e.detail.key
     },
@@ -108,7 +110,8 @@ createPage({
       "back-home": "@/compontens/base/back-home.mpx",
       "footer": "@/compontens/base/footer.mpx",
       "order": "@/subpackages/superstream/compontens/order",
-      "release":"@/subpackages/superstream/compontens/release",
+      "bossWorker":"@/subpackages/superstream/compontens/release/boss-worker",
+      "factoryCooper":"@/subpackages/superstream/compontens/release/factory-cooper",
       "worker": "@/subpackages/superstream/compontens/order/worker.mpx"
     },
     "disableScroll": true

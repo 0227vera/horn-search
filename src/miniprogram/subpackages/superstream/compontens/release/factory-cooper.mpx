@@ -1,6 +1,6 @@
 <template>
 <view class="container">
-  <van-cell-group class="form" custom-class="home-cell-group-container" style="background:#fff">
+  <van-cell-group class="form" style="background:#fff">
     <!-- 岗位相关 -->
     <view class="category-container">
       <van-field
@@ -250,9 +250,9 @@ createComponent({
       type: Array,
       value: []
     },
-    formType: {
+    fromOrigin: {
       type: String,
-      value: 'worker'
+      value: ''
     }
   },
   data: {
@@ -414,7 +414,12 @@ createComponent({
       });
       const subscribe = await this.$refs.serviceNotice?.showServiceNotice?.()
       this.updateObj.num = +this.updateObj.num
-      const res = await addRelease({ ...this.updateObj, status: 1, subscribeInfo: subscribe })
+      const res = await addRelease({
+        ...this.updateObj,
+        status: 1,
+        // 不同的订单类型
+        fromOrigin: this.fromOrigin
+      })
       mpx.hideLoading()
       if (res.code === 200) {
         const self = this

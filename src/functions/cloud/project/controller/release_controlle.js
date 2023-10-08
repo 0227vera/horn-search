@@ -12,7 +12,10 @@ class ReleaseController extends BaseController {
       })
     }
     Object.assign(where, newParams || {})
-    const service = new ReleaseService()
+    const init = {
+      origin: this._event.params.fromOrigin
+    }
+    const service = new ReleaseService(init)
     const res = await service.getList(where)
     return res
   }
@@ -24,7 +27,9 @@ class ReleaseController extends BaseController {
     const where = {
       _id: this._event.params.id
     }
-    const service = new ReleaseService()
+    const service = new ReleaseService({
+      origin: this._event.params.fromOrigin
+    })
     const res = await service.getOne(where)
     return res
   }
@@ -33,13 +38,18 @@ class ReleaseController extends BaseController {
     const where = {
       ...(this._event.params || {})
     }
-    const service = new ReleaseService()
+
+    const service = new ReleaseService({
+      origin: this._event.params.fromOrigin
+    })
     const res = await service.getCount(where)
     return res
   }
 
   async create() {
-    const service = new ReleaseService()
+    const service = new ReleaseService({
+      origin: this._event.params.fromOrigin
+    })
     const params = Object.assign({}, this._event.params, {
       OPENID: this._openId
     })
@@ -51,13 +61,17 @@ class ReleaseController extends BaseController {
   }
 
   async update() {
-    const service = new ReleaseService()
+    const service = new ReleaseService({
+      origin: this._event.params.fromOrigin
+    })
     const res = await service.update(this._event.params)
     return res
   }
 
   async delete() {
-    const service = new ReleaseService()
+    const service = new ReleaseService({
+      origin: this._event.params.fromOrigin
+    })
     const res = await service.delete(this._event.params)
     return res
   }

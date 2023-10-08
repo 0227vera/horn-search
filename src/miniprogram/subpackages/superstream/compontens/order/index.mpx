@@ -17,7 +17,12 @@
         </van-dropdown-menu>
       </view>
     </view>
-    <boss wx:if="{{status}}" list="{{orderList}}" status="{{status}}" loading="{{loading}}" />
+    <boss
+      wx:if="{{status}}"
+      list="{{orderList}}"
+      status="{{status}}"
+      loading="{{loading}}"
+    />
   </view>
 </template>
 
@@ -26,6 +31,9 @@ import { createComponent } from '@mpxjs/core'
 import { getReleaseList, updateRelease } from '@/api'
 
 createComponent({
+  properties: {
+
+  },
   data: {
     orderSelect: 'push',
     orderList: [],
