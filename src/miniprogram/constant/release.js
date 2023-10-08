@@ -1,4 +1,5 @@
-const category = [
+// note: 工作相关的的分类
+const findWorkerCategory = [
   {
     text: '车间生产类',
     children: [
@@ -75,15 +76,37 @@ const category = [
     ]
   }
 ]
+// note: 工厂相关的分类
+const findFactoryCategory = [
+
+]
 
 export default {
   findWorker: {
-    category,
-    form: ['price', 'poi', 'tel', 'time', 'images', 'note']
+    category: findWorkerCategory,
+    fromOrigin: 'boss-worker',
+    partyA: {
+      title: ['我要招工', '订单列表']
+    },
+    partyB: {
+      title: '我要找工作'
+    }
+  },
+  findFactory: {
+    category: findFactoryCategory,
+    fromOrigin: 'factory-cooper',
+    partyA: {
+      title: ['我要找工厂', '订单列表']
+    },
+    partyB: {
+      title: '我要找货做'
+    }
   }
 }
 
 export const categoryMap = {
   findWorker: 'findWorker',
-  findJob: 'findWorker'
+  findJob: 'findWorker',
+  findFactory: 'findFactory',
+  findCooper: 'findFactory'
 }

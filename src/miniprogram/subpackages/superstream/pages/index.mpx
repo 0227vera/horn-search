@@ -1,12 +1,17 @@
 <template>
   <custom-container title="{{title}}">
-    <block wx:if="{{roleType === 'boss'}}">
+    <block wx:if="{{roleType === 'partyA'}}">
       <view class="component-container">
-        <component is="{{currentCom}}" categoryList="{{categoryList}}" bind:release-jump-done="releaseJumpDone"></component>
+        <component
+          is="{{currentCom}}"
+          categoryList="{{categoryList}}"
+          fromOrigin="{{fromOrigin}}"
+          bind:release-jump-done="releaseJumpDone"
+        ></component>
       </view>
       <footer wx:if="{{currentCom}}" list="{{footerList}}" initActive="{{currentCom}}" bind:tab-change="tabChange" />
     </block>
-    <block wx:if="{{roleType === 'worker'}}">
+    <block wx:if="{{roleType === 'partyB'}}">
       <view>
         <worker />
       </view>
@@ -20,7 +25,8 @@
 import mpx, { createPage } from '@mpxjs/core'
 import config, { categoryMap } from '@/constant/release.js'
 const store = getApp().globalStore
-
+const workerTitleMap = {
+}
 createPage({
   onShareAppMessage() {
     getApp().onShareAppMessage()
@@ -32,29 +38,45 @@ createPage({
   },
   async onLoad(params) {
     const { type, key, id } = params
+    // 当前的分类id，用于获取分类，常用配置等
     this.categoryTypeId = categoryMap[id]
+    console.log('========>', this.categoryConfig)
+    // 当前的身份，展示不同的组件，主要是甲乙两方
     this.roleType = type
+    // 当前的组件，用于甲方的切换
     this.currentCom = key
   },
   computed: {
+    categoryConfig() {
+      return config[this.categoryTypeId] || {}
+    },
     categoryList() {
-      return config[this.categoryTypeId].category
+      return this.categoryConfig.category
+    },
+    fromOrigin() {
+      return this.categoryConfig.fromOrigin
+    },
+    partyA() {
+      return this.categoryConfig.partyA
+    },
+    partyB() {
+      return this.categoryConfig.partyB
     },
     footerList() {
       return [{
         name: '发单',
-        title: '我要招工',
+        title: this.partyA?.title?.[0],
         icon: 'upgrade',
         key: 'release'
       }, {
         name: '订单列表',
-        title: '订单列表',
+        title: this.partyA?.title?.[1],
         icon: 'comment',
         key: 'order'
       }]
     },
     title() {
-      if (this.roleType === 'worker') return '我要找工作'
+      if (this.roleType === 'partyB') return this.partyB.title
       return this.footerList.find(item => item.key === this.currentCom)?.title || ''
     }
   },

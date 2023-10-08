@@ -34,7 +34,7 @@ createComponent({
       text: '关单',
       icon: 'passed',
       id: 'close'
-    },{
+    }, {
       text: '看详情',
       type: 'primary',
       icon: 'eye-o',

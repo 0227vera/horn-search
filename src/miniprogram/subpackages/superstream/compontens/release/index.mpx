@@ -249,6 +249,10 @@ createComponent({
     categoryList: {
       type: Array,
       value: []
+    },
+    formType: {
+      type: String,
+      value: 'worker'
     }
   },
   data: {

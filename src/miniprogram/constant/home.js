@@ -10,7 +10,7 @@ export default [[{
     params: {
       key: 'release',
       id: 'findWorker',
-      type: 'boss'
+      type: 'partyA'
     }
   },
   extraInfo: {}
@@ -26,7 +26,7 @@ export default [[{
     params: {
       key: 'order',
       id: 'findJob',
-      type: 'worker'
+      type: 'partyB'
     }
   },
   extraInfo: {}
@@ -36,7 +36,15 @@ export default [[{
   id: '',
   dot: false,
   tips: '诚信',
-  link: '',
+  action: {
+    url: '/superstream/pages/index',
+    jumptype: 'mp',
+    params: {
+      key: 'release',
+      id: 'findFactory',
+      type: 'partyA'
+    }
+  },
   extraInfo: {}
 }, {
   text: '我要找货做',
@@ -44,7 +52,15 @@ export default [[{
   id: '',
   dot: false,
   tips: '海量货源',
-  link: '',
+  action: {
+    url: '/superstream/pages/index',
+    jumptype: 'mp',
+    params: {
+      key: 'order',
+      id: 'findCooper',
+      type: 'partyB'
+    }
+  },
   extraInfo: {}
 }], [{
   text: '出租转让发布',
