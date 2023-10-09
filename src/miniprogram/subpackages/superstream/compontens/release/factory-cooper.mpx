@@ -318,7 +318,7 @@ createComponent({
     }
   },
   methods: {
-    ...store.mapActions(['setLocation', 'getReleaseList']),
+    ...store.mapActions(['setLocation']),
     ...store.mapMutations(['setState']),
     // note: 弹窗处理
     showPopupContainer(type) {
@@ -445,7 +445,6 @@ createComponent({
               status: '2'
             })
             mpx.hideLoading()
-            self.getReleaseList()
             self.triggerEvent('release-jump-done', res.data)
           }
         })

@@ -24,7 +24,7 @@ export default [[{
     url: '/superstream/pages/index',
     jumptype: 'mp',
     params: {
-      key: 'worker',
+      key: 'partyB',
       id: 'findJob',
       type: 'partyB'
     }
@@ -56,7 +56,7 @@ export default [[{
     url: '/superstream/pages/index',
     jumptype: 'mp',
     params: {
-      key: 'order',
+      key: 'partyB',
       id: 'findCooper',
       type: 'partyB'
     }

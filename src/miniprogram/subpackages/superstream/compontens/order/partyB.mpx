@@ -27,7 +27,13 @@
       <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
     </view>
     <view wx:elif="{{list.length}}" class="list">
-      <card list="{{list}}" buttons="{{buttons}}" role="worker" bind:footer-btn="footerBtn" />
+      <card
+        list="{{list}}"
+        fromOrigin="{{this.fromOrigin}}"
+        buttons="{{buttons}}"
+        role="worker"
+        bind:footer-btn="footerBtn"
+      />
     </view>
     <view wx:else class="loading empty">
       <van-empty description="暂无数据"/>
@@ -90,7 +96,7 @@ createComponent({
     }]
   },
   computed: {
-    ...store.mapState(['openid']),
+    ...store.mapState(['openid', 'fromOrigin']),
     categoryList() {
       return config[this.categoryTypeId].category
     },

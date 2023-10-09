@@ -76,7 +76,7 @@ createComponent({
     }
   },
   computed: {
-    ...store.mapState(['openid']),
+    ...store.mapState(['openid', 'fromOrigin']),
     isWorker() {
       return this.role === 'worker'
     },
@@ -96,38 +96,63 @@ createComponent({
           text: '地址:',
           value: item.poi.detail || item.poi.address
         })
-        let categoryValue = `${item.categoryName}${item.categorySub ? `(${item.categorySub})` : ''}-{${item.categoryNum}人}-${item.categoryTypeName}`
-        content.push({
-          type: 'map',
-          text: '岗位:',
-          value: categoryValue
-        })
+        console.log('======+>', this.fromOrigin)
+        if (this.fromOrigin === 'bossWorker') {
+          let categoryValue = `${item.categoryName}${item.categorySub ? `(${item.categorySub})` : ''}-{${item.categoryNum}人}-${item.categoryTypeName}`
+          content.push({
+            type: 'map',
+            text: '岗位:',
+            value: categoryValue
+          })
 
-        // 薪资/单价
-        const priceText = item.categoryType === '2' ? '薪资:' : '单价:'
-        let priceValue = ''
-        if (item.categoryType === '2') {
-          priceValue = `{${item.priceMin}${item.priceUnitName}} ~ {${item.priceMax}${item.priceUnitName}}`
-        } else {
-          priceValue = `${item.price}${item.priceUnitName}`
+          // 薪资/单价
+          const priceText = item.categoryType === '2' ? '薪资:' : '单价:'
+          let priceValue = ''
+          if (item.categoryType === '2') {
+            priceValue = `{${item.priceMin}${item.priceUnitName}} ~ {${item.priceMax}${item.priceUnitName}}`
+          } else {
+            priceValue = `${item.price}${item.priceUnitName}`
+          }
+          content.push({
+            type: 'map',
+            text: priceText,
+            value: priceValue
+          })
+          // 时效
+          let timeValue = dayjs(item.RELEASE_ADD_TIME).format('YYYY-MM-DD')
+          if (item.ownTime) {
+            timeValue += `~${dayjs(item.ownTime).format('YYYY-MM-DD')}`
+          } else {
+            timeValue += '以后'
+          }
+          content.push({
+            type: 'map',
+            text: '有效期:',
+            value: timeValue
+          })
+        } else if (this.fromOrigin === 'factoryCooper') {
+          let factoryScaleValue = `{${item.factoryScaleName}}`
+          if (item.factoryScale === '1') {
+            factoryScaleValue += `-(${item.people}人以上)`
+          } else if (item.factoryScale === '2') {
+            factoryScaleValue += `-(${item.peopleMin}~${item.peopleMin}人)`
+          }
+          content.push({
+            type: 'map',
+            text: '规模:',
+            value: factoryScaleValue
+          })
+          content.push({
+            type: 'map',
+            text: '数量:',
+            value: `{${item.numMin}}件~{${item.numMax}}件`
+          })
+          content.push({
+            type: 'map',
+            text: '地域:',
+            value: `{${item.area}}`
+          })
         }
-        content.push({
-          type: 'map',
-          text: priceText,
-          value: priceValue
-        })
-        // 时效
-        let timeValue = dayjs(item.RELEASE_ADD_TIME).format('YYYY-MM-DD')
-        if (item.ownTime) {
-          timeValue += `~${dayjs(item.ownTime).format('YYYY-MM-DD')}`
-        } else {
-          timeValue += '以后'
-        }
-        content.push({
-          type: 'map',
-          text: '有效期:',
-          value: timeValue
-        })
         const tags = []
         if (this.isBoss) {
           if (item.calllist?.length) {

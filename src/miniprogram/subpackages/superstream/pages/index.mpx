@@ -42,6 +42,7 @@ createPage({
     this.roleType = type
     // 当前的组件，用于甲方的切换
     this.currentCom = key
+    console.log('========>', this.fromOrigin)
     this.setState({
       fromOrigin: this.fromOrigin
     })
@@ -117,7 +118,7 @@ createPage({
       "order": "@/subpackages/superstream/compontens/order",
       "bossWorker":"@/subpackages/superstream/compontens/release/boss-worker",
       "factoryCooper":"@/subpackages/superstream/compontens/release/factory-cooper",
-      "worker": "@/subpackages/superstream/compontens/order/worker.mpx"
+      "partyB": "@/subpackages/superstream/compontens/order/partyB.mpx"
     },
     "disableScroll": true
   }

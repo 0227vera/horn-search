@@ -292,7 +292,7 @@ createComponent({
     }
   },
   methods: {
-    ...store.mapActions(['setLocation', 'getReleaseList']),
+    ...store.mapActions(['setLocation']),
     ...store.mapMutations(['setState']),
     // note: 弹窗处理
     showPopupContainer(type) {
@@ -436,13 +436,7 @@ createComponent({
               status: '2'
             })
             mpx.hideLoading()
-            self.getReleaseList()
-            mpx.navigateTo({
-              url: `/order-detail/pages/detail-to-boss?isBack=true&id=${res.data}&fromOrigin=${self.fromOrigin}`,
-              success() {
-                self.triggerEvent('release-jump-done')
-              }
-            })
+            self.triggerEvent('release-jump-done', res.data)
           }
         })
       } else {

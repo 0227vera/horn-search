@@ -2,7 +2,14 @@
 <view wx:if="{{loading}}" class="status">
   <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
 </view>
-<card wx:elif="{{renderList.length}}" role="boss" list="{{renderList}}" buttons="{{buttons}}" bind:footer-btn="footerBtn" />
+<card
+  wx:elif="{{renderList.length}}"
+  fromOrigin="{{fromOrigin}}"
+  role="boss"
+  list="{{renderList}}"
+  buttons="{{buttons}}"
+  bind:footer-btn="footerBtn"
+/>
 <view wx:else class="status">
   <van-empty description="{{emptyText}}" />
 </view>
