@@ -43,15 +43,16 @@
 
 <script>
 import mpx, { createComponent } from '@mpxjs/core'
+import config, { categoryMap } from '@/constant/release.js'
 import { getReleaseList, updateRelease } from '@/api'
 import store from '@/store'
 import makePhoneToBoss from '@/utils/makePhoneToBoss'
 
 createComponent({
   properties: {
-    categoryList: {
-      type: Array,
-      value: []
+    categoryTypeId: {
+      type: String,
+      value: ''
     }
   },
   data: {
@@ -90,6 +91,9 @@ createComponent({
   },
   computed: {
     ...store.mapState(['openid']),
+    categoryList() {
+      return config[this.categoryTypeId].category
+    },
     listParams() {
       const params = {}
       const { category, orderStatus } = this.filter

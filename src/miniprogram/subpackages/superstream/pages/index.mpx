@@ -4,6 +4,7 @@
       <component
         is="{{currentCom}}"
         categoryList="{{categoryList}}"
+        categoryTypeId="{{categoryTypeId}}"
         bind:release-jump-done="releaseJumpDone"
       />
     </view>
@@ -87,10 +88,13 @@ createPage({
     tabChange(e) {
       this.currentCom = e.detail.key
     },
-    releaseJumpDone() {
-      setTimeout(() => {
-        this.currentCom = 'order'
-      }, 1000)
+    releaseJumpDone(e) {
+      mpx.navigateTo({
+        url: `/order-detail/pages/detail-to-boss?isBack=true&id=${e.detail}&fromOrigin=${this.fromOrigin}`,
+        success() {
+          this.currentCom = 'order'
+        }
+      })
     }
   }
 })

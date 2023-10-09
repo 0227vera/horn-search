@@ -1,4 +1,4 @@
-export const initUpdateObj = {
+export const initBossWorkerObj = {
   category: '',
   categoryType: '',
   categoryTypeName: '',
@@ -33,3 +33,29 @@ export const categoryTypeList = [
   { text: '临工', value: '1' },
   { text: '长工', value: '2' }
 ]
+
+export const initFactoryObj = {
+  factoryScale: '',
+  factoryScaleName: '',
+  people: '',
+  peopleMin: '',
+  peopleMax: '',
+  area: '',
+  cooperType: '',
+  cooperTypeName: '',
+  price: '',
+  numMin: '',
+  numMax: '',
+  fabricProp: '',
+  fabricPropName: '',
+  productType: '',
+  productTypeName: '',
+  orderType: '',
+  orderTypeName: '',
+  color: '',
+  images: [],
+  tel: '',
+  poi: {},
+  add: '',
+  company: ''
+}

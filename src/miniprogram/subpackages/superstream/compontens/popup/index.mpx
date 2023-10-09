@@ -5,6 +5,7 @@
     position="bottom"
     bind:close="close"
   >
+    <!-- 时间选择 -->
     <van-datetime-picker
       wx:if="{{type === 'time'}}"
       type="datetime"
@@ -16,6 +17,7 @@
       bind:cancel="close"
       formatter="{{formatter}}"
     />
+    <!-- 位置选择 -->
     <block wx:elif="{{type === 'address'}}">
       <van-nav-bar
         left-text="取消"
@@ -27,6 +29,7 @@
       />
       <address-list showBottomBtn="{{false}}" showBottomDivder bind:choose-item="addressChange" />
     </block>
+    <!-- 分类选择 -->
     <block wx:elif="{{type === 'category'}}">
       <van-nav-bar
         left-text="取消"
@@ -44,6 +47,57 @@
         bind:click-nav="onClickNav"
         bind:click-item="onClickItem"
       />
+    </block>
+    <!-- 单选列表 -->
+    <block wx:elif="{{showRadio}}">
+      <van-nav-bar
+        left-text="取消"
+        right-text="确定"
+        title="{{title}}"
+        bind:click-left="close"
+        bind:click-right="onRadioSure"
+        safe-area-inset-top="{{false}}"
+      />
+      <van-radio-group value="{{ radio }}" bind:change="onRadioChange">
+        <van-cell-group>
+          <van-cell wx:for="{{radioList}}" wx:key="value" title="{{item.name}}" clickable data-name="{{item.value}}" bind:click="onItemClick">
+            <van-radio slot="right-icon" name="{{item.value}}" />
+          </van-cell>
+        </van-cell-group>
+      </van-radio-group>
+    </block>
+    <!-- 多选列表 -->
+    <block wx:elif="{{showCheckBox}}">
+      <van-nav-bar
+        left-text="取消"
+        right-text="确定"
+        title="{{title}}"
+        bind:click-left="close"
+        bind:click-right="onCheckBoxSure"
+        safe-area-inset-top="{{false}}"
+      />
+      <view style="max-height: 75vh; overflow-x: hidden;">
+        <van-checkbox-group value="{{ checkbox }}" bind:change="onCheckboxChange">
+          <van-cell-group>
+            <van-cell
+              wx:for="{{ checkBoxList }}"
+              wx:key="index"
+              title="{{ item.name }}"
+              value-class="value-class"
+              clickable
+              data-index="{{ index }}"
+              bind:click="toggle"
+            >
+              <van-checkbox
+                catch:tap="noop"
+                shape="square"
+                class="checkboxes-{{ index }}"
+                name="{{ item.value }}"
+              />
+            </van-cell>
+          </van-cell-group>
+        </van-checkbox-group>
+      </view>
     </block>
   </van-popup>
 </template>
@@ -65,6 +119,18 @@ createComponent({
       value: 0
     },
     categoryList: {
+      type: Array,
+      value: []
+    },
+    title: {
+      type: String,
+      value: ''
+    },
+    radioList: {
+      type: Array,
+      value: []
+    },
+    checkBoxList: {
       type: Array,
       value: []
     }
@@ -91,6 +157,19 @@ createComponent({
         minute: '分'
       }
       return `${value}${types[type] || ''}`
+    },
+    // 单选
+    radio: '',
+    checkbox: []
+  },
+  computed: {
+    showRadio() {
+      const radioShowList = ['cooperType', 'orderType', 'factoryScale']
+      return radioShowList.includes(this.type)
+    },
+    showCheckBox() {
+      const checkboxShowList = ['fabricProp', 'productType']
+      return checkboxShowList.includes(this.type)
     }
   },
   methods: {
@@ -121,7 +200,7 @@ createComponent({
         tel: this.address.phone
       })
     },
-    // node: 分类
+    // note: 分类
     onClickNav({ detail = {} }) {
       this.mainActiveIndex = detail.index
     },
@@ -133,20 +212,58 @@ createComponent({
     onCategoryClickRight() {
       const obj = JSON.parse(JSON.stringify(this.activeCategory))
       this.confirm(obj)
+    },
+    // note: 单选
+    onRadioChange(e) {
+      this.radio = e.detail
+    },
+    onItemClick(e) {
+      this.radio = e.currentTarget.dataset.name
+    },
+    onRadioSure() {
+      const obj = this.radioList.find(item => item.value === this.radio)
+      this.confirm(obj)
+    },
+    // note: 多选
+    onCheckboxChange(e) {
+      this.checkbox = e.detail
+    },
+    toggle(event) {
+      const { index } = event.currentTarget.dataset
+      const checkbox = this.selectComponent(`.checkboxes-${index}`)
+      checkbox.toggle()
+    },
+    noop() {},
+    onCheckBoxSure() {
+      const obj = {
+        value: this.checkbox,
+        selectedList: this.checkBoxList.filter(item => this.checkbox.includes(item.value))
+      }
+      this.confirm(obj)
     }
   }
 })
 
 </script>
-
+<style>
+.value-class {
+  flex: none !important;
+}
+</style>
 <script type="application/json">
   {
     "usingComponents": {
-        "van-popup": "@vant/weapp/popup/index",
-        "address-list": "@/compontens/common/address-list",
-        "van-datetime-picker": "@vant/weapp/datetime-picker/index",
-        "van-nav-bar": "@vant/weapp/nav-bar/index",
-        "van-tree-select": "@vant/weapp/tree-select/index"
+      "van-popup": "@vant/weapp/popup/index",
+      "address-list": "@/compontens/common/address-list",
+      "van-datetime-picker": "@vant/weapp/datetime-picker/index",
+      "van-nav-bar": "@vant/weapp/nav-bar/index",
+      "van-tree-select": "@vant/weapp/tree-select/index",
+      "van-cell": "@vant/weapp/cell/index",
+      "van-cell-group": "@vant/weapp/cell-group/index",
+      "van-radio": "@vant/weapp/radio/index",
+      "van-radio-group": "@vant/weapp/radio-group/index",
+      "van-checkbox": "@vant/weapp/checkbox/index",
+      "van-checkbox-group": "@vant/weapp/checkbox-group/index"
     }
   }
 </script>

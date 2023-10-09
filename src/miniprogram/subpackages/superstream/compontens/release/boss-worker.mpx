@@ -237,18 +237,19 @@
 
 <script>
 import mpx, { createComponent } from '@mpxjs/core'
+import config, { categoryMap } from '@/constant/release.js'
 import { fileUpload, addRelease, updateRelease } from '@/api'
 import { ORDER_UPDATE } from '@/setting/noticeInfo.js'
-import validate from '@/subpackages/superstream/utils/validate.js'
-import { initUpdateObj, unitList, categoryTypeList } from '@/subpackages/superstream/utils/constant.js'
+import { validateBossWorker } from '@/subpackages/superstream/utils/validate.js'
+import { initBossWorkerObj, unitList, categoryTypeList } from '@/subpackages/superstream/utils/constant.js'
 import { timeInfo } from '@/subpackages/superstream/utils/utils.js'
 const store = getApp().globalStore
 
 createComponent({
   properties: {
-    categoryList: {
-      type: Array,
-      value: []
+    categoryTypeId: {
+      type: String,
+      value: ''
     }
   },
   data: {
@@ -265,11 +266,14 @@ createComponent({
       placeholder: ''
     },
     originLabel: '货源(品质层次)',
-    updateObj: initUpdateObj,
+    updateObj: initBossWorkerObj,
     toastText: ''
   },
   computed: {
     ...store.mapState(['adInfo', 'fromOrigin']),
+    categoryList() {
+      return config[this.categoryTypeId].category
+    },
     imagesValue() {
       if (this.updateObj.images.length) {
         return `已上传${this.updateObj.images.length}张图片`
@@ -393,7 +397,7 @@ createComponent({
     // note: 提交操作
     async submitData() {
       console.log(this.updateObj)
-      const vali = validate({
+      const vali = validateBossWorker({
         updateObj: this.updateObj,
         subCategoryInfo: this.subCategoryInfo
       })

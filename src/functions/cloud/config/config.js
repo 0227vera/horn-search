@@ -7,12 +7,11 @@ module.exports = {
   PID: 'A00',
   COLLECTION_NAME: [
     'warrior_admin', // node: 管理员信息
-    'warrior_order', // node: 订单信息
     'warrior_company', // node: 公司信息
     'warrior_user', // 用户管理: 包括角色、地址信息
     'warrior_log', // node: 日志信息
-    'warrior_release', // 发布的的订单信息
-    'warrior_worker_release', // worker发出的订单
+    'warrior_release_boss_worker', // 工厂招工
+    'warrior_release_factory_cooper', // 工厂找合作
     'warrior_constant' // node: 常量配置
   ],
   // ## 缓存相关

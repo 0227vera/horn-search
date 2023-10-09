@@ -1,8 +1,9 @@
 const BaseService = require('./base_service.js')
-const ReleaseModel = require('../model/release_model.js')
+const bossWorkerModel = require('../model/release_boss_work_model.js')
+const factoryCooperModel = require('../model/release_factory_cooper_model.js')
 const modelMap = {
-  ReleaseModel,
-  bossWorkerModel: ReleaseModel
+  bossWorkerModel,
+  factoryCooperModel
 }
 
 class ReleaseManagerService extends BaseService {

@@ -31,9 +31,6 @@ import { createComponent } from '@mpxjs/core'
 import { getReleaseList, updateRelease } from '@/api'
 
 createComponent({
-  properties: {
-
-  },
   data: {
     orderSelect: 'push',
     orderList: [],

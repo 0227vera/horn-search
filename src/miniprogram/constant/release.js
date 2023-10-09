@@ -77,9 +77,141 @@ const findWorkerCategory = [
   }
 ]
 // note: 工厂相关的分类
-const findFactoryCategory = [
+const cooperTypeList = [{
+  name: '包工包料',
+  value: '1'
+}, {
+  name: '来料加工',
+  value: '2'
+}, {
+  name: '裁片外发',
+  value: '3'
+}, {
+  name: '开发生产供应商',
+  value: '4'
+}]
 
-]
+const fabricPropList = [{
+  name: '针织',
+  value: '1'
+}, {
+  name: '梭织',
+  value: '2'
+}, {
+  name: '毛织',
+  value: '3'
+}, {
+  name: '卫衣',
+  value: '4'
+}, {
+  name: '牛仔',
+  value: '5'
+}, {
+  name: '雪纺/真丝',
+  value: '6'
+}, {
+  name: '蕾丝/网纱',
+  value: '7'
+}, {
+  name: '毛呢',
+  value: '8'
+}, {
+  name: '毛毛料',
+  value: '9'
+}, {
+  name: '皮革料',
+  value: '10'
+}, {
+  name: '毛毛料',
+  value: '11'
+}, {
+  name: '水洗料',
+  value: '12'
+}, {
+  name: '灯芯绒',
+  value: '13'
+}]
+
+const productTypeList = [{
+  name: 'T恤',
+  value: '1'
+}, {
+  name: '小衫',
+  value: '2'
+}, {
+  name: '衬衣',
+  value: '3'
+}, {
+  name: '连衣裙',
+  value: '4'
+}, {
+  name: '裤子',
+  value: '5'
+}, {
+  name: '裙子',
+  value: '6'
+}, {
+  name: '连体裤',
+  value: '7'
+}, {
+  name: '外套',
+  value: '8'
+}, {
+  name: '套装',
+  value: '9'
+}, {
+  name: '两件套',
+  value: '10'
+}, {
+  name: '毛毛衣',
+  value: '11'
+}, {
+  name: '马夹',
+  value: '12'
+}, {
+  name: '羽绒服/棉服',
+  value: '13'
+}, {
+  name: '羽绒裤/棉裤',
+  value: '14'
+}, {
+  name: '童装',
+  value: '15'
+}, {
+  name: '男装',
+  value: '16'
+}]
+
+const orderTypeList = [{
+  name: '档口货',
+  value: '1'
+}, {
+  name: '网档单',
+  value: '2'
+}, {
+  name: '直播单',
+  value: '3'
+}, {
+  name: '电商单',
+  value: '4'
+}, {
+  name: '公司单',
+  value: '5'
+}, {
+  name: '卓天商务单',
+  value: '6'
+}, {
+  name: '外单',
+  value: '7'
+}]
+
+const factoryScaleList = [{
+  name: '工厂',
+  value: '1'
+}, {
+  name: '小作坊',
+  value: '2'
+}]
 
 export default {
   findWorker: {
@@ -93,7 +225,11 @@ export default {
     }
   },
   findFactory: {
-    category: findFactoryCategory,
+    factoryScaleList,
+    cooperTypeList,
+    fabricPropList,
+    productTypeList,
+    orderTypeList,
     fromOrigin: 'factoryCooper',
     partyA: {
       title: ['我要找工厂', '订单列表']
