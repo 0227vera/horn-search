@@ -7,11 +7,11 @@ class ReleaseModel extends BaseModel {
 // 集合名
 ReleaseModel.CL = "warrior_release_factory_cooper"
 
-
 ReleaseModel.DB_STRUCTURE = {
   _pid: 'string|true',
   area: 'string|true',
   color: 'string|true',
+  code: 'string|true',
   cooperType: 'string|true',
   cooperTypeName: 'string|true',
   orderType: 'string|true',
@@ -35,7 +35,6 @@ ReleaseModel.DB_STRUCTURE = {
   num: 'string|false',
   numMax: 'string|false',
   numMin: 'string|false',
-  images: 'array|false',
   add: 'string|false',
   company: 'string|false',
   OPENID: 'string|true',

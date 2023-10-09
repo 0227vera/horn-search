@@ -17,6 +17,7 @@
 
 <script>
 import mpx, { createComponent } from '@mpxjs/core'
+import store from '@/store'
 
 createComponent({
   properties: {
@@ -26,62 +27,118 @@ createComponent({
     }
   },
   computed: {
+    ...store.mapState(['fromOrigin']),
     renderList() {
-      const { categoryName, categorySub, categoryType, categoryTypeName, categoryNum, priceMin, priceMax, price, priceUnitName, num, numMin, numMax, origin, poi, tel, ownTimeName, images, note, add, calllist, company } = this.orderData
+      console.log(this.orderData)
+      const {
+        categoryName, categorySub, categoryType, categoryTypeName, categoryNum, priceMin, priceMax, price, priceUnitName, num, numMin, numMax, origin, poi, tel, ownTimeName, images, note, add, calllist, company,
+        factoryScaleName, factoryScale, people, area, cooperTypeName, fabricPropName, productTypeName, orderTypeName, color, code
+      } = this.orderData
       const list = []
-      // note: 岗位
-      let categoryText = categoryName
-      if (categorySub) {
-        categoryText += `(${categorySub})`
-      }
-      if (categoryNum) {
-        categoryText += `-${categoryNum}人`
-      }
-      if (categoryTypeName) {
-        categoryText += `-${categoryTypeName}`
-      }
-      list.push({
-        title: '岗位',
-        value: categoryText
-      })
-      // note: 价格
-      let priceText = ''
-      let priceTitle = categoryType === '2' ? '薪资' : '单价'
-      if (priceMin && priceMax) {
-        priceText = `${priceMin}${priceUnitName} ~ ${priceMax}${priceUnitName}`
-      } else if (price) {
-        priceText = `${price}${priceUnitName}`
-      }
-      list.push({
-        title: priceTitle,
-        value: priceText
-      })
-      // note: 数量
-      if (num) {
+      if (this.fromOrigin === 'bossWorker') {
+        // note: 岗位
+        let categoryText = categoryName
+        if (categorySub) {
+          categoryText += `(${categorySub})`
+        }
+        if (categoryNum) {
+          categoryText += `-${categoryNum}人`
+        }
+        if (categoryTypeName) {
+          categoryText += `-${categoryTypeName}`
+        }
         list.push({
-          title: '数量',
-          value: `${num}件`
+          title: '岗位',
+          value: categoryText
         })
-      }
-      // note: 货源
-      if (origin) {
+        // note: 价格
+        let priceText = ''
+        let priceTitle = categoryType === '2' ? '薪资' : '单价'
+        if (priceMin && priceMax) {
+          priceText = `${priceMin}${priceUnitName} ~ ${priceMax}${priceUnitName}`
+        } else if (price) {
+          priceText = `${price}${priceUnitName}`
+        }
         list.push({
-          title: '货源(品质层次)',
-          value: origin,
-          titleWidth: '240rpx'
+          title: priceTitle,
+          value: priceText
         })
-      }
-      // note: 位置
-      list.push({
-        title: '位置',
-        value: poi.name
-      })
-      if (ownTimeName) {
+        // note: 数量
+        if (num) {
+          list.push({
+            title: '数量',
+            value: `${num}件`
+          })
+        }
+        // note: 货源
+        if (origin) {
+          list.push({
+            title: '货源(品质层次)',
+            value: origin,
+            titleWidth: '240rpx'
+          })
+        }
+      } else if (this.fromOrigin === 'factoryCooper') {
+        let factoryScaleText = factoryScaleName
+        if (factoryScale === '1') {
+          factoryScaleText += `(${people}人以上)`
+        } else if (factoryScale === '2') {
+          factoryScaleText += `(${peopleMin}人~${peopleMax}人)`
+        }
         list.push({
-          title: '截止时间',
-          value: ownTimeName
+          title: '工厂规模',
+          value: factoryScaleText
         })
+        list.push({
+          title: '地域要求',
+          value: area
+        })
+        if (price) {
+          list.push({
+            title: '单价',
+            value: `${price}元/件`
+          })
+        }
+        list.push({
+          title: '合作类型',
+          value: cooperTypeName
+        })
+        list.push({
+          title: '生产数量',
+          value: `${numMin}~${numMax}件`
+        })
+        list.push({
+          title: '面料属性',
+          value: fabricPropName
+        })
+        list.push({
+          title: '产品类型',
+          value: productTypeName
+        })
+        list.push({
+          title: '订单类型',
+          value: orderTypeName
+        })
+        list.push({
+          title: '颜色码数',
+          value: `${color}色${code}码`
+        })
+        if (add) {
+          list.push({
+            title: '补充',
+            value: add
+          })
+        }
       }
+      if (this.fromOrigin === 'bossWorker') {
+        if (ownTimeName) {
+          list.push({
+            title: '截止时间',
+            value: ownTimeName
+          })
+        }
+      }
+
       if (images?.length) {
         list.push({
           title: '图片',
@@ -90,18 +147,21 @@ createComponent({
           list: images
         })
       }
-      if (note) {
-        list.push({
-          title: '岗位要求',
-          value: note
-        })
+      if (this.fromOrigin === 'bossWorker') {
+        if (note) {
+          list.push({
+            title: '岗位要求',
+            value: note
+          })
+        }
+        if (add) {
+          list.push({
+            title: '待遇补充',
+            value: add
+          })
+        }
       }
-      if (add) {
-        list.push({
-          title: '待遇补充',
-          value: add
-        })
-      }
+
       if (company) {
         list.push({
           title: '工厂名',

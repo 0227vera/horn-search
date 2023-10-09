@@ -91,10 +91,7 @@ createPage({
     },
     releaseJumpDone(e) {
       mpx.navigateTo({
-        url: `/order-detail/pages/detail-to-boss?isBack=true&id=${e.detail}&fromOrigin=${this.fromOrigin}`,
-        success() {
-          this.currentCom = 'order'
-        }
+        url: `/order-detail/pages/detail-to-boss?isBack=true&id=${e.detail}&fromOrigin=${this.fromOrigin}`
       })
     }
   }

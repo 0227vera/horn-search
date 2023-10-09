@@ -136,7 +136,7 @@ export const validateFactory = ({ updateObj } = {}) => {
     result.text = '请选择{订单类型}'
     return result
   }
-  if (!updateObj.color) {
+  if (!updateObj.color || !updateObj.code) {
     result.text = '请输入{颜色码数}'
     return result
   }

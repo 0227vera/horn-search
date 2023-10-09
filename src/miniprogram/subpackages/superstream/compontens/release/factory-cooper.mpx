@@ -83,7 +83,7 @@
       id="price"
       center
     >
-      <view slot="right-icon" style="color: #333; font-weight: bold;">件</view>
+      <view slot="right-icon" style="color: #333; font-weight: bold;">元/件</view>
     </van-field>
     <!-- 数量相关 -->
     <van-field
@@ -154,14 +154,31 @@
       label="颜色码数"
       title-width="120rpx"
       required
-      value="{{ updateObj.color }}"
       placeholder="请输入颜色码数"
       type="digit"
       input-align="right"
-      bind:change="onFieldChange"
-      id="color"
       center
     >
+     <view slot="input" class="area-container">
+        <input
+          type="digit"
+          value="{{updateObj.color}}"
+          id="color"
+          bind:input="onAreaFieldChange"
+          placeholder="颜色"
+          class="input"
+        />
+        <text class="middle">色</text>
+        <input
+          type="digit"
+          value="{{updateObj.code}}"
+          id="code"
+          bind:input="onAreaFieldChange"
+          placeholder="码数"
+          class="input"
+        />
+        <text class="middle">码</text>
+      </view>
     </van-field>
     <!-- 位置相关 -->
     <van-field
