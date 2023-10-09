@@ -1,6 +1,28 @@
 
 <template>
   <view class="container">
+    <view  class="list">
+      <view class="list-filter">
+        <view class="list-filter-info">
+          <view class="list-filter-info-item">
+            <view class="list-filter-info-item_text">岗位筛选：</view>
+            <view class="list-filter-info-item_value">{{filter.category.text || '全部'}}</view>
+          </view>
+          <view class="list-filter-info-item">
+            <view class="list-filter-info-item_text">订单状态：</view>
+            <view class="list-filter-info-item_value">{{filter.orderStatus.text || '全部'}}</view>
+          </view>
+          <view class="list-filter-info-item">
+            <view class="list-filter-info-item_text">距离要求：</view>
+            <view class="list-filter-info-item_value">{{filter.distance.text || '全部'}}</view>
+          </view>
+        </view>
+        <view class="list-filter-opa" bind:tap="showFilter">
+          <van-icon name="filter-o" />
+          <text class="text">点击筛选</text>
+        </view>
+      </view>
+    </view>
     <view wx:if="{{loading}}" class="loading">
       <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
     </view>
@@ -8,9 +30,15 @@
       <card list="{{list}}" buttons="{{buttons}}" role="worker" bind:footer-btn="footerBtn" />
     </view>
     <view wx:else class="loading empty">
-      <van-empty description="暂无数据，去发布一个空闲时间吧" bind:tap="gotoRelease" />
+      <van-empty description="暂无数据"/>
     </view>
   </view>
+  <worker-filter
+    show="{{filter.show}}"
+    categoryList="{{categoryList}}"
+    bind:close="closeFilter"
+    bind:sure="sureFilter"
+  />
 </template>
 
 <script>
@@ -21,14 +49,30 @@ import makePhoneToBoss from '@/utils/makePhoneToBoss'
 
 createComponent({
   properties: {
-    category: {
-      type: String,
-      value: ''
+    categoryList: {
+      type: Array,
+      value: []
     }
   },
   data: {
     loading: true,
     list: [],
+    filter: {
+      show: false,
+      category: {
+        value: [],
+        text: ''
+      },
+      distance: {
+        value: [],
+        text: ''
+      },
+      orderStatus: {
+        value: [],
+        text: ''
+      },
+      value: []
+    },
     buttons: [{
       text: '打电话',
       id: 'call',
@@ -45,21 +89,36 @@ createComponent({
     }]
   },
   computed: {
-    ...store.mapState(['openid', 'fromOrigin'])
-  },
-  watch: {
-    category() {
-      this.changeComponent()
+    ...store.mapState(['openid']),
+    listParams() {
+      const params = {}
+      const { category, orderStatus } = this.filter
+      if (category.value?.length) {
+        Object.assign(params, {
+          category: ['in', category.value]
+        })
+      }
+      if (orderStatus.value?.length) {
+        Object.assign(params, {
+          status: ['in', orderStatus.value]
+        })
+      }
+      if (Object.keys(params).length) {
+        return { and: params }
+      } else {
+        return {}
+      }
     }
   },
   attached() {
-    this.changeComponent()
+    console.log(this.categoryList)
+    this.getList()
   },
   methods: {
-    async changeComponent() {
+    async getList() {
       this.loading = true
       this.list = []
-      const res = await getReleaseList()
+      const res = await getReleaseList(this.listParams)
       this.loading = false
       this.list = res.data?.list || []
     },
@@ -91,8 +150,18 @@ createComponent({
     gotoDetail(item) {
       mpx.navigateTo({ url: `/order-detail/pages/detail-to-worker?id=${item._id}&isBack=true&fromOrigin=${this.fromOrigin}` })
     },
-    gotoRelease(item) {
-      mpx.navigateTo({ url: `/release/pages/worker` })
+    showFilter() {
+      this.filter.show = true
+    },
+    closeFilter() {
+      this.filter.show = false
+    },
+    sureFilter({ detail } = {}) {
+      Object.keys(detail).forEach(item => {
+        console.log(item)
+        this.filter[item] = detail[item] || this.filter[item]
+      })
+      this.getList()
     }
   }
 })
@@ -110,6 +179,35 @@ createComponent({
 .list
   padding 0 32rpx
   box-sizing border-box
+  &-filter
+    display flex
+    margin-bottom 16rpx
+    &-info
+      flex 1
+      overflow hidden
+      &-item
+        display flex
+        align-items center
+        font-weight bold
+        margin-bottom 4rpx
+        &_text
+          font-size 28rpx
+        &_value
+          color #ee0a24
+          font-sizi 32rpx
+    &-opa
+      background #ffffff
+      box-sizing border-box
+      border-radius 16rpx
+      height 60rpx
+      width 150rpx
+      margin-top 16rpx
+      display flex
+      justify-content center
+      align-items center
+      font-weight bold
+      .text
+        font-size 24rpx
 .tags
   display flex
   margin-bottom 10rpx
@@ -144,7 +242,9 @@ createComponent({
       "van-loading": "@vant/weapp/loading/index",
       "van-card": "@vant/weapp/card/index",
       "van-button": "@vant/weapp/button/index",
-      "van-empty": "@vant/weapp/empty/index"
+      "van-icon": "@vant/weapp/icon/index",
+      "van-empty": "@vant/weapp/empty/index",
+      "worker-filter": "@/subpackages/superstream/compontens/popup/worker-filter.mpx"
     },
     "disableScroll": true
   }

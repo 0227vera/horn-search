@@ -10,7 +10,7 @@ class ReleaseManagerService extends BaseService {
     super()
     this.origin = params.origin
     const key = `${this.origin}Model`
-    this.model = modelMap?.[key]
+    this.model = modelMap[key]
   }
   async getList(where = {}) {
     const { fromOrigin, ...newWhere } = where

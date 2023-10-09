@@ -85,7 +85,6 @@ createComponent({
     },
     renderList() {
       const items = this.list.map(item => {
-        console.log(item)
         if (this.isWorker) {
           item.tag = item.calllist?.length ? `已有${item.calllist.length}人呼叫` : '暂无人呼叫'
         }
@@ -95,7 +94,7 @@ createComponent({
         content.push({
           type: 'map',
           text: '地址:',
-          value: item.poi.detail
+          value: item.poi.detail || item.poi.address
         })
         let categoryValue = `${item.categoryName}${item.categorySub ? `(${item.categorySub})` : ''}-{${item.categoryNum}人}-${item.categoryTypeName}`
         content.push({
@@ -211,6 +210,7 @@ createComponent({
   box-sizing border-box
   border-radius 16rpx
   position relative
+  margin-bottom 16rpx
   .tag
     position absolute
     top 16rpx

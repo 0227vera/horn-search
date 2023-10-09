@@ -1,0 +1,185 @@
+<template>
+  <van-popup
+    show="{{ show }}"
+    round
+    position="bottom"
+    bind:close="close"
+  >
+    <van-nav-bar
+      left-text="取消"
+      right-text="确定"
+      title="筛选"
+      bind:click-left="close"
+      bind:click-right="sureFilter"
+      safe-area-inset-top="{{false}}"
+    />
+    <view class="content">
+      <view class="content-item">
+        <view class="content-item-title">订单状态筛选</view>
+        <view class="status">
+          <view wx:for="{{showSteps}}" wx:key="status">
+            <view bind:tap="onStatusChange(item)" class="status-item {{item.selected ? 'selected' : ''}}">{{item.desc}}</view>
+          </view>
+        </view>
+      </view>
+      <view class="content-item">
+          <view class="content-item-title">距离筛选</view>
+          <view class="distance">
+            <van-slider value="{{distanceValue}}" use-button-slot range bind:change="onDistanceChange">
+              <view class="custom-button" slot="left-button">{{ distanceValue[0] / 10}}km</view>
+              <view class="custom-button" slot="right-button">{{ distanceValue[1] / 10}}km</view>
+            </van-slider>
+          </view>
+      </view>
+      <view class="content-item category">
+        <view class="content-item-title">岗位筛选</view>
+        <view class="category-list">
+          <van-tree-select
+            height="50vh"
+            items="{{ categoryList }}"
+            max="{{ max }}"
+            main-active-index="{{ mainActiveIndex }}"
+            active-id="{{ activeId }}"
+            bind:click-nav="onClickNav"
+            bind:click-item="onClickItem"
+          />
+        </view>
+      </view>
+    </view>
+  </van-popup>
+</template>
+
+<script>
+import { createComponent } from '@mpxjs/core'
+import store from '@/store'
+createComponent({
+  properties: {
+    show: {
+      type: Boolean,
+      value: false
+    },
+    categoryList: {
+      type: Array,
+      value: []
+    }
+  },
+  computed: {
+    ...store.mapState(['steps', 'openid']),
+    showSteps() {
+      return this.steps.filter(item => item.showInList).map(item => {
+        item.selected = this.selectStatus.includes(item.status)
+        return item
+      })
+    }
+  },
+  data: {
+    mainActiveIndex: 0,
+    max: 3,
+    activeId: [],
+    activeList: [],
+    distanceValue: [0, 100],
+    selectStatus: []
+  },
+  attached() {
+  },
+  methods: {
+    close() {
+      this.triggerEvent('close')
+    },
+    sureFilter() {
+      console.log(this.selectStatus, this.distanceValue, this.activeList)
+      this.triggerEvent('sure', {
+        orderStatus: {
+          value: this.selectStatus,
+          text: this.steps.filter(item => this.selectStatus.includes(item.status)).map(item => item.desc).join('；')
+        },
+        distance: {
+          value: this.distanceValue,
+          text: this.distanceValue.map(item => `${item / 10}km`).join('~')
+        },
+        category: {
+          value: this.activeId,
+          text: this.activeList.map(item => item.text).join('；')
+        }
+      })
+      this.close()
+    },
+    onClickNav({ detail = {} }) {
+      this.mainActiveIndex = detail.index
+    },
+    onClickItem({ detail = {} }) {
+      const { id } = detail
+      if (!this.activeId.includes(id)) {
+        this.activeId.push(id)
+        this.activeList.push(detail)
+      } else if (this.activeId.length === this.max) {
+        this.activeId = this.activeId.filter(item => item !== id)
+        this.activeList = this.activeList.filter(item => item.id !== id)
+      }
+    },
+    onDistanceChange(e) {
+      this.distanceValue = e.detail
+    },
+    onStatusChange(item) {
+      if (!this.selectStatus.includes(item.status)) {
+        this.selectStatus.push(item.status)
+      } else {
+        this.selectStatus = this.selectStatus.filter(f => item.status !== f)
+      }
+      console.log(this.selectStatus)
+    }
+  }
+})
+
+</script>
+<style lang="stylus" scoped>
+.content
+  overflow hidden
+  display flex
+  flex-direction column
+  &-item
+    padding 16rpx 32rpx
+    margin-bottom 16rpx
+    border-bottom 2rpx solid #f5f5f5
+    .status
+      display flex
+      &-item
+        background #f5f5f5
+        border 2rpx solid #f5f5f5
+        padding 8rpx 16rpx
+        margin-right 16rpx
+        border-radius 16rpx
+        &.selected
+          color #ffffff
+          background #1989fa
+    .distance
+      margin-top 16rpx
+      padding 16rpx 32rpx
+      .custom-button
+        background #1989fa
+        border-radius 16rpx
+        padding 0 8rpx
+        color #ffffff
+    &-title
+      color #333333
+      font-size 28rpx
+      font-weight bold
+      margin-bottom 16rpx
+    &.category
+      padding 0
+      flex 1
+      overflow hidden
+      display flex
+      flex-direction column
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "van-popup": "@vant/weapp/popup/index",
+      "van-nav-bar": "@vant/weapp/nav-bar/index",
+      "van-tree-select": "@vant/weapp/tree-select/index",
+      "van-slider": "@vant/weapp/slider/index"
+    }
+  }
+</script>

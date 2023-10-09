@@ -31,7 +31,7 @@ createPage({
   onShareAppMessage() {
     const path = encodeURIComponent(`/order-detail/pages/detail-to-worker?id=${this._id}&fromOrigin=${this.fromOrigin}`)
     return {
-      title: this.categoryName,
+      title: this.shareTitle,
       path: `/pages/page?type=mp&path=${path}`,
       imageUrl: this.images?.[0] || ''
     }
@@ -54,12 +54,15 @@ createPage({
     this.loading = true
     const res = await getReleaseOneById(params)
     this.orderData = res.data || {}
-    const { categoryName, category, price, priceUnit, poi, tel, images, ownTimeName, note, status, calllist, _id, readlist } = res.data || {}
+    const { categoryName, categorySub, categoryNum, categoryTypeName, category, price, priceUnit, poi, tel, images, ownTimeName, note, status, calllist, _id, readlist } = res.data || {}
     this.poi = poi
     this.tel = tel
     this._id = _id
     this.images = images
     this.categoryName = categoryName
+    this.categoryTypeName = categoryTypeName
+    this.categoryNum = categoryNum
+    this.categorySub = categorySub
     this.category = category
     this.loading = false
     this.readlistFunc(readlist)

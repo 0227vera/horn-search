@@ -1,20 +1,13 @@
 <template>
   <custom-container title="{{title}}">
-    <block wx:if="{{roleType === 'partyA'}}">
-      <view class="component-container">
-        <component
-          is="{{currentCom}}"
-          categoryList="{{categoryList}}"
-          bind:release-jump-done="releaseJumpDone"
-        ></component>
-      </view>
-      <footer wx:if="{{currentCom}}" list="{{footerList}}" initActive="{{currentCom}}" bind:tab-change="tabChange" />
-    </block>
-    <block wx:if="{{roleType === 'partyB'}}">
-      <view>
-        <worker />
-      </view>
-    </block>
+    <view class="{{roleType === 'partyA' && currentCom === footerList[0].key ? 'component-container' : ''}}">
+      <component
+        is="{{currentCom}}"
+        categoryList="{{categoryList}}"
+        bind:release-jump-done="releaseJumpDone"
+      />
+    </view>
+    <footer wx:if="{{shoeFooterList}}" list="{{footerList}}" initActive="{{currentCom}}" bind:tab-change="tabChange" />
   </custom-container>
   <back-home />
 </template>
@@ -36,6 +29,11 @@ createPage({
     categoryTypeId: ''
   },
   async onLoad(params) {
+    /**
+     * type: 区分是boss还是worker
+     * key: 确定使用哪个组件展示
+     * id: 确定分类
+     */
     const { type, key, id } = params
     // 当前的分类id，用于获取分类，常用配置等
     this.categoryTypeId = categoryMap[id]
@@ -62,6 +60,9 @@ createPage({
     },
     partyB() {
       return this.categoryConfig.partyB
+    },
+    shoeFooterList() {
+      return this.roleType === 'partyA'
     },
     footerList() {
       return [{

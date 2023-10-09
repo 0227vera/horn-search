@@ -21,7 +21,6 @@ createApp({
     const [constant, userInfo] = await Promise.all([getCommonConfig(), getCurrentUser()])
     const { steps, categoryItems } = constant.data
     const { address = [], OPENID } = userInfo.data
-    console.log('===========>', userInfo)
     let obj = {
       steps,
       appReady: true

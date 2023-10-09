@@ -121,6 +121,10 @@ createPage({
             _id: this._id,
             status: '4'
           })
+          mpx.showToast({
+            icon: 'success',
+            title: '关单成功'
+          })
           mpx.navigateBack()
         }
       }, {

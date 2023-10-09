@@ -55,10 +55,8 @@ createPage({
       mpx.redirectTo({
         url: `/order-detail/pages/worker-detail?id=${item._id}`
       })
-      console.log(item)
     },
     priviewImg(item) {
-      console.log(item)
       wx.previewMedia({
         current: 0,
         sources: item.images.map(item => ({

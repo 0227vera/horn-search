@@ -43,17 +43,32 @@ createComponent({
     }]
   },
   computed: {
-    ...store.mapState(['fromOrigin']),
+    ...store.mapState(['fromOrigin', 'openid']),
     renderList() {
       return this.list.filter(item => item.status === this.status)
     }
   },
   methods: {
-    footerBtn(e) {
+    async footerBtn(e) {
       const { item, buttonInfo } = e.detail
       switch (buttonInfo.id) {
         case 'close':
-          console.log('close')
+          if (item.OPENID !== this.openid) {
+            mpx.showToast({
+              icon: 'none',
+              title: '您不是发单人，不可关单'
+            })
+            return
+          }
+          await updateRelease({
+            _id: item._id,
+            status: '4'
+          })
+          mpx.showToast({
+            icon: 'success',
+            title: '关单成功'
+          })
+          this.triggerEvent('close-order')
           break
         case 'gotoDetail':
           this.gotoDetail(item)
