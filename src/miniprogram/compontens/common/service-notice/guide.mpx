@@ -1,14 +1,14 @@
 <template>
   <view class="subcri" wx:if="{{show}}" style="bottom: {{bottom}};">
     <view class="info">
-        <view class="mainTitle">消息订阅提醒</view>
-        <view class="subTitle">点击订阅，有新订单、动态等第一时间通知您</view>
+      <view class="mainTitle">消息订阅提醒</view>
+      <view class="subTitle">点击订阅，有新订单、动态等第一时间通知您</view>
     </view>
     <view class="btn">
-        <van-button size="mini" type="primary" bind:tap="clickSub">消息订阅</van-button>
+      <van-button size="mini" type="primary" bind:tap="clickSub">消息订阅</van-button>
     </view>
     <view class="close" bind:tap="close">
-        <van-icon name="cross" />
+      <van-icon name="cross" />
     </view>
   </view>
   <service-notice tmplIds="{{tmplIds}}" wx:ref="service" />
@@ -22,7 +22,15 @@ import store from '@/store'
 createComponent({
   data: {
     tmplIds: [NEW_ORDER_NOTICE, ORDER_UPDATE],
-    show: true
+    show: false
+  },
+  pageLifetimes: {
+    show() {
+      this.initShowStatus()
+    }
+  },
+  attached() {
+    this.initShowStatus()
   },
   computed: {
     ...store.mapState(['isIphoneX']),
@@ -35,8 +43,20 @@ createComponent({
     }
   },
   methods: {
-    clickSub() {
-      this.$refs.service?.showServiceNotice?.()
+    async initShowStatus() {
+      const res = await wx.getSetting({
+        withSubscriptions: true
+      })
+      const { subscriptionsSetting } = res
+      if (subscriptionsSetting.itemSettings[NEW_ORDER_NOTICE] === 'accept' && subscriptionsSetting.itemSettings[ORDER_UPDATE] === 'accept') {
+        this.show = false
+      } else {
+        this.show = true
+      }
+    },
+    async clickSub() {
+      await this.$refs.service?.showServiceNotice?.()
+      this.initShowStatus()
     },
     close() {
       this.show = false

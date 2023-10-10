@@ -29,7 +29,7 @@ import ParsonCenter from '@/subpackages/person-center/pages/index.mpx?resolve'
 createPage({
   data: {
     list,
-    clickLeft: () => {
+    clickLeft() {
       mpx.navigateTo({
         url: ParsonCenter
       })

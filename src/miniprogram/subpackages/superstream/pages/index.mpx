@@ -42,12 +42,12 @@ createPage({
     this.roleType = type
     // 当前的组件，用于甲方的切换
     this.currentCom = key
-    console.log('========>', this.fromOrigin)
     this.setState({
       fromOrigin: this.fromOrigin
     })
   },
   computed: {
+    ...store.mapState(['showBottomNav']),
     categoryConfig() {
       return config[this.categoryTypeId] || {}
     },
@@ -64,7 +64,7 @@ createPage({
       return this.categoryConfig.partyB
     },
     shoeFooterList() {
-      return this.roleType === 'partyA'
+      return this.roleType === 'partyA' && this.showBottomNav
     },
     footerList() {
       return [{

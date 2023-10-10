@@ -59,16 +59,16 @@ createComponent({
     align-items center
     justify-content center
     left 18rpx
-    width 64rpx
-    height 42rpx
-    font-size 32rpx
+    width 84rpx
+    height 52rpx
+    font-size 36rpx
     border-radius 32rpx
     background rgba(255, 255, 255, 0.80)
     font-weight bold
+    color #000000
   .title
-    font-size 28rpx
-    font-weight 500
-    color #fff
+    font-size 32rpx
+    font-weight bold
 </style>
 
 <script name="json">

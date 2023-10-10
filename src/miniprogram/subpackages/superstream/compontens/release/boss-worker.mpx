@@ -10,6 +10,7 @@
         required
         is-link
         readonly
+        border="{{false}}"
         value="{{updateObj.categoryName}}"
         input-align="right"
         placeholder="请点击选择需要招的岗位"
@@ -26,8 +27,19 @@
         />
         <view>位</view>
       </view>
-      <van-dropdown-menu wx:if="{{showCategoryType}}" title-class="dropdown">
-        <van-dropdown-item bind:change="changeCategoryType" value="{{ updateObj.categoryType }}" options="{{ categoryTypeList }}" />
+      <van-dropdown-menu
+        active-color="#1989fa"
+        wx:if="{{showCategoryType}}"
+        title-class="dropdown"
+        root-portal
+      >
+        <van-dropdown-item
+          bind:change="changeCategoryType"
+          value="{{ updateObj.categoryType }}"
+          options="{{ categoryTypeList }}"
+          bind:open="openDropdown"
+          bind:close="closeDropdown"
+        />
       </van-dropdown-menu>
     </view>
     <!-- 岗位子系列 -->
@@ -43,41 +55,58 @@
       id="categorySub"
     />
     <!-- 薪资相关 -->
-    <van-field
-      label="{{updateObj.categoryType === '2' ? '薪资' : '单价'}}"
-      title-width="80rpx"
-      required
-      value="{{ updateObj.price }}"
-      placeholder="请输入计时或者计件的单价"
-      type="digit"
-      input-align="right"
-      bind:change="onFieldChange"
-      id="price"
-      center
-    >
-      <view slot="input" class="area-container" wx:if="{{updateObj.priceUnit === '3'}}">
-        <input
-          type="digit"
-          value="{{updateObj.priceMin}}"
-          id="priceMin"
-          bind:input="onAreaFieldChange"
-          placeholder="最低"
-          class="input"
+    <view class="category-container">
+      <van-field
+        label="{{updateObj.categoryType === '2' ? '薪资' : '单价'}}"
+        class="category-content"
+        title-width="80rpx"
+        required
+        border="{{false}}"
+        value="{{ updateObj.price }}"
+        placeholder="请输入计时或者计件的单价"
+        type="digit"
+        input-align="right"
+        bind:change="onFieldChange"
+        id="price"
+        center
+        custom-class="custom-height"
+      >
+        <view slot="input" class="area-container" wx:if="{{updateObj.priceUnit === '3'}}">
+          <input
+            type="digit"
+            value="{{updateObj.priceMin}}"
+            id="priceMin"
+            bind:input="onAreaFieldChange"
+            placeholder="最低"
+            class="input"
+          />
+          <text class="middle">~</text>
+          <input
+            type="digit"
+            value="{{updateObj.priceMax}}"
+            id="priceMax"
+            bind:input="onAreaFieldChange"
+            placeholder="最高"
+            class="input"
+          />
+        </view>
+        <view slot="button">
+        </view>
+      </van-field>
+      <van-dropdown-menu
+        active-color="#1989fa"
+        title-class="dropdown"
+        root-portal
+      >
+        <van-dropdown-item
+          value="{{ updateObj.priceUnit }}"
+          options="{{ unitList }}"
+          bind:open="openDropdown"
+          bind:close="closeDropdown"
+          bind:change="changeUnit"
         />
-        <text class="middle">~</text>
-        <input
-          type="digit"
-          value="{{updateObj.priceMax}}"
-          id="priceMax"
-          bind:input="onAreaFieldChange"
-          placeholder="最高"
-          class="input"
-        />
-      </view>
-      <van-dropdown-menu slot="button">
-        <van-dropdown-item bind:change="changeUnit" value="{{ updateObj.priceUnit }}" options="{{ unitList }}" />
       </van-dropdown-menu>
-    </van-field>
+    </view>
     <!-- 数量相关 -->
     <van-field
       wx:if="{{updateObj.categoryType !== '2'}}"
@@ -220,19 +249,19 @@
       bind:change="onFieldChange"
     />
   </van-cell-group>
-  <van-cell border="{{false}}">
+  <van-cell border="{{false}}" wx:if="{{showBottomNav}}">
     <van-button round type="primary" block bind:tap="submitData">发布</van-button>
   </van-cell>
 </view>
-  <popup
-    show="{{showPopup}}"
-    type="{{popupType}}"
-    categoryList="{{categoryList}}"
-    bind:close="closePopupContainer"
-    bind:confirm="onConfirmHandle"
-  />
-  <toast wx:ref="toast" text="{{toastText}}" />
-  <service-notice wx:ref="serviceNotice" tmplIds="{{tmplIds}}" />
+<popup
+  show="{{showPopup}}"
+  type="{{popupType}}"
+  categoryList="{{categoryList}}"
+  bind:close="closePopupContainer"
+  bind:confirm="onConfirmHandle"
+/>
+<toast wx:ref="toast" text="{{toastText}}" />
+<service-notice wx:ref="serviceNotice" tmplIds="{{tmplIds}}" />
 </template>
 
 <script>
@@ -270,7 +299,7 @@ createComponent({
     toastText: ''
   },
   computed: {
-    ...store.mapState(['adInfo', 'fromOrigin']),
+    ...store.mapState(['adInfo', 'fromOrigin', 'showBottomNav']),
     categoryList() {
       return config[this.categoryTypeId].category
     },
@@ -445,6 +474,16 @@ createComponent({
           icon: 'none'
         })
       }
+    },
+    openDropdown() {
+      this.setState({
+        showBottomNav: false
+      })
+    },
+    closeDropdown() {
+      this.setState({
+        showBottomNav: true
+      })
     }
   }
 })
@@ -464,6 +503,9 @@ createComponent({
   color #000
   font-size 34rpx
   font-weight bold
+.custom-height
+  height 88rpx
+  overflow hidden
 .categoryNum
   display flex
   align-items center
@@ -511,7 +553,24 @@ createComponent({
   background #fff
   width 100%
   display flex
+  height 88rpx
   align-items center
+  overflow hidden
+  position relative
+  &::after
+    border-bottom: 1px solid #ebedf0;
+    bottom: 0;
+    box-sizing: border-box;
+    content: " ";
+    left: 16px;
+    pointer-events: none;
+    position: absolute;
+    right: 16px;
+    transform: scaleY(.5);
+    transform-origin: center;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(235, 237, 240);
   .category-content
     flex 1
     height 100%

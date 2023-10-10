@@ -1,5 +1,5 @@
 <template>
-<van-cell-group wx:if="{{addressList.length}}" border="{{ false }}" inset>
+<van-cell-group wx:if="{{addressList.length}}" border="{{ false }}" inset="{{inset}}">
   <van-cell
     wx:for="{{ addressList }}"
     wx:key="id"
@@ -13,7 +13,7 @@
   >
     <van-checkbox
       wx:if="{{isCanChoose}}"
-      checked-color="#FF9671"
+      checked-color="#1989fa"
       value="{{ item.checked }}"
       custom-class="address-checkbox"
     />
@@ -50,6 +50,10 @@ createComponent({
     showBottomDivder: {
       type: Boolean,
       value: false
+    },
+    inset: {
+      type: Boolean,
+      value: true
     }
   },
   computed: {

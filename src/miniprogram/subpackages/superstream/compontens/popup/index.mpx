@@ -4,6 +4,7 @@
     round
     position="bottom"
     bind:close="close"
+    root-portal
   >
     <!-- 时间选择 -->
     <van-datetime-picker
@@ -27,7 +28,7 @@
         bind:click-right="onAddressClickRight"
         safe-area-inset-top="{{false}}"
       />
-      <address-list showBottomBtn="{{false}}" showBottomDivder bind:choose-item="addressChange" />
+      <address-list showBottomBtn="{{false}}" inset="{{false}}" showBottomDivder bind:choose-item="addressChange" />
     </block>
     <!-- 分类选择 -->
     <block wx:elif="{{type === 'category'}}">
@@ -43,6 +44,8 @@
         height="75vh"
         items="{{ categoryList }}"
         main-active-index="{{ mainActiveIndex }}"
+        main-active-class="left-select"
+        content-active-class="right-select"
         active-id="{{ activeId }}"
         bind:click-nav="onClickNav"
         bind:click-item="onClickItem"
@@ -248,6 +251,13 @@ createComponent({
 <style>
 .value-class {
   flex: none !important;
+}
+.left-select{
+  color: #1989fa;
+  border-color: #1989fa;
+}
+.right-select{
+  color: #1989fa;
 }
 </style>
 <script type="application/json">

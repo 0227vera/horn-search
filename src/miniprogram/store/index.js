@@ -17,7 +17,7 @@ export default createStore({
     isIphoneX: checkIpx(),
     navBarStyle: {
       title: 'home',
-      color: '#666',
+      color: '#000',
       bg: '',
       height: 0,
       top: 0,
