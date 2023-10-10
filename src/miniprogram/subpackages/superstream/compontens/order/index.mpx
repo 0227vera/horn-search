@@ -71,7 +71,7 @@ createComponent({
       this.moreLoad.loading = false
       this.orderList = this.orderList.concat(list || [])
       if (this.orderList.length < total) {
-        this.moreLoad.text = '~点击加在更多~'
+        this.moreLoad.text = '~点击加载更多~'
         this.moreLoad.isClick = true
       } else {
         this.moreLoad.isClick = false
@@ -86,9 +86,10 @@ createComponent({
       this.getList()
     },
     clickOrderTypes(type) {
+      if (this.orderSelect === type) return
+      this.orderSelect = type
       this.orderList = []
       this.page = JSON.parse(JSON.stringify(pageInfo))
-      this.orderSelect = type
       this.loading = true
       this.getList()
     },
@@ -115,6 +116,15 @@ createComponent({
 .nav
   display flex
   align-items center
+  position sticky
+  top 0
+  z-index 6
+  background #ffffff
+  margin-bottom 16rpx
+  border-radius 16rpx
+  padding 0 16rpx
+  box-sizing border-box
+  box-shadow 0px 4px 20px 0px rgba(0,0,0,0.1)
 .order-type
   flex 1
   display flex
