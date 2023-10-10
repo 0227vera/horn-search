@@ -9,10 +9,6 @@
             <view class="list-filter-info-item_value">{{filter.category.text || '全部'}}</view>
           </view>
           <view class="list-filter-info-item">
-            <view class="list-filter-info-item_text">订单状态：</view>
-            <view class="list-filter-info-item_value">{{filter.orderStatus.text || '全部'}}</view>
-          </view>
-          <view class="list-filter-info-item">
             <view class="list-filter-info-item_text">距离要求：</view>
             <view class="list-filter-info-item_value">{{filter.distance.text || '全部'}}</view>
           </view>
@@ -32,7 +28,9 @@
         fromOrigin="{{this.fromOrigin}}"
         buttons="{{buttons}}"
         role="worker"
+        moreLoad="{{moreLoad}}"
         bind:footer-btn="footerBtn"
+        bind:more-load="moreLoadHandle"
       />
     </view>
     <view wx:else class="loading empty">
@@ -53,6 +51,7 @@ import config, { categoryMap } from '@/constant/release.js'
 import { getReleaseList, updateRelease } from '@/api'
 import store from '@/store'
 import makePhoneToBoss from '@/utils/makePhoneToBoss'
+import { pageInfo } from '@/subpackages/superstream/utils/constant.js'
 
 createComponent({
   properties: {
@@ -63,6 +62,12 @@ createComponent({
   },
   data: {
     loading: true,
+    page: JSON.parse(JSON.stringify(pageInfo)),
+    moreLoad: {
+      loading: false,
+      isClick: true,
+      text: '~~没有更多啦~~'
+    },
     list: [],
     filter: {
       show: false,
@@ -71,10 +76,6 @@ createComponent({
         text: ''
       },
       distance: {
-        value: [],
-        text: ''
-      },
-      orderStatus: {
         value: [],
         text: ''
       },
@@ -101,36 +102,41 @@ createComponent({
       return config[this.categoryTypeId].category
     },
     listParams() {
-      const params = {}
-      const { category, orderStatus } = this.filter
+      const params = {
+        status: ['in', ['2', '3']]
+      }
+      const { category } = this.filter
       if (category.value?.length) {
         Object.assign(params, {
           category: ['in', category.value]
         })
       }
-      if (orderStatus.value?.length) {
-        Object.assign(params, {
-          status: ['in', orderStatus.value]
-        })
-      }
-      if (Object.keys(params).length) {
-        return { and: params }
-      } else {
-        return {}
-      }
+      return { and: params, ...this.page }
     }
   },
   attached() {
-    console.log(this.categoryList)
     this.getList()
   },
   methods: {
     async getList() {
-      this.loading = true
-      this.list = []
+      this.moreLoad.loading = true
       const res = await getReleaseList(this.listParams)
+      const { list, total } = res.data || {}
       this.loading = false
-      this.list = res.data?.list || []
+      this.moreLoad.loading = false
+      this.list = this.list.concat(list || [])
+      if (this.list.length < total) {
+        this.moreLoad.text = '~点击加在更多~'
+        this.moreLoad.isClick = true
+      } else {
+        this.moreLoad.isClick = false
+        this.moreLoad.text = '~~没有更多啦~~'
+      }
+    },
+    moreLoadHandle() {
+      if (!this.moreLoad.isClick) return
+      this.page.page++
+      this.getList()
     },
     footerBtn(e) {
       const { item, buttonInfo } = e.detail
@@ -168,9 +174,9 @@ createComponent({
     },
     sureFilter({ detail } = {}) {
       Object.keys(detail).forEach(item => {
-        console.log(item)
         this.filter[item] = detail[item] || this.filter[item]
       })
+      this.loading = true
       this.getList()
     }
   }

@@ -8,8 +8,11 @@
   role="boss"
   list="{{list}}"
   buttons="{{buttons}}"
+  moreLoad="{{moreLoad}}"
   bind:footer-btn="footerBtn"
-/>
+  bind:more-load="loadmore"
+>
+</card>
 <view wx:else class="status">
   <van-empty description="{{emptyText}}" />
 </view>
@@ -32,6 +35,10 @@ createComponent({
     loading: {
       type: Boolean,
       value: true
+    },
+    moreLoad: {
+      type: Object,
+      value: {}
     },
     emptyText: {
       type: String,
@@ -71,6 +78,9 @@ createComponent({
             })
             return
           }
+          mpx.showLoading({
+            title: '关单中……'
+          })
           await updateRelease({
             _id: item._id,
             status: '4'
@@ -79,7 +89,7 @@ createComponent({
             icon: 'success',
             title: '关单成功'
           })
-          this.triggerEvent('close-order')
+          this.triggerEvent('close-order', item)
           break
         case 'again':
           this.triggerEvent('again-order', item)
@@ -93,6 +103,9 @@ createComponent({
       mpx.navigateTo({
         url: `/order-detail/pages/detail-to-boss?isBack=true&id=${item._id}&fromOrigin=${this.fromOrigin}`
       })
+    },
+    loadmore() {
+      this.triggerEvent('more-load')
     }
   }
 })
@@ -105,6 +118,14 @@ createComponent({
   display flex
   justify-content center
   align-items center
+.moreload
+  color #666666
+  font-size 28rpx
+  width 100%
+  display flex
+  align-items center
+  justify-content center
+  padding 50rpx 0
 </style>
 
 <script type="application/json">

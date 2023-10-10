@@ -60,3 +60,8 @@ export const initFactoryObj = {
   add: '',
   company: ''
 }
+
+export const pageInfo = {
+  page: 1,
+  size: 10
+}

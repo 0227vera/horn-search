@@ -14,8 +14,8 @@ class ReleaseManagerService extends BaseService {
     this.model = modelMap[key]
   }
   async getList(where = {}) {
-    const { fromOrigin, ...newWhere } = where
-    let res = await this.model.getList(newWhere)
+    const { fromOrigin, page, size, ...newWhere } = where
+    let res = await this.model.getList(newWhere, '*', { RELEASE_ADD_TIME: 'desc' }, page, size)
     return res
   }
 

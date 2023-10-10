@@ -21,8 +21,10 @@
       list="{{orderList}}"
       status="{{status}}"
       loading="{{loading}}"
-      bind:close-order="getList"
+      bind:close-order="closeOrder"
       bind:again-order="againOrder"
+      bind:more-load="moreLoadHandle"
+      moreLoad="{{moreLoad}}"
     />
   </view>
 </template>
@@ -30,12 +32,19 @@
 <script>
 import { createComponent } from '@mpxjs/core'
 import { getReleaseList, updateRelease } from '@/api'
+import { pageInfo } from '@/subpackages/superstream/utils/constant.js'
 
 createComponent({
   data: {
     orderSelect: 'push',
     orderList: [],
-    loading: true
+    loading: true,
+    page: JSON.parse(JSON.stringify(pageInfo)),
+    moreLoad: {
+      loading: false,
+      isClick: true,
+      text: '~~没有更多啦~~'
+    }
   },
   attached() {
     this.getList()
@@ -49,20 +58,42 @@ createComponent({
     }
   },
   methods: {
-    async getList(needUpdateList = true) {
-      this.loading = true
-      this.orderList = []
+    async getList() {
       const params = {
         needOpenid: true,
-        status: this.status
+        status: this.status,
+        ...this.page
       }
+      this.moreLoad.loading = true
       const res = await getReleaseList(params)
-      this.orderList = res.data.list || []
+      const { list, total } = res.data || {}
       this.loading = false
+      this.moreLoad.loading = false
+      this.orderList = this.orderList.concat(list || [])
+      if (this.orderList.length < total) {
+        this.moreLoad.text = '~点击加在更多~'
+        this.moreLoad.isClick = true
+      } else {
+        this.moreLoad.isClick = false
+        this.moreLoad.text = '~~没有更多啦~~'
+      }
+    },
+    moreLoadHandle() {
+      if (!this.moreLoad.isClick) {
+        return
+      }
+      this.page.page++
+      this.getList()
     },
     clickOrderTypes(type) {
+      this.orderList = []
+      this.page = JSON.parse(JSON.stringify(pageInfo))
       this.orderSelect = type
+      this.loading = true
       this.getList()
+    },
+    closeOrder({ detail }) {
+      this.orderList = this.orderList.filter(item => item._id !== detail._id)
     },
     againOrder(e) {
       this.triggerEvent('again-order', e.detail)

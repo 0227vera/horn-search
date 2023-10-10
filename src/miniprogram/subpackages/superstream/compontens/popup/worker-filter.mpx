@@ -15,14 +15,6 @@
     />
     <view class="content">
       <view class="content-item">
-        <view class="content-item-title">订单状态筛选</view>
-        <view class="status">
-          <view wx:for="{{showSteps}}" wx:key="status">
-            <view bind:tap="onStatusChange(item)" class="status-item {{item.selected ? 'selected' : ''}}">{{item.desc}}</view>
-          </view>
-        </view>
-      </view>
-      <view class="content-item">
           <view class="content-item-title">距离筛选</view>
           <view class="distance">
             <van-slider value="{{distanceValue}}" use-button-slot range bind:change="onDistanceChange">
@@ -89,10 +81,6 @@ createComponent({
     sureFilter() {
       console.log(this.selectStatus, this.distanceValue, this.activeList)
       this.triggerEvent('sure', {
-        orderStatus: {
-          value: this.selectStatus,
-          text: this.steps.filter(item => this.selectStatus.includes(item.status)).map(item => item.desc).join('；')
-        },
         distance: {
           value: this.distanceValue,
           text: this.distanceValue.map(item => `${item / 10}km`).join('~')
@@ -119,14 +107,6 @@ createComponent({
     },
     onDistanceChange(e) {
       this.distanceValue = e.detail
-    },
-    onStatusChange(item) {
-      if (!this.selectStatus.includes(item.status)) {
-        this.selectStatus.push(item.status)
-      } else {
-        this.selectStatus = this.selectStatus.filter(f => item.status !== f)
-      }
-      console.log(this.selectStatus)
     }
   }
 })

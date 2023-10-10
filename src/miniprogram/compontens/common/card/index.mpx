@@ -40,6 +40,10 @@
         </view>
       </view>
     </van-swipe-cell>
+    <view class="moreload">
+      <van-loading wx:if="{{moreLoad.loading}}" type="spinner" size="14px" color="#1989fa">加载中……</van-loading>
+      <view wx:else bind:tap="loadmore">{{moreLoad.text}}</view>
+    </view>
   </view>
 </template>
 
@@ -67,6 +71,10 @@ createComponent({
     role: {
       type: String,
       value: 'boss'
+    },
+    moreLoad: {
+      type: Object,
+      value: {}
     }
   },
   data: {
@@ -119,17 +127,17 @@ createComponent({
             value: priceValue
           })
           // 时效
-          let timeValue = dayjs(item.RELEASE_ADD_TIME).format('YYYY-MM-DD')
-          if (item.ownTime) {
-            timeValue += `~${dayjs(item.ownTime).format('YYYY-MM-DD')}`
-          } else {
-            timeValue += '以后'
-          }
-          content.push({
-            type: 'map',
-            text: '有效期:',
-            value: timeValue
-          })
+          // let timeValue = dayjs(item.RELEASE_ADD_TIME).format('YYYY-MM-DD')
+          // if (item.ownTime) {
+          //   timeValue += `~${dayjs(item.ownTime).format('YYYY-MM-DD')}`
+          // } else {
+          //   timeValue += '以后'
+          // }
+          // content.push({
+          //   type: 'map',
+          //   text: '有效期:',
+          //   value: timeValue
+          // })
         } else if (this.fromOrigin === 'factoryCooper') {
           let factoryScaleValue = `{${item.factoryScaleName}}`
           if (item.factoryScale === '1') {
@@ -153,6 +161,11 @@ createComponent({
             value: `{${item.area}}`
           })
         }
+        content.push({
+          type: 'map',
+          text: '发布点:',
+          value: `{${dayjs(item.RELEASE_ADD_TIME).format('YYYY-MM-DD HH:mm:ss')}}`
+        })
         const tags = []
         if (this.isBoss) {
           if (item.calllist?.length) {
@@ -211,6 +224,9 @@ createComponent({
     },
     delete(item) {
       this.triggerEvent('delete', item)
+    },
+    loadmore() {
+      this.triggerEvent('more-load')
     }
   }
 })
@@ -252,10 +268,10 @@ createComponent({
     align-items center
     &-img
       width 160rpx
-      height 240rpx
+      height 260rpx
     &-content
       flex 1
-      height 240rpx
+      height 260rpx
       overflow hidden
       margin-left 16rpx
       font-size 28rpx
@@ -289,11 +305,20 @@ createComponent({
     display flex
     justify-content flex-end
     margin-top 8rpx
+.moreload
+  color #666666
+  font-size 28rpx
+  width 100%
+  display flex
+  align-items center
+  justify-content center
+  padding 50rpx 0
 </style>
 
 <script type="application/json">
   {
     "usingComponents": {
+      "van-loading": "@vant/weapp/loading/index",
       "van-card": "@vant/weapp/card/index",
       "van-button": "@vant/weapp/button/index",
       "van-swipe-cell": "@vant/weapp/swipe-cell/index",

@@ -31,7 +31,6 @@ createPage({
     categoryTypeId: ''
   },
   async onLoad(params) {
-    console.log(333333)
     /**
      * type: 区分是boss还是worker
      * key: 确定使用哪个组件展示
