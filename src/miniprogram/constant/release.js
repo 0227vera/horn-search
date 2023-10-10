@@ -237,6 +237,15 @@ export default {
     partyB: {
       title: '我要找货做'
     }
+  },
+  leaseTransfer: {
+    fromOrigin: 'leaseTransfer',
+    partyA: {
+      title: ['出租转让', '订单列表']
+    },
+    partyB: {
+      title: '租房'
+    }
   }
 }
 
@@ -244,5 +253,7 @@ export const categoryMap = {
   findWorker: 'findWorker',
   findJob: 'findWorker',
   findFactory: 'findFactory',
-  findCooper: 'findFactory'
+  findCooper: 'findFactory',
+  hire: 'leaseTransfer',
+  rent: 'leaseTransfer'
 }

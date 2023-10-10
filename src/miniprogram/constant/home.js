@@ -68,7 +68,15 @@ export default [[{
   id: '',
   dot: false,
   tips: '长期有效',
-  link: '',
+  action: {
+    url: '/superstream/pages/index',
+    jumptype: 'mp',
+    params: {
+      key: 'leaseTransfer',
+      id: 'hire',
+      type: 'partyA'
+    }
+  },
   extraInfo: {}
 }, {
   text: '出租转让公示',
@@ -76,7 +84,15 @@ export default [[{
   id: '',
   dot: false,
   tips: '',
-  link: '',
+  action: {
+    url: '/superstream/pages/index',
+    jumptype: 'mp',
+    params: {
+      key: 'partyB',
+      id: 'rent',
+      type: 'partyB'
+    }
+  },
   extraInfo: {}
 }], [{
   text: '公司直聘发布',
@@ -84,7 +100,7 @@ export default [[{
   id: '',
   dot: false,
   tips: '',
-  link: '',
+
   extraInfo: {}
 }, {
   text: '我要应聘公司岗',

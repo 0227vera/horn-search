@@ -3,7 +3,6 @@
     <view class="{{roleType === 'partyA' && currentCom === footerList[0].key ? 'component-container' : ''}}">
       <component
         is="{{currentCom}}"
-        categoryList="{{categoryList}}"
         categoryTypeId="{{categoryTypeId}}"
         bind:release-jump-done="releaseJumpDone"
         bind:again-order="againOrder"
@@ -19,8 +18,6 @@
 import mpx, { createPage } from '@mpxjs/core'
 import config, { categoryMap } from '@/constant/release.js'
 const store = getApp().globalStore
-const workerTitleMap = {
-}
 createPage({
   onShareAppMessage() {
     getApp().onShareAppMessage()
@@ -39,9 +36,9 @@ createPage({
     const { type, key, id } = params
     // 当前的分类id，用于获取分类，常用配置等
     this.categoryTypeId = categoryMap[id]
-    // 当前的身份，展示不同的组件，主要是甲乙两方
+    // 当前的身份，主要是甲乙两方，用于区分使用甲方或者乙方
     this.roleType = type
-    // 当前的组件，用于甲方的切换
+    // 当前的组件，用于甲方的切换的时候的初始化组件
     this.currentCom = key
     this.setState({
       fromOrigin: this.fromOrigin
@@ -127,6 +124,7 @@ createPage({
       "order": "@/subpackages/superstream/compontens/order",
       "bossWorker":"@/subpackages/superstream/compontens/release/boss-worker",
       "factoryCooper":"@/subpackages/superstream/compontens/release/factory-cooper",
+      "leaseTransfer":"@/subpackages/superstream/compontens/release/lease-transfer",
       "partyB": "@/subpackages/superstream/compontens/order/partyB.mpx"
     },
     "disableScroll": true

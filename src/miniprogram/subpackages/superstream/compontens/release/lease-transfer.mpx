@@ -1,0 +1,506 @@
+<template>
+<view class="container">
+  <van-cell-group class="form" style="background:#fff">
+    <!-- 岗位相关 -->
+    <view class="category-container">
+      <van-field
+        class="category-content"
+        label="岗位"
+        title-width="80rpx"
+        required
+        is-link
+        readonly
+        border="{{false}}"
+        value="{{updateObj.categoryName}}"
+        input-align="right"
+        placeholder="请点击选择需要招的岗位"
+        bind:tap="showPopupContainer('category')"
+      />
+      <view wx:if="{{showCategoryType}}" class="categoryNum">
+        <input
+          type="digit"
+          value="{{updateObj.categoryNum}}"
+          id="categoryNum"
+          bind:input="onAreaFieldChange"
+          placeholder="人数"
+          class="input"
+        />
+        <view>位</view>
+      </view>
+      <van-dropdown-menu
+        active-color="#1989fa"
+        wx:if="{{showCategoryType}}"
+        title-class="dropdown"
+        root-portal
+      >
+        <van-dropdown-item
+          bind:change="changeCategoryType"
+          value="{{ updateObj.categoryType }}"
+          options="{{ categoryTypeList }}"
+          bind:open="openDropdown"
+          bind:close="closeDropdown"
+        />
+      </van-dropdown-menu>
+    </view>
+    <!-- 岗位子系列 -->
+    <van-field
+      label="{{subCategoryInfo.label}}"
+      wx:if="{{subCategoryInfo.show}}"
+      title-width="240rpx"
+      required
+      value="{{ updateObj.categorySub }}"
+      placeholder="{{subCategoryInfo.placeholder}}"
+      input-align="right"
+      bind:change="onFieldChange"
+      id="categorySub"
+    />
+    <!-- 薪资相关 -->
+    <view class="category-container">
+      <van-field
+        label="{{updateObj.categoryType === '2' ? '薪资' : '单价'}}"
+        class="category-content"
+        title-width="80rpx"
+        required
+        border="{{false}}"
+        value="{{ updateObj.price }}"
+        placeholder="请输入计时或者计件的单价"
+        type="digit"
+        input-align="right"
+        bind:change="onFieldChange"
+        id="price"
+        center
+        custom-class="custom-height"
+      >
+        <view slot="input" class="area-container" wx:if="{{updateObj.priceUnit === '3'}}">
+          <input
+            type="digit"
+            value="{{updateObj.priceMin}}"
+            id="priceMin"
+            bind:input="onAreaFieldChange"
+            placeholder="最低"
+            class="input"
+          />
+          <text class="middle">~</text>
+          <input
+            type="digit"
+            value="{{updateObj.priceMax}}"
+            id="priceMax"
+            bind:input="onAreaFieldChange"
+            placeholder="最高"
+            class="input"
+          />
+        </view>
+        <view slot="button">
+        </view>
+      </van-field>
+      <van-dropdown-menu
+        active-color="#1989fa"
+        title-class="dropdown"
+        root-portal
+      >
+        <van-dropdown-item
+          value="{{ updateObj.priceUnit }}"
+          options="{{ unitList }}"
+          bind:open="openDropdown"
+          bind:close="closeDropdown"
+          bind:change="changeUnit"
+        />
+      </van-dropdown-menu>
+    </view>
+    <!-- 数量相关 -->
+    <van-field
+      wx:if="{{updateObj.categoryType !== '2'}}"
+      label="数量"
+      title-width="80rpx"
+      required
+      value="{{ updateObj.num }}"
+      type="digit"
+      placeholder="请输入数量"
+      input-align="right"
+      bind:change="onFieldChange"
+      id="num"
+    >
+      <!-- <view slot="input" class="area-container">
+        <input
+          type="digit"
+          value="{{updateObj.numMin}}"
+          id="numMin"
+          bind:input="onAreaFieldChange"
+          placeholder="最少"
+          class="input"
+        />
+        <text class="middle">~</text>
+        <input
+          type="digit"
+          value="{{updateObj.numMax}}"
+          id="numMax"
+          bind:input="onAreaFieldChange"
+          placeholder="最多"
+          class="input"
+        />
+      </view> -->
+      <view slot="right-icon" style="color: #333; font-weight: bold;">件</view>
+    </van-field>
+    <!-- 位置相关 -->
+    <van-field
+      label="位置"
+      title-width="80rpx"
+      required
+      is-link
+      readonly
+      value="{{updateObj.poi.name}}"
+      input-align="right"
+      placeholder="请点击进入输入我的详细地址"
+      bind:tap="showPopupContainer('address')"
+    />
+    <!-- 电话 -->
+    <van-field
+      label="电话"
+      title-width="80rpx"
+      required
+      value="{{ updateObj.tel }}"
+      type="number"
+      placeholder="请输入联系方式"
+      input-align="right"
+      bind:change="onFieldChange"
+      id="tel"
+    />
+    <!-- 货源(品质层次) -->
+    <van-field
+      wx:if="{{updateObj.categoryType === '1'}}"
+      label="{{originLabel}}"
+      title-width="240rpx"
+      required="{{false}}"
+      value="{{ updateObj.origin }}"
+      placeholder="例如十三行写字楼品质"
+      input-align="right"
+      bind:change="onFieldChange"
+      id="origin"
+    />
+    <!-- 截止时间 -->
+    <van-field
+      wx:if="{{updateObj.categoryType === '2'}}"
+      label="截止时间"
+      title-width="120rpx"
+      is-link
+      readonly
+      value="{{ timeInfo }}"
+      placeholder="点击确定截止时间"
+      bind:tap="showPopupContainer('time')"
+      input-align="right"
+    />
+    <!-- 图片 -->
+    <van-cell title="图片或者视频展示" value="{{imagesValue}}" border="{{false}}" />
+    <view class="image-container">
+      <view class="iamge-content">
+        <van-uploader
+          bind:after-read="afterRead"
+          accept="media"
+          deletable
+          disabled="{{uploaderDisabled}}"
+        />
+        <view class="imgurl-container" wx:for="{{updateObj.images}}" wx:key="*this">
+          <van-image
+            bind:click="previewMedia(index)"
+            width="80"
+            height="80"
+            src="{{item}}"
+            radius="8"
+            fit="cover"
+          />
+          <van-icon name="clear" bindtap="clearImg(item)" class="image-clear-icon"/>
+        </view>
+      </view>
+    </view>
+    <!-- 要求 -->
+    <van-field
+      label="岗位要求"
+      title-width="120rpx"
+      value="{{ updateObj.note }}"
+      placeholder="请输入您对所招工人的要求或者服装的要求"
+      input-align="left"
+      type="textarea"
+      autosize
+      id="note"
+      bind:change="onFieldChange"
+    />
+    <!-- 待遇补充 -->
+    <van-field
+      label="待遇补充"
+      title-width="120rpx"
+      value="{{ updateObj.add }}"
+      placeholder="请输入您可以额外提供的待遇"
+      input-align="left"
+      type="textarea"
+      autosize
+      id="add"
+      bind:change="onFieldChange"
+    />
+    <!-- 工厂名 -->
+    <van-field
+      label="工厂名"
+      title-width="120rpx"
+      value="{{ updateObj.company }}"
+      placeholder="请输入您的工厂或公司名称"
+      input-align="left"
+      type="textarea"
+      autosize
+      id="company"
+      bind:change="onFieldChange"
+    />
+  </van-cell-group>
+  <van-cell border="{{false}}" wx:if="{{showBottomNav}}">
+    <van-button round type="primary" block bind:tap="releaseData">发布</van-button>
+  </van-cell>
+</view>
+<popup
+  show="{{showPopup}}"
+  type="{{popupType}}"
+  categoryList="{{categoryList}}"
+  bind:close="closePopupContainer"
+  bind:confirm="onConfirmHandle"
+/>
+<toast wx:ref="toast" text="{{toastText}}" />
+<service-notice wx:ref="serviceNotice" tmplIds="{{tmplIds}}" />
+</template>
+
+<script>
+import mpx, { createComponent } from '@mpxjs/core'
+import config, { categoryMap } from '@/constant/release.js'
+import { mixins } from '@/subpackages/superstream/utils/mixins.js'
+import { fileUpload, addRelease, updateRelease } from '@/api'
+import { validateBossWorker } from '@/subpackages/superstream/utils/validate.js'
+import { initBossWorkerObj, unitList, categoryTypeList } from '@/subpackages/superstream/utils/constant.js'
+import { timeInfo } from '@/subpackages/superstream/utils/utils.js'
+const store = getApp().globalStore
+
+createComponent({
+  mixins: [mixins],
+  data: {
+    showCategoryType: false,
+    categoryTypeList,
+    unitList,
+    subCategoryInfo: {
+      show: false,
+      label: '',
+      placeholder: ''
+    },
+    originLabel: '货源(品质层次)',
+    updateObj: initBossWorkerObj
+  },
+  computed: {
+    ...store.mapState(['showBottomNav']),
+    categoryList() {
+      return config[this.categoryTypeId].category
+    },
+    timeInfo() {
+      return timeInfo(this.updateObj.ownTime)
+    }
+  },
+  methods: {
+    // note: 弹窗处理
+    showPopupContainer(type) {
+      this.showPopup = true
+      this.popupType = type
+    },
+    // 弹窗确认
+    onConfirmHandle({ detail = {} } = {}) {
+      const { data, type } = detail
+      const actions = {
+        category: () => {
+          this.updateObj.category = data.id
+          this.updateObj.categoryName = data.text
+          this.showCategoryType = data.showCategoryType
+          if (data.showCategoryType) {
+            if (data.categoryType === '2') {
+              this.updateObj.categoryType = '2'
+              this.updateObj.categoryTypeName = '长工'
+            } else {
+              this.updateObj.categoryType = '1'
+              this.updateObj.categoryTypeName = '临工'
+            }
+            this.setUnitList()
+          } else {
+            this.updateObj.categoryType = ''
+            this.updateObj.categoryTypeName = ''
+            this.setUnitList()
+          }
+          if (data.needDetail) {
+            this.subCategoryInfo.show = true
+            this.subCategoryInfo.label = `${data.text}(分类)`
+            this.subCategoryInfo.placeholder = `请输入${data.text}的具体类别`
+            this.originLabel = `${data.text}说明`
+          } else {
+            this.subCategoryInfo.show = false
+            this.originLabel = '货源(品质层次)'
+          }
+        },
+        time: () => {
+          this.updateObj.ownTime = data.ownTime
+          this.updateObj.ownTimeName = this.timeInfo
+        },
+        address: () => {
+          this.updateObj.poi = data.poi
+          this.updateObj.tel = data.tel
+        }
+      }
+      actions?.[type]?.()
+      this.closePopupContainer()
+    },
+    changeUnit(e) {
+      const name = this.unitList.find(item => item.value === e.detail).text
+      this.updateObj.priceUnitName = name
+      this.updateObj.priceUnit = e.detail
+    },
+    changeCategoryType(e) {
+      const name = this.categoryTypeList.find(item => item.value === e.detail).text
+      this.updateObj.categoryType = e.detail
+      this.updateObj.categoryTypeName = name
+      this.setUnitList()
+    },
+    setUnitList() {
+      if (this.updateObj.categoryType === '2') {
+        this.updateObj.priceUnit = '3'
+        this.updateObj.priceUnitName = 'K/月'
+        this.unitList = unitList.filter(item => item.value === '3')
+      } else if (this.updateObj.categoryType === '1') {
+        this.updateObj.priceUnit = '1'
+        this.updateObj.priceUnitName = '元/件'
+        this.unitList = unitList.filter(item => item.value !== '3')
+      } else {
+        this.unitList = unitList
+      }
+    },
+    // note: 提交操作
+    async releaseData() {
+      this.submitData(validateBossWorker)
+    },
+    openDropdown() {
+      this.setState({
+        showBottomNav: false
+      })
+    },
+    closeDropdown() {
+      this.setState({
+        showBottomNav: true
+      })
+    }
+  }
+})
+</script>
+<style lang="stylus">
+.container
+  display flex
+  flex-direction column
+  height 100%
+  overflow hidden
+  padding-bottom 10rpx
+  box-sizing border-box
+  .form
+    flex 1
+    overflow-x hidden
+.dropdown
+  color #000
+  font-size 34rpx
+  font-weight bold
+.custom-height
+  height 88rpx
+  overflow hidden
+.categoryNum
+  display flex
+  align-items center
+  justify-content center
+  padding-right 20rpx
+  .input
+    width 120rpx
+    margin-right 4rpx
+.input
+  text-align center
+  font-size 32rpx
+  background-color #f9f9f9
+  border-radius 6rpx
+  font-weight bold
+  height 36rpx
+  lint-height 36rpx
+.submit
+  margin-top 32rpx
+  margin-bottom 20rpx
+.area-container
+  display flex
+  .middle
+    padding 0 16rpx
+    font-size 36rpx
+    color #333
+    font-weight bold
+.image-container
+  background #ffffff
+  padding 20rpx 32rpx
+  box-sizing border-box
+  .iamge-content
+    border-bottom 1px solid #ebedf0
+    display flex
+    flex-wrap wrap
+.imgurl-container
+  position relative
+  margin 0 8px 8px 0
+  .image-clear-icon
+    position absolute
+    top 0
+    right 0
+    color #fff
+    font-size 40rpx
+.category-container
+  background #fff
+  width 100%
+  display flex
+  height 88rpx
+  align-items center
+  overflow hidden
+  position relative
+  &::after
+    border-bottom: 1px solid #ebedf0;
+    bottom: 0;
+    box-sizing: border-box;
+    content: " ";
+    left: 16px;
+    pointer-events: none;
+    position: absolute;
+    right: 16px;
+    transform: scaleY(.5);
+    transform-origin: center;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(235, 237, 240);
+  .category-content
+    flex 1
+    height 100%
+  &-item
+    display flex
+    padding 32rpx 0
+    box-sizing border-box
+    border-top 2rpx solid #eee
+    .text
+      flex 1
+      color #333333
+      font-size 28rpx
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "service-notice": "@/compontens/common/service-notice",
+      "custom-container": "@/compontens/base/custom-container",
+      "popup": "@/subpackages/superstream/compontens/popup/index.mpx",
+      "toast": "@/compontens/base/toast.mpx",
+      "van-cell": "@vant/weapp/cell/index",
+      "van-cell-group": "@vant/weapp/cell-group/index",
+      "van-uploader": "@vant/weapp/uploader/index",
+      "van-field": "@vant/weapp/field/index",
+      "van-image": "@vant/weapp/image/index",
+      "van-icon": "@vant/weapp/icon/index",
+      "van-button": "@vant/weapp/button/index",
+      "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
+      "van-dropdown-item": "@vant/weapp/dropdown-item/index"
+    }
+  }
+</script>

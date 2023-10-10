@@ -12,6 +12,7 @@ module.exports = {
     'warrior_log', // node: 日志信息
     'warrior_release_boss_worker', // 工厂招工
     'warrior_release_factory_cooper', // 工厂找合作
+    'warrior_release_lease_transfer', // 出租转让
     'warrior_constant' // node: 常量配置
   ],
   // ## 缓存相关
