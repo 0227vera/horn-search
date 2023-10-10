@@ -41,7 +41,8 @@ export default createStore({
     categoryItems: {},
     steps: [],
     addressList: [],
-    fromOrigin: ''
+    fromOrigin: '',
+    cacheForm: {}
   },
   getters: {
     currentGooterList(state) {

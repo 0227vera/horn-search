@@ -10,11 +10,10 @@
           <view class="num" wx:if="{{callNum}}">{{callNum}}</view>
           <view class="text">已有人呼叫</view>
         </view>
-      </view>
-      <view class="filter" wx:if="{{filterList.length}}">
-        <van-dropdown-menu custom-class="filter-container">
-          <van-dropdown-item bind:change="filterChange"  value="{{ filter }}" options="{{ filterList }}" />
-        </van-dropdown-menu>
+        <view class="order-type-item {{orderSelect === 'done' ? 'selected' : ''}}" bind:tap="clickOrderTypes('done')">
+          <view class="num" wx:if="{{doneNum}}">{{doneNum}}</view>
+          <view class="text">已完成</view>
+        </view>
       </view>
     </view>
     <partyA
@@ -22,6 +21,8 @@
       list="{{orderList}}"
       status="{{status}}"
       loading="{{loading}}"
+      bind:close-order="getList"
+      bind:again-order="againOrder"
     />
   </view>
 </template>
@@ -34,9 +35,7 @@ createComponent({
   data: {
     orderSelect: 'push',
     orderList: [],
-    loading: true,
-    filter: '',
-    filterList: []
+    loading: true
   },
   attached() {
     this.getList()
@@ -45,6 +44,7 @@ createComponent({
     status() {
       if (this.orderSelect === 'push') return '2'
       if (this.orderSelect === 'call') return '3'
+      if (this.orderSelect === 'done') return '4'
       return ''
     }
   },
@@ -56,54 +56,16 @@ createComponent({
         needOpenid: true,
         status: this.status
       }
-      if (this.filter) {
-        Object.assign(params, {
-          category: this.filter
-        })
-      }
       const res = await getReleaseList(params)
       this.orderList = res.data.list || []
-      if (needUpdateList) {
-        this.getFilterList()
-      }
       this.loading = false
-    },
-    getFilterList() {
-      const arr = []
-      this.orderList.forEach(item => {
-        if (!arr.includes(item.category)) {
-          arr.push(item.category)
-        }
-      })
-      const list = arr.map(item => {
-        const name = this.orderList.find(f => f.category === item).categoryName
-        return {
-          text: name,
-          value: item
-        }
-      })
-      if (list.length) {
-        list.unshift({
-          text: '全部',
-          value: ''
-        })
-      }
-      this.filterList = list
-    },
-    filterChange({ detail } = {}) {
-      this.filter = detail
-      this.getList(false)
-    },
-    clickTypes(type) {
-      this.typeSelect = type
     },
     clickOrderTypes(type) {
       this.orderSelect = type
-      this.filter = ''
       this.getList()
     },
-    closeOrderFinish() {
-      this.getList()
+    againOrder(e) {
+      this.triggerEvent('again-order', e.detail)
     }
   }
 })
@@ -141,7 +103,7 @@ createComponent({
     &.selected
       color #333333
       background #ffffff
-      border 2rpx solid #ee0a24
+      border 2rpx solid #1989fa
       font-weight bold
       font-size 30rpx
       .num

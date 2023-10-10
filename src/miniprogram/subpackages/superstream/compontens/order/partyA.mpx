@@ -3,10 +3,10 @@
   <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
 </view>
 <card
-  wx:elif="{{renderList.length}}"
+  wx:elif="{{list.length}}"
   fromOrigin="{{fromOrigin}}"
   role="boss"
-  list="{{renderList}}"
+  list="{{list}}"
   buttons="{{buttons}}"
   bind:footer-btn="footerBtn"
 />
@@ -17,6 +17,7 @@
 
 <script>
 import mpx, { createComponent } from '@mpxjs/core'
+import { updateRelease } from '@/api'
 import store from '@/store'
 createComponent({
   properties: {
@@ -37,22 +38,25 @@ createComponent({
       value: '暂无数据'
     }
   },
-  data: {
-    buttons: [{
-      text: '关单',
-      icon: 'passed',
-      id: 'close'
-    }, {
-      text: '看详情',
-      type: 'primary',
-      icon: 'eye-o',
-      id: 'gotoDetail'
-    }]
-  },
   computed: {
     ...store.mapState(['fromOrigin', 'openid']),
-    renderList() {
-      return this.list.filter(item => item.status === this.status)
+    buttons() {
+      return [{
+        text: '关单',
+        icon: 'passed',
+        id: 'close',
+        hide: this.status === '4'
+      }, {
+        text: '再来一单',
+        icon: 'revoke',
+        id: 'again',
+        hide: this.status !== '4'
+      }, {
+        text: '看详情',
+        type: 'primary',
+        icon: 'eye-o',
+        id: 'gotoDetail'
+      }]
     }
   },
   methods: {
@@ -77,6 +81,9 @@ createComponent({
           })
           this.triggerEvent('close-order')
           break
+        case 'again':
+          this.triggerEvent('again-order', item)
+          break
         case 'gotoDetail':
           this.gotoDetail(item)
           break
@@ -94,7 +101,7 @@ createComponent({
 <style lang="stylus" scoped>
 .status
   width 100%
-  height 350rpx
+  height 60vh
   display flex
   justify-content center
   align-items center

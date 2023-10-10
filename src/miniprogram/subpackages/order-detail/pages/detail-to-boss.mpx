@@ -56,7 +56,8 @@ createPage({
     active: '',
     calllist: [],
     readlist: [],
-    category: ''
+    category: '',
+    status: ''
   },
   async onLoad(params) {
     this.setState({
@@ -72,6 +73,7 @@ createPage({
     this.orderData = res.data
     const { category, categoryName, categorySub, categoryTypeName, categoryNum, images, status, calllist, readlist, _id, OPENID } = res.data || {}
     this.active = status - 1
+    this.status = status
     this.category = category
     this.categoryName = categoryName
     this.categoryNum = categoryNum
@@ -107,6 +109,7 @@ createPage({
     footerList() {
       return [{
         name: '关单',
+        hide: this.status === '4',
         icon: 'passed',
         id: 'close',
         click: async () => {
@@ -126,6 +129,14 @@ createPage({
             title: '关单成功'
           })
           mpx.navigateBack()
+        }
+      }, {
+        name: '再来一单',
+        icon: 'revoke',
+        hide: this.status !== '4',
+        id: 'again',
+        click: () => {
+          console.log('再来一单')
         }
       }, {
         name: '分享给好友',

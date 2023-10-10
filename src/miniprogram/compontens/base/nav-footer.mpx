@@ -1,7 +1,7 @@
 <template>
   <view class="container">
     <view class="content">
-      <view wx:for="{{list}}" class="list-item" wx:key="id" catchtap="cliclItem(item)">
+      <view wx:for="{{list}}" class="list-item" wx:key="id" catchtap="cliclItem(item)" wx:if="{{!item.hide}}">
         <van-icon class="icon" wx:if="{{item.icon}}" name="{{item.icon}}" />
         <view class="name">{{item.name}}</view>
         <button wx:if="{{item.share}}" open-type="share" class="share"></button>

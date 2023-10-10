@@ -6,6 +6,7 @@
         categoryList="{{categoryList}}"
         categoryTypeId="{{categoryTypeId}}"
         bind:release-jump-done="releaseJumpDone"
+        bind:again-order="againOrder"
       />
     </view>
     <footer wx:if="{{shoeFooterList}}" list="{{footerList}}" initActive="{{currentCom}}" bind:tab-change="tabChange" />
@@ -93,6 +94,13 @@ createPage({
       mpx.navigateTo({
         url: `/order-detail/pages/detail-to-boss?isBack=true&id=${e.detail}&fromOrigin=${this.fromOrigin}`
       })
+    },
+    againOrder(e) {
+      console.log(e.detail)
+      this.setState({
+        cacheForm: e.detail
+      })
+      this.currentCom = this.footerList[0].key
     }
   }
 })

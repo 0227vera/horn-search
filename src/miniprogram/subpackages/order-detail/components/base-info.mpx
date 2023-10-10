@@ -138,7 +138,6 @@ createComponent({
           })
         }
       }
-
       if (images?.length) {
         list.push({
           title: '图片',

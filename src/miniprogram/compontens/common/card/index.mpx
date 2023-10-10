@@ -26,6 +26,7 @@
         <view class="list-item_ope" wx:if="{{buttons.length}}">
           <van-button
             wx:for="{{buttons}}"
+            wx:if="{{!b.hide}}"
             size="mini"
             style="margin-left: 8rpx"
             wx:for-item="b"
@@ -96,7 +97,6 @@ createComponent({
           text: '地址:',
           value: item.poi.detail || item.poi.address
         })
-        console.log('======+>', this.fromOrigin)
         if (this.fromOrigin === 'bossWorker') {
           let categoryValue = `${item.categoryName}${item.categorySub ? `(${item.categorySub})` : ''}-{${item.categoryNum}人}-${item.categoryTypeName}`
           content.push({
@@ -111,7 +111,7 @@ createComponent({
           if (item.categoryType === '2') {
             priceValue = `{${item.priceMin}${item.priceUnitName}} ~ {${item.priceMax}${item.priceUnitName}}`
           } else {
-            priceValue = `${item.price}${item.priceUnitName}`
+            priceValue = `{${item.price}${item.priceUnitName}}`
           }
           content.push({
             type: 'map',
