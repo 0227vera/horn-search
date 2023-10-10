@@ -136,7 +136,16 @@ createPage({
         hide: this.status !== '4',
         id: 'again',
         click: () => {
-          console.log('再来一单')
+          if (this.params.isBack === 'true') {
+            this.setState({
+              cacheForm: this.orderData
+            })
+            mpx.navigateBack()
+          } else {
+            mpx.reLaunch({
+              url: `/homepage/pages/index`
+            })
+          }
         }
       }, {
         name: '分享给好友',

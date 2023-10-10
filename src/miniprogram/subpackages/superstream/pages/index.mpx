@@ -31,6 +31,7 @@ createPage({
     categoryTypeId: ''
   },
   async onLoad(params) {
+    console.log(333333)
     /**
      * type: 区分是boss还是worker
      * key: 确定使用哪个组件展示
@@ -47,8 +48,13 @@ createPage({
       fromOrigin: this.fromOrigin
     })
   },
+  onShow() {
+    if (Object.keys(this.cacheForm).length) {
+      this.currentCom = this.footerList[0].key
+    }
+  },
   computed: {
-    ...store.mapState(['showBottomNav']),
+    ...store.mapState(['showBottomNav', 'cacheForm']),
     categoryConfig() {
       return config[this.categoryTypeId] || {}
     },
@@ -96,7 +102,6 @@ createPage({
       })
     },
     againOrder(e) {
-      console.log(e.detail)
       this.setState({
         cacheForm: e.detail
       })

@@ -18,6 +18,7 @@ export const mixins = {
     toastText: ''
   },
   computed: {
+    ...store.mapState(['adInfo', 'fromOrigin', 'cacheForm']),
     imagesValue() {
       if (this.updateObj.images.length) {
         return `已上传${this.updateObj.images.length}张图片`
@@ -26,6 +27,14 @@ export const mixins = {
     }
   },
   async attached() {
+    if (Object.keys(this.cacheForm).length) {
+      Object.keys(this.updateObj).forEach(item => {
+        this.updateObj[item] = this.cacheForm[item] || this.updateObj[item]
+      })
+      this.setState({
+        cacheForm: {}
+      })
+    }
     await this.setLocation()
     this.updateObj.poi = {
       ...this.adInfo,

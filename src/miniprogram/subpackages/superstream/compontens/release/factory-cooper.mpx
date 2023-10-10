@@ -275,7 +275,6 @@ import config, { categoryMap } from '@/constant/release.js'
 import { mixins } from '@/subpackages/superstream/utils/mixins.js'
 import { validateFactory } from '@/subpackages/superstream/utils/validate.js'
 import { initFactoryObj } from '@/subpackages/superstream/utils/constant.js'
-const store = getApp().globalStore
 
 createComponent({
   mixins: [mixins],
@@ -286,7 +285,6 @@ createComponent({
     checkBoxList: []
   },
   computed: {
-    ...store.mapState(['adInfo', 'fromOrigin']),
     configById() {
       return config[categoryMap[this.categoryTypeId]]
     },

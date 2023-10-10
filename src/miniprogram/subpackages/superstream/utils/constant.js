@@ -20,6 +20,7 @@ export const initBossWorkerObj = {
   ownTimeName: '',
   images: [],
   poi: {},
+  add: '',
   company: ''
 }
 

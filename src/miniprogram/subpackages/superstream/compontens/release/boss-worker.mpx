@@ -289,7 +289,7 @@ createComponent({
     updateObj: initBossWorkerObj
   },
   computed: {
-    ...store.mapState(['adInfo', 'fromOrigin', 'showBottomNav']),
+    ...store.mapState(['showBottomNav']),
     categoryList() {
       return config[this.categoryTypeId].category
     },
