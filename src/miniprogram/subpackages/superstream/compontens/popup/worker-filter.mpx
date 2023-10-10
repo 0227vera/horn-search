@@ -4,6 +4,7 @@
     round
     position="bottom"
     bind:close="close"
+    root-portal
   >
     <van-nav-bar
       left-text="取消"

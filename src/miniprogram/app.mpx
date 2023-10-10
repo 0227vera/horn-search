@@ -63,7 +63,8 @@ createApp({
       "./subpackages/company/app?root=company"
     ],
     "window": {
-      "navigationStyle": "custom"
+      "navigationStyle": "custom",
+      "disableScroll": true
     },
     "requiredPrivateInfos": [
       "chooseAddress",
