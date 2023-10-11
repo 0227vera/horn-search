@@ -1,11 +1,11 @@
 <template>
 <view class="container">
   <van-cell-group class="form" style="background:#fff">
-    <!-- 岗位相关 -->
+    <!-- 类别 -->
     <view class="category-container">
       <van-field
         class="category-content"
-        label="岗位"
+        label="类别"
         title-width="80rpx"
         required
         is-link
@@ -13,36 +13,11 @@
         border="{{false}}"
         value="{{updateObj.categoryName}}"
         input-align="right"
-        placeholder="请点击选择需要招的岗位"
+        placeholder="请点击选择出租/转让"
         bind:tap="showPopupContainer('category')"
       />
-      <view wx:if="{{showCategoryType}}" class="categoryNum">
-        <input
-          type="digit"
-          value="{{updateObj.categoryNum}}"
-          id="categoryNum"
-          bind:input="onAreaFieldChange"
-          placeholder="人数"
-          class="input"
-        />
-        <view>位</view>
-      </view>
-      <van-dropdown-menu
-        active-color="#1989fa"
-        wx:if="{{showCategoryType}}"
-        title-class="dropdown"
-        root-portal
-      >
-        <van-dropdown-item
-          bind:change="changeCategoryType"
-          value="{{ updateObj.categoryType }}"
-          options="{{ categoryTypeList }}"
-          bind:open="openDropdown"
-          bind:close="closeDropdown"
-        />
-      </van-dropdown-menu>
     </view>
-    <!-- 岗位子系列 -->
+    <!-- 类别子系列 -->
     <van-field
       label="{{subCategoryInfo.label}}"
       wx:if="{{subCategoryInfo.show}}"
@@ -54,45 +29,63 @@
       bind:change="onFieldChange"
       id="categorySub"
     />
-    <!-- 薪资相关 -->
+     <!-- 位置相关 -->
+    <van-field
+      label="招租/转让地址"
+      title-width="200rpx"
+      required
+      is-link
+      readonly
+      value="{{updateObj.poi.name}}"
+      input-align="right"
+      placeholder="请点击进入输入招租/转让地址"
+      bind:tap="showPopupContainer('address')"
+    />
+    <!-- 面积 -->
+    <van-field
+      label="面积"
+      title-width="80rpx"
+      required
+      value="{{ updateObj.area }}"
+      type="digit"
+      placeholder="请输入面积大小，单位（平米）"
+      input-align="right"
+      bind:change="onFieldChange"
+      id="area"
+    >
+      <view slot="right-icon" style="color: #333; font-weight: bold;">平米</view>
+    </van-field>
+    <!-- 楼层 -->
+    <van-field
+      label="楼层"
+      title-width="80rpx"
+      required
+      value="{{ updateObj.floor }}"
+      type="digit"
+      placeholder="请输入楼层"
+      input-align="right"
+      bind:change="onFieldChange"
+      id="floor"
+    >
+      <view slot="right-icon" style="color: #333; font-weight: bold;">楼</view>
+    </van-field>
+    <!-- 租金 -->
     <view class="category-container">
       <van-field
-        label="{{updateObj.categoryType === '2' ? '薪资' : '单价'}}"
+        label="租金"
         class="category-content"
         title-width="80rpx"
         required
         border="{{false}}"
         value="{{ updateObj.price }}"
-        placeholder="请输入计时或者计件的单价"
+        placeholder="请输入租金"
         type="digit"
         input-align="right"
         bind:change="onFieldChange"
         id="price"
         center
         custom-class="custom-height"
-      >
-        <view slot="input" class="area-container" wx:if="{{updateObj.priceUnit === '3'}}">
-          <input
-            type="digit"
-            value="{{updateObj.priceMin}}"
-            id="priceMin"
-            bind:input="onAreaFieldChange"
-            placeholder="最低"
-            class="input"
-          />
-          <text class="middle">~</text>
-          <input
-            type="digit"
-            value="{{updateObj.priceMax}}"
-            id="priceMax"
-            bind:input="onAreaFieldChange"
-            placeholder="最高"
-            class="input"
-          />
-        </view>
-        <view slot="button">
-        </view>
-      </van-field>
+      />
       <van-dropdown-menu
         active-color="#1989fa"
         title-class="dropdown"
@@ -100,58 +93,39 @@
       >
         <van-dropdown-item
           value="{{ updateObj.priceUnit }}"
-          options="{{ unitList }}"
+          options="{{ rentUnitList }}"
           bind:open="openDropdown"
           bind:close="closeDropdown"
           bind:change="changeUnit"
         />
       </van-dropdown-menu>
     </view>
-    <!-- 数量相关 -->
+    <!-- 押金 -->
     <van-field
-      wx:if="{{updateObj.categoryType !== '2'}}"
-      label="数量"
+      label="押金"
       title-width="80rpx"
       required
-      value="{{ updateObj.num }}"
+      value="{{ updateObj.deposit }}"
       type="digit"
-      placeholder="请输入数量"
+      placeholder="请输入押金"
       input-align="right"
       bind:change="onFieldChange"
-      id="num"
+      id="deposit"
     >
-      <!-- <view slot="input" class="area-container">
-        <input
-          type="digit"
-          value="{{updateObj.numMin}}"
-          id="numMin"
-          bind:input="onAreaFieldChange"
-          placeholder="最少"
-          class="input"
-        />
-        <text class="middle">~</text>
-        <input
-          type="digit"
-          value="{{updateObj.numMax}}"
-          id="numMax"
-          bind:input="onAreaFieldChange"
-          placeholder="最多"
-          class="input"
-        />
-      </view> -->
-      <view slot="right-icon" style="color: #333; font-weight: bold;">件</view>
+      <view slot="right-icon" style="color: #333; font-weight: bold;">个月</view>
     </van-field>
-    <!-- 位置相关 -->
+    <!-- 设备 -->
     <van-field
-      label="位置"
-      title-width="80rpx"
+      label="设备"
       required
-      is-link
-      readonly
-      value="{{updateObj.poi.name}}"
+      title-width="200rpx"
+      value="{{ updateObj.device }}"
+      placeholder="请输入设备"
       input-align="right"
-      placeholder="请点击进入输入我的详细地址"
-      bind:tap="showPopupContainer('address')"
+      type="textarea"
+      autosize
+      id="device"
+      bind:change="onFieldChange"
     />
     <!-- 电话 -->
     <van-field
@@ -164,30 +138,6 @@
       input-align="right"
       bind:change="onFieldChange"
       id="tel"
-    />
-    <!-- 货源(品质层次) -->
-    <van-field
-      wx:if="{{updateObj.categoryType === '1'}}"
-      label="{{originLabel}}"
-      title-width="240rpx"
-      required="{{false}}"
-      value="{{ updateObj.origin }}"
-      placeholder="例如十三行写字楼品质"
-      input-align="right"
-      bind:change="onFieldChange"
-      id="origin"
-    />
-    <!-- 截止时间 -->
-    <van-field
-      wx:if="{{updateObj.categoryType === '2'}}"
-      label="截止时间"
-      title-width="120rpx"
-      is-link
-      readonly
-      value="{{ timeInfo }}"
-      placeholder="点击确定截止时间"
-      bind:tap="showPopupContainer('time')"
-      input-align="right"
     />
     <!-- 图片 -->
     <van-cell title="图片或者视频展示" value="{{imagesValue}}" border="{{false}}" />
@@ -212,40 +162,16 @@
         </view>
       </view>
     </view>
-    <!-- 要求 -->
+    <!-- 补充 -->
     <van-field
-      label="岗位要求"
-      title-width="120rpx"
-      value="{{ updateObj.note }}"
-      placeholder="请输入您对所招工人的要求或者服装的要求"
-      input-align="left"
-      type="textarea"
-      autosize
-      id="note"
-      bind:change="onFieldChange"
-    />
-    <!-- 待遇补充 -->
-    <van-field
-      label="待遇补充"
+      label="补充"
       title-width="120rpx"
       value="{{ updateObj.add }}"
-      placeholder="请输入您可以额外提供的待遇"
+      placeholder="可以在此输入需要补充的内容"
       input-align="left"
       type="textarea"
       autosize
       id="add"
-      bind:change="onFieldChange"
-    />
-    <!-- 工厂名 -->
-    <van-field
-      label="工厂名"
-      title-width="120rpx"
-      value="{{ updateObj.company }}"
-      placeholder="请输入您的工厂或公司名称"
-      input-align="left"
-      type="textarea"
-      autosize
-      id="company"
       bind:change="onFieldChange"
     />
   </van-cell-group>
@@ -268,33 +194,25 @@
 import mpx, { createComponent } from '@mpxjs/core'
 import config, { categoryMap } from '@/constant/release.js'
 import { mixins } from '@/subpackages/superstream/utils/mixins.js'
-import { fileUpload, addRelease, updateRelease } from '@/api'
-import { validateBossWorker } from '@/subpackages/superstream/utils/validate.js'
-import { initBossWorkerObj, unitList, categoryTypeList } from '@/subpackages/superstream/utils/constant.js'
-import { timeInfo } from '@/subpackages/superstream/utils/utils.js'
+import { validateLease } from '@/subpackages/superstream/utils/validate.js'
+import { initLeaseObj, rentUnitList } from '@/subpackages/superstream/utils/constant.js'
 const store = getApp().globalStore
 
 createComponent({
   mixins: [mixins],
   data: {
-    showCategoryType: false,
-    categoryTypeList,
-    unitList,
+    rentUnitList,
     subCategoryInfo: {
       show: false,
       label: '',
       placeholder: ''
     },
-    originLabel: '货源(品质层次)',
-    updateObj: initBossWorkerObj
+    updateObj: initLeaseObj
   },
   computed: {
     ...store.mapState(['showBottomNav']),
     categoryList() {
       return config[this.categoryTypeId].category
-    },
-    timeInfo() {
-      return timeInfo(this.updateObj.ownTime)
     }
   },
   methods: {
@@ -310,34 +228,13 @@ createComponent({
         category: () => {
           this.updateObj.category = data.id
           this.updateObj.categoryName = data.text
-          this.showCategoryType = data.showCategoryType
-          if (data.showCategoryType) {
-            if (data.categoryType === '2') {
-              this.updateObj.categoryType = '2'
-              this.updateObj.categoryTypeName = '长工'
-            } else {
-              this.updateObj.categoryType = '1'
-              this.updateObj.categoryTypeName = '临工'
-            }
-            this.setUnitList()
-          } else {
-            this.updateObj.categoryType = ''
-            this.updateObj.categoryTypeName = ''
-            this.setUnitList()
-          }
           if (data.needDetail) {
             this.subCategoryInfo.show = true
             this.subCategoryInfo.label = `${data.text}(分类)`
             this.subCategoryInfo.placeholder = `请输入${data.text}的具体类别`
-            this.originLabel = `${data.text}说明`
           } else {
             this.subCategoryInfo.show = false
-            this.originLabel = '货源(品质层次)'
           }
-        },
-        time: () => {
-          this.updateObj.ownTime = data.ownTime
-          this.updateObj.ownTimeName = this.timeInfo
         },
         address: () => {
           this.updateObj.poi = data.poi
@@ -348,32 +245,13 @@ createComponent({
       this.closePopupContainer()
     },
     changeUnit(e) {
-      const name = this.unitList.find(item => item.value === e.detail).text
+      const name = this.rentUnitList.find(item => item.value === e.detail).text
       this.updateObj.priceUnitName = name
       this.updateObj.priceUnit = e.detail
     },
-    changeCategoryType(e) {
-      const name = this.categoryTypeList.find(item => item.value === e.detail).text
-      this.updateObj.categoryType = e.detail
-      this.updateObj.categoryTypeName = name
-      this.setUnitList()
-    },
-    setUnitList() {
-      if (this.updateObj.categoryType === '2') {
-        this.updateObj.priceUnit = '3'
-        this.updateObj.priceUnitName = 'K/月'
-        this.unitList = unitList.filter(item => item.value === '3')
-      } else if (this.updateObj.categoryType === '1') {
-        this.updateObj.priceUnit = '1'
-        this.updateObj.priceUnitName = '元/件'
-        this.unitList = unitList.filter(item => item.value !== '3')
-      } else {
-        this.unitList = unitList
-      }
-    },
     // note: 提交操作
     async releaseData() {
-      this.submitData(validateBossWorker)
+      this.submitData(validateLease)
     },
     openDropdown() {
       this.setState({

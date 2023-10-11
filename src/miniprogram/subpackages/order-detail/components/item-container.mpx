@@ -1,6 +1,8 @@
 <template>
   <view class="container">
-    <view class="title" wx:if="{{title}}">{{title}}</view>
+    <view class="title" wx:if="{{title}}">
+      <mutil-style-text text="{{title}}" rules="{{rules}}" />
+    </view>
     <view class="content">
       <slot />
     </view>
@@ -14,6 +16,19 @@ createComponent({
     title: {
       type: String,
       value: ''
+    },
+    highColor: {
+      type: String,
+      value: '#1989fc'
+    }
+  },
+  computed: {
+    rules() {
+      return {
+        '{x}': {
+          style: `color: ${this.highColor}`
+        }
+      }
     }
   }
 })
@@ -40,6 +55,8 @@ createComponent({
 
 <script type="application/json">
   {
-    "usingComponents": {}
+    "usingComponents": {
+      "mutil-style-text": "@/compontens/base/mutil-style-text.mpx"
+    }
   }
 </script>

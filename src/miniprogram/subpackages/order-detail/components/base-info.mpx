@@ -8,7 +8,6 @@
     value="{{item.value}}"
     clickable="{{item.islink}}"
     is-link="{{item.islink}}"
-    bind:tap="priview(item)"
     value-class="right-class"
   />
 </van-cell-group>
@@ -32,9 +31,13 @@ createComponent({
       console.log(this.orderData)
       const {
         categoryName, categorySub, categoryType, categoryTypeName, categoryNum, priceMin, priceMax, price, priceUnitName, num, numMin, numMax, origin, poi, tel, ownTimeName, images, note, add, calllist, company,
-        factoryScaleName, factoryScale, people, area, cooperTypeName, fabricPropName, productTypeName, orderTypeName, color, code
+        factoryScaleName, factoryScale, people, area, cooperTypeName, fabricPropName, productTypeName, orderTypeName, color, code,
+        deposit, device, floor
       } = this.orderData
-      const list = []
+      const list = [{
+        title: '位置',
+        value: poi.detail || poi.address
+      }]
       if (this.fromOrigin === 'bossWorker') {
         // note: 岗位
         let categoryText = categoryName
@@ -76,6 +79,24 @@ createComponent({
             title: '货源(品质层次)',
             value: origin,
             titleWidth: '240rpx'
+          })
+        }
+        if (ownTimeName) {
+          list.push({
+            title: '截止时间',
+            value: ownTimeName
+          })
+        }
+        if (note) {
+          list.push({
+            title: '岗位要求',
+            value: note
+          })
+        }
+        if (add) {
+          list.push({
+            title: '待遇补充',
+            value: add
           })
         }
       } else if (this.fromOrigin === 'factoryCooper') {
@@ -129,38 +150,38 @@ createComponent({
             value: add
           })
         }
-      }
-      if (this.fromOrigin === 'bossWorker') {
-        if (ownTimeName) {
-          list.push({
-            title: '截止时间',
-            value: ownTimeName
-          })
-        }
-      }
-      if (images?.length) {
+      } else if (this.fromOrigin === 'leaseTransfer') {
         list.push({
-          title: '图片',
-          value: '点击查看图片',
-          islink: true,
-          list: images
+          title: '类别',
+          value: `${categoryName}${categorySub ? `(${categorySub})` : ''}`
         })
-      }
-      if (this.fromOrigin === 'bossWorker') {
-        if (note) {
-          list.push({
-            title: '岗位要求',
-            value: note
-          })
-        }
+        list.push({
+          title: '面积',
+          value: area + '平米'
+        })
+        list.push({
+          title: '楼层',
+          value: floor + '楼'
+        })
+        list.push({
+          title: '租金',
+          value: `${price}${priceUnitName}`
+        })
+        list.push({
+          title: '押金',
+          value: `${deposit}个月`
+        })
+        list.push({
+          title: '设备',
+          value: device
+        })
         if (add) {
           list.push({
-            title: '待遇补充',
+            title: '补充',
             value: add
           })
         }
       }
-
       if (company) {
         list.push({
           title: '工厂名',
@@ -174,20 +195,6 @@ createComponent({
         })
       }
       return list
-    }
-  },
-  methods: {
-    priview(item) {
-      if (!item.islink) {
-        return
-      }
-      wx.previewMedia({
-        current: 0,
-        sources: item.list.map(i => ({
-          url: i,
-          type: 'image'
-        }))
-      })
     }
   }
 })

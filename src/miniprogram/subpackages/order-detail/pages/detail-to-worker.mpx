@@ -1,6 +1,6 @@
 <template>
   <custom-container
-    title="订单详情"
+    title="{{shareTitle}}"
     lefticon="arrow-left"
     containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
     clickLeft="{{clickLeft}}"
@@ -12,13 +12,19 @@
       <item-container title="基本信息：">
         <base-info orderData="{{orderData}}" needList />
       </item-container>
+      <item-container wx:if="{{images.length}}" title="图片展示{(可点击查看大图)}：">
+        <view class="image-list">
+          <image class="image-item" bind:tap="priviewImage(index)" wx:for="{{images}}" wx:key="item" src="{{item}}"></image>
+          <view class="image-item" wx:for="{{3 - images.length % 3}}"></view>
+        </view>
+      </item-container>
       <item-container title="位置信息：">
         <cus-map endInfo="{{poi}}" />
       </item-container>
     </view>
   </custom-container>
-  <nav-footer list="{{footerList}}" />
-  <back-home showShare />
+  <nav-footer wx:if="{{shareTitle}}" list="{{footerList}}" />
+  <back-home wx:if="{{shareTitle}}" showShare />
 </template>
 
 <script>
@@ -40,6 +46,7 @@ createPage({
     loading: true,
     orderData: {},
     params: {},
+    images: [],
     poi: {}
   },
   async onLoad(params) {
@@ -69,6 +76,34 @@ createPage({
   },
   computed: {
     ...store.mapState(['openid', 'fromOrigin']),
+    shareTitle() {
+      if (!Object.keys(this.orderData).length) {
+        return ''
+      }
+      const actions = {
+        bossWorker: () => {
+          let text = this.orderData.categoryName
+          if (this.orderData.categorySub) {
+            text += `(${this.orderData.categorySub})`
+          }
+          text += `/${this.orderData.categoryNum}人`
+          text += `/${this.orderData.categoryTypeName}`
+          return text
+        },
+        factoryCooper: () => {
+          return `${this.orderData.cooperTypeName}/${this.orderData.numMin}~${this.orderData.numMax}件/${this.orderData.orderTypeName}`
+        },
+        leaseTransfer: () => {
+          let text = this.orderData.categoryName
+          if (this.orderData.categorySub) {
+            text += `(${this.orderData.categorySub})`
+          }
+          text += `-${this.orderData.area}平米-${this.orderData.price}${this.orderData.priceUnitName}`
+          return text
+        }
+      }
+      return actions?.[this.fromOrigin]?.()
+    },
     clickLeft() {
       return () => {
         if (this.params.isBack === 'true') {
@@ -150,13 +185,10 @@ createPage({
         })
       }
     },
-    priview(item) {
-      if (!item.islink) {
-        return
-      }
+    priviewImage(index) {
       wx.previewMedia({
-        current: 0,
-        sources: item.list.map(i => ({
+        current: index,
+        sources: this.images.map(i => ({
           url: i,
           type: 'image'
         }))
@@ -191,6 +223,16 @@ createPage({
   &-content
     overflow hidden
     border-radius 16rpx
+.image-list
+  display flex
+  flex-wrap wrap
+  justify-content space-between
+  padding 16rpx
+  .image-item
+    width 32%
+    height 300rpx
+    border-radius 16rpx
+    margin-bottom 16rpx
 </style>
 
 <script type="application/json">

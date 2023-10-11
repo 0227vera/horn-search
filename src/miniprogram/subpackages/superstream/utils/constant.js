@@ -30,6 +30,11 @@ export const unitList = [
   { text: 'K/月', value: '3' }
 ]
 
+export const rentUnitList = [
+  { text: '元/月', value: '1' },
+  { text: '元/平', value: '2' }
+]
+
 export const categoryTypeList = [
   { text: '临工', value: '1' },
   { text: '长工', value: '2' }
@@ -64,4 +69,21 @@ export const initFactoryObj = {
 export const pageInfo = {
   page: 1,
   size: 10
+}
+
+export const initLeaseObj = {
+  category: '',
+  categoryName: '',
+  categorySub: '',
+  area: '',
+  floor: '',
+  price: '',
+  priceUnit: '1',
+  priceUnitName: '元/月',
+  deposit: '',
+  device: '',
+  poi: {},
+  tel: '',
+  images: [],
+  add: ''
 }

@@ -1,3 +1,5 @@
+const telReg = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/
+
 export const validateBossWorker = ({ updateObj, subCategoryInfo } = {}) => {
   if (!updateObj) {
     console.error('updateObj应该为对象')
@@ -64,23 +66,23 @@ export const validateBossWorker = ({ updateObj, subCategoryInfo } = {}) => {
     result.text = '请输入{手机号}'
     return result
   }
-  if (!/^(?:(?:\+|00)86)?1[3-9]\d{9}$/.test(updateObj.tel)) {
+  if (!telReg.test(updateObj.tel)) {
     result.text = '请输入{正确的手机号}'
     return result
   }
-  if (/^(?:(?:\+|00)86)?1[3-9]\d{9}$/.test(updateObj.origin)) {
+  if (telReg.test(updateObj.origin)) {
     result.text = '{货源(品质层次)}中不可带{电话号码}'
     return result
   }
-  if (/^(?:(?:\+|00)86)?1[3-9]\d{9}$/.test(updateObj.note)) {
+  if (telReg.test(updateObj.note)) {
     result.text = '{岗位要求}中不可带{电话号码}'
     return result
   }
-  if (/^(?:(?:\+|00)86)?1[3-9]\d{9}$/.test(updateObj.add)) {
+  if (telReg.test(updateObj.add)) {
     result.text = '{待遇补充}中不可带{电话号码}'
     return result
   }
-  if (/^(?:(?:\+|00)86)?1[3-9]\d{9}$/.test(updateObj.company)) {
+  if (telReg.test(updateObj.company)) {
     result.text = '{工厂名}中不可带{电话号码}'
     return result
   }
@@ -144,16 +146,73 @@ export const validateFactory = ({ updateObj } = {}) => {
     result.text = '请输入{手机号}'
     return result
   }
-  if (!/^(?:(?:\+|00)86)?1[3-9]\d{9}$/.test(updateObj.tel)) {
+  if (!telReg.test(updateObj.tel)) {
     result.text = '请输入{正确的手机号}'
     return result
   }
-  if (/^(?:(?:\+|00)86)?1[3-9]\d{9}$/.test(updateObj.add)) {
+  if (telReg.test(updateObj.add)) {
     result.text = '{补充}中不可带{电话号码}'
     return result
   }
-  if (/^(?:(?:\+|00)86)?1[3-9]\d{9}$/.test(updateObj.company)) {
+  if (telReg.test(updateObj.company)) {
     result.text = '{工厂名}中不可带{电话号码}'
+    return result
+  }
+  result.success = true
+  return result
+}
+
+export const validateLease = ({ updateObj, subCategoryInfo } = {}) => {
+  if (!updateObj) {
+    console.error('updateObj应该为对象')
+    return
+  }
+  const result = {
+    success: false,
+    text: ''
+  }
+  if (!updateObj.category) {
+    result.text = '请选择{分类}'
+    return result
+  }
+  if (subCategoryInfo.show && !updateObj.categorySub) {
+    result.text = subCategoryInfo.placeholder
+    return result
+  }
+  if (!updateObj.area) {
+    result.text = '请填写{面积}'
+    return result
+  }
+  if (!updateObj.floor) {
+    result.text = '请填写{楼层}'
+    return result
+  }
+  if (!updateObj.price) {
+    result.text = '请填写{租金}'
+    return result
+  }
+  if (!updateObj.deposit) {
+    result.text = '请填写{押金}'
+    return result
+  }
+  if (!updateObj.device) {
+    result.text = '请填写{设备}'
+    return result
+  }
+  if (!updateObj.tel) {
+    result.text = '请输入{手机号}'
+    return result
+  }
+  if (!telReg.test(updateObj.tel)) {
+    result.text = '请输入{正确的手机号}'
+    return result
+  }
+  if (telReg.test(updateObj.device)) {
+    result.text = '{设备}中不可带{电话号码}'
+    return result
+  }
+  if (telReg.test(updateObj.add)) {
+    result.text = '{补充}中不可带{电话号码}'
     return result
   }
   result.success = true

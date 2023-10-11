@@ -213,12 +213,39 @@ const factoryScaleList = [{
   value: '2'
 }]
 
+const leaseTransferCategory = [{
+  text: '招租',
+  children: [
+    { text: "厂房招租", id: "1-0" },
+    { text: "公司/写字楼招租", id: "1-3" },
+    { text: "直播间招租", id: "1-6" },
+    { text: "店铺招租", id: "1-9" },
+    { text: "商铺招租", id: "1-12", needDetail: true },
+    { text: "房屋出租", id: "1-15", needDetail: true }
+  ]
+}, {
+  text: '转让',
+  children: [
+    { text: "公司/写字楼转让", id: "2-0" },
+    { text: "直播间转让", id: "2-3" },
+    { text: "店铺转让", id: "2-6" },
+    { text: "商铺转让", id: "2-9" },
+    { text: "厂房转让", id: "2-12" },
+    { text: "制衣厂转让", id: "2-15" },
+    { text: "裁床转让", id: "2-18" },
+    { text: "烫房转让", id: "2-21" },
+    { text: "专机店转让", id: "2-24" },
+    { text: "住房转让", id: "2-27" },
+    { text: "餐管转让", id: "2-30" }
+  ]
+}]
+
 export default {
   findWorker: {
     category: findWorkerCategory,
     fromOrigin: 'bossWorker',
     partyA: {
-      title: ['我要招工', '订单列表']
+      title: ['我要招工', '招工列表']
     },
     partyB: {
       title: '我要找工作'
@@ -232,16 +259,17 @@ export default {
     orderTypeList,
     fromOrigin: 'factoryCooper',
     partyA: {
-      title: ['我要找工厂', '订单列表']
+      title: ['我要找工厂', '找工厂列表']
     },
     partyB: {
       title: '我要找货做'
     }
   },
   leaseTransfer: {
+    category: leaseTransferCategory,
     fromOrigin: 'leaseTransfer',
     partyA: {
-      title: ['出租转让', '订单列表']
+      title: ['出租转让', '出租转让列表']
     },
     partyB: {
       title: '租房'

@@ -6,7 +6,11 @@
     <view wx:if="{{navBarStyle.lefticon}}" class="left" bindtap="backClick">
       <van-icon name="{{navBarStyle.lefticon}}" />
     </view>
-    <view class="title" style="color: {{ navBarStyle.color }};">{{ navBarStyle.title }}</view>
+    <view class="title" style="color: {{ navBarStyle.color }};">
+      <scroll-view scroll-x width="50vw">
+        {{ navBarStyle.title }}
+      </scroll-view>
+    </view>
   </view>
 </template>
 
@@ -69,6 +73,9 @@ createComponent({
   .title
     font-size 32rpx
     font-weight bold
+    max-width 50vw
+    overflow hidden
+    white-space nowrap
 </style>
 
 <script name="json">

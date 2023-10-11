@@ -268,7 +268,6 @@
 import mpx, { createComponent } from '@mpxjs/core'
 import config, { categoryMap } from '@/constant/release.js'
 import { mixins } from '@/subpackages/superstream/utils/mixins.js'
-import { fileUpload, addRelease, updateRelease } from '@/api'
 import { validateBossWorker } from '@/subpackages/superstream/utils/validate.js'
 import { initBossWorkerObj, unitList, categoryTypeList } from '@/subpackages/superstream/utils/constant.js'
 import { timeInfo } from '@/subpackages/superstream/utils/utils.js'
