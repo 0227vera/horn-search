@@ -12,15 +12,15 @@ const handleUrlParams = (url, params) => {
 }
 
 const jumpAction = item => {
-  let url = item.link || item.url
-  if (item.params) {
-    url = handleUrlParams(url, item.params)
-  }
-  if (!url) {
-    return
-  }
   const actions = {
     mp: () => {
+      let url = item.link || item.url
+      if (item.params) {
+        url = handleUrlParams(url, item.params)
+      }
+      if (!url) {
+        return
+      }
       if (item.redirect) {
         mpx.redirectTo({ url })
         return
@@ -34,6 +34,7 @@ const jumpAction = item => {
       })
     },
     setting: () => {
+      console.log('setting')
       mpx.openSetting()
     }
   }
