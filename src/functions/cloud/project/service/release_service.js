@@ -2,10 +2,16 @@ const BaseService = require('./base_service.js')
 const bossWorkerModel = require('../model/release_boss_work_model.js')
 const factoryCooperModel = require('../model/release_factory_cooper_model.js')
 const leaseTransferModel = require('../model/release_lease_transfer_model.js')
+const employAppliModel = require('../model/release_employ_appli_model.js')
+const usedDetectModel = require('../model/release_used_detect_model.js')
+const tailingsModel = require('../model/release_tailings_model.js')
 const modelMap = {
   bossWorkerModel,
   factoryCooperModel,
-  leaseTransferModel
+  leaseTransferModel,
+  employAppliModel,
+  usedDetectModel,
+  tailingsModel
 }
 
 class ReleaseManagerService extends BaseService {
