@@ -33,8 +33,7 @@ createPage({
   {
     "usingComponents": {
       "custom-container": "@/compontens/base/custom-container",
-      "address-list": "@/compontens/common/address-list",
-      "van-divider": "@vant/weapp/divider/index"
+      "address-list": "@/compontens/common/address-list"
     },
     "navigationStyle": "custom"
   }

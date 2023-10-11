@@ -242,7 +242,6 @@ createPage({
       "cus-map": "@/compontens/common/map",
       "van-cell": "@vant/weapp/cell/index",
       "van-cell-group": "@vant/weapp/cell-group/index",
-      "van-image": "@vant/weapp/image/index",
       "van-steps": "@vant/weapp/steps/index",
       "van-loading": "@vant/weapp/loading/index",
       "item-container": "../components/item-container",

@@ -66,6 +66,7 @@ createApp({
       "navigationStyle": "custom",
       "disableScroll": true
     },
+    "lazyCodeLoading": "requiredComponents",
     "requiredPrivateInfos": [
       "chooseAddress",
       "choosePoi",
