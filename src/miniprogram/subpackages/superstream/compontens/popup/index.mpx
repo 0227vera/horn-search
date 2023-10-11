@@ -5,6 +5,8 @@
     position="bottom"
     bind:close="close"
     root-portal
+    z-index="{{100}}"
+    bind:enter="enter"
   >
     <!-- 时间选择 -->
     <van-datetime-picker
@@ -107,6 +109,7 @@
 
 <script>
 import { createComponent } from '@mpxjs/core'
+import store from '@/store'
 createComponent({
   properties: {
     show: {
@@ -176,8 +179,17 @@ createComponent({
     }
   },
   methods: {
+    ...store.mapMutations(['setState']),
     close() {
       this.triggerEvent('close')
+      this.setState({
+        showBottomNav: true
+      })
+    },
+    enter() {
+      this.setState({
+        showBottomNav: false
+      })
     },
     confirm(data) {
       this.triggerEvent('confirm', {

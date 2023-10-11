@@ -7,7 +7,7 @@
       <van-icon name="{{navBarStyle.lefticon}}" />
     </view>
     <view class="title" style="color: {{ navBarStyle.color }};">
-      <scroll-view scroll-x width="50vw">
+      <scroll-view scroll-x width="100%" class="title">
         {{ navBarStyle.title }}
       </scroll-view>
     </view>
@@ -49,12 +49,12 @@ createComponent({
 
 <style lang="stylus">
 .nav-bar
-  position absolute
+  position fixed
   display flex
   align-items center
   justify-content center
   width 100%
-  z-index 2
+  z-index 0
   overflow hidden
   top 0
   .left
@@ -76,6 +76,7 @@ createComponent({
     max-width 50vw
     overflow hidden
     white-space nowrap
+    text-align center
 </style>
 
 <script name="json">

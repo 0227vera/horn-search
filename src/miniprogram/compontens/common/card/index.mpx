@@ -3,10 +3,10 @@
   <view class="container">
     <van-swipe-cell wx:for="{{renderList}}" wx:key="_id" right-width="{{ canDelete ? 65 : 0 }}">
       <view wx:if="{{canDelete}}" slot="right" class="van-swipe-cell__right" bind:tap="delete(item)">删除</view>
-      <view class="list-item">
+      <view class="list-item" bind:tap="gotoDetail(item)">
         <view wx:if="{{item.tag}}" class="tag">{{item.tag}}</view>
         <view class="list-item_info">
-          <image class="list-item_info-img" bind:tap="priview(item)" src="{{item.thumb}}"></image>
+          <image class="list-item_info-img" catchtap="priview(item)" src="{{item.thumb}}"></image>
           <view class="list-item_info-content">
             <view wx:for="{{item.contentList}}" wx:key="title" wx:for-item="content" class="list-item_info-content-item">
               <block wx:if="{{content.type === 'map'}}">
@@ -32,7 +32,7 @@
             wx:for-item="b"
             round
             type="{{b.type || 'default'}}"
-            bind:tap="clickBtn(item, b)"
+            catchtap="clickBtn(item, b)"
             icon="{{b.icon || ''}}"
           >
             {{b.text}}
@@ -220,6 +220,14 @@ createComponent({
   methods: {
     clickBtn(item, b) {
       this.triggerEvent('footer-btn', { item, buttonInfo: b })
+    },
+    gotoDetail(item) {
+      this.triggerEvent('footer-btn', {
+        item,
+        buttonInfo: {
+          id: 'gotoDetail'
+        }
+      })
     },
     priview(item) {
       if (!item.images.length) {

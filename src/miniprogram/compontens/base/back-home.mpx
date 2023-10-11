@@ -1,23 +1,29 @@
 <template>
-  <view class="container home" bind:tap="backHome">
-    <van-icon class="icon" name="wap-home" />
-    <view class="text">返回首页</view>
-  </view>
-  <view class="container share" wx:if="{{showShare}}">
-    <van-icon class="icon" name="share" />
-    <view class="text">分享</view>
-    <button open-type="share" class="btn"></button>
-  </view>
+  <block wx:if="{{showBottomNav}}">
+    <view class="container home" bind:tap="backHome">
+      <van-icon class="icon" name="wap-home" />
+      <view class="text">返回首页</view>
+    </view>
+    <view class="container share" wx:if="{{showShare}}">
+      <van-icon class="icon" name="share" />
+      <view class="text">分享</view>
+      <button open-type="share" class="btn"></button>
+    </view>
+  </block>
 </template>
 
 <script>
 import mpx, { createComponent } from '@mpxjs/core'
+import store from '@/store'
 createComponent({
   properties: {
     showShare: {
       type: Boolean,
       value: false
     }
+  },
+  computed: {
+    ...store.mapState(['showBottomNav'])
   },
   methods: {
     backHome() {
@@ -42,6 +48,7 @@ createComponent({
   border-radius 50%
   width 80rpx
   height 80rpx
+  z-index 0
   &.home
     left 0
   &.share
