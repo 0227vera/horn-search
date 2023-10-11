@@ -100,7 +100,15 @@ export default [[{
   id: '',
   dot: false,
   tips: '',
-
+  action: {
+    url: '/superstream/pages/index',
+    jumptype: 'mp',
+    params: {
+      key: 'employAppli',
+      id: 'employment',
+      type: 'partyA'
+    }
+  },
   extraInfo: {}
 }, {
   text: '我要应聘公司岗',
@@ -108,7 +116,15 @@ export default [[{
   id: '',
   dot: false,
   tips: '靠谱',
-  link: '',
+  action: {
+    url: '/superstream/pages/index',
+    jumptype: 'mp',
+    params: {
+      key: 'partyB',
+      id: 'application',
+      type: 'partyB'
+    }
+  },
   extraInfo: {}
 }], [{
   text: '出售二手设备发布',
@@ -116,7 +132,15 @@ export default [[{
   id: '',
   dot: false,
   tips: '',
-  link: '',
+  action: {
+    url: '/superstream/pages/index',
+    jumptype: 'mp',
+    params: {
+      key: 'usedDetect',
+      id: 'used',
+      type: 'partyA'
+    }
+  },
   extraInfo: {}
 }, {
   text: '我要捡漏二手没备',
@@ -124,7 +148,15 @@ export default [[{
   id: '',
   dot: false,
   tips: '聚划算',
-  link: '',
+  action: {
+    url: '/superstream/pages/index',
+    jumptype: 'mp',
+    params: {
+      key: 'partyB',
+      id: 'detect',
+      type: 'partyB'
+    }
+  },
   extraInfo: {}
 }], [{
   text: '尾货处理发布',
@@ -132,7 +164,15 @@ export default [[{
   id: '',
   dot: false,
   tips: '清仓',
-  link: '',
+  action: {
+    url: '/superstream/pages/index',
+    jumptype: 'mp',
+    params: {
+      key: 'tailings',
+      id: 'tailings',
+      type: 'partyA'
+    }
+  },
   extraInfo: {}
 }, {
   text: '货尾中心公示',
@@ -140,6 +180,14 @@ export default [[{
   id: '',
   dot: false,
   tips: '方便联系',
-  link: '',
+  action: {
+    url: '/superstream/pages/index',
+    jumptype: 'mp',
+    params: {
+      key: 'partyB',
+      id: 'center',
+      type: 'partyB'
+    }
+  },
   extraInfo: {}
 }]]

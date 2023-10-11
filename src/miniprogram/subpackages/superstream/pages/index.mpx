@@ -125,6 +125,9 @@ createPage({
       "bossWorker":"@/subpackages/superstream/compontens/release/boss-worker",
       "factoryCooper":"@/subpackages/superstream/compontens/release/factory-cooper",
       "leaseTransfer":"@/subpackages/superstream/compontens/release/lease-transfer",
+      "employAppli":"@/subpackages/superstream/compontens/release/employ-appli",
+      "usedDetect":"@/subpackages/superstream/compontens/release/used-detect",
+      "tailings":"@/subpackages/superstream/compontens/release/tailings",
       "partyB": "@/subpackages/superstream/compontens/order/partyB.mpx"
     },
     "disableScroll": true

@@ -248,7 +248,7 @@ export default {
       title: ['我要招工', '招工列表']
     },
     partyB: {
-      title: '我要找工作'
+      title: '我要找事做'
     }
   },
   findFactory: {
@@ -274,6 +274,27 @@ export default {
     partyB: {
       title: '租房'
     }
+  },
+  employ: {
+    fromOrigin: 'employAppli',
+    partyA: {
+      title: ['公司直聘', '直聘列表']
+    },
+    partyB: '应聘公司岗'
+  },
+  usedDetect: {
+    fromOrigin: 'usedDetect',
+    partyA: {
+      title: ['出售二手设备', '二手设备列表']
+    },
+    partyB: '我要捡漏二手没备'
+  },
+  tailings: {
+    fromOrigin: 'tailings',
+    partyA: {
+      title: ['尾货处理', '尾货处理列表']
+    },
+    partyB: '货尾中心'
   }
 }
 
@@ -283,5 +304,11 @@ export const categoryMap = {
   findFactory: 'findFactory',
   findCooper: 'findFactory',
   hire: 'leaseTransfer',
-  rent: 'leaseTransfer'
+  rent: 'leaseTransfer',
+  employment: 'employ',
+  application: 'employ',
+  used: 'usedDetect',
+  detect: 'usedDetect',
+  tailings: 'tailings',
+  center: 'tailings'
 }
