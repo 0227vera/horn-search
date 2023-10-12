@@ -48,7 +48,7 @@ createComponent({
         withSubscriptions: true
       })
       const { subscriptionsSetting } = res
-      if (subscriptionsSetting.itemSettings[NEW_ORDER_NOTICE] === 'accept' && subscriptionsSetting.itemSettings[ORDER_UPDATE] === 'accept') {
+      if (subscriptionsSetting.itemSettings?.[NEW_ORDER_NOTICE] === 'accept' && subscriptionsSetting.itemSettings?.[ORDER_UPDATE] === 'accept') {
         this.show = false
       } else {
         this.show = true

@@ -1,23 +1,86 @@
 
 <template>
   <view class="container">
-    <view  class="list">
-      <view class="list-filter">
-        <view class="list-filter-info">
-          <view class="list-filter-info-item">
-            <view class="list-filter-info-item_text">岗位筛选：</view>
-            <view class="list-filter-info-item_value">{{filter.category.text || '全部'}}</view>
-          </view>
-          <view class="list-filter-info-item">
-            <view class="list-filter-info-item_text">距离要求：</view>
-            <view class="list-filter-info-item_value">{{filter.distance.text || '全部'}}</view>
-          </view>
+    <view class="list" wx:if="{{renderFilterList.length}}">
+      <scroll-view scroll-x style="width: 100% border-radius: 16rpx 16rpx {{showBottomNav ? '16rpx 16rpx' : '0 0'}}" class="list-scroll">
+        <view class="list-filter">
+          <block wx:for="{{renderFilterList}}" wx:key="id">
+            <view class="list-filter-item">
+              <van-dropdown-menu
+                active-color="#1989fa"
+                title-class="dropdown"
+                root-portal
+              >
+                <van-dropdown-item
+                  bind:change="changeCategoryType"
+                  bind:open="openDropdown"
+                  bind:close="closeDropdown"
+                  title="{{item.text}}"
+                  id="{{item.id}}"
+                >
+                  <view class="filter-container">
+                    <van-tree-select
+                      wx:if="{{item.type === 'category'}}"
+                      height="50vh"
+                      main-active-class="left-select"
+                      content-active-class="right-select"
+                      items="{{ item.list }}"
+                      max="{{ item.max }}"
+                      main-active-index="{{ mainActiveIndex }}"
+                      active-id="{{ item.value }}"
+                      bind:click-nav="onClickNav"
+                      bind:click-item="onClickItem"
+                      id="{{item.id}}"
+                    />
+                    <van-radio-group value="{{ item.value }}" wx:elif="{{item.type === 'radio'}}" bind:change="onRadioChange" id="{{item.id}}">
+                      <van-cell-group>
+                        <van-cell wx:for="{{item.list}}" wx:for-item="radio" wx:key="value" title="{{radio.name}}" clickable data-name="{{radio.value}}" data-id="{{item.id}}" bind:click="onItemClick">
+                          <van-radio slot="right-icon" name="{{radio.value}}" />
+                        </van-cell>
+                      </van-cell-group>
+                    </van-radio-group>
+                    <view style="max-height: 50vh; overflow-x: hidden;" wx:elif="{{item.type === 'checkbox'}}">
+                      <van-checkbox-group value="{{ item.value }}" bind:change="onCheckboxChange" id="{{item.id}}">
+                        <van-cell-group>
+                          <van-cell
+                            wx:for="{{ item.list }}"
+                            wx:key="index"
+                            wx:for-item="checkou"
+                            title="{{ checkou.name }}"
+                            value-class="value-class"
+                            clickable
+                            data-index="{{ index }}"
+                            bind:click="toggle"
+                            data-id="{{item.id}}"
+                            data-value="{{checkou.value}}"
+                          >
+                            <van-checkbox
+                              catch:tap="noop"
+                              shape="square"
+                              class="checkboxes-{{ index }}"
+                              name="{{ checkou.value }}"
+                            />
+                          </van-cell>
+                        </van-cell-group>
+                      </van-checkbox-group>
+                    </view>
+                    <view class="distance" wx:elif="{{item.type === 'dropdown'}}">
+                      <van-slider value="{{item.value}}" use-button-slot range bind:change="onDistanceChange" id="{{item.id}}">
+                        <view class="custom-button" slot="left-button">{{ item.value[0] / 10}}km</view>
+                        <view class="custom-button" slot="right-button">{{ item.value[1] / 10}}km</view>
+                      </van-slider>
+                    </view>
+                    <view class="filter-container-btn">
+                      <van-button class="btn" block round bind:tap="reset(item)">重置</van-button>
+                      <van-button class="btn" type="primary" block round bind:tap="filterSure(item)">确定</van-button>
+                    </view>
+                  </view>
+                </van-dropdown-item>
+              </van-dropdown-menu>
+            </view>
+          </block>
         </view>
-        <view class="list-filter-opa" bind:tap="showFilter">
-          <van-icon name="filter-o" />
-          <text class="text">点击筛选</text>
-        </view>
-      </view>
+      </scroll-view>
     </view>
     <view wx:if="{{loading}}" class="loading">
       <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
@@ -37,12 +100,6 @@
       <van-empty description="暂无数据"/>
     </view>
   </view>
-  <worker-filter
-    show="{{filter.show}}"
-    categoryList="{{categoryList}}"
-    bind:close="closeFilter"
-    bind:sure="sureFilter"
-  />
 </template>
 
 <script>
@@ -63,24 +120,15 @@ createComponent({
   data: {
     loading: true,
     page: JSON.parse(JSON.stringify(pageInfo)),
+    renderFilterList: [],
+    mainActiveIndex: 0,
     moreLoad: {
       loading: false,
       isClick: true,
       text: '~~没有更多啦~~'
     },
     list: [],
-    filter: {
-      show: false,
-      category: {
-        value: [],
-        text: ''
-      },
-      distance: {
-        value: [],
-        text: ''
-      },
-      value: []
-    },
+    filter: {},
     buttons: [{
       text: '打电话',
       id: 'call',
@@ -97,7 +145,7 @@ createComponent({
     }]
   },
   computed: {
-    ...store.mapState(['openid', 'fromOrigin']),
+    ...store.mapState(['openid', 'fromOrigin', 'showBottomNav']),
     categoryList() {
       return config[this.categoryTypeId].category
     },
@@ -105,19 +153,36 @@ createComponent({
       const params = {
         status: ['in', ['2', '3']]
       }
-      const { category } = this.filter
-      if (category.value?.length) {
-        Object.assign(params, {
-          category: ['in', category.value]
-        })
-      }
+      Object.keys(this.filter).forEach(item => {
+        if (this.filter[item]?.length) {
+          if (typeof this.filter[item] === 'string') {
+            Object.assign(params, {
+              [item]: ['in', [this.filter[item]]]
+            })
+          } else {
+            Object.assign(params, {
+              [item]: ['in', this.filter[item]]
+            })
+          }
+        }
+      })
       return { and: params, ...this.page }
+    },
+    filterList() {
+      return config[this.categoryTypeId].filterList || []
+    }
+  },
+  watch: {
+    filterSure(val) {
+      this.renderFilterList = JSON.parse(JSON.stringify(val))
     }
   },
   attached() {
+    this.renderFilterList = JSON.parse(JSON.stringify(this.filterList))
     this.getList()
   },
   methods: {
+    ...store.mapMutations(['setState']),
     async getList() {
       this.moreLoad.loading = true
       const res = await getReleaseList(this.listParams)
@@ -166,16 +231,118 @@ createComponent({
     gotoDetail(item) {
       mpx.navigateTo({ url: `/order-detail/pages/detail-to-worker?id=${item._id}&isBack=true&fromOrigin=${this.fromOrigin}` })
     },
-    showFilter() {
-      this.filter.show = true
-    },
-    closeFilter() {
-      this.filter.show = false
-    },
-    sureFilter({ detail } = {}) {
-      Object.keys(detail).forEach(item => {
-        this.filter[item] = detail[item] || this.filter[item]
+    openDropdown() {
+      this.setState({
+        showBottomNav: false
       })
+    },
+    closeDropdown() {
+      this.setState({
+        showBottomNav: true
+      })
+    },
+    onClickNav({ detail = {} }) {
+      this.mainActiveIndex = detail.index
+    },
+    onClickItem(e) {
+      const { detail, target } = e
+      this.renderFilterList.forEach(item => {
+        if (item.id === target.id) {
+          if (item.value.includes(detail.id)) {
+            item.value = item.value.filter(f => f !== detail.id)
+            item.activeList = item.activeList.filter(f => f.id !== detail.id)
+          } else {
+            item.value.push(detail.id)
+            item.activeList.push(detail)
+          }
+          item.cacheText = item.activeList.map(m => m.text).join('/') || item.initText
+        }
+      })
+    },
+    onItemClick(e) {
+      const { currentTarget } = e
+      const { dataset } = currentTarget
+      const { name, id } = dataset
+      this.renderFilterList.forEach(item => {
+        if (item.id === id) {
+          item.value = name
+          item.cacheText = item.list.find(f => f.value === name).name
+        }
+      })
+    },
+    onRadioChange(e) {
+      const { detail, target } = e
+      console.log(e)
+      this.renderFilterList.forEach(item => {
+        if (item.id === target.id) {
+          item.value = detail
+          item.activeList = item.list.filter(f => item.value.includes(f.value))
+          item.cacheText = item.activeList.map(m => m.name).join('/') || item.initText
+        }
+      })
+    },
+    onCheckboxChange(e) {
+      const { detail, target } = e
+      this.renderFilterList.forEach(item => {
+        if (item.id === target.id) {
+          item.value = detail
+          item.activeList = item.list.filter(f => item.value.includes(f.value))
+          item.cacheText = item.activeList.map(m => m.name).join('/') || item.initText
+        }
+      })
+    },
+    toggle(e) {
+      console.log(e)
+      const { currentTarget } = e
+      const { dataset } = currentTarget
+      const { index, id, value } = dataset
+      const checkbox = this.selectComponent(`.checkboxes-${index}`)
+      this.renderFilterList.forEach(item => {
+        if (item.id === id) {
+          if (item.value.includes(value)) {
+            item.value = item.value.filter(f => f !== value)
+          } else {
+            item.value.push(value)
+          }
+          item.activeList = item.list.filter(f => item.value.includes(f.value))
+          item.cacheText = item.activeList.map(m => m.name).join('/') || item.initText
+        }
+      })
+      checkbox.toggle()
+    },
+    noop() {},
+    onDistanceChange(e) {
+      const { detail, target } = e
+      this.renderFilterList.forEach(item => {
+        if (item.id === target.id) {
+          item.value = detail
+        }
+      })
+    },
+    reset(detail) {
+      this.renderFilterList.forEach(item => {
+        if (item.id === detail.id) {
+          item.text = detail.initText
+          item.cacheText = detail.initText
+          item.value = []
+          item.activeList = []
+        }
+      })
+      this.filter[detail.id] = []
+      this.selectComponent(`#${detail.id}`).toggle()
+      this.loading = true
+      this.list = []
+      this.page = JSON.parse(JSON.stringify(pageInfo))
+      this.getList()
+    },
+    filterSure(detail) {
+      this.renderFilterList.forEach(item => {
+        if (item.id === detail.id) {
+          item.text = detail.cacheText
+        }
+      })
+      this.filter[detail.id] = detail.value
+      this.selectComponent(`#${detail.id}`).toggle()
       this.loading = true
       this.list = []
       this.page = JSON.parse(JSON.stringify(pageInfo))
@@ -184,7 +351,18 @@ createComponent({
   }
 })
 </script>
-
+<style>
+.value-class {
+  flex: none !important;
+}
+.left-select{
+  color: #1989fa;
+  border-color: #1989fa;
+}
+.right-select{
+  color: #1989fa;
+}
+</style>
 <style lang="stylus" scoped>
 .container
   padding-bottom 50rpx
@@ -198,45 +376,20 @@ createComponent({
   padding 0 32rpx
   box-sizing border-box
 .list
-  padding 0 32rpx
-  box-sizing border-box
   position sticky
   top 0
   z-index 6
+  &-scroll
+    border-radius 16rpx
+    box-shadow 0px 4px 20px 0px rgba(0,0,0,0.1)
+    margin-bottom 16rpx
+    overflow hidden
   &-filter
     display flex
-    margin-bottom 16rpx
     background #ffffff
-    border-radius 16rpx
-    padding 16rpx
-    box-sizing border-box
-    box-shadow 0px 4px 20px 0px rgba(0,0,0,0.1)
-    &-info
-      flex 1
+    &-item
       overflow hidden
-      &-item
-        display flex
-        align-items center
-        font-weight bold
-        margin-bottom 4rpx
-        &_text
-          font-size 28rpx
-        &_value
-          color #ee0a24
-          font-sizi 32rpx
-    &-opa
-      background #ffffff
-      box-sizing border-box
-      border-radius 16rpx
-      height 60rpx
-      width 150rpx
-      margin-top 16rpx
-      display flex
-      justify-content center
-      align-items center
-      font-weight bold
-      .text
-        font-size 24rpx
+      flex-shrink 0
 .tags
   display flex
   margin-bottom 10rpx
@@ -262,6 +415,22 @@ createComponent({
   .img
     width 540rpx
     margin-bottom 40rpx
+.filter-container
+  padding 16rpx 0
+  &-btn
+    padding 16rpx 16rpx
+    box-sizing border-box
+    display flex
+    justify-content space-around
+    .btn
+      width 45%
+  .distance
+    padding 70rpx 50rpx
+    .custom-button
+      background #1989fa
+      border-radius 16rpx
+      padding 0 8rpx
+      color #ffffff
 </style>
 
 <script type="application/json">
@@ -272,7 +441,17 @@ createComponent({
       "van-button": "@vant/weapp/button/index",
       "van-icon": "@vant/weapp/icon/index",
       "van-empty": "@vant/weapp/empty/index",
-      "worker-filter": "@/subpackages/superstream/compontens/popup/worker-filter.mpx"
+      "mutil-style-text": "@/compontens/base/mutil-style-text.mpx",
+      "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
+      "van-dropdown-item": "@vant/weapp/dropdown-item/index",
+      "van-tree-select": "@vant/weapp/tree-select/index",
+      "van-slider": "@vant/weapp/slider/index",
+      "van-cell": "@vant/weapp/cell/index",
+      "van-cell-group": "@vant/weapp/cell-group/index",
+      "van-radio": "@vant/weapp/radio/index",
+      "van-radio-group": "@vant/weapp/radio-group/index",
+      "van-checkbox": "@vant/weapp/checkbox/index",
+      "van-checkbox-group": "@vant/weapp/checkbox-group/index"
     },
     "disableScroll": true
   }

@@ -240,9 +240,70 @@ const leaseTransferCategory = [{
   ]
 }]
 
+const workerFilter = [{
+  type: 'category',
+  id: 'category',
+  text: '岗位筛选',
+  initText: '岗位筛选',
+  value: [],
+  activeList: [],
+  list: findWorkerCategory,
+  max: 3
+}, {
+  type: 'dropdown',
+  id: 'distance',
+  text: '距离筛选',
+  initText: '距离筛选',
+  activeList: [],
+  value: [0, 100]
+}]
+
+const factoryFilter = [{
+  type: 'radio',
+  id: 'factoryScale',
+  text: '工厂规模筛选',
+  initText: '工厂规模筛选',
+  value: [],
+  activeList: [],
+  list: factoryScaleList
+}, {
+  type: 'checkbox',
+  id: 'cooperType',
+  text: '合作类型筛选',
+  initText: '合作类型筛选',
+  value: [],
+  activeList: [],
+  list: cooperTypeList
+}, {
+  type: 'checkbox',
+  id: 'fabricProp',
+  text: '面料属性筛选',
+  initText: '面料属性筛选',
+  value: [],
+  activeList: [],
+  list: fabricPropList
+}, {
+  type: 'checkbox',
+  id: 'productType',
+  text: '产品类型筛选',
+  initText: '产品类型筛选',
+  value: [],
+  activeList: [],
+  list: productTypeList
+}, {
+  type: 'checkbox',
+  id: 'orderType',
+  text: '订单类型筛选',
+  initText: '订单类型筛选',
+  value: [],
+  activeList: [],
+  list: orderTypeList
+}]
+
 export default {
   findWorker: {
     category: findWorkerCategory,
+    filterList: workerFilter,
     fromOrigin: 'bossWorker',
     partyA: {
       title: ['我要招工', '招工列表']
@@ -257,6 +318,7 @@ export default {
     fabricPropList,
     productTypeList,
     orderTypeList,
+    filterList: factoryFilter,
     fromOrigin: 'factoryCooper',
     partyA: {
       title: ['我要找工厂', '找工厂列表']
@@ -267,6 +329,7 @@ export default {
   },
   leaseTransfer: {
     category: leaseTransferCategory,
+    filterList: [],
     fromOrigin: 'leaseTransfer',
     partyA: {
       title: ['出租转让', '出租转让列表']
@@ -277,6 +340,7 @@ export default {
   },
   employ: {
     fromOrigin: 'employAppli',
+    filterList: [],
     partyA: {
       title: ['公司直聘', '直聘列表']
     },
@@ -284,6 +348,7 @@ export default {
   },
   usedDetect: {
     fromOrigin: 'usedDetect',
+    filterList: [],
     partyA: {
       title: ['出售二手设备', '二手设备列表']
     },
@@ -291,6 +356,7 @@ export default {
   },
   tailings: {
     fromOrigin: 'tailings',
+    filterList: [],
     partyA: {
       title: ['尾货处理', '尾货处理列表']
     },
