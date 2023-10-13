@@ -265,11 +265,11 @@ createComponent({
   flex: none !important;
 }
 .left-select{
-  color: #1989fa;
-  border-color: #1989fa;
+  color: #1989fa !important;
+  border-color: #1989fa !important;
 }
 .right-select{
-  color: #1989fa;
+  color: #1989fa !important;
 }
 </style>
 <script type="application/json">

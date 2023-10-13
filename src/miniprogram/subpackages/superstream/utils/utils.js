@@ -10,3 +10,12 @@ export const timeInfo = t => {
   }
   return ''
 }
+
+export const formatNumSubmitData = ({obj = {}, nums = []}) => {
+  Object.keys(obj).forEach(item => {
+    if (nums.includes(item) && obj[item]) {
+      obj[item] = +obj[item]
+    }
+  })
+  return obj
+}

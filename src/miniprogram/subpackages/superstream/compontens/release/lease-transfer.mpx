@@ -89,7 +89,6 @@
       <van-dropdown-menu
         active-color="#1989fa"
         title-class="dropdown"
-        root-portal
       >
         <van-dropdown-item
           value="{{ updateObj.priceUnit }}"

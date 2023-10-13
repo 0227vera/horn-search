@@ -31,7 +31,6 @@
         active-color="#1989fa"
         wx:if="{{showCategoryType}}"
         title-class="dropdown"
-        root-portal
       >
         <van-dropdown-item
           bind:change="changeCategoryType"
@@ -96,7 +95,6 @@
       <van-dropdown-menu
         active-color="#1989fa"
         title-class="dropdown"
-        root-portal
       >
         <van-dropdown-item
           value="{{ updateObj.priceUnit }}"

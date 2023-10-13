@@ -300,6 +300,43 @@ const factoryFilter = [{
   list: orderTypeList
 }]
 
+const leaseTransferFilter = [{
+  type: 'category',
+  id: 'category',
+  text: '类型筛选',
+  initText: '类型筛选',
+  value: [],
+  activeList: [],
+  list: leaseTransferCategory,
+  max: 3
+}, {
+  type: 'range',
+  id: 'merge',
+  mergeList: [{
+    label: '面积：',
+    id: 'area',
+    unit: '平米',
+    placeholder: ['最小', '最大'],
+    value: {
+      min: '',
+      max: ''
+    }
+  }, {
+    label: '楼层：',
+    id: 'floor',
+    unit: '楼',
+    placeholder: ['最低', '最高'],
+    value: {
+      min: '',
+      max: ''
+    }
+  }],
+  text: '面积楼层筛选',
+  initText: '面积楼层筛选',
+  value: [],
+  activeList: []
+}]
+
 export default {
   findWorker: {
     category: findWorkerCategory,
@@ -329,7 +366,7 @@ export default {
   },
   leaseTransfer: {
     category: leaseTransferCategory,
-    filterList: [],
+    filterList: leaseTransferFilter,
     fromOrigin: 'leaseTransfer',
     partyA: {
       title: ['出租转让', '出租转让列表']

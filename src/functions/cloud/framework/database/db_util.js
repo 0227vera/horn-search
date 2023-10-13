@@ -876,7 +876,7 @@ function fmtFields(fields) {
       ['>=', 3],
       ['<=', 8],
       ['<>', 5],
-      ['between', 6,7]
+      ['between', 6, 7]
       ['in', '6,7']
       ['in', [6,7]]
     ],
