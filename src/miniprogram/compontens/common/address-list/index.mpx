@@ -1,23 +1,37 @@
 <template>
 <van-cell-group wx:if="{{addressList.length}}" border="{{ false }}" inset="{{inset}}">
-  <van-cell
-    wx:for="{{ addressList }}"
-    wx:key="id"
-    title="{{ item.address.name }}"
-    label="{{ item.name + '   ' + item.phone }}"
-    value-class="value-class"
-    title-width="{{isCanChoose ? '560rpx' : '100%'}}"
-    clickable="{{isCanChoose}}"
-    center
-    bind:click="CellClickHandle(item)"
-  >
-    <van-checkbox
-      wx:if="{{isCanChoose}}"
-      checked-color="#1989fa"
-      value="{{ item.checked }}"
-      custom-class="address-checkbox"
-    />
-  </van-cell>
+  <view wx:for="{{ addressList }}"  wx:key="id" class="item">
+    <van-cell
+      title="{{ item.address.name }}"
+      label="{{ item.name + '   ' + item.phone }}"
+      value-class="value-class"
+      title-width="{{isCanChoose ? '560rpx' : '100%'}}"
+      clickable="{{isCanChoose}}"
+      center
+      bind:click="CellClickHandle(item)"
+    >
+      <van-checkbox
+        wx:if="{{isCanChoose}}"
+        checked-color="#1989fa"
+        value="{{ item.checked }}"
+        custom-class="address-checkbox"
+      />
+    </van-cell>
+    <view class="opt" wx:if="{{showOptBtn}}">
+      <van-button
+        wx:for="{{buttons}}"
+        size="small"
+        wx:for-item="b"
+        style="margin-left: 8rpx"
+        round
+        type="{{b.type || 'default'}}"
+        catchtap="clickBtn(item, b)"
+        icon="{{b.icon || ''}}"
+      >
+        {{b.text}}
+      </van-button>
+    </view>
+  </view>
 </van-cell-group>
 <view wx:else class="empty">
   <van-empty description="暂无数据，去新增一个吧" />
@@ -30,12 +44,15 @@
 <view wx:elif="{{showBottomDivder}}"  class="btn-container">
   <van-divider contentPosition="center" bind:tap="openAddPage">去新增</van-divider>
 </view>
+<van-dialog id="van-dialog" />
 </template>
 
 <script>
 import mpx, { createComponent, onShow } from '@mpxjs/core'
 import store from '@/store'
 import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
+import Dialog from '@vant/weapp/dialog/dialog'
+import { updateUserInfo } from '@/api'
 
 createComponent({
   properties: {
@@ -54,7 +71,24 @@ createComponent({
     inset: {
       type: Boolean,
       value: true
+    },
+    showOptBtn: {
+      type: Boolean,
+      value: false
     }
+  },
+  data: {
+    buttons: [{
+      text: '编辑',
+      id: 'edit',
+      icon: 'edit',
+      type: 'primary'
+    }, {
+      text: '删除',
+      id: 'delete',
+      icon: 'delete-o',
+      type: 'danger'
+    }]
   },
   computed: {
     ...store.mapState(['addressList'])
@@ -78,6 +112,38 @@ createComponent({
       })
       this.triggerEvent('choose-item', arg)
     },
+    clickBtn(item, btn) {
+      console.log(item, btn)
+      const actions = {
+        edit: () => {
+          mpx.navigateTo({
+            url: `${AddAddressUrl}?id=${item.id}`
+          })
+        },
+        delete: async () => {
+          try {
+            await Dialog.confirm({
+              title: '提示',
+              message: `确定删除当前地址吗？`
+            })
+            const list = JSON.parse(JSON.stringify(this.addressList))
+            const newList = list.filter(f => f.id !== item.id)
+            mpx.showLoading({
+              title: '删除中'
+            })
+            const res = await updateUserInfo({
+              address: newList
+            })
+            mpx.hideLoading()
+            this.setState({
+              addressList: newList
+            })
+          } catch (error) {
+          }
+        }
+      }
+      actions?.[btn.id]?.()
+    },
     openAddPage() {
       mpx.navigateTo({
         url: AddAddressUrl
@@ -98,6 +164,16 @@ createComponent({
   height 70%
 .checkbox
   float right
+.item
+  background #ffffff
+  margin-top 16rpx
+  border-radius 20rpx
+  overflow hidden
+.opt
+  display flex
+  justify-content flex-end
+  padding 16rpx
+  box-sizing border-box
 .value-class
   display flex
   justify-content flex-end

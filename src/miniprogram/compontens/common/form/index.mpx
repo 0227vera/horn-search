@@ -226,14 +226,6 @@ createComponent({
     clearImg(item) {
       this.updateObj.images = this.updateObj.images.filter(f => f !== item)
     },
-    // note: 弹窗处理
-    showPopupContainer(type) {
-      this.showPopup = true
-      this.popupType = type
-    },
-    closePopupContainer() {
-      this.showPopup = false
-    },
     // note: 时间处理
     onTimeClick() {
       this.showPopupContainer('time')

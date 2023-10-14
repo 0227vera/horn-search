@@ -1,6 +1,7 @@
 import { ORDER_UPDATE } from '@/setting/noticeInfo.js'
 import { fileUpload, addRelease, updateRelease } from '@/api'
 import { formatNumSubmitData } from '@/subpackages/superstream/utils/utils.js'
+import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
 import mpx from '@mpxjs/core'
 const store = getApp().globalStore
 
@@ -19,7 +20,7 @@ export const mixins = {
     toastText: ''
   },
   computed: {
-    ...store.mapState(['adInfo', 'fromOrigin', 'cacheForm']),
+    ...store.mapState(['adInfo', 'fromOrigin', 'cacheForm', 'addressList']),
     imagesValue() {
       if (this.updateObj.images.length) {
         return `已上传${this.updateObj.images.length}张图片`
@@ -28,6 +29,7 @@ export const mixins = {
     }
   },
   async attached() {
+    console.log('========>', this.addressList)
     if (Object.keys(this.cacheForm).length) {
       Object.keys(this.updateObj).forEach(item => {
         this.updateObj[item] = this.cacheForm[item] || this.updateObj[item]
@@ -35,16 +37,45 @@ export const mixins = {
       this.setState({
         cacheForm: {}
       })
+      return
     }
     await this.setLocation()
     this.updateObj.poi = {
       ...this.adInfo,
       name: this.adInfo.address
     }
+    this.initAddressPhone()
+  },
+  pageLifetimes: {
+    show() {
+      this.initAddressPhone()
+    }
   },
   methods: {
     ...store.mapActions(['setLocation']),
     ...store.mapMutations(['setState']),
+    initAddressPhone() {
+      const item = this.addressList.find(item => item.checked)
+      if (item?.id) {
+        this.updateObj.tel = item.phone
+        this.updateObj.poi = item.address
+      }
+    },
+    // note: 弹窗处理
+    showPopupContainer(type) {
+      if (!this.addressList.length && type === 'address') {
+        console.log(333333)
+        mpx.navigateTo({
+          url: AddAddressUrl
+        })
+      } else {
+        this.showPopup = true
+        this.popupType = type
+      }
+    },
+    closePopupContainer() {
+      this.showPopup = false
+    },
     // note: 修改字段值
     onFieldChange(e) {
       this.updateObj[e.target.id] = e.detail
@@ -69,9 +100,6 @@ export const mixins = {
           url: item
         }))
       })
-    },
-    closePopupContainer() {
-      this.showPopup = false
     },
     // note: 提交操作
     async submitData(validate, formatList = []) {

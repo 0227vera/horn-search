@@ -1,7 +1,7 @@
 <template>
   <custom-container
-    title="添加地址"
-    btnName="添加"
+    title="{{pageType === 'new' ? '添加地址' : '修改地址'}}"
+    btnName="保存"
     bind:footer-btn="addAddress"
   >
     <van-cell-group class="content" border="{{ false }}" inset>
@@ -40,20 +40,21 @@
         label="详细地址"
         value="{{ addInfo.address.detail }}"
         placeholder="请输入详细地址"
+        required
+        type="textarea"
+        autosize
+        input-align="right"
+        bind:change="onDetailChange"
+      />
+      <van-field
+        label="定位"
+        value="{{ addInfo.address.name }}"
+        placeholder="请选择定位"
         is-link
         readonly
         required
         input-align="right"
         bind:tap="openSearchDetail"
-      />
-      </van-cell>
-      <van-field
-        label="门牌号"
-        value="{{ addInfo.address.door }}"
-        placeholder="请输入门牌号"
-        border="{{ false }}"
-        bind:change="onDoorChange"
-        input-align="right"
       />
     </van-cell-group>
   </custom-container>
@@ -76,7 +77,7 @@
 </template>
 
 <script>
-import mpx, { createPage, onLoad } from '@mpxjs/core'
+import mpx, { createPage } from '@mpxjs/core'
 import { areaList } from '@vant/area-data'
 import store from '@/store'
 import { updateUserInfo } from '@/api'
@@ -84,13 +85,13 @@ import guid from '@/utils'
 
 createPage({
   data: {
+    pageType: 'new',
     addInfo: {
       name: '',
       phone: null,
       address: {
         areaProvice: '',
         areaCode: '',
-        door: '',
         detail: '',
         name: '',
         location: {}
@@ -100,12 +101,18 @@ createPage({
     areaList,
     popupType: ''
   },
-  async onLoad() {
+  async onLoad(params = {}) {
+    if (params.id) {
+      this.pageType = 'edit'
+      this.addInfo = this.addressList.find(item => item.id === params.id)
+      return
+    }
     await this.setLocation()
     this.addInfo.address.areaProvice = this.adInfo.ad_info.province
     this.addInfo.address.area = `${this.adInfo.ad_info.province}${this.adInfo.ad_info.city}${this.adInfo.ad_info.district}`
     this.addInfo.address.areaCode = this.adInfo.ad_info.adcode
     this.addInfo.address.detail = this.adInfo.address
+    this.addInfo.address.name = this.adInfo.address
     this.addInfo.address.location = this.adInfo.location
   },
   computed: {
@@ -118,8 +125,8 @@ createPage({
     onChange(e) {
       this.addInfo[e.target.id] = e.detail
     },
-    onDoorChange(e) {
-      this.addInfo.address.door = e.detail
+    onDetailChange(e) {
+      this.addInfo.address.detail = e.detail
     },
     // note: popup的处理
     closePopupContainer() {
@@ -149,7 +156,8 @@ createPage({
           if (!res.name) {
             return
           }
-          _this.addInfo.address.detail = res.address + res.name
+          _this.addInfo.address.name = res.name
+          _this.addInfo.address.detail = res.name
           _this.mapSdk.reverseGeocoder({
             location: {
               latitude: res.latitude,
@@ -195,12 +203,16 @@ createPage({
         })
         return
       }
-      this.addInfo.address.name = `${this.addInfo.address.area}-${this.addInfo.address.detail}-${this.addInfo.address.door}`
-      this.addInfo.id = guid()
       const list = JSON.parse(JSON.stringify(this.addressList))
-      list.push(this.addInfo)
+      if (this.pageType === 'new') {
+        this.addInfo.id = guid()
+        if (!list.length) {
+          this.addInfo.checked = true
+        }
+        list.push(this.addInfo)
+      }
       mpx.showLoading({
-        title: '加载中……',
+        title: this.pageType === 'new' ? '加载中……' : '修改中……',
         mask: true
       })
       const res = await updateUserInfo({

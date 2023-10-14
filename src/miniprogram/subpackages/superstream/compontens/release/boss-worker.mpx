@@ -269,6 +269,7 @@ import { mixins } from '@/subpackages/superstream/utils/mixins.js'
 import { validateBossWorker } from '@/subpackages/superstream/utils/validate.js'
 import { initBossWorkerObj, unitList, categoryTypeList } from '@/subpackages/superstream/utils/constant.js'
 import { timeInfo } from '@/subpackages/superstream/utils/utils.js'
+
 const store = getApp().globalStore
 
 createComponent({
@@ -295,11 +296,6 @@ createComponent({
     }
   },
   methods: {
-    // note: 弹窗处理
-    showPopupContainer(type) {
-      this.showPopup = true
-      this.popupType = type
-    },
     // 弹窗确认
     onConfirmHandle({ detail = {} } = {}) {
       const { data, type } = detail

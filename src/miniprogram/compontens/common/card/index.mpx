@@ -27,7 +27,7 @@
           <van-button
             wx:for="{{buttons}}"
             wx:if="{{!b.hide}}"
-            size="mini"
+            size="small"
             style="margin-left: 8rpx"
             wx:for-item="b"
             round
@@ -344,7 +344,7 @@ createComponent({
   &_ope
     display flex
     justify-content flex-end
-    margin-top 8rpx
+    margin-top 18rpx
 .moreload
   color #666666
   font-size 28rpx

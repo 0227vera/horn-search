@@ -7,8 +7,10 @@
     <address-list
       isCanChoose="{{false}}"
       showBottomBtn="{{false}}"
+      showOptBtn
     />
   </custom-container>
+  <van-dialog id="van-dialog" />
 </template>
 
 <script>
@@ -33,7 +35,8 @@ createPage({
   {
     "usingComponents": {
       "custom-container": "@/compontens/base/custom-container",
-      "address-list": "@/compontens/common/address-list"
+      "address-list": "@/compontens/common/address-list",
+      "van-dialog": "@vant/weapp/dialog/index"
     },
     "navigationStyle": "custom"
   }

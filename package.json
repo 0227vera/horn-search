@@ -6,6 +6,7 @@
     "start": "npm run serve",
     "serve": "mpx-cli-service serve:mp",
     "build": "mpx-cli-service build:mp",
+    "pord": "npm run build",
     "lint": "eslint --ext .js,.ts,.mpx src/",
     "lint:fix": "eslint --fix --ext .js,.ts,.mpx src/miniprogram/"
   },
