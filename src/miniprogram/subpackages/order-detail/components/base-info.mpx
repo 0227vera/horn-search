@@ -181,6 +181,23 @@ createComponent({
             value: add
           })
         }
+      } else if (this.fromOrigin === 'usedDetect') {
+        list.push({
+          title: '设备名称',
+          value: `${categoryName}${categorySub ? `(${categorySub})` : ''}`
+        })
+        if (price) {
+          list.push({
+            title: '价格',
+            value: `${price}元`
+          })
+        }
+        if (note) {
+          list.push({
+            title: '产品概述',
+            value: note
+          })
+        }
       }
       if (company) {
         list.push({

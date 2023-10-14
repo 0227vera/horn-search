@@ -192,6 +192,9 @@ createComponent({
       })
     },
     confirm(data) {
+      this.setState({
+        showBottomNav: true
+      })
       this.triggerEvent('confirm', {
         type: this.type,
         data

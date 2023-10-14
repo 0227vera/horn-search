@@ -91,6 +91,34 @@ const cooperTypeList = [{
   value: '4'
 }]
 
+const usedDetectCategory = [{
+  text: '设备类',
+  children: [
+    { text: "货架", id: "1-0" },
+    { text: "电脑", id: "1-3" },
+    { text: "模特(含卓天商务模特)", id: "1-6" },
+    { text: "四线", id: "1-9" },
+    { text: "五线", id: "1-12" },
+    { text: "冚车", id: "1-15" },
+    { text: "模板纷棉车", id: "1-18" },
+    { text: "专机类", id: "1-21", needDetail: true },
+    { text: "唛架机", id: "1-24" },
+    { text: "烫炉/烫台", id: "1-27" },
+    { text: "凤眼机", id: "1-30" },
+    { text: "打揽机", id: "1-33" },
+    { text: "手工类", id: "1-36" },
+    { text: "手工类", id: "1-39" }
+  ]
+}, {
+  text: '生活类',
+  children: [
+    { text: "电动车", id: "2-0" },
+    { text: "冰箱", id: "2-3" },
+    { text: "洗衣机", id: "2-6" },
+    { text: "空调", id: "2-9" }
+  ]
+}]
+
 const fabricPropList = [{
   name: '针织',
   value: '1'
@@ -337,7 +365,36 @@ const leaseTransferFilter = [{
   activeList: []
 }]
 
+const usedDetectFilter = [{
+  type: 'category',
+  id: 'category',
+  text: '设备名称筛选',
+  initText: '设备名称筛选',
+  value: [],
+  activeList: [],
+  list: usedDetectCategory,
+  max: 3
+}, {
+  type: 'range',
+  id: 'merge',
+  mergeList: [{
+    label: '价格：',
+    id: 'price',
+    unit: '元',
+    placeholder: ['最少', '最多'],
+    value: {
+      min: '',
+      max: ''
+    }
+  }],
+  text: '价格筛选',
+  initText: '价格筛选',
+  value: [],
+  activeList: []
+}]
+
 export default {
+  // note: 招工
   findWorker: {
     category: findWorkerCategory,
     filterList: workerFilter,
@@ -349,6 +406,7 @@ export default {
       title: '我要找事做'
     }
   },
+  // note: 工厂合作
   findFactory: {
     factoryScaleList,
     cooperTypeList,
@@ -364,6 +422,7 @@ export default {
       title: '我要找货做'
     }
   },
+  // note: 出租转让
   leaseTransfer: {
     category: leaseTransferCategory,
     filterList: leaseTransferFilter,
@@ -375,6 +434,7 @@ export default {
       title: '租房'
     }
   },
+  // note: 公司直聘
   employ: {
     fromOrigin: 'employAppli',
     filterList: [],
@@ -383,14 +443,17 @@ export default {
     },
     partyB: '应聘公司岗'
   },
+  // note: 二手设备
   usedDetect: {
     fromOrigin: 'usedDetect',
-    filterList: [],
+    category: usedDetectCategory,
+    filterList: usedDetectFilter,
     partyA: {
       title: ['出售二手设备', '二手设备列表']
     },
     partyB: '我要捡漏二手没备'
   },
+  // note: 尾货处理
   tailings: {
     fromOrigin: 'tailings',
     filterList: [],

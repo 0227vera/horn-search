@@ -26,7 +26,7 @@ createComponent({
           withSubscriptions: true,
           success: res => {
             const { subscriptionsSetting } = res
-            if (this.tmplIds.every(item => subscriptionsSetting.itemSettings[item] === 'accept')) {
+            if (this.tmplIds.every(item => subscriptionsSetting.itemSettings?.[item] === 'accept')) {
               resolve(true)
               return
             }

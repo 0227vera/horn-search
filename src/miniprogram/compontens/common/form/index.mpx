@@ -46,7 +46,7 @@
       bind:tap="onTimeClick"
       input-align="right"
     />
-    <van-cell title="图片或者视频展示" value="{{imagesValue}}" border="{{false}}" />
+    <van-cell title="图片展示" value="{{imagesValue}}" border="{{false}}" />
     <view class="image-container">
       <view class="iamge-content">
         <van-uploader

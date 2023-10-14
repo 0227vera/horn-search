@@ -11,9 +11,9 @@ export const timeInfo = t => {
   return ''
 }
 
-export const formatNumSubmitData = ({ obj = {}, nums = [] }) => {
+export const formatNumSubmitData = ({ obj = {}, formatList = [] }) => {
   Object.keys(obj).forEach(item => {
-    if (nums.includes(item) && obj[item]) {
+    if (formatList.includes(item) && obj[item]) {
       obj[item] = +obj[item]
     }
   })

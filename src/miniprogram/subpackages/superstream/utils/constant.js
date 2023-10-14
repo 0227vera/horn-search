@@ -87,3 +87,14 @@ export const initLeaseObj = {
   images: [],
   add: ''
 }
+
+export const initUsedObj = {
+  category: '',
+  categoryName: '',
+  categorySub: '',
+  price: '',
+  poi: {},
+  tel: '',
+  images: [],
+  note: ''
+}

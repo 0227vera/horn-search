@@ -139,7 +139,7 @@
       id="tel"
     />
     <!-- 图片 -->
-    <van-cell title="图片或者视频展示" value="{{imagesValue}}" border="{{false}}" />
+    <van-cell title="图片展示" value="{{imagesValue}}" border="{{false}}" />
     <view class="image-container">
       <view class="iamge-content">
         <van-uploader
@@ -250,7 +250,7 @@ createComponent({
     },
     // note: 提交操作
     async releaseData() {
-      this.submitData(validateLease)
+      this.submitData(validateLease, ['area', 'floor'])
     },
     openDropdown() {
       this.setState({

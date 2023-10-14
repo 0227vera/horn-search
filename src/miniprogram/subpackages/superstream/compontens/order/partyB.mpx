@@ -187,7 +187,6 @@ createComponent({
             })
           }
         } else if (typeof value === 'object') {
-          console.log(value)
           if (value.min && value.max) {
             Object.assign(params, {
               [item]: ['between', +value.min, +value.max]
@@ -309,7 +308,6 @@ createComponent({
     },
     onRadioChange(e) {
       const { detail, target } = e
-      console.log(e)
       this.renderFilterList.forEach(item => {
         if (item.id === target.id) {
           item.value = detail
@@ -329,7 +327,6 @@ createComponent({
       })
     },
     toggle(e) {
-      console.log(e)
       const { currentTarget } = e
       const { dataset } = currentTarget
       const { index, id, value } = dataset
@@ -393,7 +390,7 @@ createComponent({
     filterSure(detail) {
       if (detail.type === 'range') {
         detail.mergeList.forEach(item => {
-          if (item.value.min > item.value.max) {
+          if (item.value.min && item.value.max && (item.value.min > item.value.max)) {
             item.value = {
               min: item.value.max,
               max: item.value.min

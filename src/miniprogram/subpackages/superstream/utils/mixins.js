@@ -1,5 +1,6 @@
 import { ORDER_UPDATE } from '@/setting/noticeInfo.js'
 import { fileUpload, addRelease, updateRelease } from '@/api'
+import { formatNumSubmitData } from '@/subpackages/superstream/utils/utils.js'
 import mpx from '@mpxjs/core'
 const store = getApp().globalStore
 
@@ -73,7 +74,7 @@ export const mixins = {
       this.showPopup = false
     },
     // note: 提交操作
-    async submitData(validate) {
+    async submitData(validate, formatList = []) {
       console.log(this.updateObj)
       const vali = validate({
         updateObj: this.updateObj,
@@ -91,6 +92,9 @@ export const mixins = {
         mask: true
       });
       await this.$refs.serviceNotice?.showServiceNotice?.()
+      if (formatList.length) {
+        this.updateObj = formatNumSubmitData({ obj: this.updateObj, formatList })
+      }
       const res = await addRelease({
         ...this.updateObj,
         status: 1

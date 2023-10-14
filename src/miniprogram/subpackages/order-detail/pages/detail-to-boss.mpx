@@ -123,6 +123,16 @@ createPage({
           }
           text += `-${this.orderData.area}平米-${this.orderData.price}${this.orderData.priceUnitName}`
           return text
+        },
+        usedDetect: () => {
+          let text = this.orderData.categoryName
+          if (this.orderData.categorySub) {
+            text += `(${this.orderData.categorySub})`
+          }
+          if (this.orderData.price) {
+            text += `-${this.orderData.price}元`
+          }
+          return text
         }
       }
       return actions?.[this.fromOrigin]?.()

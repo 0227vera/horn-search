@@ -218,3 +218,40 @@ export const validateLease = ({ updateObj, subCategoryInfo } = {}) => {
   result.success = true
   return result
 }
+
+export const validateUsed = ({ updateObj, subCategoryInfo } = {}) => {
+  if (!updateObj) {
+    console.error('updateObj应该为对象')
+    return
+  }
+  const result = {
+    success: false,
+    text: ''
+  }
+  if (!updateObj.category) {
+    result.text = '请选择{设备名称}'
+    return result
+  }
+  if (subCategoryInfo.show && !updateObj.categorySub) {
+    result.text = subCategoryInfo.placeholder
+    return result
+  }
+  if (!updateObj.images.length) {
+    result.text = '请上传图片信息'
+    return result
+  }
+  if (!updateObj.tel) {
+    result.text = '请输入{手机号}'
+    return result
+  }
+  if (!telReg.test(updateObj.tel)) {
+    result.text = '请输入{正确的手机号}'
+    return result
+  }
+  if (telReg.test(updateObj.note)) {
+    result.text = '{产品概述说明}中不可带{电话号码}'
+    return result
+  }
+  result.success = true
+  return result
+}
