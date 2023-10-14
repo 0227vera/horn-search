@@ -5,8 +5,8 @@
     clickLeft="{{clickLeft}}"
   >
     <view class="container">
-      <view class="list">
-        <view wx:for="{{list}}" wx:key="*this" class="list-item {{index % 2 === 0 ? 'jishu' : 'oushu'}}">
+      <view class="list" wx:if="{{list.length}}">
+        <view wx:for="{{list}}" wx:key="*this" style="animation-duration: {{0.3 * (index + 1)}}s" class="list-item {{index % 2 === 0 ? 'jishu' : 'oushu'}} animation{{index}}">
           <view wx:for="{{item}}" wx:for-item="m" wx:key="*this" class="list-item_line" bind:tap="jump(m)">
             <image class="image" src="{{m.icon}}"></image>
             <view class="text">{{m.text}}</view>
@@ -28,12 +28,18 @@ import ParsonCenter from '@/subpackages/person-center/pages/index.mpx?resolve'
 
 createPage({
   data: {
-    list,
+    list: [],
     clickLeft() {
       mpx.navigateTo({
         url: ParsonCenter
       })
     }
+  },
+  onShow() {
+    this.list = list
+  },
+  onHide() {
+    this.list = []
   },
   methods: {
     jump(m) {
@@ -57,10 +63,11 @@ createPage({
       justify-content space-between
       margin-bottom 32rpx
       border-bottom 2rpx dashed #999999
-      &.jishu
-        animation showInJishu 0.5s
-      &.oushu
-        animation showInOushu 0.5s
+      animation-name showbotomToUp
+      // &.jishu
+      //   animation showInJishu 0.5s
+      // &.oushu
+      //   animation showInOushu 0.5s
       &_line
         width 50%
         padding 16rpx
@@ -114,6 +121,13 @@ createPage({
     transform translateX(100%)
   to
     transform translateX(1)
+    opacity 1
+@-webkit-keyframes showbotomToUp
+  from
+    transform translateY(100%) scale(1.5)
+    opacity 0
+  to
+    transform translateY(0) scale(1)
     opacity 1
 </style>
 
