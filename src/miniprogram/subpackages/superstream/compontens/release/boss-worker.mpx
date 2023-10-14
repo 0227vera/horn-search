@@ -146,7 +146,9 @@
       required
       is-link
       readonly
-      value="{{updateObj.poi.name}}"
+      type="textarea"
+      autosize
+      value="{{updateObj.poi.detail}}"
       input-align="right"
       placeholder="请点击进入输入我的详细地址"
       bind:tap="showPopupContainer('address')"

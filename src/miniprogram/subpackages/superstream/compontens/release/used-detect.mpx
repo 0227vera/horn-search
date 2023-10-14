@@ -36,7 +36,7 @@
       required
       is-link
       readonly
-      value="{{updateObj.poi.name}}"
+      value="{{updateObj.poi.detail}}"
       input-align="right"
       placeholder="请点击进入常用位置选择"
       bind:tap="showPopupContainer('address')"

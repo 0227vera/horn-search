@@ -64,7 +64,6 @@ export const mixins = {
     // note: 弹窗处理
     showPopupContainer(type) {
       if (!this.addressList.length && type === 'address') {
-        console.log(333333)
         mpx.navigateTo({
           url: AddAddressUrl
         })
