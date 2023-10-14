@@ -339,12 +339,10 @@ createComponent({
           this.updateObj.cooperTypeName = data.name
         },
         fabricProp: () => {
-          console.log(data)
           this.updateObj.fabricProp = data.value
           this.updateObj.fabricPropName = data.selectedList.map(item => item.name).join(';')
         },
         productType: () => {
-          console.log(data)
           this.updateObj.productType = data.value
           this.updateObj.productTypeName = data.selectedList.map(item => item.name).join(';')
         },

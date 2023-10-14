@@ -28,7 +28,6 @@ createComponent({
   computed: {
     ...store.mapState(['fromOrigin']),
     renderList() {
-      console.log(this.orderData)
       const {
         categoryName, categorySub, categoryType, categoryTypeName, categoryNum, priceMin, priceMax, price, priceUnitName, num, numMin, numMax, origin, poi, tel, ownTimeName, images, note, add, calllist, company,
         factoryScaleName, factoryScale, people, area, cooperTypeName, fabricPropName, productTypeName, orderTypeName, color, code,

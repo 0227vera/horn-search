@@ -113,7 +113,6 @@ createComponent({
       this.triggerEvent('choose-item', arg)
     },
     clickBtn(item, btn) {
-      console.log(item, btn)
       const actions = {
         edit: () => {
           mpx.navigateTo({
