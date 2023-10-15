@@ -34,7 +34,6 @@ const jumpAction = item => {
       })
     },
     setting: () => {
-      console.log('setting')
       mpx.openSetting()
     }
   }

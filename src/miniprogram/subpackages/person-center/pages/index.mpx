@@ -21,6 +21,7 @@
             wx:key="name"
             title="{{subitem.name}}"
             icon="{{subitem.icon}}"
+            value="{{subitem.value}}"
             is-link
             bindtap="itemtaphandle(subitem)"
             wx:if="{{!subitem.hide}}"
@@ -30,20 +31,43 @@
     </view>
 </custom-container>
 <van-dialog id="van-dialog" />
+<van-dialog
+  use-slot
+  title="工厂/公司名修改"
+  show="{{ show }}"
+  show-cancel-button
+  bind:close="onClose"
+  bind:confirm="onConfirm"
+>
+  <view class="company-container">
+    <van-field
+      value="{{ cacheCompany }}"
+      label="工厂/公司名"
+      type="textarea"
+      autosize
+      placeholder="请输入工厂/公司名"
+      border="{{ false }}"
+      bind:change="onCompanyChange"
+    />
+  </view>
+</van-dialog>
 </template>
 
 <script>
 import mpx, { createPage } from '@mpxjs/core'
-import { isAdmin } from '@/api'
+import { isAdmin, updateUserInfo } from '@/api'
 import Dialog from '@vant/weapp/dialog/dialog'
-
 import jumpAction from '@/utils/jump'
+import store from '@/store'
 
 createPage({
   data: {
-    showManagerEntry: false
+    showManagerEntry: false,
+    show: false,
+    cacheCompany: ''
   },
   computed: {
+    ...store.mapState(['company']),
     navbar() {
       return [
         {
@@ -68,6 +92,12 @@ createPage({
             icon: 'todo-list-o',
             jumptype: 'mp',
             url: '/address-manager/pages/index'
+          },
+          {
+            name: '工厂/公司名',
+            icon: 'user-o',
+            jumptype: 'company',
+            value: this.company
           }
         ],
         [
@@ -101,6 +131,7 @@ createPage({
     this.isAdmin()
   },
   methods: {
+    ...store.mapMutations(['setState']),
     async isAdmin() {
       const res = await isAdmin()
       if (res.data.ADMIN_ID) {
@@ -108,7 +139,38 @@ createPage({
       }
     },
     itemtaphandle(item) {
-      jumpAction(item)
+      if (item.jumptype === 'company') {
+        this.cacheCompany = this.company
+        this.show = true
+      } else {
+        jumpAction(item)
+      }
+    },
+    onClose() {
+      this.show = false
+    },
+    onCompanyChange(e) {
+      this.cacheCompany = e.detail
+    },
+    async onConfirm() {
+      mpx.showLoading({ title: '更新中……' })
+      const res = await updateUserInfo({
+        company: this.cacheCompany
+      })
+      console.log(res)
+      if (res.code === 200) {
+        this.setState({
+          company: this.cacheCompany
+        })
+        mpx.showToast({
+          title: '更新成功！'
+        })
+      } else {
+        mpx.showToast({
+          title: res.msg,
+          icon: 'none'
+        })
+      }
     }
   }
 })
@@ -142,6 +204,8 @@ createPage({
         margin-top 12rpx
 .list
   padding-top 32rpx
+.company-container
+  min-height 100rpx
 </style>
 
 <script name="json">
@@ -150,6 +214,7 @@ module.exports = {
     "custom-container": "@/compontens/base/custom-container",
     "van-dialog": "@vant/weapp/dialog/index",
     "van-icon": "@vant/weapp/icon/index",
+    "van-field": "@vant/weapp/field/index",
     "van-cell": "@vant/weapp/cell/index",
     "van-cell-group": "@vant/weapp/cell-group/index"
   }

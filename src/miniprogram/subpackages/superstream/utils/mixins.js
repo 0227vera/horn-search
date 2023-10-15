@@ -1,5 +1,5 @@
 import { ORDER_UPDATE } from '@/setting/noticeInfo.js'
-import { fileUpload, addRelease, updateRelease } from '@/api'
+import { fileUpload, addRelease, updateRelease, updateUserInfo } from '@/api'
 import { formatNumSubmitData } from '@/subpackages/superstream/utils/utils.js'
 import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
 import mpx from '@mpxjs/core'
@@ -126,6 +126,14 @@ export const mixins = {
         ...this.updateObj,
         status: 1
       })
+      if (this.updateObj.company) {
+        updateUserInfo({
+          company: this.updateObj.company
+        })
+        this.setState({
+          company: this.updateObj.company
+        })
+      }
       mpx.hideLoading()
       if (res.code === 200) {
         const self = this

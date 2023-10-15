@@ -20,21 +20,18 @@ createApp({
     })
     const [constant, userInfo] = await Promise.all([getCommonConfig(), getCurrentUser()])
     const { steps, categoryItems } = constant.data
-    const { address = [], OPENID } = userInfo.data
+    const { address = [], OPENID, company } = userInfo.data
     let obj = {
       steps,
       appReady: true
     }
-    if (address.length) {
-      Object.assign(obj, {
-        addressList: address
-      })
-    }
-    if (OPENID) {
-      Object.assign(obj, {
-        openid: OPENID
-      })
-    }
+    address.length && Object.assign(obj, {
+      addressList: address
+    })
+    OPENID && Object.assign(obj, {
+      openid: OPENID
+    })
+    company && Object.assign(obj, { company })
     this.setState(obj)
   },
   globalStore: store,

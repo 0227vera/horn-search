@@ -1,3 +1,4 @@
+import store from '@/store'
 export const initBossWorkerObj = {
   category: '',
   categoryType: '',
@@ -21,7 +22,7 @@ export const initBossWorkerObj = {
   images: [],
   poi: {},
   add: '',
-  company: ''
+  company: store.state.company
 }
 
 export const unitList = [
@@ -63,7 +64,7 @@ export const initFactoryObj = {
   tel: '',
   poi: {},
   add: '',
-  company: ''
+  company: store.state.company
 }
 
 export const pageInfo = {

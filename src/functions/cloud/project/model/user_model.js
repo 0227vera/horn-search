@@ -11,6 +11,7 @@ AddressModel.DB_STRUCTURE = {
   _pid: 'string|true',
   role: 'string|false',
   address: 'array|false',
+  company: 'string|false',
   OPENID: 'string|true',
   USER_ID: 'string|true',
   USER_ADD_TIME: 'int|false',
