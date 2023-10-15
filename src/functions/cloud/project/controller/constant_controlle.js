@@ -5,7 +5,6 @@ class ConstantController extends BaseAdminController {
   async getOne() {
     const service = new ConstantService()
     const res = await service.getOne()
-    console.log('controlle------>', res)
     return res
   }
 }

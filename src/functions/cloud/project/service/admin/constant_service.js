@@ -5,7 +5,6 @@ class ConstantService extends BaseService {
   async getOne() {
     let where = {}
     let res = await ConstantModel.getOne(where)
-    console.log('service------->', res)
     return res
   }
 }

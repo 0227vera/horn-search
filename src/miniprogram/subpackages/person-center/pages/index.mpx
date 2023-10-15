@@ -157,7 +157,6 @@ createPage({
       const res = await updateUserInfo({
         company: this.cacheCompany
       })
-      console.log(res)
       if (res.code === 200) {
         this.setState({
           company: this.cacheCompany

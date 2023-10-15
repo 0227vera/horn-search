@@ -111,7 +111,6 @@ async function checkText(txt) {
       content: txt
 
     })
-    // console.log('checkText', result);
     if (!result || result.errCode !== 0) {
       throw new AppError('文字内容不合适，请修改或者重试');
     }

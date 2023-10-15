@@ -70,7 +70,6 @@ export default createStore({
       })
     },
     setNavBarStyle(state, data) {
-      console.log(data)
       Object.assign(state.navBarStyle, data)
     },
     setState(state, obj) {
