@@ -1,5 +1,5 @@
 <template>
-  <custom-container title="{{title}}">
+  <custom-container title="{{title}}" clickLeft="{{clickLeft}}">
     <view class="{{roleType === 'partyA' && currentCom === footerList[0].key ? 'component-container' : ''}}">
       <component
         is="{{currentCom}}"
@@ -55,7 +55,6 @@ createPage({
     this.setState({
       fromOrigin: this.fromOrigin
     })
-    console.log(this.radioList)
   },
   onShow() {
     if (Object.keys(this.cacheForm).length) {
@@ -76,6 +75,15 @@ createPage({
   },
   computed: {
     ...store.mapState(['showBottomNav', 'cacheForm']),
+    clickLeft() {
+      return () => {
+        this.setNavBarStyle({
+          showDropdown: false,
+          clickDropdown: null
+        })
+        mpx.navigateBack()
+      }
+    },
     radioList() {
       let result = []
       if (this.roleType === 'partyA') {

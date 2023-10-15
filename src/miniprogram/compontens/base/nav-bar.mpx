@@ -7,9 +7,9 @@
       <van-icon name="{{navBarStyle.lefticon}}" />
     </view>
     <view class="title" style="color: {{ navBarStyle.color }};" bind:tap="clickTitle">
-      <scroll-view scroll-x width="100%" class="title">
+      <view class="title-content">
         {{ navBarStyle.title }}
-      </scroll-view>
+      </view>
       <van-icon name="arrow-down" wx:if="{{navBarStyle.showDropdown}}" />
     </view>
   </view>
@@ -45,7 +45,6 @@ createComponent({
       })
     },
     clickTitle() {
-      console.log(this.navBarStyle)
       if (this.navBarStyle.showDropdown) {
         this.navBarStyle.clickDropdown?.()
       }
