@@ -441,7 +441,9 @@ export default {
     partyA: {
       title: ['公司直聘', '直聘列表']
     },
-    partyB: '应聘公司岗'
+    partyB: {
+      title: '应聘公司岗'
+    }
   },
   // note: 二手设备
   usedDetect: {
@@ -451,7 +453,9 @@ export default {
     partyA: {
       title: ['出售二手设备', '二手设备列表']
     },
-    partyB: '我要捡漏二手没备'
+    partyB: {
+      title: '我要捡漏二手没备'
+    }
   },
   // note: 尾货处理
   tailings: {
@@ -460,7 +464,9 @@ export default {
     partyA: {
       title: ['尾货处理', '尾货处理列表']
     },
-    partyB: '货尾中心'
+    partyB: {
+      title: '货尾中心'
+    }
   }
 }
 

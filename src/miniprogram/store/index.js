@@ -23,6 +23,8 @@ export default createStore({
       top: 0,
       lefticon: 'wap-home-o',
       paddingBottom: 6,
+      showDropdown: false,
+      clickDropdown: null,
       clickLeft: null
     },
     footerNavBar: [],

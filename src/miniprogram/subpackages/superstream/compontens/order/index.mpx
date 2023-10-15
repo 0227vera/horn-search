@@ -35,6 +35,12 @@ import { getReleaseList, updateRelease } from '@/api'
 import { pageInfo } from '@/subpackages/superstream/utils/constant.js'
 
 createComponent({
+  properties: {
+    updateList: {
+      type: Boolean,
+      value: false
+    }
+  },
   data: {
     orderSelect: 'push',
     orderList: [],
@@ -55,6 +61,14 @@ createComponent({
       if (this.orderSelect === 'call') return '3'
       if (this.orderSelect === 'done') return '4'
       return ''
+    }
+  },
+  watch: {
+    updateList() {
+      this.orderList = []
+      this.page = JSON.parse(JSON.stringify(pageInfo))
+      this.loading = true
+      this.getList()
     }
   },
   methods: {

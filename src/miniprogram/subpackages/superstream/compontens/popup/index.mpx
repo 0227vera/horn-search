@@ -139,6 +139,10 @@ createComponent({
     checkBoxList: {
       type: Array,
       value: []
+    },
+    needShowRadio: {
+      type: Boolean,
+      value: false
     }
   },
   attached() {
@@ -171,7 +175,7 @@ createComponent({
   computed: {
     showRadio() {
       const radioShowList = ['cooperType', 'orderType', 'factoryScale']
-      return radioShowList.includes(this.type)
+      return radioShowList.includes(this.type) || this.needShowRadio
     },
     showCheckBox() {
       const checkboxShowList = ['fabricProp', 'productType']

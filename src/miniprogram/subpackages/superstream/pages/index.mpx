@@ -4,6 +4,7 @@
       <component
         is="{{currentCom}}"
         categoryTypeId="{{categoryTypeId}}"
+        updateList="{{updateList}}"
         bind:release-jump-done="releaseJumpDone"
         bind:again-order="againOrder"
       />
@@ -11,6 +12,14 @@
     <footer wx:if="{{shoeFooterList}}" list="{{footerList}}" initActive="{{currentCom}}" bind:tab-change="tabChange" />
   </custom-container>
   <back-home />
+  <popup
+    show="{{showPopup}}"
+    type="{{popupType}}"
+    needShowRadio
+    radioList="{{radioList}}"
+    bind:close="closePopupContainer"
+    bind:confirm="onConfirmHandle"
+  />
 </template>
 
 <script>
@@ -25,7 +34,10 @@ createPage({
   data: {
     currentCom: '',
     roleType: '',
-    categoryTypeId: ''
+    categoryTypeId: '',
+    popupType: 'radio',
+    showPopup: false,
+    updateList: false
   },
   async onLoad(params) {
     /**
@@ -43,14 +55,48 @@ createPage({
     this.setState({
       fromOrigin: this.fromOrigin
     })
+    console.log(this.radioList)
   },
   onShow() {
     if (Object.keys(this.cacheForm).length) {
       this.currentCom = this.footerList[0].key
     }
+    this.setNavBarStyle({
+      showDropdown: true,
+      clickDropdown: () => {
+        this.showPopup = true
+      }
+    })
+  },
+  onHide() {
+    this.setNavBarStyle({
+      showDropdown: false,
+      clickDropdown: null
+    })
   },
   computed: {
     ...store.mapState(['showBottomNav', 'cacheForm']),
+    radioList() {
+      let result = []
+      if (this.roleType === 'partyA') {
+        Object.keys(config).forEach(item => {
+          result.push({
+            name: config[item].partyA.title[this.footerList.findIndex(f => f.key === this.currentCom)],
+            value: config[item].fromOrigin,
+            key: item
+          })
+        })
+      } else if (this.roleType === 'partyB') {
+        Object.keys(config).forEach(item => {
+          result.push({
+            name: config[item].partyB.title,
+            value: config[item].fromOrigin,
+            key: item
+          })
+        })
+      }
+      return result
+    },
     categoryConfig() {
       return config[this.categoryTypeId] || {}
     },
@@ -88,7 +134,32 @@ createPage({
     }
   },
   methods: {
-    ...store.mapMutations(['setState']),
+    ...store.mapMutations(['setState', 'setNavBarStyle']),
+    closePopupContainer() {
+      this.showPopup = false
+    },
+    onConfirmHandle({ detail }) {
+      const { data } = detail
+      if (this.roleType === 'partyA') {
+        if (this.currentCom === this.fromOrigin) {
+          // note: 甲方且在编辑页面需要更新当前的表单组件
+          this.currentCom = data.value
+        } else {
+          // note: 甲方在列表页面，需要刷新列表就行
+          this.updateList = !this.updateList
+        }
+      } else {
+        // note: 甲方只有列表页面，需要刷新列表就行
+        this.updateList = !this.updateList
+      }
+      // note: 更新数据请求源
+      this.setState({
+        fromOrigin: data.value
+      })
+      // note: 更新配置
+      this.categoryTypeId = data.key
+      this.showPopup = false
+    },
     tabChange(e) {
       this.currentCom = e.detail.key
     },
@@ -119,6 +190,7 @@ createPage({
   {
     "usingComponents": {
       "custom-container": "@/compontens/base/custom-container",
+      "popup": "@/subpackages/superstream/compontens/popup/index.mpx",
       "back-home": "@/compontens/base/back-home.mpx",
       "footer": "@/compontens/base/footer.mpx",
       "order": "@/subpackages/superstream/compontens/order",

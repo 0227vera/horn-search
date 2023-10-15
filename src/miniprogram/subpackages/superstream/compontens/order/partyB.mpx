@@ -132,6 +132,10 @@ createComponent({
     categoryTypeId: {
       type: String,
       value: ''
+    },
+    updateList: {
+      type: Boolean,
+      value: false
     }
   },
   data: {
@@ -211,6 +215,13 @@ createComponent({
   watch: {
     filterSure(val) {
       this.renderFilterList = JSON.parse(JSON.stringify(val))
+    },
+    updateList() {
+      this.renderFilterList = JSON.parse(JSON.stringify(this.filterList))
+      this.loading = true
+      this.list = []
+      this.page = JSON.parse(JSON.stringify(pageInfo))
+      this.getList()
     }
   },
   attached() {

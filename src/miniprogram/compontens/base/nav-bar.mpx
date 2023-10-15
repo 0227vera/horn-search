@@ -6,10 +6,11 @@
     <view wx:if="{{navBarStyle.lefticon}}" class="left" bindtap="backClick">
       <van-icon name="{{navBarStyle.lefticon}}" />
     </view>
-    <view class="title" style="color: {{ navBarStyle.color }};">
+    <view class="title" style="color: {{ navBarStyle.color }};" bind:tap="clickTitle">
       <scroll-view scroll-x width="100%" class="title">
         {{ navBarStyle.title }}
       </scroll-view>
+      <van-icon name="arrow-down" wx:if="{{navBarStyle.showDropdown}}" />
     </view>
   </view>
 </template>
@@ -42,6 +43,12 @@ createComponent({
         title: '',
         clickLeft: null
       })
+    },
+    clickTitle() {
+      console.log(this.navBarStyle)
+      if (this.navBarStyle.showDropdown) {
+        this.navBarStyle.clickDropdown?.()
+      }
     }
   }
 })
@@ -57,6 +64,8 @@ createComponent({
   z-index 0
   overflow hidden
   top 0
+  font-weight bold
+  color #000000
   .left
     position absolute
     display flex
@@ -68,15 +77,15 @@ createComponent({
     font-size 36rpx
     border-radius 32rpx
     background rgba(255, 255, 255, 0.80)
-    font-weight bold
-    color #000000
   .title
     font-size 32rpx
     font-weight bold
-    max-width 50vw
     overflow hidden
     white-space nowrap
     text-align center
+    display flex
+    align-items center
+    justify-content center
 </style>
 
 <script name="json">
