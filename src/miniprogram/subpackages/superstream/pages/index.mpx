@@ -19,7 +19,9 @@
     radioList="{{radioList}}"
     bind:close="closePopupContainer"
     bind:confirm="onConfirmHandle"
+    initRadio="{{fromOrigin}}"
   />
+  <tips autoStyle="{{tipsStyle}}" key="superstream-tips" text="{{tipsText}}" upLeft="170rpx" />
 </template>
 
 <script>
@@ -37,7 +39,8 @@ createPage({
     categoryTypeId: '',
     popupType: 'radio',
     showPopup: false,
-    updateList: false
+    updateList: false,
+    tipsText: '可点击进行类型切换'
   },
   async onLoad(params) {
     /**
@@ -74,7 +77,13 @@ createPage({
     })
   },
   computed: {
-    ...store.mapState(['showBottomNav', 'cacheForm']),
+    ...store.mapState(['showBottomNav', 'cacheForm', 'navBarStyle']),
+    top() {
+      return this.navBarStyle.height + this.navBarStyle.top + this.navBarStyle.paddingBottom
+    },
+    tipsStyle() {
+      return `top: ${this.top}px;left: 170rpx`
+    },
     clickLeft() {
       return () => {
         this.setNavBarStyle({
@@ -208,7 +217,8 @@ createPage({
       "employAppli":"@/subpackages/superstream/compontens/release/employ-appli",
       "usedDetect":"@/subpackages/superstream/compontens/release/used-detect",
       "tailings":"@/subpackages/superstream/compontens/release/tailings",
-      "partyB": "@/subpackages/superstream/compontens/order/partyB.mpx"
+      "partyB": "@/subpackages/superstream/compontens/order/partyB.mpx",
+      "tips": "@/compontens/base/tips.mpx"
     },
     "disableScroll": true
   }

@@ -143,6 +143,28 @@ createComponent({
     needShowRadio: {
       type: Boolean,
       value: false
+    },
+    initRadio: {
+      type: String,
+      value: ''
+    },
+    initCheckbox: {
+      type: Array,
+      value: ''
+    }
+  },
+  watch: {
+    initRadio: {
+      handler(val) {
+        this.radio = val
+      },
+      immediate: true
+    },
+    initCheckbox: {
+      handler(val) {
+        this.checkbox = val
+      },
+      immediate: true
     }
   },
   attached() {
@@ -244,7 +266,11 @@ createComponent({
     },
     onRadioSure() {
       const obj = this.radioList.find(item => item.value === this.radio)
-      this.confirm(obj)
+      if (obj) {
+        this.confirm(obj)
+      } else {
+        this.close()
+      }
     },
     // note: 多选
     onCheckboxChange(e) {

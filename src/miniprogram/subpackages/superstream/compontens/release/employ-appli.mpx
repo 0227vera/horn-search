@@ -1,5 +1,7 @@
 <template>
-  <view>公司直聘发布表单</view>
+  <view>
+    公司直聘模块正在火速建设中……
+  </view>
 </template>
 
 <script>

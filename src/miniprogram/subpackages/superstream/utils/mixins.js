@@ -29,7 +29,6 @@ export const mixins = {
     }
   },
   async attached() {
-    console.log('========>', this.addressList)
     if (Object.keys(this.cacheForm).length) {
       Object.keys(this.updateObj).forEach(item => {
         this.updateObj[item] = this.cacheForm[item] || this.updateObj[item]

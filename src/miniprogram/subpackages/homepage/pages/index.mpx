@@ -18,6 +18,7 @@
     </view>
   </custom-container>
   <guide-subcri />
+  <tips autoStyle="{{tipsStyle}}" key="home-tips" text="{{tipsText}}" upLeft="46rpx" />
 </template>
 
 <script>
@@ -25,23 +26,42 @@ import mpx, { createPage } from '@mpxjs/core'
 import jumpAction from '@/utils/jump.js'
 import list from '@/constant/home.js'
 import ParsonCenter from '@/subpackages/person-center/pages/index.mpx?resolve'
+import store from '@/store'
 
 createPage({
+  onShareAppMessage() {
+    getApp().onShareAppMessage()
+  },
   data: {
     list: [],
+    tipsText: '点击进入个人中心进行基础设置',
     clickLeft() {
       mpx.navigateTo({
         url: ParsonCenter
       })
     }
   },
+  computed: {
+    ...store.mapState(['navBarStyle']),
+    top() {
+      return this.navBarStyle.height + this.navBarStyle.top + this.navBarStyle.paddingBottom
+    },
+    tipsStyle() {
+      return `top: ${this.top}px; left: 0;`
+    }
+  },
   onShow() {
     this.list = list
+    this.setNavBarStyle({
+      showDropdown: false,
+      clickDropdown: null
+    })
   },
   onHide() {
     this.list = []
   },
   methods: {
+    ...store.mapMutations(['setNavBarStyle']),
     jump(m) {
       jumpAction(m.action)
     }
@@ -135,7 +155,8 @@ createPage({
 module.exports = {
   usingComponents: {
     "custom-container": "@/compontens/base/custom-container",
-    "guide-subcri": "@/compontens/common/service-notice/guide.mpx"
+    "guide-subcri": "@/compontens/common/service-notice/guide.mpx",
+    "tips": "@/compontens/base/tips.mpx"
   }
 }
 </script>

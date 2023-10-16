@@ -1,0 +1,129 @@
+<template>
+  <view class="tips" wx:if="{{show && !isDone}}" style="{{autoStyle}}">
+    <view class="tips-content">
+      <view class="tips-content-text">
+        <view>{{text}}</view>
+      </view>
+      <view class="tips-content-close" catchtap="close">
+        <van-icon name="close" />
+      </view>
+      <view class="tips-content-up" style="left: {{upLeft}};"></view>
+    </view>
+  </view>
+</template>
+
+<script>
+import mpx, { createComponent } from '@mpxjs/core'
+import store from '@/store'
+let timer = null
+
+createComponent({
+  properties: {
+    text: {
+      type: String,
+      value: '招工桥'
+    },
+    autoStyle: {
+      type: String,
+      value: ''
+    },
+    key: {
+      type: String,
+      value: 'storage-key'
+    },
+    upLeft: {
+      type: String,
+      value: '25px'
+    }
+  },
+  data: {
+    show: false
+  },
+  pageLifetimes: {
+    show() {
+      const count = mpx.getStorageSync(`${this.key}_count`) || ''
+      if (+count <= 5) {
+        this.show = true
+        const newCount = +count + 1
+        mpx.setStorage({
+          key: `${this.key}_count`,
+          data: newCount
+        })
+      } else {
+        mpx.setStorage({
+          key: this.key,
+          data: 'done'
+        })
+      }
+      clearInterval(timer)
+      timer = setTimeout(() => {
+        this.show = false
+      }, 5 * 1000)
+    },
+    hide() {
+      this.show = false
+    }
+  },
+  computed: {
+    isDone() {
+      return mpx.getStorageSync(this.key) === 'done'
+    }
+  },
+  methods: {
+    close() {
+      mpx.setStorage({
+        key: this.key,
+        data: 'done'
+      })
+      this.show = false
+    }
+  }
+})
+</script>
+
+<style lang="stylus" scoped>
+.tips
+  position fixed
+  z-index 100
+  animation showInTips 1.5s
+  &-content
+    background #FF6435
+    border-radius 32rpx
+    display flex
+    align-items center
+    justify-content center
+    padding 8rpx
+    color #ffffff
+    font-size 32rpx
+    position relative
+    &-close
+      margin-left 16rpx
+      font-weight 1000
+    &-up
+      width 0
+      height 0
+      border-width 0 8px 8px
+      border-style solid
+      border-color transparent transparent #FF6435
+      position absolute
+      top -8px
+@-webkit-keyframes showInTips
+    0%
+        transform translateY(100%)
+        opacity 0
+    75%
+        transform translateY(-50%)
+        opacity 0.75
+    100%
+        transform translateY(0)
+        opacity 1
+</style>
+
+<script name="json">
+module.exports = {
+  component: true,
+  usingComponents: {
+    "van-icon": "@vant/weapp/icon/index"
+  }
+}
+</script>

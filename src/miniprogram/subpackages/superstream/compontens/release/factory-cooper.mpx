@@ -260,6 +260,8 @@
   show="{{showPopup}}"
   type="{{popupType}}"
   title="{{popupTitle}}"
+  initRadio="{{initRadio}}"
+  initCheckbox="{{initCheckbox}}"
   radioList="{{radioList}}"
   checkBoxList="{{checkBoxList}}"
   bind:close="closePopupContainer"
@@ -282,7 +284,9 @@ createComponent({
     updateObj: initFactoryObj,
     radioList: [],
     popupTitle: '',
-    checkBoxList: []
+    checkBoxList: [],
+    initRadio: '',
+    initCheckbox: []
   },
   computed: {
     configById() {
@@ -310,18 +314,23 @@ createComponent({
       if (type === 'factoryScale') {
         this.radioList = this.factoryScaleList
         this.popupTitle = '请选择工厂规模'
+        this.initRadio = this.updateObj.factoryScale
       } else if (type === 'cooperType') {
         this.radioList = this.cooperTypeList
         this.popupTitle = '请选择合作类型'
+        this.initRadio = this.updateObj.cooperType
       } else if (type === 'fabricProp') {
         this.checkBoxList = this.fabricPropList
         this.popupTitle = '请选择面料属性'
+        this.initCheckbox = this.updateObj.fabricProp
       } else if (type === 'productType') {
         this.checkBoxList = this.productTypeList
         this.popupTitle = '请选择产品类型'
+        this.initCheckbox = this.updateObj.productType
       } else if (type === 'orderType') {
         this.radioList = this.orderTypeList
         this.popupTitle = '请选择订单类型'
+        this.initRadio = this.updateObj.orderType
       }
       this.showPopup = true
       this.popupType = type
