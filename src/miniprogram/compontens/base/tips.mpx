@@ -41,6 +41,9 @@ createComponent({
   },
   pageLifetimes: {
     show() {
+      if (this.isDone) {
+        return
+      }
       const count = mpx.getStorageSync(`${this.key}_count`) || ''
       if (+count <= 5) {
         this.show = true
@@ -54,6 +57,7 @@ createComponent({
           key: this.key,
           data: 'done'
         })
+        return
       }
       clearInterval(timer)
       timer = setTimeout(() => {

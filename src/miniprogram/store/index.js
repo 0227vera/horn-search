@@ -109,7 +109,6 @@ export default createStore({
               location: `${latitude},${longitude}`,
               success (res) {
                 const { result } = res || {}
-                console.log(result)
                 commit('setState', {
                   location: {
                     longitude: result.location.lng || state.location.longitude,
