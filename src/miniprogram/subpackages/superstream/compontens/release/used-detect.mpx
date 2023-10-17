@@ -3,7 +3,7 @@
   <van-cell-group class="form" style="background:#fff">
     <!-- 类别 -->
     <view class="category-container">
-      <van-field
+      <van-field size="large"
         class="category-content"
         label="设备名称"
         title-width="120rpx"
@@ -18,7 +18,7 @@
       />
     </view>
     <!-- 类别子系列 -->
-    <van-field
+    <van-field size="large"
       label="{{subCategoryInfo.label}}"
       wx:if="{{subCategoryInfo.show}}"
       title-width="240rpx"
@@ -30,8 +30,10 @@
       id="categorySub"
     />
      <!-- 位置相关 -->
-    <van-field
+    <van-field size="large"
       label="位置"
+      type="textarea"
+      autosize
       title-width="200rpx"
       required
       is-link
@@ -42,7 +44,7 @@
       bind:tap="showPopupContainer('address')"
     />
     <!-- 电话 -->
-    <van-field
+    <van-field size="large"
       label="电话"
       title-width="80rpx"
       required
@@ -77,7 +79,7 @@
       </view>
     </view>
     <!-- 价格 -->
-    <van-field
+    <van-field size="large"
       label="价格"
       title-width="80rpx"
       value="{{ updateObj.price }}"
@@ -90,7 +92,7 @@
       <view slot="right-icon" style="color: #333; font-weight: bold;">元</view>
     </van-field>
     <!-- 产品概述说明 -->
-    <van-field
+    <van-field size="large"
       label="产品概述说明"
       title-width="200rpx"
       value="{{ updateObj.note }}"

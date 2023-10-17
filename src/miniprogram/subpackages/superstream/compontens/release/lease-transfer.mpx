@@ -3,7 +3,7 @@
   <van-cell-group class="form" style="background:#fff">
     <!-- 类别 -->
     <view class="category-container">
-      <van-field
+      <van-field size="large"
         class="category-content"
         label="类别"
         title-width="80rpx"
@@ -18,7 +18,7 @@
       />
     </view>
     <!-- 类别子系列 -->
-    <van-field
+    <van-field size="large"
       label="{{subCategoryInfo.label}}"
       wx:if="{{subCategoryInfo.show}}"
       title-width="240rpx"
@@ -30,9 +30,11 @@
       id="categorySub"
     />
      <!-- 位置相关 -->
-    <van-field
+    <van-field size="large"
       label="招租/转让地址"
       title-width="200rpx"
+      type="textarea"
+      autosize
       required
       is-link
       readonly
@@ -42,7 +44,7 @@
       bind:tap="showPopupContainer('address')"
     />
     <!-- 面积 -->
-    <van-field
+    <van-field size="large"
       label="面积"
       title-width="80rpx"
       required
@@ -56,7 +58,7 @@
       <view slot="right-icon" style="color: #333; font-weight: bold;">平米</view>
     </van-field>
     <!-- 楼层 -->
-    <van-field
+    <van-field size="large"
       label="楼层"
       title-width="80rpx"
       required
@@ -71,7 +73,7 @@
     </van-field>
     <!-- 租金 -->
     <view class="category-container">
-      <van-field
+      <van-field size="large"
         label="租金"
         class="category-content"
         title-width="80rpx"
@@ -100,7 +102,7 @@
       </van-dropdown-menu>
     </view>
     <!-- 押金 -->
-    <van-field
+    <van-field size="large"
       label="押金"
       title-width="80rpx"
       required
@@ -114,7 +116,7 @@
       <view slot="right-icon" style="color: #333; font-weight: bold;">个月</view>
     </van-field>
     <!-- 设备 -->
-    <van-field
+    <van-field size="large"
       label="设备"
       required
       title-width="200rpx"
@@ -127,7 +129,7 @@
       bind:change="onFieldChange"
     />
     <!-- 电话 -->
-    <van-field
+    <van-field size="large"
       label="电话"
       title-width="80rpx"
       required
@@ -162,7 +164,7 @@
       </view>
     </view>
     <!-- 补充 -->
-    <van-field
+    <van-field size="large"
       label="补充"
       title-width="120rpx"
       value="{{ updateObj.add }}"

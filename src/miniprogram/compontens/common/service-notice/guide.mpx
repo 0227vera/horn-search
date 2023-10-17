@@ -1,13 +1,13 @@
 <template>
-  <view class="subcri" wx:if="{{show}}" style="bottom: {{bottom}};">
+  <view class="subcri" wx:if="{{show}}" style="bottom: {{bottom}};" bind:tap="clickSub">
     <view class="info">
       <view class="mainTitle">消息订阅提醒</view>
-      <view class="subTitle">点击订阅，有新订单、动态等第一时间通知您</view>
+      <view class="subTitle">点击订阅，有新订单第一时间通知您</view>
     </view>
     <view class="btn">
-      <van-button size="mini" type="primary" bind:tap="clickSub">消息订阅</van-button>
+      <van-button size="small" type="primary">消息订阅</van-button>
     </view>
-    <view class="close" bind:tap="close">
+    <view class="close" catchtap="close">
       <van-icon name="cross" />
     </view>
   </view>
@@ -81,7 +81,7 @@ createComponent({
     animation showIn 0.5s
     .info
       flex 1
-      font-size 24rpx
+      font-size 28rpx
       font-weight bold
       color #333333
       .subTitle
@@ -90,7 +90,7 @@ createComponent({
       position absolute
       top 0
       right 0
-      font-size 20rpx
+      font-size 28rpx
       background rgba(0, 0, 0, 0.5)
       color #ffffff
       border-radius 0 12rpx 0 12rpx

@@ -2,6 +2,7 @@
 <van-cell-group wx:if="{{addressList.length}}" border="{{ false }}" inset="{{inset}}">
   <view wx:for="{{ addressList }}"  wx:key="id" class="item">
     <van-cell
+      size="large"
       title="{{ item.address.detail }}"
       label="{{ item.name + '   ' + item.phone }}"
       value-class="value-class"

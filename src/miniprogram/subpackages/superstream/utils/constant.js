@@ -37,8 +37,8 @@ export const rentUnitList = [
 ]
 
 export const categoryTypeList = [
-  { text: '临工', value: '1' },
-  { text: '长工', value: '2' }
+  { text: '临时工', value: '1' },
+  { text: '长期工', value: '2' }
 ]
 
 export const initFactoryObj = {

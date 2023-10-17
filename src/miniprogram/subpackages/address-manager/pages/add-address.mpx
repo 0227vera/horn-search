@@ -5,7 +5,7 @@
     bind:footer-btn="addAddress"
   >
     <van-cell-group class="content" border="{{ false }}" inset>
-      <van-field
+      <van-field size="large"
         value="{{ addInfo.name }}"
         placeholder="请输入姓名"
         label="姓名"
@@ -15,7 +15,7 @@
         input-align="right"
         required
       />
-      <van-field
+      <van-field size="large"
         label="电话"
         value="{{ addInfo.phone }}"
         placeholder="请输入电话"
@@ -26,7 +26,7 @@
         required
         input-align="right"
       />
-      <van-field
+      <van-field size="large"
         label="省市区"
         value="{{ addInfo.address.area }}"
         placeholder="请选择省市区"
@@ -36,7 +36,7 @@
         input-align="right"
         bind:tap="openArea"
       />
-      <van-field
+      <van-field size="large"
         label="详细地址"
         value="{{ addInfo.address.detail }}"
         placeholder="请输入详细地址"
@@ -46,11 +46,13 @@
         input-align="right"
         bind:change="onDetailChange"
       />
-      <van-field
+      <van-field size="large"
         label="定位"
         value="{{ addInfo.address.name }}"
         placeholder="请选择定位"
         is-link
+        type="textarea"
+        autosize
         readonly
         required
         input-align="right"

@@ -16,6 +16,7 @@
     show="{{showPopup}}"
     type="{{popupType}}"
     needShowRadio
+    title="业务切换"
     radioList="{{radioList}}"
     bind:close="closePopupContainer"
     bind:confirm="onConfirmHandle"

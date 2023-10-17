@@ -16,6 +16,7 @@
       <view wx:for="{{list}}" wx:key="*this" style="margin-top: 16rpx">
         <van-cell-group inset>
           <van-cell
+            size="large"
             wx:for="{{item}}"
             wx:for-item="subitem"
             wx:key="name"
@@ -41,6 +42,7 @@
 >
   <view class="company-container">
     <van-field
+      size="large"
       value="{{ cacheCompany }}"
       label="工厂/公司名"
       type="textarea"

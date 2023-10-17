@@ -25,7 +25,7 @@ export const mixins = {
       if (this.updateObj.images.length) {
         return `已上传${this.updateObj.images.length}张图片`
       }
-      return '点击下方可上传图片'
+      return '点击下方上传图片展示更直观'
     }
   },
   async attached() {
@@ -41,7 +41,8 @@ export const mixins = {
     await this.setLocation()
     this.updateObj.poi = {
       ...this.adInfo,
-      name: this.adInfo.address
+      name: this.adInfo.address,
+      detail: this.adInfo.address
     }
     this.initAddressPhone()
   },

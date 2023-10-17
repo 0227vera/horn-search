@@ -3,8 +3,9 @@
   <van-cell-group class="form" style="background:#fff">
     <!-- 工厂规模 -->
     <van-field
+      size="large"
       label="工厂规模"
-      title-width="120rpx"
+      title-width="160rpx"
       required
       is-link
       readonly
@@ -14,10 +15,11 @@
       bind:tap="showPopupContainer('factoryScale')"
     />
     <van-field
+      size="large"
       wx:if="{{updateObj.factoryScale}}"
       required
       label="{{updateObj.factoryScale === '1' ? '工厂人数' : '作坊人数'}}"
-      title-width="120rpx"
+      title-width="160rpx"
       value="{{ updateObj.people }}"
       placeholder="请输入人数"
       type="digit"
@@ -49,6 +51,7 @@
     </van-field>
     <!-- 地域要求 -->
     <van-field
+      size="large"
       wx:if="{{updateObj.factoryScale}}"
       label="地域要求"
       required
@@ -61,8 +64,9 @@
     />
     <!-- 合作类型 -->
     <van-field
+      size="large"
       label="合作类型"
-      title-width="120rpx"
+      title-width="160rpx"
       required
       is-link
       readonly
@@ -73,8 +77,9 @@
     />
     <!-- 单价 -->
     <van-field
+      size="large"
       label="单价"
-      title-width="120rpx"
+      title-width="160rpx"
       value="{{ updateObj.price }}"
       placeholder="请输入单价"
       type="digit"
@@ -87,8 +92,9 @@
     </van-field>
     <!-- 数量相关 -->
     <van-field
+      size="large"
       label="生产数量"
-      title-width="120rpx"
+      title-width="160rpx"
       required
       input-align="right"
     >
@@ -115,8 +121,9 @@
     </van-field>
     <!-- 面料属性 -->
     <van-field
+      size="large"
       label="面料属性"
-      title-width="120rpx"
+      title-width="160rpx"
       required
       is-link
       readonly
@@ -127,8 +134,9 @@
     />
     <!-- 产品类型 -->
     <van-field
+      size="large"
       label="产品类型"
-      title-width="120rpx"
+      title-width="160rpx"
       required
       is-link
       readonly
@@ -139,8 +147,9 @@
     />
     <!-- 订单类型 -->
     <van-field
+      size="large"
       label="订单类型"
-      title-width="120rpx"
+      title-width="160rpx"
       required
       is-link
       readonly
@@ -151,8 +160,9 @@
     />
     <!-- 颜色码数 -->
     <van-field
+      size="large"
       label="颜色码数"
-      title-width="120rpx"
+      title-width="160rpx"
       required
       placeholder="请输入颜色码数"
       type="digit"
@@ -182,7 +192,10 @@
     </van-field>
     <!-- 位置相关 -->
     <van-field
+      size="large"
       label="位置"
+      type="textarea"
+      autosize
       title-width="80rpx"
       required
       is-link
@@ -194,6 +207,7 @@
     />
     <!-- 电话 -->
     <van-field
+      size="large"
       label="电话"
       title-width="80rpx"
       required
@@ -205,7 +219,7 @@
       id="tel"
     />
     <!-- 图片 -->
-    <van-cell title="图片展示" value="{{imagesValue}}" border="{{false}}" />
+    <van-cell size="large" title="图片展示" value="{{imagesValue}}" border="{{false}}" />
     <view class="image-container">
       <view class="iamge-content">
         <van-uploader
@@ -229,8 +243,9 @@
     </view>
     <!-- 补充 -->
     <van-field
+      size="large"
       label="补充"
-      title-width="120rpx"
+      title-width="160rpx"
       value="{{ updateObj.add }}"
       placeholder="例如十三行写字楼货源，要求管理质检等人员齐全能马上开货、看质量返单、配合度高、跑量为主等"
       input-align="left"
@@ -241,8 +256,9 @@
     />
     <!-- 工厂名 -->
     <van-field
+      size="large"
       label="工厂名"
-      title-width="120rpx"
+      title-width="160rpx"
       value="{{ updateObj.company }}"
       placeholder="请输入您的工厂或公司名称"
       input-align="left"

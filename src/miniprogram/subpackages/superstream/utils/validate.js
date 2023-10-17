@@ -14,7 +14,7 @@ export const validateBossWorker = ({ updateObj, subCategoryInfo } = {}) => {
     return result
   }
   if (!updateObj.categoryNum) {
-    result.text = '请输入{岗位}招聘{人数}'
+    result.text = '请输入岗位{招工人数}'
     return result
   }
   if (subCategoryInfo.show && !updateObj.categorySub) {
@@ -54,7 +54,7 @@ export const validateBossWorker = ({ updateObj, subCategoryInfo } = {}) => {
     //   return result
     // }
     if (!updateObj.num) {
-      result.text = '请输入{数量}'
+      result.text = '请输入{单量}'
       return result
     }
   }

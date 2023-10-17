@@ -65,7 +65,7 @@
       />
       <van-radio-group value="{{ radio }}" bind:change="onRadioChange">
         <van-cell-group>
-          <van-cell wx:for="{{radioList}}" wx:key="value" title="{{item.name}}" clickable data-name="{{item.value}}" bind:click="onItemClick">
+          <van-cell size="large" wx:for="{{radioList}}" wx:key="value" title="{{item.name}}" clickable data-name="{{item.value}}" bind:click="onItemClick">
             <van-radio slot="right-icon" name="{{item.value}}" />
           </van-cell>
         </van-cell-group>
@@ -85,6 +85,7 @@
         <van-checkbox-group value="{{ checkbox }}" bind:change="onCheckboxChange">
           <van-cell-group>
             <van-cell
+              size="large"
               wx:for="{{ checkBoxList }}"
               wx:key="index"
               title="{{ item.name }}"

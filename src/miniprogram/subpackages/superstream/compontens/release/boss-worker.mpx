@@ -4,6 +4,7 @@
     <!-- 岗位相关 -->
     <view class="category-container">
       <van-field
+        size="large"
         class="category-content"
         label="岗位"
         title-width="80rpx"
@@ -16,7 +17,7 @@
         placeholder="请点击选择需要招的岗位"
         bind:tap="showPopupContainer('category')"
       />
-      <view wx:if="{{showCategoryType}}" class="categoryNum">
+      <!-- <view wx:if="{{showCategoryType}}" class="categoryNum">
         <input
           type="digit"
           value="{{updateObj.categoryNum}}"
@@ -26,7 +27,7 @@
           class="input"
         />
         <view>位</view>
-      </view>
+      </view> -->
       <van-dropdown-menu
         active-color="#1989fa"
         wx:if="{{showCategoryType}}"
@@ -41,8 +42,25 @@
         />
       </van-dropdown-menu>
     </view>
+    <!-- 人数 -->
+    <van-field
+      size="large"
+      label="招工人数"
+      title-width="240rpx"
+      wx:if="{{showCategoryType}}"
+      required
+      value="{{ updateObj.categoryNum }}"
+      placeholder="请输入招工人数"
+      input-align="right"
+      type="number"
+      bind:change="onFieldChange"
+      id="categoryNum"
+    >
+      <view slot="right-icon" style="color: #333; font-weight: bold;">名</view>
+    </van-field>
     <!-- 岗位子系列 -->
     <van-field
+      size="large"
       label="{{subCategoryInfo.label}}"
       wx:if="{{subCategoryInfo.show}}"
       title-width="240rpx"
@@ -56,6 +74,7 @@
     <!-- 薪资相关 -->
     <view class="category-container">
       <van-field
+        size="large"
         label="{{updateObj.categoryType === '2' ? '薪资' : '单价'}}"
         class="category-content"
         title-width="80rpx"
@@ -105,15 +124,16 @@
         />
       </van-dropdown-menu>
     </view>
-    <!-- 数量相关 -->
+    <!-- 单量相关 -->
     <van-field
+      size="large"
       wx:if="{{updateObj.categoryType !== '2'}}"
-      label="数量"
+      label="单量"
       title-width="80rpx"
       required
       value="{{ updateObj.num }}"
       type="digit"
-      placeholder="请输入数量"
+      placeholder="请输入单量"
       input-align="right"
       bind:change="onFieldChange"
       id="num"
@@ -141,6 +161,7 @@
     </van-field>
     <!-- 位置相关 -->
     <van-field
+      size="large"
       label="位置"
       title-width="80rpx"
       required
@@ -150,11 +171,12 @@
       autosize
       value="{{updateObj.poi.detail}}"
       input-align="right"
-      placeholder="请点击进入输入我的详细地址"
+      placeholder="请点击输入我的详细地址"
       bind:tap="showPopupContainer('address')"
     />
     <!-- 电话 -->
     <van-field
+      size="large"
       label="电话"
       title-width="80rpx"
       required
@@ -167,6 +189,7 @@
     />
     <!-- 货源(品质层次) -->
     <van-field
+      size="large"
       wx:if="{{updateObj.categoryType === '1'}}"
       label="{{originLabel}}"
       title-width="240rpx"
@@ -179,6 +202,7 @@
     />
     <!-- 截止时间 -->
     <van-field
+      size="large"
       wx:if="{{updateObj.categoryType === '2'}}"
       label="截止时间"
       title-width="120rpx"
@@ -190,7 +214,7 @@
       input-align="right"
     />
     <!-- 图片 -->
-    <van-cell title="图片展示" value="{{imagesValue}}" border="{{false}}" />
+    <van-cell size="large" title="图片展示" value="{{imagesValue}}" border="{{false}}" />
     <view class="image-container">
       <view class="iamge-content">
         <van-uploader
@@ -214,10 +238,11 @@
     </view>
     <!-- 要求 -->
     <van-field
+      size="large"
       label="岗位要求"
-      title-width="120rpx"
+      title-width="160rpx"
       value="{{ updateObj.note }}"
-      placeholder="请输入您对所招工人的要求或者服装的要求"
+      placeholder="请输入您对工人或服装的要求"
       input-align="left"
       type="textarea"
       autosize
@@ -226,10 +251,11 @@
     />
     <!-- 待遇补充 -->
     <van-field
+      size="large"
       label="待遇补充"
-      title-width="120rpx"
+      title-width="160rpx"
       value="{{ updateObj.add }}"
-      placeholder="请输入您可以额外提供的待遇"
+      placeholder="例如:本厂自产自销,房补300元等"
       input-align="left"
       type="textarea"
       autosize
@@ -238,6 +264,7 @@
     />
     <!-- 工厂名 -->
     <van-field
+      size="large"
       label="工厂名"
       title-width="120rpx"
       value="{{ updateObj.company }}"
@@ -399,7 +426,7 @@ createComponent({
   font-size 34rpx
   font-weight bold
 .custom-height
-  height 88rpx
+  height 96rpx
   overflow hidden
 .categoryNum
   display flex
@@ -448,7 +475,7 @@ createComponent({
   background #fff
   width 100%
   display flex
-  height 88rpx
+  height 96rpx
   align-items center
   overflow hidden
   position relative
