@@ -32,7 +32,9 @@ import config, { categoryMap } from '@/constant/release.js'
 const store = getApp().globalStore
 createPage({
   onShareAppMessage() {
-    getApp().onShareAppMessage()
+    return {
+      path: '/pages/page'
+    }
   },
   data: {
     currentCom: '',
