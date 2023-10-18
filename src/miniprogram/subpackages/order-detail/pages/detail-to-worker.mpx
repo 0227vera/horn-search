@@ -61,7 +61,7 @@ createPage({
     this.loading = true
     const res = await getReleaseOneById(params)
     this.orderData = res.data || {}
-    const { categoryName, categorySub, categoryNum, categoryTypeName, category, price, priceUnit, poi, tel, images, ownTimeName, note, status, calllist, _id, readlist } = res.data || {}
+    const { categoryName, categorySub, categoryNum, categoryTypeName, category, price, priceUnit, poi, tel, images, note, status, calllist, _id, readlist } = res.data || {}
     this.poi = poi
     this.tel = tel
     this._id = _id

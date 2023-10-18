@@ -4,11 +4,7 @@
       <view class="order-type">
         <view class="order-type-item {{orderSelect === 'push' ? 'selected' : ''}}" bind:tap="clickOrderTypes('push')">
           <view wx:if="{{pushNum}}" class="num">{{pushNum}}</view>
-          <view class="text">已推送</view>
-        </view>
-        <view class="order-type-item {{orderSelect === 'call' ? 'selected' : ''}}" bind:tap="clickOrderTypes('call')">
-          <view class="num" wx:if="{{callNum}}">{{callNum}}</view>
-          <view class="text">已有人呼叫</view>
+          <view class="text">推送/有人呼叫</view>
         </view>
         <view class="order-type-item {{orderSelect === 'done' ? 'selected' : ''}}" bind:tap="clickOrderTypes('done')">
           <view class="num" wx:if="{{doneNum}}">{{doneNum}}</view>
@@ -58,7 +54,6 @@ createComponent({
   computed: {
     status() {
       if (this.orderSelect === 'push') return '2'
-      if (this.orderSelect === 'call') return '3'
       if (this.orderSelect === 'done') return '4'
       return ''
     }
@@ -77,6 +72,11 @@ createComponent({
         needOpenid: true,
         status: this.status,
         ...this.page
+      }
+      if (this.status === '2') {
+        Object.assign(params, {
+          status: ['in', ['2', '3']]
+        })
       }
       this.moreLoad.loading = true
       const res = await getReleaseList(params)
@@ -139,6 +139,7 @@ createComponent({
   padding 0 16rpx
   box-sizing border-box
   box-shadow 0px 4px 20px 0px rgba(0,0,0,0.1)
+  animation showUptoBottom 0.5s
 .order-type
   flex 1
   display flex
@@ -177,6 +178,13 @@ createComponent({
       border-radius 20rpx
       font-size 20rpx
       color #ffffff
+@-webkit-keyframes showUptoBottom
+  from
+    transform translateY(-100%)
+    opacity 0
+  to
+    transform translateY(0)
+    opacity 1
 </style>
 
 <script type="application/json">

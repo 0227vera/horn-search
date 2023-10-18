@@ -116,19 +116,6 @@ createPage({
           border-radius 20rpx
           font-size 24rpx
           font-weight bold
-@-webkit-keyframes showInJishu
-  from
-    transform translateX(-100%)
-    opacity 0
-  to
-    transform translateX(1)
-    opacity 1
-@-webkit-keyframes showInOushu
-  from
-    transform translateX(100%)
-  to
-    transform translateX(1)
-    opacity 1
 @-webkit-keyframes showbotomToUp
   from
     transform translateY(100%) scale(1.5)

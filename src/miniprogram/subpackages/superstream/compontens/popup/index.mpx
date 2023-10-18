@@ -124,10 +124,6 @@ createComponent({
       type: String,
       value: ''
     },
-    ownTime: {
-      type: Number,
-      value: 0
-    },
     categoryList: {
       type: Array,
       value: []
@@ -170,9 +166,6 @@ createComponent({
       },
       immediate: true
     }
-  },
-  attached() {
-    this.currentDate = this.ownTime || this.currentDate
   },
   data: {
     // node: 分类相关

@@ -30,8 +30,6 @@ ReleaseModel.DB_STRUCTURE = {
   num: 'int|false',
   numMax: 'int|false',
   numMin: 'int|false',
-  ownTime: 'int|false',
-  ownTimeName: 'string|false',
   images: 'array|false',
   note: 'string|false',
   add: 'string|false',

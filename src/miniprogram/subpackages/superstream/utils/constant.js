@@ -17,8 +17,6 @@ export const initBossWorkerObj = {
   priceUnit: '1',
   priceUnitName: '元/件',
   tel: '',
-  ownTime: '',
-  ownTimeName: '',
   images: [],
   poi: {},
   add: '',
@@ -28,7 +26,8 @@ export const initBossWorkerObj = {
 export const unitList = [
   { text: '元/件', value: '1' },
   { text: '元/小时', value: '2' },
-  { text: 'K/月', value: '3' }
+  { text: '元/天', value: '0' },
+  { text: '元/月', value: '3' }
 ]
 
 export const rentUnitList = [

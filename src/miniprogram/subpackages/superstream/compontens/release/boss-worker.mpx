@@ -17,17 +17,6 @@
         placeholder="请点击选择需要招的岗位"
         bind:tap="showPopupContainer('category')"
       />
-      <!-- <view wx:if="{{showCategoryType}}" class="categoryNum">
-        <input
-          type="digit"
-          value="{{updateObj.categoryNum}}"
-          id="categoryNum"
-          bind:input="onAreaFieldChange"
-          placeholder="人数"
-          class="input"
-        />
-        <view>位</view>
-      </view> -->
       <van-dropdown-menu
         active-color="#1989fa"
         wx:if="{{showCategoryType}}"
@@ -190,7 +179,6 @@
     <!-- 货源(品质层次) -->
     <van-field
       size="large"
-      wx:if="{{updateObj.categoryType === '1'}}"
       label="{{originLabel}}"
       title-width="240rpx"
       required="{{false}}"
@@ -199,19 +187,6 @@
       input-align="right"
       bind:change="onFieldChange"
       id="origin"
-    />
-    <!-- 截止时间 -->
-    <van-field
-      size="large"
-      wx:if="{{updateObj.categoryType === '2'}}"
-      label="截止时间"
-      title-width="120rpx"
-      is-link
-      readonly
-      value="{{ timeInfo }}"
-      placeholder="点击确定截止时间"
-      bind:tap="showPopupContainer('time')"
-      input-align="right"
     />
     <!-- 图片 -->
     <van-cell size="large" title-width="160rpx" title="图片展示" value="{{imagesValue}}" border="{{false}}" />
@@ -297,7 +272,6 @@ import config, { categoryMap } from '@/constant/release.js'
 import { mixins } from '@/subpackages/superstream/utils/mixins.js'
 import { validateBossWorker } from '@/subpackages/superstream/utils/validate.js'
 import { initBossWorkerObj, unitList, categoryTypeList } from '@/subpackages/superstream/utils/constant.js'
-import { timeInfo } from '@/subpackages/superstream/utils/utils.js'
 
 const store = getApp().globalStore
 
@@ -319,9 +293,6 @@ createComponent({
     ...store.mapState(['showBottomNav']),
     categoryList() {
       return config[this.categoryTypeId].category
-    },
-    timeInfo() {
-      return timeInfo(this.updateObj.ownTime)
     }
   },
   methods: {
@@ -357,10 +328,6 @@ createComponent({
             this.originLabel = '货源(品质层次)'
           }
         },
-        time: () => {
-          this.updateObj.ownTime = data.ownTime
-          this.updateObj.ownTimeName = this.timeInfo
-        },
         address: () => {
           this.updateObj.poi = data.poi
           this.updateObj.tel = data.tel
@@ -383,7 +350,7 @@ createComponent({
     setUnitList() {
       if (this.updateObj.categoryType === '2') {
         this.updateObj.priceUnit = '3'
-        this.updateObj.priceUnitName = 'K/月'
+        this.updateObj.priceUnitName = '元/月'
         this.unitList = unitList.filter(item => item.value === '3')
       } else if (this.updateObj.categoryType === '1') {
         this.updateObj.priceUnit = '1'

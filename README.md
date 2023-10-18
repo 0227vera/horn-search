@@ -16,4 +16,3 @@ npm run build
 ## UI视图部分
 
 `src/miniprogram`
-

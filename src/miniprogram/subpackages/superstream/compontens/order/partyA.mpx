@@ -56,8 +56,7 @@ createComponent({
       }, {
         text: '再来一单',
         icon: 'revoke',
-        id: 'again',
-        hide: this.status !== '4'
+        id: 'again'
       }, {
         text: '看详情',
         type: 'primary',

@@ -58,6 +58,16 @@
         input-align="right"
         bind:tap="openSearchDetail"
       />
+      <van-field
+        size="large"
+        label="设置为默认地址"
+        title-width="240rpx"
+        readonly
+        input-align="right"
+        required
+      >
+        <van-switch slot="button" checked="{{ addInfo.checked }}" bind:change="onSwitchChange" />
+      </van-field>
     </van-cell-group>
   </custom-container>
   <van-popup
@@ -91,6 +101,7 @@ createPage({
     addInfo: {
       name: '',
       phone: null,
+      checked: true,
       address: {
         areaProvice: '',
         areaCode: '',
@@ -106,7 +117,7 @@ createPage({
   async onLoad(params = {}) {
     if (params.id) {
       this.pageType = 'edit'
-      this.addInfo = this.addressList.find(item => item.id === params.id)
+      Object.assign(this.addInfo, this.addressList.find(item => item.id === params.id) || {})
       return
     }
     await this.setLocation()
@@ -176,6 +187,9 @@ createPage({
         }
       })
     },
+    onSwitchChange({ detail }) {
+      this.addInfo.checked = detail
+    },
     validate() {
       const result = {
         success: false,
@@ -212,6 +226,13 @@ createPage({
           this.addInfo.checked = true
         }
         list.push(this.addInfo)
+      }
+      if (this.addInfo.checked) {
+        list.forEach(item => {
+          if (item.id !== this.addInfo.id) {
+            item.checked = false
+          }
+        })
       }
       mpx.showLoading({
         title: this.pageType === 'new' ? '加载中……' : '修改中……',
@@ -260,7 +281,8 @@ createPage({
       "van-cell-group": "@vant/weapp/cell-group/index",
       "van-field": "@vant/weapp/field/index",
       "van-popup": "@vant/weapp/popup/index",
-      "van-area": "@vant/weapp/area/index"
+      "van-area": "@vant/weapp/area/index",
+      "van-switch": "@vant/weapp/switch/index"
     },
     "navigationStyle": "custom"
   }

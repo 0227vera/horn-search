@@ -175,7 +175,6 @@ createPage({
       }, {
         name: '再来一单',
         icon: 'revoke',
-        hide: this.status !== '4',
         id: 'again',
         click: () => {
           if (this.params.isBack === 'true') {

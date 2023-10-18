@@ -11,7 +11,6 @@
     </view>
     <footer wx:if="{{shoeFooterList}}" list="{{footerList}}" initActive="{{currentCom}}" bind:tab-change="tabChange" />
   </custom-container>
-  <back-home />
   <popup
     show="{{showPopup}}"
     type="{{popupType}}"
@@ -158,6 +157,10 @@ createPage({
     },
     onConfirmHandle({ detail }) {
       const { data } = detail
+      if (data.value === this.fromOrigin) {
+        this.showPopup = false
+        return
+      }
       if (this.roleType === 'partyA') {
         if (this.currentCom === this.fromOrigin) {
           // note: 甲方且在编辑页面需要更新当前的表单组件

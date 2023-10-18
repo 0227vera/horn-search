@@ -19,18 +19,21 @@
       />
     </van-cell>
     <view class="opt" wx:if="{{showOptBtn}}">
-      <van-button
-        wx:for="{{buttons}}"
-        size="small"
-        wx:for-item="b"
-        style="margin-left: 8rpx"
-        round
-        type="{{b.type || 'default'}}"
-        catchtap="clickBtn(item, b)"
-        icon="{{b.icon || ''}}"
-      >
-        {{b.text}}
-      </van-button>
+      <view class="checked" wx:if="{{item.checked}}">默认</view>
+      <view class="btns">
+        <van-button
+          wx:for="{{buttons}}"
+          size="small"
+          wx:for-item="b"
+          style="margin-left: 8rpx"
+          round
+          type="{{b.type || 'default'}}"
+          catchtap="clickBtn(item, b)"
+          icon="{{b.icon || ''}}"
+        >
+          {{b.text}}
+        </van-button>
+      </view>
     </view>
   </view>
 </van-cell-group>
@@ -171,9 +174,19 @@ createComponent({
   overflow hidden
 .opt
   display flex
-  justify-content flex-end
+  align-items center
   padding 16rpx
   box-sizing border-box
+  .checked
+    background #07c160
+    padding 4rpx 10rpx
+    border-radius 8rpx
+    color #ffffff
+    font-size 28rpx
+  .btns
+    flex 1
+    display flex
+    justify-content flex-end
 .value-class
   display flex
   justify-content flex-end

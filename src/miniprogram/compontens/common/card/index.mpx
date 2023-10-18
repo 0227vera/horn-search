@@ -1,7 +1,7 @@
 
 <template>
   <view class="container">
-    <van-swipe-cell wx:for="{{renderList}}" wx:key="_id" right-width="{{ canDelete ? 65 : 0 }}">
+    <van-swipe-cell custom-class="{{index % 2 === 1 ? 'jishu' : 'oushu'}}" wx:for="{{renderList}}" wx:key="_id" right-width="{{ canDelete ? 65 : 0 }}">
       <view wx:if="{{canDelete}}" slot="right" class="van-swipe-cell__right" bind:tap="delete(item)">删除</view>
       <view class="list-item" bind:tap="gotoDetail(item)">
         <view wx:if="{{item.tag}}" class="tag">{{item.tag}}</view>
@@ -34,6 +34,7 @@
             type="{{b.type || 'default'}}"
             catchtap="clickBtn(item, b)"
             icon="{{b.icon || ''}}"
+            custom-class="btn-custom"
           >
             {{b.text}}
           </van-button>
@@ -120,24 +121,15 @@ createComponent({
             priceValue = `{${item.priceMin}${item.priceUnitName}} ~ {${item.priceMax}${item.priceUnitName}}`
           } else {
             priceValue = `{${item.price}${item.priceUnitName}}`
+            if (item.num) {
+              priceValue += `(单量：{${item.num}件})`
+            }
           }
           content.push({
             type: 'map',
             text: priceText,
             value: priceValue
           })
-          // 时效
-          // let timeValue = dayjs(item.RELEASE_ADD_TIME).format('YYYY-MM-DD')
-          // if (item.ownTime) {
-          //   timeValue += `~${dayjs(item.ownTime).format('YYYY-MM-DD')}`
-          // } else {
-          //   timeValue += '以后'
-          // }
-          // content.push({
-          //   type: 'map',
-          //   text: '有效期:',
-          //   value: timeValue
-          // })
         } else if (this.fromOrigin === 'factoryCooper') {
           let factoryScaleValue = `{${item.factoryScaleName}}`
           if (item.factoryScale === '1') {
@@ -273,7 +265,10 @@ createComponent({
 </script>
 
 <style lang="stylus">
-
+.btn-custom{
+  font-weight: bolder;
+  font-size: 28rpx !important;
+}
 </style>
 <style lang="stylus" scoped>
 .van-swipe-cell__right
@@ -292,6 +287,10 @@ createComponent({
   border-radius 16rpx
   position relative
   margin-bottom 16rpx
+  &.jishu
+    animation showInJishu 0.5s
+  &.oushu
+    animation showInOushu 0.5s
   .tag
     position absolute
     top 16rpx

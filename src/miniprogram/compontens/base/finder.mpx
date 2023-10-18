@@ -25,7 +25,7 @@ createComponent({
     },
     title: {
       type: String,
-      value: '以为您推送给所有用户'
+      value: '已为您推送给所有用户'
     },
     readlist: {
       type: Array,
