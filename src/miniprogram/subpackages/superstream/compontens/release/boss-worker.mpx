@@ -214,7 +214,7 @@
       input-align="right"
     />
     <!-- 图片 -->
-    <van-cell size="large" title="图片展示" value="{{imagesValue}}" border="{{false}}" />
+    <van-cell size="large" title-width="160rpx" title="图片展示" value="{{imagesValue}}" border="{{false}}" />
     <view class="image-container">
       <view class="iamge-content">
         <van-uploader
@@ -266,7 +266,7 @@
     <van-field
       size="large"
       label="工厂名"
-      title-width="120rpx"
+      title-width="160rpx"
       value="{{ updateObj.company }}"
       placeholder="请输入您的工厂或公司名称"
       input-align="left"
@@ -411,100 +411,7 @@ createComponent({
 })
 </script>
 <style lang="stylus">
-.container
-  display flex
-  flex-direction column
-  height 100%
-  overflow hidden
-  padding-bottom 10rpx
-  box-sizing border-box
-  .form
-    flex 1
-    overflow-x hidden
-.dropdown
-  color #000
-  font-size 34rpx
-  font-weight bold
-.custom-height
-  height 96rpx
-  overflow hidden
-.categoryNum
-  display flex
-  align-items center
-  justify-content center
-  padding-right 20rpx
-  .input
-    width 120rpx
-    margin-right 4rpx
-.input
-  text-align center
-  font-size 32rpx
-  background-color #f9f9f9
-  border-radius 6rpx
-  font-weight bold
-  height 36rpx
-  lint-height 36rpx
-.submit
-  margin-top 32rpx
-  margin-bottom 20rpx
-.area-container
-  display flex
-  .middle
-    padding 0 16rpx
-    font-size 36rpx
-    color #333
-    font-weight bold
-.image-container
-  background #ffffff
-  padding 20rpx 32rpx
-  box-sizing border-box
-  .iamge-content
-    border-bottom 1px solid #ebedf0
-    display flex
-    flex-wrap wrap
-.imgurl-container
-  position relative
-  margin 0 8px 8px 0
-  .image-clear-icon
-    position absolute
-    top 0
-    right 0
-    color #fff
-    font-size 40rpx
-.category-container
-  background #fff
-  width 100%
-  display flex
-  height 96rpx
-  align-items center
-  overflow hidden
-  position relative
-  &::after
-    border-bottom: 1px solid #ebedf0;
-    bottom: 0;
-    box-sizing: border-box;
-    content: " ";
-    left: 16px;
-    pointer-events: none;
-    position: absolute;
-    right: 16px;
-    transform: scaleY(.5);
-    transform-origin: center;
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: rgb(235, 237, 240);
-  .category-content
-    flex 1
-    height 100%
-  &-item
-    display flex
-    padding 32rpx 0
-    box-sizing border-box
-    border-top 2rpx solid #eee
-    .text
-      flex 1
-      color #333333
-      font-size 28rpx
+@import "../style/form.styl"
 </style>
 
 <script type="application/json">

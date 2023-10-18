@@ -140,7 +140,7 @@ createPage({
         icon: 'upgrade',
         key: this.fromOrigin
       }, {
-        name: '订单列表',
+        name: this.partyA?.title?.[1] || '订单列表',
         title: this.partyA?.title?.[1],
         icon: 'comment',
         key: 'order'

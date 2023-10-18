@@ -43,6 +43,9 @@
         safe-area-inset-top="{{false}}"
       />
       <van-tree-select
+        main-item-class="left-item"
+        content-item-class="right-item"
+        size="large"
         height="75vh"
         items="{{ categoryList }}"
         main-active-index="{{ mainActiveIndex }}"
@@ -295,6 +298,12 @@ createComponent({
 
 </script>
 <style>
+.left-item{
+  font-size: 32rpx;
+}
+.right-item{
+  font-size: 32rpx;
+}
 .value-class {
   flex: none !important;
 }
