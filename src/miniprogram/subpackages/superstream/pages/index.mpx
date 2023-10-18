@@ -21,6 +21,7 @@
     bind:confirm="onConfirmHandle"
     initRadio="{{fromOrigin}}"
   />
+  <back-home showShare showBackHome="{{false}}" wx:if="{{roleType === 'partyB'}}"/>
   <tips autoStyle="{{tipsStyle}}" key="superstream-tips" text="{{tipsText}}" upLeft="170rpx" />
 </template>
 

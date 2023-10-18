@@ -31,7 +31,7 @@ createComponent({
       const {
         categoryName, categorySub, categoryType, categoryTypeName, categoryNum, priceMin, priceMax, price, priceUnitName, num, numMin, numMax, origin, poi, tel, images, note, add, calllist, company,
         factoryScaleName, factoryScale, people, area, cooperTypeName, fabricPropName, productTypeName, orderTypeName, color, code,
-        deposit, device, floor
+        deposit, device, floor, peopleMin, peopleMax
       } = this.orderData
       const list = [{
         title: '位置',

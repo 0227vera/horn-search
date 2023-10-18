@@ -1,8 +1,8 @@
 <template>
   <block wx:if="{{showBottomNav}}">
-    <view class="container home" bind:tap="backHome">
+    <view class="container home" bind:tap="backHome" wx:if="{{showBackHome}}">
       <van-icon class="icon" name="wap-home" />
-      <view class="text">返回首页</view>
+      <view class="text">回首页</view>
     </view>
     <view class="container share" wx:if="{{showShare}}">
       <van-icon class="icon" name="share" />
@@ -17,6 +17,10 @@ import mpx, { createComponent } from '@mpxjs/core'
 import store from '@/store'
 createComponent({
   properties: {
+    showBackHome: {
+      type: Boolean,
+      value: true
+    },
     showShare: {
       type: Boolean,
       value: false
@@ -46,9 +50,11 @@ createComponent({
   background rgba(255, 255,255, 0.9)
   box-shadow 0px 4px 20px 0px rgba(0,0,0,0.4)
   border-radius 50%
-  width 80rpx
-  height 80rpx
+  width 100rpx
+  height 100rpx
   z-index 0
+  font-size 28rpx
+  font-weight bold
   &.home
     left 0
   &.share
@@ -60,10 +66,7 @@ createComponent({
       height 100%
       left 0
       top 0
-  .icon
-    font-size 30rpx
   .text
-    font-size 16rpx
     margin-top 4rpx
 </style>
 
