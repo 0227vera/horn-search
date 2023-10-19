@@ -51,6 +51,7 @@ createPage({
      * key: 确定使用哪个组件展示
      * id: 确定分类
      */
+    await this.setLocation()
     const { type, key, id } = params
     // 当前的分类id，用于获取分类，常用配置等
     this.categoryTypeId = categoryMap[id]
@@ -155,6 +156,7 @@ createPage({
   },
   methods: {
     ...store.mapMutations(['setState', 'setNavBarStyle']),
+    ...store.mapActions(['setLocation']),
     closePopupContainer() {
       this.showPopup = false
     },

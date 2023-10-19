@@ -1,8 +1,8 @@
 const dbUtil = require('./db_util.js')
+const cloudBase = require('../cloud/cloud_base.js')
 const util = require('../utils/util.js')
 const timeUtil = require('../utils/time_util.js')
 const AppError = require('../core/app_error.js')
-const cloudBase = require('../cloud/cloud_base.js')
 
 class Model {
   /**
@@ -356,7 +356,7 @@ class Model {
         let orginal = arr[key]
 
         let type = 'string'
-        if (val === 'float' || val === 'int' || val === 'string' || val === 'array' || val === 'object' || val === 'bool') {
+        if (val === 'float' || val === 'int' || val === 'string' || val === 'array' || val === 'object' || val === 'bool' || val === 'geopoint') {
           type = val
           newStru[k]['type'] = type
           continue
@@ -498,7 +498,7 @@ class Model {
             data[k] = String(data[k])
             break
           case 'bool':
-            // data[k] = data[k]
+            data[k] = !!data[k]
             break
           case 'float':
           case 'int':
@@ -511,6 +511,11 @@ class Model {
           case 'object':
             if (data[k].constructor !== Object)
               data[k] = {}
+            break
+          case 'geopoint':
+            if (data[k].lng && data[k].lat) {
+              data[k] = dbUtil.Geo.Point(data[k].lng, data[k].lat)
+            }
             break
           default:
             console.error('字段类型错误：' + k + dbStructure[k].type)

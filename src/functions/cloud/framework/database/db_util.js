@@ -9,6 +9,7 @@ const DEFAULT_RECORD_SIZE = 20 // 默认显示记录数
 const cloud = cloudBase.getCloud()
 const db = cloud.database()
 const dbCmd = db.command // 命令
+const Geo = db.Geo
 const dbAggr = dbCmd.aggregate // 聚合
 
 /**
@@ -910,7 +911,13 @@ function fmtWhere(where) {
     for (let i = 0; i < where.length; i++)
       where[i] = fmtWhere(where[i])
   }
-
+  if (where.location && where.location.lng && where.location.lat) {
+    where.location = dbCmd.geoNear({
+      geometry: Geo.Point(where.location.lng, where.location.lat),
+      minDistance: where.location.minDistance || 0,
+      maxDistance: where.location.maxDistance || 1 * 1000
+    })
+  }
   for (let k in where) {
     /* 判断是否有条件数组
       INFO_EXPIRE_TIME: [
@@ -1023,7 +1030,7 @@ module.exports = {
   getOne,
   getAll,
   getAllBig,
-
+  Geo,
   getAllByArray,
   getList,
   getListJoin,

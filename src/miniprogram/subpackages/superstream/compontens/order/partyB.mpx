@@ -166,7 +166,7 @@ createComponent({
     }]
   },
   computed: {
-    ...store.mapState(['openid', 'fromOrigin', 'showBottomNav', 'navBarStyle']),
+    ...store.mapState(['openid', 'fromOrigin', 'showBottomNav', 'navBarStyle', 'adInfo']),
     top() {
       return 50 + this.navBarStyle.height + this.navBarStyle.top + this.navBarStyle.paddingBottom
     },
@@ -174,8 +174,14 @@ createComponent({
       return config[this.categoryTypeId].category
     },
     listParams() {
+      console.log(this.adInfo)
       const params = {
         status: ['in', ['2', '3']]
+      }
+      if (this.adInfo.location.lat) {
+        Object.assign(params, {
+          location: this.adInfo.location
+        })
       }
       Object.keys(this.filter).forEach(item => {
         const value = this.filter[item]

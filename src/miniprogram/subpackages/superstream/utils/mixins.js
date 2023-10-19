@@ -114,6 +114,7 @@ export const mixins = {
         }, 0)
         return
       }
+      this.updateObj.location = this.updateObj.poi.location
       mpx.showLoading({
         title: '提交中...',
         mask: true
