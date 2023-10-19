@@ -126,6 +126,7 @@ import { getReleaseList, updateRelease } from '@/api'
 import store from '@/store'
 import makePhoneToBoss from '@/utils/makePhoneToBoss'
 import { pageInfo } from '@/subpackages/superstream/utils/constant.js'
+import { getDistance } from '@/subpackages/superstream/utils/utils.js'
 
 createComponent({
   properties: {
@@ -166,7 +167,7 @@ createComponent({
     }]
   },
   computed: {
-    ...store.mapState(['openid', 'fromOrigin', 'showBottomNav', 'navBarStyle', 'adInfo']),
+    ...store.mapState(['openid', 'fromOrigin', 'showBottomNav', 'navBarStyle', 'adInfo', 'mapSdk']),
     top() {
       return 50 + this.navBarStyle.height + this.navBarStyle.top + this.navBarStyle.paddingBottom
     },
@@ -174,7 +175,6 @@ createComponent({
       return config[this.categoryTypeId].category
     },
     listParams() {
-      console.log(this.adInfo)
       const params = {
         status: ['in', ['2', '3']]
       }
@@ -183,10 +183,19 @@ createComponent({
           location: this.adInfo.location
         })
       }
+      console.log(this.filter)
       Object.keys(this.filter).forEach(item => {
         const value = this.filter[item]
-        // array or string
-        if (value?.length) {
+        if (item === 'distance') {
+          Object.assign(params, {
+            location: {
+              ...this.adInfo.location,
+              minDistance: value[0] * 100,
+              maxDistance: value[1] * 100
+            }
+          })
+        } else if (value?.length) {
+          // array or string
           if (typeof value === 'string') {
             Object.assign(params, {
               [item]: ['in', [value]]
@@ -240,9 +249,15 @@ createComponent({
       this.moreLoad.loading = true
       const res = await getReleaseList(this.listParams)
       const { list, total } = res.data || {}
+      list.forEach(item => {
+        if (this.adInfo.location.lat) {
+          item.distance = getDistance(this.adInfo.location.lat, this.adInfo.location.lng, item.poi.location.lat, item.poi.location.lng).toFixed(1)
+        }
+      })
       this.loading = false
       this.moreLoad.loading = false
       this.list = this.list.concat(list || [])
+      this.list = this.list.sort((a, b) => a.distance - b.distance)
       if (this.list.length < total) {
         this.moreLoad.text = '~点击加载更多~'
         this.moreLoad.isClick = true

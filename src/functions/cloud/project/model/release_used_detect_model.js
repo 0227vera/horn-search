@@ -17,6 +17,7 @@ ReleaseModel.DB_STRUCTURE = {
   readlist: 'array|false',
   price: 'int|false',
   poi: 'object|true',
+  location: 'geopoint|true',
   tel: 'string|true',
   images: 'array|true',
   note: 'string|false',

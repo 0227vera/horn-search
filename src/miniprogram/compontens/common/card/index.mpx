@@ -11,7 +11,10 @@
             <view wx:for="{{item.contentList}}" wx:key="title" wx:for-item="content" class="list-item_info-content-item">
               <block wx:if="{{content.type === 'map'}}">
                 <text class="list-item_info-content-item_text">{{content.text}}</text>
-                <mutil-style-text class="list-item_info-content-item_value" rules="{{content.rules || textRules}}" text="{{content.value}}" />
+                <view class="list-item_info-content-item_value">
+                  <mutil-style-text class="text" rules="{{content.rules || textRules}}" text="{{content.value}}" />
+                  <view wx:if="{{content.right}}" class="distance">{{content.right}}</view>
+                </view>
               </block>
               <block wx:elif="{{content.type === 'tag'}}">
                 <view class="list-item_info-content-item_tags">
@@ -86,7 +89,7 @@ createComponent({
     }
   },
   computed: {
-    ...store.mapState(['openid', 'fromOrigin']),
+    ...store.mapState(['openid', 'fromOrigin', 'adInfo']),
     isWorker() {
       return this.role === 'worker'
     },
@@ -100,11 +103,19 @@ createComponent({
         }
         item.thumb = item.images[0] || 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/image-cdn/none.png'
         const content = []
+        const distance = item.distance
+        let right = ''
+        if (distance < 0.1) {
+          right = '在您附近'
+        } else {
+          right = `距您${distance}km`
+        }
         // 地址
         content.push({
           type: 'map',
           text: '地址:',
-          value: item.poi.detail || item.poi.address
+          value: item.poi.detail || item.poi.address,
+          right: this.isWorker ? right : ''
         })
         if (this.fromOrigin === 'bossWorker') {
           let categoryValue = `${item.categoryName}${item.categorySub ? `(${item.categorySub})` : ''}-{${item.categoryNum}人}-${item.categoryTypeName}`
@@ -327,8 +338,17 @@ createComponent({
         &_value
           flex 1
           overflow hidden
-          text-overflow ellipsis
-          white-space nowrap
+          display flex
+          align-items center
+          .text
+            flex 1
+            text-overflow ellipsis
+            overflow hidden
+            white-space nowrap
+          .distance
+            color red
+            font-size 28rpx
+            font-weight bold
         &_tags
           display flex
           &-item

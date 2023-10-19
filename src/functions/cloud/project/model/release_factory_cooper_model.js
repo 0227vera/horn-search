@@ -27,6 +27,7 @@ ReleaseModel.DB_STRUCTURE = {
   calllist: 'array|false',
   readlist: 'array|false',
   poi: 'object|true',
+  location: 'geopoint|true',
   tel: 'string|true',
   people: 'string|false',
   peopleMax: 'string|false',
