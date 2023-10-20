@@ -14,7 +14,9 @@
       </van-button>
       <view class="content">
         <view wx:if="{{showListLoading}}" class="loading">
-          <van-loading size="24px" type="spinner" color="#1989fa">加载中...</van-loading>
+          <van-loading size="24px" type="spinner" color="#1989fa">
+            <text style="color: #000000;font-weight: bold;">加载中...</text>
+          </van-loading>
         </view>
         <view wx:elif="{{list.length}}">
           <van-cell-group inset>

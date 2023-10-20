@@ -10,6 +10,7 @@
       info="{{item.info}}"
       dot="{{item.dot}}"
       name="{{item.key}}"
+      custom-class="item-class"
     >
       {{item.name}}
     </van-tabbar-item>
@@ -64,6 +65,12 @@ createComponent({
   }
 })
 </script>
+<style>
+.item-class{
+  font-weight: bold;
+  font-size: 28rpx;
+}
+</style>
 
 <script type="application/json">
   {

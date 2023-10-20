@@ -2,11 +2,13 @@
   <custom-container
     title="{{shareTitle}}"
     lefticon="arrow-left"
-    containerBg="linear-gradient(#E3E0F3, #E3E0F3 89px, #ffffff)"
     clickLeft="{{clickLeft}}"
+    containerBg="linear-gradient(to bottom, #79b3f4, #ffffff)"
   >
     <view wx:if="{{loading}}" class="status">
-      <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
+      <van-loading type="spinner" color="#1989fa" vertical>
+        <text style="color: #000000;font-weight: bold;">加载中...</text>
+      </van-loading>
     </view>
     <view wx:else class="container">
       <item-container title="基本信息：">

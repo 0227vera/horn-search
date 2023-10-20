@@ -102,7 +102,6 @@ export const mixins = {
     },
     // note: 提交操作
     async submitData(validate, formatList = []) {
-      console.log(this.updateObj)
       const vali = validate({
         updateObj: this.updateObj,
         subCategoryInfo: this.subCategoryInfo || {}

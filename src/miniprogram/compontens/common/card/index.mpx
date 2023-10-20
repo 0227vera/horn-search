@@ -1,7 +1,7 @@
 
 <template>
   <view class="container">
-    <van-swipe-cell custom-class="{{index % 2 === 1 ? 'jishu' : 'oushu'}}" wx:for="{{renderList}}" wx:key="_id" right-width="{{ canDelete ? 65 : 0 }}">
+    <van-swipe-cell custom-class="{{index % 2 === 1 ? 'jishu' : 'oushu'}}" wx:for="{{renderList}}" wx:key="*this" right-width="{{ canDelete ? 65 : 0 }}">
       <view wx:if="{{canDelete}}" slot="right" class="van-swipe-cell__right" bind:tap="delete(item)">删除</view>
       <view class="list-item" bind:tap="gotoDetail(item)">
         <view wx:if="{{item.tag}}" class="tag">{{item.tag}}</view>
@@ -45,7 +45,9 @@
       </view>
     </van-swipe-cell>
     <view class="moreload">
-      <van-loading wx:if="{{moreLoad.loading}}" type="spinner" size="14px" color="#1989fa">加载中……</van-loading>
+      <van-loading wx:if="{{moreLoad.loading}}" type="spinner" size="14px" color="#1989fa">
+        <text style="color: #000000;font-weight: bold;">加载中...</text>
+      </van-loading>
       <view wx:else bind:tap="loadmore">{{moreLoad.text}}</view>
     </view>
   </view>
@@ -282,6 +284,7 @@ createComponent({
 }
 </style>
 <style lang="stylus" scoped>
+@import "@/assets/base.styl"
 .van-swipe-cell__right
   width 65px
   height 100%
@@ -292,16 +295,12 @@ createComponent({
   justify-content center
   border-radius 16rpx
 .list-item
-  background linear-gradient(#ffffff, #E3E0F3, #ffffff)
+  background #ffffff
   padding 16rpx
   box-sizing border-box
   border-radius 16rpx
   position relative
   margin-bottom 16rpx
-  &.jishu
-    animation showInJishu 0.5s
-  &.oushu
-    animation showInOushu 0.5s
   .tag
     position absolute
     top 16rpx
@@ -365,8 +364,9 @@ createComponent({
     justify-content flex-end
     margin-top 18rpx
 .moreload
-  color #666666
+  color #000000
   font-size 28rpx
+  font-weight bold
   width 100%
   display flex
   align-items center

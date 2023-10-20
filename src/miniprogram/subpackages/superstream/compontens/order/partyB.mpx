@@ -24,6 +24,8 @@
                     <view class="filter-title">{{item.initText}}</view>
                     <!-- 分类树选择 -->
                     <van-tree-select
+                      main-item-class="left-item"
+                      content-item-class="right-item"
                       wx:if="{{item.type === 'category'}}"
                       height="50vh"
                       main-active-class="left-select"
@@ -83,8 +85,8 @@
                     <!-- 距离 -->
                     <view class="distance" wx:elif="{{item.type === 'dropdown'}}">
                       <van-slider value="{{item.value}}" use-button-slot range bind:change="onDistanceChange" id="{{item.id}}">
-                        <view class="custom-button" slot="left-button">{{ item.value[0] / 10}}km</view>
-                        <view class="custom-button" slot="right-button">{{ item.value[1] / 10}}km</view>
+                        <view class="custom-button" slot="left-button">{{ (item.value[0] || 0) / 10}}km</view>
+                        <view class="custom-button" slot="right-button">{{ (item.value[1] || 100) / 10}}km</view>
                       </van-slider>
                     </view>
                     <view class="filter-container-btn">
@@ -100,7 +102,9 @@
       </scroll-view>
     </view>
     <view wx:if="{{loading}}" class="loading">
-      <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
+      <van-loading type="spinner" color="#1989fa" vertical>
+        <text style="color: #000000;font-weight: bold;">加载中...</text>
+      </van-loading>
     </view>
     <view wx:elif="{{list.length}}" class="card-list">
       <card
@@ -114,7 +118,8 @@
       />
     </view>
     <view wx:else class="loading empty">
-      <van-empty description="暂无数据"/>
+      <van-empty />
+      <view class="text">暂无数据</view>
     </view>
   </view>
 </template>
@@ -183,7 +188,6 @@ createComponent({
           location: this.adInfo.location
         })
       }
-      console.log(this.filter)
       Object.keys(this.filter).forEach(item => {
         const value = this.filter[item]
         if (item === 'distance') {
@@ -448,6 +452,18 @@ createComponent({
 })
 </script>
 <style>
+
+.van-empty__description{
+  color: #000000;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+.left-item{
+  font-size: 32rpx;
+}
+.right-item{
+  font-size: 32rpx;
+}
 .dropdown{
   color: #1989fa;
   font-weight: bold;
@@ -472,6 +488,11 @@ createComponent({
   display flex
   align-items center
   justify-content center
+  flex-direction column
+  .text
+    font-size 28rpx
+    color #000000
+    font-weight bold
 .card-list
   padding 0 32rpx
   box-sizing border-box

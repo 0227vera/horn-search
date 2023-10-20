@@ -76,7 +76,7 @@ createComponent({
     align-items center
     position fixed
     left 3%
-    background #ffffff
+    background-image linear-gradient(to right top, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #41dfff);
     overflow hidden
     animation showIn 0.5s
     .info

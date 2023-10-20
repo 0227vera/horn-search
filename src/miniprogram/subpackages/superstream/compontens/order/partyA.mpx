@@ -1,6 +1,8 @@
 <template>
 <view wx:if="{{loading}}" class="status">
-  <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
+  <van-loading type="spinner" color="#1989fa" vertical>
+    <text style="color: #000000;font-weight: bold;">加载中...</text>
+  </van-loading>
 </view>
 <card
   wx:elif="{{list.length}}"
@@ -14,7 +16,8 @@
 >
 </card>
 <view wx:else class="status">
-  <van-empty description="{{emptyText}}" />
+  <van-empty />
+  <view class="text">{{emptyText}}</view>
 </view>
 </template>
 
@@ -117,14 +120,11 @@ createComponent({
   display flex
   justify-content center
   align-items center
-.moreload
-  color #666666
-  font-size 28rpx
-  width 100%
-  display flex
-  align-items center
-  justify-content center
-  padding 50rpx 0
+  flex-direction column
+  .text
+    font-size 28rpx
+    color #000000
+    font-weight bold
 </style>
 
 <script type="application/json">
