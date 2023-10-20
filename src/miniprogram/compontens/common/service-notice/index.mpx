@@ -1,7 +1,16 @@
 <template>
 <van-overlay show="{{show}}" z-index="100">
   <view class="container">
-    <image class="" src="https://pt-starimg.didistatic.com/static/starimg/img/Zjmq7qrfcy1628235982087.gif"></image>
+    <view class="content">
+      <view class="content-item">
+        <mutil-style-text text="第一步: {打开开关}" />
+        <van-switch style="margin-top: 20rpx" checked="{{ true }}" size="50rpx" active-color="#07c160"/>
+      </view>
+      <view class="content-item">
+        <mutil-style-text text="第二步: {点击允许}" />
+        <van-button type="primary">允许</van-button>
+      </view>
+    </view>
   </view>
 </van-overlay>
 </template>
@@ -57,12 +66,41 @@ createComponent({
   flex-direction column
   justify-content center
   align-items center
+  .content
+    animation showScale 2s infinite
+    width 600rpx
+    height 300rpx
+    display flex
+    flex-direction column
+    justify-content space-around
+    align-items center
+    font-size 40rpx
+    background #ffffff
+    font-weight bold
+    border-radius 32rpx
+    box-sizing border-box
+    padding 32rpx 64rpx
+    &-item
+      width 100%
+      display flex
+      align-items center
+      justify-content space-between
+@-webkit-keyframes showScale
+  0%
+    transform scale(1)
+  50%
+    transform scale(1.1)
+  100%
+    transform scale(1)
 </style>
 
 <script type="application/json">
   {
     "usingComponents": {
-        "van-overlay": "@vant/weapp/overlay/index"
+      "van-overlay": "@vant/weapp/overlay/index",
+      "mutil-style-text": "@/compontens/base/mutil-style-text.mpx",
+      "van-switch": "@vant/weapp/switch/index",
+      "van-button": "@vant/weapp/button/index"
     }
   }
 </script>
