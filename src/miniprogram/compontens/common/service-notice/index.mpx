@@ -7,7 +7,15 @@
         <van-switch style="margin-top: 20rpx" checked="{{ true }}" size="50rpx" active-color="#07c160"/>
       </view>
       <view class="content-item">
-        <mutil-style-text text="第二步: {点击允许}" />
+        <mutil-style-text text="第二步: {保持选择}" />
+        <van-radio-group value="{{ radio }}" bind:change="onChange">
+          <van-radio name="1" checked-color="#07c160">
+            <text style="font-size: 24rpx">总是保持以上选择</text>
+          </van-radio>
+        </van-radio-group>
+      </view>
+      <view class="content-item">
+        <mutil-style-text text="第三步: {点击允许}" />
         <van-button type="primary">允许</van-button>
       </view>
     </view>
@@ -26,7 +34,8 @@ createComponent({
     }
   },
   data: {
-    show: false
+    show: false,
+    radio: '1'
   },
   methods: {
     showServiceNotice() {
@@ -68,18 +77,18 @@ createComponent({
   align-items center
   .content
     animation showScale 2s infinite
-    width 600rpx
-    height 300rpx
+    width 650rpx
+    height 400rpx
     display flex
     flex-direction column
     justify-content space-around
     align-items center
-    font-size 40rpx
+    font-size 34rpx
     background #ffffff
     font-weight bold
     border-radius 32rpx
     box-sizing border-box
-    padding 32rpx 64rpx
+    padding 32rpx
     &-item
       width 100%
       display flex
@@ -100,6 +109,8 @@ createComponent({
       "van-overlay": "@vant/weapp/overlay/index",
       "mutil-style-text": "@/compontens/base/mutil-style-text.mpx",
       "van-switch": "@vant/weapp/switch/index",
+      "van-radio": "@vant/weapp/radio/index",
+      "van-radio-group": "@vant/weapp/radio-group/index",
       "van-button": "@vant/weapp/button/index"
     }
   }
