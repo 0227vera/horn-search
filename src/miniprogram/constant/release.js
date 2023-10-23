@@ -85,7 +85,8 @@ const cooperTypeList = [{
   value: '2'
 }, {
   name: '裁片外发',
-  value: '3'
+  value: '3',
+  showAddress: true
 }, {
   name: '开发生产供应商',
   value: '4'

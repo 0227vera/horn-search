@@ -97,7 +97,7 @@ createComponent({
         if (factoryScale === '1') {
           people && (factoryScaleText += `(${people}人以上)`)
         } else if (factoryScale === '2') {
-          people && (factoryScaleText += `(${people}左右)`)
+          people && (factoryScaleText += `(${people}人左右)`)
         }
         list.push({
           title: '工厂规模',

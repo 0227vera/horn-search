@@ -114,7 +114,7 @@ createPage({
           return text
         },
         factoryCooper: () => {
-          return `${this.orderData.cooperTypeName}/${this.orderData.num}件`
+          return `${this.orderData.cooperTypeName}/${this.orderData.num}件左右`
         },
         leaseTransfer: () => {
           let text = this.orderData.categoryName
