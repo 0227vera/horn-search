@@ -272,7 +272,7 @@ createComponent({
             text: '类别:',
             value: `${item.categoryName}${item.categorySub ? `(${item.categorySub})` : ''}`
           })
-          if (item.times.length) {
+          if (item.times?.length) {
             const [start, end] = item.times
             let text = ''
             if (start && end) {
