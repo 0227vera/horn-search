@@ -408,7 +408,7 @@ const tailingsList = [{
 
 const tailingsFilter = [{
   type: 'radio',
-  id: 'factoryScale',
+  id: 'category',
   text: '货品类别筛选',
   initText: '货品类别筛选',
   value: [],
