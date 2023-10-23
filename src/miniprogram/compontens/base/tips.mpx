@@ -45,7 +45,7 @@ createComponent({
         return
       }
       const count = mpx.getStorageSync(`${this.key}_count`) || ''
-      if (+count <= 5) {
+      if (+count <= 2) {
         this.show = true
         const newCount = +count + 1
         mpx.setStorage({

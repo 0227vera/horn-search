@@ -87,6 +87,7 @@
       bind:finish="onFinish"
     />
   </van-popup>
+  <van-dialog id="van-dialog" />
 </template>
 
 <script>
@@ -119,15 +120,17 @@ createPage({
     if (params.id) {
       this.pageType = 'edit'
       Object.assign(this.addInfo, this.addressList.find(item => item.id === params.id) || {})
-      return
     }
-    await this.setLocation()
-    this.addInfo.address.areaProvice = this.adInfo.ad_info.province
-    this.addInfo.address.area = `${this.adInfo.ad_info.province}${this.adInfo.ad_info.city}${this.adInfo.ad_info.district}`
-    this.addInfo.address.areaCode = this.adInfo.ad_info.adcode
-    this.addInfo.address.detail = this.adInfo.address
-    this.addInfo.address.name = this.adInfo.address
-    this.addInfo.address.location = this.adInfo.location
+  },
+  onShow() {
+    this.setLocation().then(() => {
+      this.addInfo.address.areaProvice = this.adInfo.ad_info.province
+      this.addInfo.address.area = `${this.adInfo.ad_info.province}${this.adInfo.ad_info.city}${this.adInfo.ad_info.district}`
+      this.addInfo.address.areaCode = this.adInfo.ad_info.adcode
+      this.addInfo.address.detail = this.adInfo.address
+      this.addInfo.address.name = this.adInfo.address
+      this.addInfo.address.location = this.adInfo.location
+    })
   },
   computed: {
     ...store.mapState(['mapSdk', 'adInfo', 'addressList'])
@@ -283,7 +286,8 @@ createPage({
       "van-field": "@vant/weapp/field/index",
       "van-popup": "@vant/weapp/popup/index",
       "van-area": "@vant/weapp/area/index",
-      "van-switch": "@vant/weapp/switch/index"
+      "van-switch": "@vant/weapp/switch/index",
+      "van-dialog": "@vant/weapp/dialog/index"
     },
     "navigationStyle": "custom"
   }

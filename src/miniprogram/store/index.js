@@ -1,5 +1,6 @@
 import mpx, { createStore } from '@mpxjs/core'
 import MapSdk from '@/wx-map-sdk/qqmap-wx-jssdk.min.js'
+import Dialog from '@vant/weapp/dialog/dialog'
 
 export function checkIpx () {
   const systemInfo = wx.getSystemInfoSync()
@@ -98,6 +99,10 @@ export default createStore({
   actions: {
     setLocation ({ state, commit }) {
       return new Promise((resolve, reject) => {
+        if (state.adInfo?.location?.lat) {
+          resolve(state.adInfo)
+          return
+        }
         mpx.getLocation({
           type: 'gcj02',
           success (res) {
@@ -122,6 +127,12 @@ export default createStore({
           },
           fail (err) {
             reject(err)
+            Dialog.confirm({
+              title: '提示',
+              message: '您未打开定位信息，无法为您精准推送附近的订单，建议你前往打开定位服务，方便您的使用'
+            }).then(res => {
+              mpx.openSetting()
+            }).catch(() => {})
           }
         })
       })

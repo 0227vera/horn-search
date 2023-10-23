@@ -289,7 +289,6 @@
 
 <script>
 import mpx, { createComponent } from '@mpxjs/core'
-import config, { categoryMap } from '@/constant/release.js'
 import { mixins } from '@/subpackages/superstream/utils/mixins.js'
 import { validateFactory } from '@/subpackages/superstream/utils/validate.js'
 import { initFactoryObj } from '@/subpackages/superstream/utils/constant.js'
@@ -305,9 +304,6 @@ createComponent({
     initCheckbox: []
   },
   computed: {
-    configById() {
-      return config[categoryMap[this.categoryTypeId]]
-    },
     factoryScaleList() {
       return this.configById.factoryScaleList
     },
@@ -347,6 +343,13 @@ createComponent({
         this.radioList = this.orderTypeList
         this.popupTitle = '请选择订单类型'
         this.initRadio = this.updateObj.orderType
+      } else if (type === 'address') {
+        if (!this.addressList.length) {
+          mpx.navigateTo({
+            url: AddAddressUrl
+          })
+          return
+        }
       }
       this.showPopup = true
       this.popupType = type

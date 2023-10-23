@@ -181,9 +181,10 @@ createComponent({
     },
     listParams() {
       const params = {
-        status: ['in', ['2', '3']]
+        status: ['in', ['2', '3']],
+        OPENID: ['not in', [this.openid]]
       }
-      if (this.adInfo.location.lat) {
+      if (this.adInfo?.location?.lat) {
         Object.assign(params, {
           location: this.adInfo.location
         })
@@ -193,7 +194,7 @@ createComponent({
         if (item === 'distance') {
           Object.assign(params, {
             location: {
-              ...this.adInfo.location,
+              ...this.adInfo?.location || {},
               minDistance: value[0] * 100,
               maxDistance: value[1] * 100
             }
@@ -241,6 +242,18 @@ createComponent({
       this.list = []
       this.page = JSON.parse(JSON.stringify(pageInfo))
       this.getList()
+    },
+    adInfo: {
+      handler(val) {
+        console.log(val)
+        if (val?.location?.lat) {
+          this.list.forEach(item => {
+            item.distance = getDistance(val.location.lat, val.location.lng, item.poi.location.lat, item.poi.location.lng).toFixed(1)
+          })
+          this.list = this.list.sort((a, b) => a.distance - b.distance)
+        }
+      },
+      immediate: true
     }
   },
   attached() {
@@ -253,11 +266,11 @@ createComponent({
       this.moreLoad.loading = true
       const res = await getReleaseList(this.listParams)
       const { list, total } = res.data || {}
-      list.forEach(item => {
-        if (this.adInfo.location.lat) {
+      if (this.adInfo?.location?.lat) {
+        list.forEach(item => {
           item.distance = getDistance(this.adInfo.location.lat, this.adInfo.location.lng, item.poi.location.lat, item.poi.location.lng).toFixed(1)
-        }
-      })
+        })
+      }
       this.loading = false
       this.moreLoad.loading = false
       this.list = this.list.concat(list || [])

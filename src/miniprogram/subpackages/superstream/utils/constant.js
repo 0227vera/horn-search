@@ -98,3 +98,14 @@ export const initUsedObj = {
   images: [],
   note: ''
 }
+
+export const initTailingsObj = {
+  category: '',
+  categoryName: '',
+  categorySub: '',
+  poi: {},
+  tel: '',
+  images: [],
+  times: [],
+  note: ''
+}

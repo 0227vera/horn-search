@@ -26,6 +26,7 @@
     initRadio="{{fromOrigin}}"
   />
   <back-home showShare showBackHome="{{false}}" wx:if="{{roleType === 'partyB'}}"/>
+  <van-dialog id="van-dialog" />
   <tips autoStyle="{{tipsStyle}}" key="superstream-tips" text="{{tipsText}}" upLeft="170rpx" />
 </template>
 
@@ -55,7 +56,6 @@ createPage({
      * key: 确定使用哪个组件展示
      * id: 确定分类
      */
-    await this.setLocation()
     const { type, key, id } = params
     // 当前的分类id，用于获取分类，常用配置等
     this.categoryTypeId = categoryMap[id]
@@ -68,6 +68,7 @@ createPage({
     })
   },
   onShow() {
+    this.setLocation()
     if (Object.keys(this.cacheForm).length) {
       this.currentCom = this.footerList[0].key
     }
@@ -231,7 +232,8 @@ createPage({
       "usedDetect":"@/subpackages/superstream/compontens/release/used-detect",
       "tailings":"@/subpackages/superstream/compontens/release/tailings",
       "partyB": "@/subpackages/superstream/compontens/order/partyB.mpx",
-      "tips": "@/compontens/base/tips.mpx"
+      "tips": "@/compontens/base/tips.mpx",
+      "van-dialog": "@vant/weapp/dialog/index"
     },
     "disableScroll": true
   }

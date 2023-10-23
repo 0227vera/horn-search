@@ -268,7 +268,6 @@
 
 <script>
 import mpx, { createComponent } from '@mpxjs/core'
-import config, { categoryMap } from '@/constant/release.js'
 import { mixins } from '@/subpackages/superstream/utils/mixins.js'
 import { validateBossWorker } from '@/subpackages/superstream/utils/validate.js'
 import { initBossWorkerObj, unitList, categoryTypeList } from '@/subpackages/superstream/utils/constant.js'
@@ -290,9 +289,8 @@ createComponent({
     updateObj: initBossWorkerObj
   },
   computed: {
-    ...store.mapState(['showBottomNav']),
     categoryList() {
-      return config[this.categoryTypeId].category
+      return this.configById.category
     }
   },
   methods: {
@@ -363,16 +361,6 @@ createComponent({
     // note: 提交操作
     async releaseData() {
       this.submitData(validateBossWorker)
-    },
-    openDropdown() {
-      this.setState({
-        showBottomNav: false
-      })
-    },
-    closeDropdown() {
-      this.setState({
-        showBottomNav: true
-      })
     }
   }
 })

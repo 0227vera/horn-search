@@ -121,7 +121,6 @@
 
 <script>
 import mpx, { createComponent } from '@mpxjs/core'
-import config from '@/constant/release.js'
 import { mixins } from '@/subpackages/superstream/utils/mixins.js'
 import { validateUsed } from '@/subpackages/superstream/utils/validate.js'
 import { initUsedObj } from '@/subpackages/superstream/utils/constant.js'
@@ -138,9 +137,8 @@ createComponent({
     updateObj: initUsedObj
   },
   computed: {
-    ...store.mapState(['showBottomNav']),
     categoryList() {
-      return config[this.categoryTypeId].category
+      return this.configById.category
     }
   },
   methods: {

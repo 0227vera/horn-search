@@ -1,5 +1,6 @@
 import { ORDER_UPDATE } from '@/setting/noticeInfo.js'
 import { fileUpload, addRelease, updateRelease, updateUserInfo } from '@/api'
+import config, { categoryMap } from '@/constant/release.js'
 import { formatNumSubmitData } from '@/subpackages/superstream/utils/utils.js'
 import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
 import mpx from '@mpxjs/core'
@@ -20,7 +21,10 @@ export const mixins = {
     toastText: ''
   },
   computed: {
-    ...store.mapState(['adInfo', 'fromOrigin', 'cacheForm', 'addressList']),
+    ...store.mapState(['adInfo', 'fromOrigin', 'cacheForm', 'addressList', 'showBottomNav']),
+    configById() {
+      return config[categoryMap[this.categoryTypeId]]
+    },
     imagesValue() {
       if (this.updateObj.images.length) {
         return `已上传${this.updateObj.images.length}张图片`
@@ -38,11 +42,12 @@ export const mixins = {
       })
       return
     }
-    await this.setLocation()
-    this.updateObj.poi = {
-      ...this.adInfo,
-      name: this.adInfo.address,
-      detail: this.adInfo.address
+    if (this.adInfo.address) {
+      this.updateObj.poi = {
+        ...this.adInfo,
+        name: this.adInfo.address,
+        detail: this.adInfo.address
+      }
     }
     this.initAddressPhone()
   },
@@ -98,6 +103,16 @@ export const mixins = {
         sources: this.updateObj.images.map(item => ({
           url: item
         }))
+      })
+    },
+    openDropdown() {
+      this.setState({
+        showBottomNav: false
+      })
+    },
+    closeDropdown() {
+      this.setState({
+        showBottomNav: true
       })
     },
     // note: 提交操作

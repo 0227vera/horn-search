@@ -106,7 +106,7 @@ createComponent({
     }
   },
   async attached () {
-    await this.setLocation()
+    this.setLocation()
   },
   methods: {
     ...store.mapActions(['setLocation']),

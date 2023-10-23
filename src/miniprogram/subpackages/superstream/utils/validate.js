@@ -255,3 +255,36 @@ export const validateUsed = ({ updateObj, subCategoryInfo } = {}) => {
   result.success = true
   return result
 }
+
+export const tailingsValidate = ({ updateObj, subCategoryInfo } = {}) => {
+  if (!updateObj) {
+    console.error('updateObj应该为对象')
+    return
+  }
+  const result = {
+    success: false,
+    text: ''
+  }
+  if (!updateObj.category) {
+    result.text = '请选择{货品类型}'
+    return result
+  }
+  if (subCategoryInfo.show && !updateObj.categorySub) {
+    result.text = subCategoryInfo.placeholder
+    return result
+  }
+  if (!updateObj.tel) {
+    result.text = '请输入{手机号}'
+    return result
+  }
+  if (!telReg.test(updateObj.tel)) {
+    result.text = '请输入{正确的手机号}'
+    return result
+  }
+  if (telReg.test(updateObj.note)) {
+    result.text = '{补充说明}中不可带{电话号码}'
+    return result
+  }
+  result.success = true
+  return result
+}

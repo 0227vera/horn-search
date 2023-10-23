@@ -107,10 +107,12 @@ createComponent({
         const content = []
         const distance = item.distance
         let right = ''
-        if (distance < 0.1) {
-          right = '在您附近'
-        } else {
-          right = `距您${distance}km`
+        if (distance) {
+          if (distance < 0.1) {
+            right = '在您附近'
+          } else {
+            right = `距您${distance}km`
+          }
         }
         // 地址
         content.push({

@@ -193,7 +193,6 @@
 
 <script>
 import mpx, { createComponent } from '@mpxjs/core'
-import config, { categoryMap } from '@/constant/release.js'
 import { mixins } from '@/subpackages/superstream/utils/mixins.js'
 import { validateLease } from '@/subpackages/superstream/utils/validate.js'
 import { initLeaseObj, rentUnitList } from '@/subpackages/superstream/utils/constant.js'
@@ -211,9 +210,8 @@ createComponent({
     updateObj: initLeaseObj
   },
   computed: {
-    ...store.mapState(['showBottomNav']),
     categoryList() {
-      return config[this.categoryTypeId].category
+      return this.configById.category
     }
   },
   methods: {
@@ -248,16 +246,6 @@ createComponent({
     // note: 提交操作
     async releaseData() {
       this.submitData(validateLease, ['area', 'floor'])
-    },
-    openDropdown() {
-      this.setState({
-        showBottomNav: false
-      })
-    },
-    closeDropdown() {
-      this.setState({
-        showBottomNav: true
-      })
     }
   }
 })

@@ -277,14 +277,15 @@ const workerFilter = [{
   activeList: [],
   list: findWorkerCategory,
   max: 3
-}, {
-  type: 'dropdown',
-  id: 'distance',
-  text: '距离筛选',
-  initText: '距离筛选',
-  activeList: [],
-  value: [0, 100]
 }]
+// , {
+//   type: 'dropdown',
+//   id: 'distance',
+//   text: '距离筛选',
+//   initText: '距离筛选',
+//   activeList: [],
+//   value: [0, 100]
+// }
 
 const factoryFilter = [{
   type: 'radio',
@@ -393,6 +394,28 @@ const usedDetectFilter = [{
   activeList: []
 }]
 
+const tailingsList = [{
+  name: '面料',
+  value: '1'
+}, {
+  name: '成品',
+  value: '2'
+}, {
+  name: '辅料',
+  value: '3',
+  needDetail: true
+}]
+
+const tailingsFilter = [{
+  type: 'radio',
+  id: 'factoryScale',
+  text: '货品类别筛选',
+  initText: '货品类别筛选',
+  value: [],
+  activeList: [],
+  list: tailingsList
+}]
+
 export default {
   // note: 招工
   findWorker: {
@@ -460,7 +483,8 @@ export default {
   // note: 尾货处理
   tailings: {
     fromOrigin: 'tailings',
-    filterList: [],
+    category: tailingsList,
+    filterList: tailingsFilter,
     partyA: {
       title: ['尾货处理', '尾货处理列表']
     },

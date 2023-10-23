@@ -115,6 +115,9 @@
 import { createComponent } from '@mpxjs/core'
 import store from '@/store'
 createComponent({
+  options: {
+    styleIsolation: 'shared'
+  },
   properties: {
     show: {
       type: Boolean,
@@ -141,6 +144,10 @@ createComponent({
       value: []
     },
     needShowRadio: {
+      type: Boolean,
+      value: false
+    },
+    needShowCheckbox: {
       type: Boolean,
       value: false
     },
@@ -193,12 +200,12 @@ createComponent({
   },
   computed: {
     showRadio() {
-      const radioShowList = ['cooperType', 'orderType', 'factoryScale']
+      const radioShowList = ['cooperType', 'orderType', 'factoryScale', 'tailingsCategory']
       return radioShowList.includes(this.type) || this.needShowRadio
     },
     showCheckBox() {
       const checkboxShowList = ['fabricProp', 'productType']
-      return checkboxShowList.includes(this.type)
+      return checkboxShowList.includes(this.type) || this.needShowCheckbox
     }
   },
   methods: {
@@ -291,6 +298,10 @@ createComponent({
 
 </script>
 <style>
+.van-nav-bar__text{
+  font-size: 32rpx;
+  font-weight: bold;
+}
 .left-item{
   font-size: 32rpx;
 }

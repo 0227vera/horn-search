@@ -103,7 +103,6 @@ createPage({
           font-size $size-main
           color $color-main
           font-weight bold
-          filter drop-shadow(0px 4px 20px 0px rgba(0, 129, 255, 0.4))
         .tips
           position absolute
           top 0
