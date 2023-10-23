@@ -183,7 +183,7 @@ createComponent({
           })
           content.push({
             type: 'map',
-            text: '数量:',
+            text: '加工数量:',
             value: `{${item.num}}件左右-{${item.productTypeName}}`
           })
         } else if (this.fromOrigin === 'leaseTransfer') {

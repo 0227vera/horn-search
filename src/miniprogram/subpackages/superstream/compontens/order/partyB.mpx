@@ -274,7 +274,10 @@ createComponent({
       this.loading = false
       this.moreLoad.loading = false
       this.list = this.list.concat(list || [])
-      this.list = this.list.sort((a, b) => a.distance - b.distance)
+      console.log(this.filter)
+      if (this.fromOrigin !== 'factoryCooper' && !this.filter.cooperType?.length) {
+        this.list = this.list.sort((a, b) => a.distance - b.distance)
+      }
       if (this.list.length < total) {
         this.moreLoad.text = '~点击加载更多~'
         this.moreLoad.isClick = true

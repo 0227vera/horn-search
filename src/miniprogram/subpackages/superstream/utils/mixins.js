@@ -23,7 +23,7 @@ export const mixins = {
   computed: {
     ...store.mapState(['adInfo', 'fromOrigin', 'cacheForm', 'addressList', 'showBottomNav']),
     configById() {
-      return config[categoryMap[this.categoryTypeId]]
+      return config[this.categoryTypeId]
     },
     imagesValue() {
       if (this.updateObj.images.length) {

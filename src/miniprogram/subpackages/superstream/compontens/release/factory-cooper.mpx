@@ -195,10 +195,10 @@
     <!-- 位置相关 -->
     <van-field
       size="large"
-      label="位置"
+      label="{{addressName}}"
       type="textarea"
       autosize
-      title-width="80rpx"
+      title-width="160rpx"
       required
       is-link
       readonly
@@ -321,6 +321,12 @@ createComponent({
     },
     orderTypeList() {
       return this.configById.orderTypeList
+    },
+    addressName() {
+      if (this.updateObj.cooperType === '3') {
+        return '裁床地址'
+      }
+      return '地址'
     }
   },
   methods: {
