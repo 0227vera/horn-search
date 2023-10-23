@@ -112,6 +112,13 @@ createPage({
             text += `-${this.orderData.price}元`
           }
           return text
+        },
+        tailings: () => {
+          let text = this.orderData.categoryName
+          if (this.orderData.categorySub) {
+            text += `(${this.orderData.categorySub})`
+          }
+          return text
         }
       }
       return actions?.[this.fromOrigin]?.()

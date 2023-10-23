@@ -29,7 +29,7 @@
       bind:change="onFieldChange"
       id="categorySub"
     />
-     <!-- 位置相关 -->
+    <!-- 位置相关 -->
     <van-field size="large"
       label="位置"
       type="textarea"
@@ -56,7 +56,7 @@
       id="tel"
     />
     <!-- 图片 -->
-    <van-cell title="图片展示" size="large" title-width="160rpx" required value="{{imagesValue}}" border="{{false}}" />
+    <van-cell title="图片展示" size="large" title-width="160rpx" value="{{imagesValue}}" border="{{false}}" />
     <view class="image-container">
       <view class="iamge-content">
         <van-uploader
@@ -77,6 +77,39 @@
           <van-icon name="clear" bindtap="clearImg(item)" class="image-clear-icon"/>
         </view>
       </view>
+    </view>
+    <!-- 联系时间 -->
+    <view class="category-container">
+      <van-field
+        size="large"
+        label="联系时间"
+        class="category-content"
+        title-width="160rpx"
+        border="{{false}}"
+        input-align="right"
+        center
+        custom-class="custom-height"
+      >
+        <view slot="input" class="area-container">
+          <input
+            value="{{updateObj.times[0]}}"
+            disabled
+            placeholder="最早"
+            class="input"
+            bindtap="showPopupContainer('time', 'start')"
+          />
+          <text class="middle">~</text>
+          <input
+            value="{{updateObj.times[1]}}"
+            disabled
+            placeholder="最晚"
+            class="input"
+            bindtap="showPopupContainer('time', 'end')"
+          />
+        </view>
+        <view slot="button">
+        </view>
+      </van-field>
     </view>
     <!-- 补充 -->
     <van-field size="large"
@@ -100,6 +133,8 @@
   type="{{popupType}}"
   title="{{popupTitle}}"
   initRadio="{{initRadio}}"
+  initTime="{{initTime}}"
+  timeType="time"
   needShowRadio="{{needShowRadio}}"
   radioList="{{tailingsList}}"
   bind:close="closePopupContainer"
@@ -115,6 +150,7 @@ import config from '@/constant/release.js'
 import { mixins } from '@/subpackages/superstream/utils/mixins.js'
 import { tailingsValidate } from '@/subpackages/superstream/utils/validate.js'
 import { initTailingsObj } from '@/subpackages/superstream/utils/constant.js'
+import dayjs from 'dayjs'
 const store = getApp().globalStore
 
 createComponent({
@@ -128,6 +164,8 @@ createComponent({
     needShowRadio: false,
     popupTitle: '',
     initRadio: '',
+    initTime: 0,
+    currentTimeId: '',
     updateObj: initTailingsObj
   },
   computed: {
@@ -136,7 +174,7 @@ createComponent({
     }
   },
   methods: {
-    showPopupContainer(type) {
+    showPopupContainer(type, id) {
       this.initRadio = ''
       this.popupTitle = ''
       this.needShowRadio = false
@@ -144,6 +182,9 @@ createComponent({
         this.popupTitle = '请选择货品类别'
         this.initRadio = this.updateObj.category
         this.needShowRadio = true
+      } else if (type === 'time') {
+        this.currentTimeId = id
+        this.initTime = (id === 'start' ? this.updateObj.times?.[0] : this.updateObj.times?.[1]) || dayjs(Date.now()).format('HH:mm')
       } else if (type === 'address') {
         if (!this.addressList.length) {
           mpx.navigateTo({
@@ -160,7 +201,7 @@ createComponent({
       const { data, type } = detail
       const actions = {
         tailingsCategory: () => {
-          this.updateObj.category = data.id
+          this.updateObj.category = data.value
           this.updateObj.categoryName = data.name
           if (data.needDetail) {
             this.subCategoryInfo.show = true
@@ -173,6 +214,15 @@ createComponent({
         address: () => {
           this.updateObj.poi = data.poi
           this.updateObj.tel = data.tel
+        },
+        time: () => {
+          const { data } = detail
+          if (this.currentTimeId === 'start') {
+            this.updateObj.times[0] = data.time
+          } else {
+            this.updateObj.times[1] = data.time
+          }
+          console.log(this.updateObj)
         }
       }
       actions?.[type]?.()

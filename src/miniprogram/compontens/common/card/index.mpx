@@ -199,6 +199,34 @@ createComponent({
               value: item.note
             })
           }
+        } else if (this.fromOrigin === 'tailings') {
+          content.push({
+            type: 'map',
+            text: '类别:',
+            value: `${item.categoryName}${item.categorySub ? `(${item.categorySub})` : ''}`
+          })
+          if (item.times.length) {
+            const [start, end] = item.times
+            let text = ''
+            if (start && end) {
+              text = `${start}~${end}`
+            } else if (start) {
+              text = `${start}以后`
+            } else if (end) {
+              text = `${end}以前`
+            }
+            text && content.push({
+              type: 'map',
+              text: '联系点:',
+              value: `{${text}}`
+            })
+          }
+          if (item.note) {
+            content.push({
+              title: '补充:',
+              value: item.note
+            })
+          }
         }
         content.push({
           type: 'map',

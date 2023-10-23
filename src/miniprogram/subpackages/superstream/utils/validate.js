@@ -266,7 +266,7 @@ export const tailingsValidate = ({ updateObj, subCategoryInfo } = {}) => {
     text: ''
   }
   if (!updateObj.category) {
-    result.text = '请选择{货品类型}'
+    result.text = '请选择{货品类别}'
     return result
   }
   if (subCategoryInfo.show && !updateObj.categorySub) {
@@ -280,6 +280,13 @@ export const tailingsValidate = ({ updateObj, subCategoryInfo } = {}) => {
   if (!telReg.test(updateObj.tel)) {
     result.text = '请输入{正确的手机号}'
     return result
+  }
+  if (updateObj.times[0] && updateObj.times[1]) {
+    const [start, end] = updateObj.times
+    if (+(start.replace(':', '')) >= +(end.replace(':', ''))) {
+      result.text = '{联系时间}最早不能大于最晚'
+      return result
+    }
   }
   if (telReg.test(updateObj.note)) {
     result.text = '{补充说明}中不可带{电话号码}'

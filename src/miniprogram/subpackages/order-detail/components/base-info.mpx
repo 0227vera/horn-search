@@ -31,7 +31,7 @@ createComponent({
       const {
         categoryName, categorySub, categoryType, categoryTypeName, categoryNum, priceMin, priceMax, price, priceUnitName, num, numMin, numMax, origin, poi, tel, images, note, add, calllist, company,
         factoryScaleName, factoryScale, people, area, cooperTypeName, fabricPropName, productTypeName, orderTypeName, color, code,
-        deposit, device, floor, peopleMin, peopleMax
+        deposit, device, floor, peopleMin, peopleMax, times
       } = this.orderData
       const list = [{
         title: '位置',
@@ -188,6 +188,32 @@ createComponent({
         if (note) {
           list.push({
             title: '产品概述',
+            value: note
+          })
+        }
+      } else if (this.fromOrigin === 'tailings') {
+        list.push({
+          title: '货品类别',
+          value: `${categoryName}${categorySub ? `(${categorySub})` : ''}`
+        })
+        if (times.length) {
+          const [start, end] = times
+          let text = ''
+          if (start && end) {
+            text = `${start}~${end}`
+          } else if (start) {
+            text = `${start}以后`
+          } else if (end) {
+            text = `${end}以前`
+          }
+          text && list.push({
+            title: '联系时间',
+            value: text
+          })
+        }
+        if (note) {
+          list.push({
+            title: '补充',
             value: note
           })
         }

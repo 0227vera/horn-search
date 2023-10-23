@@ -7,18 +7,20 @@ class ReleaseModel extends BaseModel {
 // 集合名
 ReleaseModel.CL = "warrior_release_tailings"
 
+// category: '',
+// categoryName: '',
+// categorySub: '',
+// poi: {},
+// tel: '',
+// images: [],
+// times: [],
+// note: ''
+
 ReleaseModel.DB_STRUCTURE = {
   _pid: 'string|true',
   category: 'string|true',
   categoryName: 'string|true',
   categorySub: 'string|false',
-  area: 'string|true',
-  floor: 'string|true',
-  price: 'string|true',
-  priceUnit: 'string|true',
-  priceUnitName: 'string|true',
-  deposit: 'string|true',
-  device: 'string|true',
   status: 'string|true',
   calllist: 'array|false',
   readlist: 'array|false',
@@ -26,7 +28,8 @@ ReleaseModel.DB_STRUCTURE = {
   location: 'geopoint|true',
   tel: 'string|true',
   images: 'array|false',
-  add: 'string|false',
+  note: 'string|false',
+  times: 'array|false',
   OPENID: 'string|true',
   RELEASE_ID: 'string|true',
   RELEASE_ADD_TIME: 'int|false',

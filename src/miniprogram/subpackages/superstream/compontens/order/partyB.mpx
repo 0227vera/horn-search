@@ -181,8 +181,8 @@ createComponent({
     },
     listParams() {
       const params = {
-        status: ['in', ['2', '3']],
-        OPENID: ['not in', [this.openid]]
+        status: ['in', ['2', '3']]
+        // OPENID: ['not in', [this.openid]]
       }
       if (this.adInfo?.location?.lat) {
         Object.assign(params, {

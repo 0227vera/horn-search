@@ -11,13 +11,14 @@
     <!-- 时间选择 -->
     <van-datetime-picker
       wx:if="{{type === 'time'}}"
-      type="datetime"
-      title="选择截止时间"
+      type="{{timeType}}"
+      title="{{title || '选择截止时间'}}"
       value="{{ currentDate }}"
       min-date="{{ minDate }}"
       bind:input="onTimeInput"
       bind:confirm="onTimeConfirm"
       bind:cancel="close"
+      filter="{{ filter }}"
       formatter="{{formatter}}"
     />
     <!-- 位置选择 -->
@@ -114,6 +115,8 @@
 <script>
 import { createComponent } from '@mpxjs/core'
 import store from '@/store'
+import dayjs from 'dayjs'
+
 createComponent({
   options: {
     styleIsolation: 'shared'
@@ -158,6 +161,14 @@ createComponent({
     initCheckbox: {
       type: Array,
       value: ''
+    },
+    timeType: {
+      type: String,
+      value: 'datetime'
+    },
+    initTime: {
+      type: String,
+      value: ''
     }
   },
   watch: {
@@ -172,6 +183,12 @@ createComponent({
         this.checkbox = val
       },
       immediate: true
+    },
+    initTime: {
+      handler(val) {
+        this.currentDate = val
+      },
+      immediate: true
     }
   },
   data: {
@@ -183,7 +200,7 @@ createComponent({
     address: {},
     // note: 时间相关
     minDate: Date.now(),
-    currentDate: Date.now(),
+    currentDate: '',
     formatter(type, value) {
       const types = {
         year: '年',
@@ -193,6 +210,13 @@ createComponent({
         minute: '分'
       }
       return `${value}${types[type] || ''}`
+    },
+    filter(type, options) {
+      if (type === 'minute') {
+        return options.filter((option) => option % 15 === 0)
+      }
+
+      return options
     },
     // 单选
     radio: '',
@@ -235,7 +259,7 @@ createComponent({
       this.currentDate = e.detail
     },
     onTimeConfirm() {
-      this.confirm({ ownTime: this.currentDate })
+      this.confirm({ time: this.currentDate })
     },
     // node: 位置
     addressChange(e) {
