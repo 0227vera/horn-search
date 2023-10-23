@@ -233,9 +233,7 @@ createPage({
       }
       if (this.addInfo.checked) {
         list.forEach(item => {
-          if (item.id !== this.addInfo.id) {
-            item.checked = false
-          }
+          item.checked = item.id === this.addInfo.id
         })
       }
       mpx.showLoading({

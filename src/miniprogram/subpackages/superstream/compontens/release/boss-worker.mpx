@@ -121,7 +121,7 @@
       title-width="80rpx"
       required
       value="{{ updateObj.num }}"
-      type="digit"
+      type="number"
       placeholder="请输入单量"
       input-align="right"
       bind:change="onFieldChange"
@@ -129,7 +129,7 @@
     >
       <!-- <view slot="input" class="area-container">
         <input
-          type="digit"
+          type="number"
           value="{{updateObj.numMin}}"
           id="numMin"
           bind:input="onAreaFieldChange"
@@ -138,7 +138,7 @@
         />
         <text class="middle">~</text>
         <input
-          type="digit"
+          type="number"
           value="{{updateObj.numMax}}"
           id="numMax"
           bind:input="onAreaFieldChange"
@@ -224,16 +224,17 @@
       id="note"
       bind:change="onFieldChange"
     />
-    <!-- 待遇补充 -->
+    <!-- 招工概述 -->
     <van-field
       size="large"
-      label="待遇补充"
+      label="招工概述"
       title-width="160rpx"
       value="{{ updateObj.add }}"
-      placeholder="例如:本厂自产自销,房补300元等"
+      placeholder="请输入招工概述"
       input-align="left"
       type="textarea"
       autosize
+      error-message="{{updateObj.add ? '' : '例如：本厂自产自销、源充足、环境良好、出粮准时、外住房补300、周末不加班等'}}"
       id="add"
       bind:change="onFieldChange"
     />

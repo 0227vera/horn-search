@@ -63,7 +63,7 @@
       title-width="80rpx"
       required
       value="{{ updateObj.floor }}"
-      type="digit"
+      type="number"
       placeholder="请输入楼层"
       input-align="right"
       bind:change="onFieldChange"
@@ -81,7 +81,7 @@
         border="{{false}}"
         value="{{ updateObj.price }}"
         placeholder="请输入租金"
-        type="digit"
+        type="number"
         input-align="right"
         bind:change="onFieldChange"
         id="price"
@@ -107,7 +107,7 @@
       title-width="80rpx"
       required
       value="{{ updateObj.deposit }}"
-      type="digit"
+      type="number"
       placeholder="请输入押金"
       input-align="right"
       bind:change="onFieldChange"

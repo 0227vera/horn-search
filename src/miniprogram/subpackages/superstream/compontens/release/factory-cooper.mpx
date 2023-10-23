@@ -17,20 +17,19 @@
     <van-field
       size="large"
       wx:if="{{updateObj.factoryScale}}"
-      required
       label="{{updateObj.factoryScale === '1' ? '工厂人数' : '作坊人数'}}"
       title-width="160rpx"
       value="{{ updateObj.people }}"
       placeholder="请输入人数"
-      type="digit"
+      type="number"
       input-align="right"
       bind:change="onFieldChange"
       id="people"
       center
     >
-      <view slot="input" wx:if="{{updateObj.factoryScale === '2'}}" class="area-container">
+      <!-- <view slot="input" wx:if="{{updateObj.factoryScale === '2'}}" class="area-container">
         <input
-          type="digit"
+          type="number"
           value="{{updateObj.peopleMin}}"
           id="peopleMin"
           bind:input="onAreaFieldChange"
@@ -39,15 +38,15 @@
         />
         <text class="middle">~</text>
         <input
-          type="digit"
+          type="number"
           value="{{updateObj.peopleMax}}"
           id="peopleMax"
           bind:input="onAreaFieldChange"
           placeholder="人数"
           class="input"
         />
-      </view>
-      <view slot="right-icon" style="color: #333;">人(以上)</view>
+      </view> -->
+      <view slot="right-icon" style="color: #333;">{{updateObj.factoryScale === '1' ? '人(以上)' : '人(左右)'}}</view>
     </van-field>
     <!-- 地域要求 -->
     <van-field
@@ -75,6 +74,66 @@
       placeholder="请点击选择合作类型"
       bind:tap="showPopupContainer('cooperType')"
     />
+     <!-- 产品类型 -->
+    <van-field
+      size="large"
+      label="产品类型"
+      title-width="160rpx"
+      required
+      is-link
+      readonly
+      value="{{updateObj.productTypeName}}"
+      input-align="right"
+      placeholder="请点击选择产品类型"
+      bind:tap="showPopupContainer('productType')"
+    />
+     <!-- 面料属性 -->
+    <van-field
+      size="large"
+      label="面料属性"
+      title-width="160rpx"
+      required
+      is-link
+      readonly
+      value="{{updateObj.fabricPropName}}"
+      input-align="right"
+      placeholder="请点击选择面料属性"
+      bind:tap="showPopupContainer('fabricProp')"
+    />
+    <!-- 数量相关 -->
+    <van-field
+      size="large"
+      label="生产数量"
+      title-width="160rpx"
+      placeholder="请输入生产数量"
+      required
+      type="number"
+      value="{{ updateObj.num }}"
+      input-align="right"
+      bind:change="onFieldChange"
+      id="num"
+    >
+      <!-- <view slot="input" class="area-container">
+        <input
+          type="number"
+          value="{{updateObj.numMin}}"
+          id="numMin"
+          bind:input="onAreaFieldChange"
+          placeholder="最少"
+          class="input"
+        />
+        <text class="middle">~</text>
+        <input
+          type="number"
+          value="{{updateObj.numMax}}"
+          id="numMax"
+          bind:input="onAreaFieldChange"
+          placeholder="最多"
+          class="input"
+        />
+      </view> -->
+      <view slot="right-icon" style="color: #333; font-weight: bold;">件(左右)</view>
+    </van-field>
     <!-- 单价 -->
     <van-field
       size="large"
@@ -90,67 +149,42 @@
     >
       <view slot="right-icon" style="color: #333; font-weight: bold;">元/件</view>
     </van-field>
-    <!-- 数量相关 -->
+    <!-- 颜色码数 -->
     <van-field
       size="large"
-      label="生产数量"
+      label="颜色码数"
       title-width="160rpx"
-      required
+      placeholder="请输入颜色码数"
+      type="number"
       input-align="right"
+      center
     >
-      <view slot="input" class="area-container">
+     <view slot="input" class="area-container">
         <input
-          type="digit"
-          value="{{updateObj.numMin}}"
-          id="numMin"
+          type="number"
+          value="{{updateObj.color}}"
+          id="color"
           bind:input="onAreaFieldChange"
-          placeholder="最少"
+          placeholder="几"
           class="input"
         />
-        <text class="middle">~</text>
+        <text class="middle">色</text>
         <input
-          type="digit"
-          value="{{updateObj.numMax}}"
-          id="numMax"
+          type="number"
+          value="{{updateObj.code}}"
+          id="code"
           bind:input="onAreaFieldChange"
-          placeholder="最多"
+          placeholder="几"
           class="input"
         />
+        <text class="middle">码</text>
       </view>
-      <view slot="right-icon" style="color: #333; font-weight: bold;">件</view>
     </van-field>
-    <!-- 面料属性 -->
-    <van-field
-      size="large"
-      label="面料属性"
-      title-width="160rpx"
-      required
-      is-link
-      readonly
-      value="{{updateObj.fabricPropName}}"
-      input-align="right"
-      placeholder="请点击选择面料属性"
-      bind:tap="showPopupContainer('fabricProp')"
-    />
-    <!-- 产品类型 -->
-    <van-field
-      size="large"
-      label="产品类型"
-      title-width="160rpx"
-      required
-      is-link
-      readonly
-      value="{{updateObj.productTypeName}}"
-      input-align="right"
-      placeholder="请点击选择产品类型"
-      bind:tap="showPopupContainer('productType')"
-    />
     <!-- 订单类型 -->
     <van-field
       size="large"
       label="订单类型"
       title-width="160rpx"
-      required
       is-link
       readonly
       value="{{updateObj.orderTypeName}}"
@@ -158,38 +192,6 @@
       placeholder="请点击选择订单类型"
       bind:tap="showPopupContainer('orderType')"
     />
-    <!-- 颜色码数 -->
-    <van-field
-      size="large"
-      label="颜色码数"
-      title-width="160rpx"
-      required
-      placeholder="请输入颜色码数"
-      type="digit"
-      input-align="right"
-      center
-    >
-     <view slot="input" class="area-container">
-        <input
-          type="digit"
-          value="{{updateObj.color}}"
-          id="color"
-          bind:input="onAreaFieldChange"
-          placeholder="颜色"
-          class="input"
-        />
-        <text class="middle">色</text>
-        <input
-          type="digit"
-          value="{{updateObj.code}}"
-          id="code"
-          bind:input="onAreaFieldChange"
-          placeholder="码数"
-          class="input"
-        />
-        <text class="middle">码</text>
-      </view>
-    </van-field>
     <!-- 位置相关 -->
     <van-field
       size="large"
@@ -241,14 +243,15 @@
         </view>
       </view>
     </view>
-    <!-- 补充 -->
+    <!-- 合作概述 -->
     <van-field
       size="large"
-      label="补充"
+      label="合作概述"
       title-width="160rpx"
       value="{{ updateObj.add }}"
-      placeholder="例如十三行写字楼货源，要求管理质检等人员齐全能马上开货、看质量返单、配合度高、跑量为主等"
+      placeholder="请输入合作概述"
       input-align="left"
+      error-message="{{updateObj.add ? '' : '例如十三行写字楼货源，要求管理质检等人员齐全能马上开货、看质量返单、配合度高、跑量为主等'}}"
       type="textarea"
       autosize
       id="add"

@@ -109,7 +109,7 @@ createComponent({
         let right = ''
         if (distance) {
           if (distance < 0.1) {
-            right = '在您附近'
+            right = '距您100米内'
           } else {
             right = `距您${distance}km`
           }
@@ -148,9 +148,9 @@ createComponent({
         } else if (this.fromOrigin === 'factoryCooper') {
           let factoryScaleValue = `{${item.factoryScaleName}}`
           if (item.factoryScale === '1') {
-            factoryScaleValue += `-(${item.people}人以上)`
+            item.people && (factoryScaleValue += `-(${item.people}人以上)`)
           } else if (item.factoryScale === '2') {
-            factoryScaleValue += `-(${item.peopleMin}~${item.peopleMin}人)`
+            item.people && (factoryScaleValue += `-(${item.people}人(左右))`)
           }
           content.push({
             type: 'map',
@@ -160,7 +160,7 @@ createComponent({
           content.push({
             type: 'map',
             text: '数量:',
-            value: `{${item.numMin}}件~{${item.numMax}}件`
+            value: `{${item.num}}件(左右)`
           })
           content.push({
             type: 'map',

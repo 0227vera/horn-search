@@ -915,7 +915,7 @@ function fmtWhere(where) {
     where.location = dbCmd.geoNear({
       geometry: Geo.Point(where.location.lng, where.location.lat),
       minDistance: where.location.minDistance || 0,
-      maxDistance: where.location.maxDistance || 100 * 1000
+      maxDistance: where.location.maxDistance || 1000000000 * 1000
     })
     console.log('where.location=======+>', where.location)
   }

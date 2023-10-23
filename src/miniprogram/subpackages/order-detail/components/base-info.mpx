@@ -95,9 +95,9 @@ createComponent({
       } else if (this.fromOrigin === 'factoryCooper') {
         let factoryScaleText = factoryScaleName
         if (factoryScale === '1') {
-          factoryScaleText += `(${people}人以上)`
+          people && (factoryScaleText += `(${people}人以上)`)
         } else if (factoryScale === '2') {
-          factoryScaleText += `(${peopleMin}人~${peopleMax}人)`
+          people && (factoryScaleText += `(${people}左右)`)
         }
         list.push({
           title: '工厂规模',
@@ -107,39 +107,41 @@ createComponent({
           title: '地域要求',
           value: area
         })
-        if (price) {
-          list.push({
-            title: '单价',
-            value: `${price}元/件`
-          })
-        }
         list.push({
           title: '合作类型',
           value: cooperTypeName
-        })
-        list.push({
-          title: '生产数量',
-          value: `${numMin}~${numMax}件`
-        })
-        list.push({
-          title: '面料属性',
-          value: fabricPropName
         })
         list.push({
           title: '产品类型',
           value: productTypeName
         })
         list.push({
+          title: '面料属性',
+          value: fabricPropName
+        })
+        list.push({
+          title: '生产数量',
+          value: `${num}件(左右)`
+        })
+        if (price) {
+          list.push({
+            title: '单价',
+            value: `${price}元/件`
+          })
+        }
+        if (color && code) {
+          list.push({
+            title: '颜色码数',
+            value: `${color}色${code}码`
+          })
+        }
+        orderTypeName && list.push({
           title: '订单类型',
           value: orderTypeName
         })
-        list.push({
-          title: '颜色码数',
-          value: `${color}色${code}码`
-        })
         if (add) {
           list.push({
-            title: '补充',
+            title: '合作概述',
             value: add
           })
         }

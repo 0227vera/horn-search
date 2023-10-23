@@ -297,6 +297,14 @@ const factoryFilter = [{
   list: factoryScaleList
 }, {
   type: 'checkbox',
+  id: 'productType',
+  text: '产品类型筛选',
+  initText: '产品类型筛选',
+  value: [],
+  activeList: [],
+  list: productTypeList
+}, {
+  type: 'checkbox',
   id: 'cooperType',
   text: '合作类型筛选',
   initText: '合作类型筛选',
@@ -311,14 +319,6 @@ const factoryFilter = [{
   value: [],
   activeList: [],
   list: fabricPropList
-}, {
-  type: 'checkbox',
-  id: 'productType',
-  text: '产品类型筛选',
-  initText: '产品类型筛选',
-  value: [],
-  activeList: [],
-  list: productTypeList
 }, {
   type: 'checkbox',
   id: 'orderType',

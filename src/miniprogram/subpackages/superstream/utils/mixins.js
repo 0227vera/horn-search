@@ -42,6 +42,7 @@ export const mixins = {
       })
       return
     }
+    await this.setLocation()
     if (this.adInfo.address) {
       this.updateObj.poi = {
         ...this.adInfo,
