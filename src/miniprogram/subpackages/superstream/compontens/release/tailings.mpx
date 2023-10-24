@@ -222,7 +222,6 @@ createComponent({
           } else {
             this.updateObj.times[1] = data.time
           }
-          console.log(this.updateObj)
         }
       }
       actions?.[type]?.()

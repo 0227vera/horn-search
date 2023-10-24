@@ -140,7 +140,6 @@ createComponent({
               _this.scale = 12
             },
             fail(err) {
-              console.log('============>', err)
               console.log(err)
             }
           })

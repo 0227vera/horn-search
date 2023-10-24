@@ -335,7 +335,6 @@ createComponent({
           this.updateObj.factoryScaleName = data.name
         },
         cooperType: () => {
-          console.log(data)
           this.updateObj.cooperType = data.value
           this.updateObj.cooperTypeName = data.name
         },
