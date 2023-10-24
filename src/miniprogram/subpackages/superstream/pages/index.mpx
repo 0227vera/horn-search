@@ -4,6 +4,7 @@
     clickLeft="{{clickLeft}}"
     wx:show="{{pageShow}}"
     containerBg="linear-gradient(to bottom, #8aa7ec, #79b3f4, #ffffff)"
+    bind:scrolltobottom="scrollToBottom"
   >
     <view class="{{roleType === 'partyA' && currentCom === footerList[0].key ? 'component-container' : ''}}">
       <component
@@ -12,6 +13,7 @@
         updateList="{{updateList}}"
         bind:release-jump-done="releaseJumpDone"
         bind:again-order="againOrder"
+        toBottom="{{toBottom}}"
       />
     </view>
     <footer wx:if="{{shoeFooterList}}" list="{{footerList}}" initActive="{{currentCom}}" bind:tab-change="tabChange" />
@@ -28,7 +30,7 @@
   />
   <back-home showShare showBackHome="{{false}}" wx:if="{{roleType === 'partyB'}}"/>
   <van-dialog id="van-dialog" />
-  <tips autoStyle="{{tipsStyle}}" key="superstream-tips" text="{{tipsText}}" upLeft="170rpx" />
+  <tips autoStyle="{{tipsStyle}}" key="superstream-tips" text="可点击进行类型切换" upLeft="170rpx" />
 </template>
 
 <script>
@@ -50,7 +52,7 @@ createPage({
     popupType: 'radio',
     showPopup: false,
     updateList: false,
-    tipsText: '可点击进行类型切换'
+    toBottom: ''
   },
   async onLoad(params) {
     /**
@@ -210,6 +212,12 @@ createPage({
         cacheForm: e.detail
       })
       this.currentCom = this.footerList[0].key
+    },
+    scrollToBottom() {
+      this.toBottom = true
+      setTimeout(() => {
+        this.toBottom = false
+      })
     }
   }
 })

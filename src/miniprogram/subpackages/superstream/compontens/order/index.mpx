@@ -35,6 +35,10 @@ createComponent({
     updateList: {
       type: Boolean,
       value: false
+    },
+    toBottom: {
+      type: Boolean,
+      value: false
     }
   },
   data: {
@@ -59,6 +63,11 @@ createComponent({
     }
   },
   watch: {
+    toBottom(val) {
+      if (val) {
+        this.moreLoadHandle()
+      }
+    },
     updateList() {
       this.orderList = []
       this.page = JSON.parse(JSON.stringify(pageInfo))

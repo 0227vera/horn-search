@@ -142,6 +142,10 @@ createComponent({
     updateList: {
       type: Boolean,
       value: false
+    },
+    toBottom: {
+      type: Boolean,
+      value: false
     }
   },
   data: {
@@ -233,6 +237,14 @@ createComponent({
     }
   },
   watch: {
+    toBottom: {
+      handler(val) {
+        if (val) {
+          this.moreLoadHandle()
+        }
+      },
+      immediate: true
+    },
     filterSure(val) {
       this.renderFilterList = JSON.parse(JSON.stringify(val))
     },
@@ -274,7 +286,6 @@ createComponent({
       this.loading = false
       this.moreLoad.loading = false
       this.list = this.list.concat(list || [])
-      console.log(this.filter)
       if (this.fromOrigin !== 'factoryCooper' && !this.filter.cooperType?.length) {
         this.list = this.list.sort((a, b) => a.distance - b.distance)
       }

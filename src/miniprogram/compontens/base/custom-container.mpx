@@ -96,7 +96,6 @@ createComponent({
       this.triggerEvent('footer-btn')
     },
     scroll(e) {
-      console.log(e.detail)
       this.scrollTop = e.detail.scrollTop
     },
     scrollToLower() {
