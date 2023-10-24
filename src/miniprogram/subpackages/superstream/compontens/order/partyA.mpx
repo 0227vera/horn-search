@@ -20,6 +20,7 @@
 <script>
 import mpx, { createComponent } from '@mpxjs/core'
 import { updateRelease } from '@/api'
+import Dialog from '@vant/weapp/dialog/dialog'
 import store from '@/store'
 createComponent({
   properties: {
@@ -76,18 +77,24 @@ createComponent({
             })
             return
           }
-          mpx.showLoading({
-            title: '关单中……'
+          Dialog.confirm({
+            title: '提示',
+            message: `是否确定关闭此订单？`
+          }).then(async () => {
+            mpx.showLoading({
+              title: '关单中……'
+            })
+            await updateRelease({
+              _id: item._id,
+              status: '4'
+            })
+            mpx.showToast({
+              icon: 'success',
+              title: '关单成功'
+            })
+            this.triggerEvent('close-order', item)
           })
-          await updateRelease({
-            _id: item._id,
-            status: '4'
-          })
-          mpx.showToast({
-            icon: 'success',
-            title: '关单成功'
-          })
-          this.triggerEvent('close-order', item)
+
           break
         case 'again':
           this.triggerEvent('again-order', item)

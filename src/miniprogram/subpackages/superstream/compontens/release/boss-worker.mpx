@@ -127,25 +127,6 @@
       bind:change="onFieldChange"
       id="num"
     >
-      <!-- <view slot="input" class="area-container">
-        <input
-          type="number"
-          value="{{updateObj.numMin}}"
-          id="numMin"
-          bind:input="onAreaFieldChange"
-          placeholder="最少"
-          class="input"
-        />
-        <text class="middle">~</text>
-        <input
-          type="number"
-          value="{{updateObj.numMax}}"
-          id="numMax"
-          bind:input="onAreaFieldChange"
-          placeholder="最多"
-          class="input"
-        />
-      </view> -->
       <view slot="right-icon" style="color: #333; font-weight: bold;">件</view>
     </van-field>
     <!-- 位置相关 -->

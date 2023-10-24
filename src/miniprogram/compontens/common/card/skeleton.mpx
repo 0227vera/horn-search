@@ -1,6 +1,6 @@
 <template>
   <view class="container" style="{{mstyle}}">
-    <view class="content" wx:for="{{3}}">
+    <view class="content" wx:for="{{4}}">
       <view class="content-top">
         <view class="content-top-img item"></view>
         <view class="content-top-texts">

@@ -234,7 +234,7 @@ createPage({
 <script type="application/json">
   {
     "usingComponents": {
-      "custom-container": "@/compontens/base/custom-container?root=common-coms-page",
+      "custom-container": "@/compontens/base/custom-container",
       "popup": "@/subpackages/superstream/compontens/popup/index.mpx",
       "back-home": "@/compontens/base/back-home.mpx?root=common-coms-page",
       "footer": "@/compontens/base/footer.mpx",
@@ -250,7 +250,6 @@ createPage({
       "van-dialog": "@vant/weapp/dialog/index?root=vant-page"
     },
     "componentPlaceholder": {
-      "custom-container": "view",
       "tips": "view",
       "back-home": "view",
       "van-dialog": "view"

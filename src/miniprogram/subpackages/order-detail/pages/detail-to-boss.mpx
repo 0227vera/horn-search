@@ -37,12 +37,14 @@
   </custom-container>
   <nav-footer wx:if="{{shareTitle}}" list="{{footerList}}" />
   <back-home wx:if="{{shareTitle}}" showShare />
+  <van-dialog id="van-dialog" />
 </template>
 
 <script>
 import mpx, { createPage } from '@mpxjs/core'
 import { getReleaseOneById, updateRelease } from '@/api'
 import store from '@/store'
+import Dialog from '@vant/weapp/dialog/dialog'
 import mixins from '@/subpackages/order-detail/utils.js/mixins.js'
 
 createPage({
@@ -76,15 +78,23 @@ createPage({
             })
             return
           }
-          const res = await updateRelease({
-            _id: this._id,
-            status: '4'
+          Dialog.confirm({
+            title: '提示',
+            message: `是否确定关闭${this.shareTitle}？`
+          }).then(async () => {
+            mpx.showLoading({
+              title: '关单中……'
+            })
+            const res = await updateRelease({
+              _id: this._id,
+              status: '4'
+            })
+            mpx.showToast({
+              icon: 'success',
+              title: '关单成功'
+            })
+            mpx.navigateBack()
           })
-          mpx.showToast({
-            icon: 'success',
-            title: '关单成功'
-          })
-          mpx.navigateBack()
         }
       }, {
         name: '再来一单',
@@ -188,6 +198,7 @@ createPage({
       "finder": "@/compontens/base/finder.mpx",
       "nav-footer": "@/compontens/base/nav-footer.mpx?root=common-coms-page",
       "base-info": "../components/base-info.mpx",
+      "van-dialog": "@vant/weapp/dialog/index?root=vant-page",
       "back-home": "@/compontens/base/back-home.mpx?root=common-coms-page"
     },
     "componentPlaceholder": {
@@ -197,7 +208,8 @@ createPage({
       "van-cell": "view",
       "van-cell-group": "view",
       "van-steps": "view",
-      "van-loading": "view"
+      "van-loading": "view",
+      "van-dialog": "view"
     },
     "navigationStyle": "custom"
   }
