@@ -35,7 +35,7 @@ createComponent({
     }
   },
   data: {
-    scale: 12,
+    scale: 10,
     containerStyle: {},
     polyline: []
   },
@@ -102,42 +102,46 @@ createComponent({
             left: 0,
             top: 0
           }
-          this.scale = 14
+          this.scale = 12
         } else {
           this.containerStyle = {}
-          this.scale = 12
+          this.scale = 10
         }
       },
       immediate: true
     },
-    markers (val) {
-      console.log('val---->', val)
-      if (val.length === 2) {
-        const _this = this
-        this.mapSdk.direction({
-          mode: 'driving',
-          from: {
-            latitude: val[0].latitude,
-            longitude: val[0].longitude
-          },
-          to: {
-            latitude: val[1].latitude,
-            longitude: val[1].longitude
-          },
-          success (res) {
-            _this.polyline = res.result.routes.map((item) => ({
-              points: _this.changepolylineData(item.polyline),
-              color: '#07c160',
-              width: 10
-            }))
-            _this.scale = 12
-          },
-          fail(err) {
-            console.log(err)
-            console.log(err)
-          }
-        })
-      }
+    markers: {
+      handler(val){
+        if (val.length === 2) {
+          const _this = this
+          console.log(val)
+          this.mapSdk.direction({
+            mode: 'driving',
+            from: {
+              latitude: val[0].latitude,
+              longitude: val[0].longitude
+            },
+            to: {
+              latitude: val[1].latitude,
+              longitude: val[1].longitude
+            },
+            success (res) {
+              console.log('---------->', res)
+              _this.polyline = res.result.routes.map((item) => ({
+                points: _this.changepolylineData(item.polyline),
+                color: '#07c160',
+                width: 10
+              }))
+              _this.scale = 12
+            },
+            fail(err) {
+              console.log('============>', err)
+              console.log(err)
+            }
+          })
+        }
+      },
+      immediate: true
     }
   },
   async attached () {
