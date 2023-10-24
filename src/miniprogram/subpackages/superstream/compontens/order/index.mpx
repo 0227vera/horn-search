@@ -191,9 +191,14 @@ createComponent({
   {
     "usingComponents": {
       "partyA": "./partyA",
-      "van-icon": "@vant/weapp/icon/index",
-      "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
-      "van-dropdown-item": "@vant/weapp/dropdown-item/index"
+      "van-icon": "@vant/weapp/icon/index?root=vant-page",
+      "van-dropdown-menu": "@vant/weapp/dropdown-menu/index?root=vant-page",
+      "van-dropdown-item": "@vant/weapp/dropdown-item/index?root=vant-page"
+    },
+    "componentPlaceholder": {
+      "van-dropdown-menu": "view",
+      "van-dropdown-item": "view",
+      "van-icon": "view"
     }
   }
 </script>

@@ -198,12 +198,20 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "van-empty": "@vant/weapp/empty/index",
-      "van-button": "@vant/weapp/button/index",
-      "van-checkbox": "@vant/weapp/checkbox/index",
-      "van-cell": "@vant/weapp/cell/index",
-      "van-cell-group": "@vant/weapp/cell-group/index",
-      "van-divider": "@vant/weapp/divider/index"
+      "van-empty": "@vant/weapp/empty/index?root=vant-page",
+      "van-button": "@vant/weapp/button/index?root=vant-page",
+      "van-checkbox": "@vant/weapp/checkbox/index?root=vant-page",
+      "van-cell": "@vant/weapp/cell/index?root=vant-page",
+      "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page",
+      "van-divider": "@vant/weapp/divider/index?root=vant-page"
+    },
+    "componentPlaceholder": {
+      "van-empty": "view",
+      "van-button": "view",
+      "van-checkbox": "view",
+      "van-cell": "view",
+      "van-cell-group": "view",
+      "van-divider": "view"
     }
   }
 </script>

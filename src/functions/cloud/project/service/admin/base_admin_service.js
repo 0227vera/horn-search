@@ -21,7 +21,7 @@ class BaseAdminService extends BaseService {
     let where = {
       ADMIN_OPENID: openid
     }
-    let admin = await AdminModel.getOne(where, 'ADMIN_ID,ADMIN_PHONE,ADMIN_NAME,ADMIN_TYPE')
+    let admin = await AdminModel.getOne(where)
     if (!admin) {
       this.AppError('管理员不存在', appCode.ADMIN_ERROR)
     }
@@ -31,9 +31,7 @@ class BaseAdminService extends BaseService {
   /** 写入日志 */
   async insertLog(content, admin, type) {
     if (!admin) return
-
     if (config.MASK_IS_OPEN && config.MASK_ADMIN_PHONE && admin.ADMIN_PHONE === config.MASK_ADMIN_PHONE) return
-
     let data = {
       LOG_CONTENT: content,
       LOG_ADMIN_ID: admin.ADMIN_ID,

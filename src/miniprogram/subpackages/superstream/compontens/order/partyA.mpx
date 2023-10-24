@@ -130,9 +130,14 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "card": "@/compontens/common/card/index.mpx",
-      "van-loading": "@vant/weapp/loading/index",
-      "van-empty": "@vant/weapp/empty/index"
+      "card": "@/compontens/common/card/index.mpx?root=common-coms-page",
+      "van-loading": "@vant/weapp/loading/index?root=vant-page",
+      "van-empty": "@vant/weapp/empty/index?root=vant-page"
+    },
+    "componentPlaceholder": {
+      "card": "view",
+      "van-loading": "view",
+      "van-empty": "view"
     }
   }
 </script>

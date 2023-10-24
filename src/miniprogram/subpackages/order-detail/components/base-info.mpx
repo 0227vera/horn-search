@@ -247,8 +247,12 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "van-cell": "@vant/weapp/cell/index",
-      "van-cell-group": "@vant/weapp/cell-group/index"
+      "van-cell": "@vant/weapp/cell/index?root=vant-page",
+      "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page"
+    },
+    "componentPlaceholder": {
+      "van-cell": "view",
+      "van-cell-group": "view"
     },
     "navigationStyle": "custom"
   }

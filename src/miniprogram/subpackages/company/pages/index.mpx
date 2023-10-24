@@ -35,9 +35,14 @@ createPage({
 <script type="application/json">
   {
     "usingComponents": {
-      "custom-container": "@/compontens/base/custom-container",
-      "van-cell": "@vant/weapp/cell/index",
-      "van-cell-group": "@vant/weapp/cell-group/index"
+      "custom-container": "@/compontens/base/custom-container?root=common-coms-page",
+      "van-cell": "@vant/weapp/cell/index?root=vant-page",
+      "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page"
+    },
+    "componentPlaceholder": {
+      "custom-container": "view",
+      "van-cell": "view",
+      "van-cell-group": "view"
     },
     "navigationStyle": "custom"
   }

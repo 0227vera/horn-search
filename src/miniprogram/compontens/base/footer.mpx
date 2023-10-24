@@ -75,8 +75,12 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "van-tabbar": "@vant/weapp/tabbar/index",
-      "van-tabbar-item": "@vant/weapp/tabbar-item/index"
+      "van-tabbar": "@vant/weapp/tabbar/index?root=vant-page",
+      "van-tabbar-item": "@vant/weapp/tabbar-item/index?root=vant-page"
+    },
+    "componentPlaceholder": {
+      "van-tabbar": "view",
+      "van-tabbar-item": "view"
     }
   }
 </script>

@@ -4,32 +4,24 @@
   lefticon="wap-home"
   containerBg="linear-gradient(to bottom, #8aa7ec, #79b3f4, #ffffff)"
 >
-    <!-- <view class="navbar">
-      <view class="navbar-content">
-        <view wx:for="{{navbar}}" wx:key="*this" class="navbar-content-item" wx:if="{{!item.hide}}" bindtap="itemtaphandle(item)">
-          <van-icon name="{{item.icon}}" class="navbar-content-item-icon" />
-          <view class="navbar-content-item-name">{{item.name}}</view>
-        </view>
-      </view>
-    </view> -->
-    <view class="list">
-      <view wx:for="{{list}}" wx:key="*this" style="margin-top: 16rpx">
-        <van-cell-group inset>
-          <van-cell
-            size="large"
-            wx:for="{{item}}"
-            wx:for-item="subitem"
-            wx:key="name"
-            title="{{subitem.name}}"
-            icon="{{subitem.icon}}"
-            value="{{subitem.value}}"
-            is-link
-            bindtap="itemtaphandle(subitem)"
-            wx:if="{{!subitem.hide}}"
-          />
-        </van-cell-group>
-      </view>
+  <view class="list">
+    <view wx:for="{{list}}" wx:key="*this" style="margin-top: 16rpx">
+      <van-cell-group inset>
+        <van-cell
+          size="large"
+          wx:for="{{item}}"
+          wx:for-item="subitem"
+          wx:key="name"
+          title="{{subitem.name}}"
+          icon="{{subitem.icon}}"
+          value="{{subitem.value}}"
+          is-link
+          bindtap="itemtaphandle(subitem)"
+          wx:if="{{!subitem.hide}}"
+        />
+      </van-cell-group>
     </view>
+  </view>
 </custom-container>
 <van-dialog id="van-dialog" />
 <van-dialog
@@ -70,22 +62,6 @@ createPage({
   },
   computed: {
     ...store.mapState(['company']),
-    // navbar() {
-    //   return [
-    //     {
-    //       name: '发布历史',
-    //       icon: 'todo-list-o',
-    //       jumptype: 'mp',
-    //       url: '/release/pages/list'
-    //     },
-    //     {
-    //       name: '权益卡',
-    //       icon: 'send-gift-o',
-    //       jumptype: 'alert',
-    //       message: '权益卡正在规划中，开通后第一时间通知您'
-    //     }
-    //   ]
-    // },
     list() {
       return [
         [
@@ -177,32 +153,7 @@ createPage({
 })
 </script>
 
-<style lang="stylus">
-.navbar
-  width 100%
-  box-sizing border-box
-  padding 0 32rpx
-  margin-top 32rpx
-  .navbar-content
-    background #ffffff
-    box-shadow #ddd 0px 0px 10px
-    border-radius 16rpx
-    display flex
-    align-items center
-    justify-content space-around
-    padding 16rpx
-    overflow hidden
-    .navbar-content-item
-      display flex
-      flex-direction column
-      align-items center
-      justify-content center
-      color #333
-      .navbar-content-item-icon
-        font-size 50rpx
-      .navbar-content-item-name
-        font-size 26rpx
-        margin-top 12rpx
+<style lang="stylus" scoped>
 .list
   padding-top 32rpx
 .company-container
@@ -212,12 +163,20 @@ createPage({
 <script name="json">
 module.exports = {
   usingComponents: {
-    "custom-container": "@/compontens/base/custom-container",
-    "van-dialog": "@vant/weapp/dialog/index",
-    "van-icon": "@vant/weapp/icon/index",
-    "van-field": "@vant/weapp/field/index",
-    "van-cell": "@vant/weapp/cell/index",
-    "van-cell-group": "@vant/weapp/cell-group/index"
+    "custom-container": "@/compontens/base/custom-container?root=common-coms-page",
+    "van-dialog": "@vant/weapp/dialog/index?root=vant-page",
+    "van-icon": "@vant/weapp/icon/index?root=vant-page",
+    "van-field": "@vant/weapp/field/index?root=vant-page",
+    "van-cell": "@vant/weapp/cell/index?root=vant-page",
+    "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page"
+  },
+  "componentPlaceholder": {
+    "custom-container": "view",
+    "van-cell": "view",
+    "van-cell-group": "view",
+    "van-dialog": "view",
+    "van-icon": "view",
+    "van-field": "view"
   }
 }
 </script>

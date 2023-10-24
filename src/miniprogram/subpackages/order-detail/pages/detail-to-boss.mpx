@@ -289,16 +289,25 @@ createPage({
 <script type="application/json">
   {
     "usingComponents": {
-      "custom-container": "@/compontens/base/custom-container",
-      "van-cell": "@vant/weapp/cell/index",
-      "van-cell-group": "@vant/weapp/cell-group/index",
-      "van-steps": "@vant/weapp/steps/index",
-      "van-loading": "@vant/weapp/loading/index",
+      "custom-container": "@/compontens/base/custom-container?root=common-coms-page",
+      "van-cell": "@vant/weapp/cell/index?root=vant-page",
+      "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page",
+      "van-steps": "@vant/weapp/steps/index?root=vant-page",
+      "van-loading": "@vant/weapp/loading/index?root=vant-page",
       "item-container": "../components/item-container",
       "finder": "@/compontens/base/finder.mpx",
-      "nav-footer": "@/compontens/base/nav-footer.mpx",
+      "nav-footer": "@/compontens/base/nav-footer.mpx?root=common-coms-page",
       "base-info": "../components/base-info.mpx",
-      "back-home": "@/compontens/base/back-home.mpx"
+      "back-home": "@/compontens/base/back-home.mpx?root=common-coms-page"
+    },
+    "componentPlaceholder": {
+      "custom-container": "view",
+      "nav-footer": "view",
+      "back-home": "view",
+      "van-cell": "view",
+      "van-cell-group": "view",
+      "van-steps": "view",
+      "van-loading": "view"
     },
     "navigationStyle": "custom"
   }

@@ -106,9 +106,13 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-        "van-button": "@vant/weapp/button/index",
-        "van-icon": "@vant/weapp/icon/index",
-        "service-notice": "./index"
+      "van-button": "@vant/weapp/button/index?root=vant-page",
+      "van-icon": "@vant/weapp/icon/index?root=vant-page",
+      "service-notice": "./index"
+    },
+    "componentPlaceholder": {
+      "van-button": "view",
+      "van-icon": "view"
     }
   }
 </script>

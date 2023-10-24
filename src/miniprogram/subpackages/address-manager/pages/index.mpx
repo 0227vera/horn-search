@@ -35,9 +35,14 @@ createPage({
 <script type="application/json">
   {
     "usingComponents": {
-      "custom-container": "@/compontens/base/custom-container",
-      "address-list": "@/compontens/common/address-list",
-      "van-dialog": "@vant/weapp/dialog/index"
+      "custom-container": "@/compontens/base/custom-container?root=common-coms-page",
+      "address-list": "@/compontens/common/address-list?root=common-coms-page",
+      "van-dialog": "@vant/weapp/dialog/index?root=vant-page"
+    },
+    "componentPlaceholder": {
+      "custom-container": "view",
+      "address-list": "view",
+      "van-dialog": "view"
     },
     "navigationStyle": "custom"
   }

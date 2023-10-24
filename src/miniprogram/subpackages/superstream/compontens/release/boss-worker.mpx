@@ -374,18 +374,30 @@ createComponent({
   {
     "usingComponents": {
       "service-notice": "@/compontens/common/service-notice",
-      "custom-container": "@/compontens/base/custom-container",
+      "custom-container": "@/compontens/base/custom-container?root=common-coms-page",
       "popup": "@/subpackages/superstream/compontens/popup/index.mpx",
       "toast": "@/compontens/base/toast.mpx",
-      "van-cell": "@vant/weapp/cell/index",
-      "van-cell-group": "@vant/weapp/cell-group/index",
-      "van-uploader": "@vant/weapp/uploader/index",
-      "van-field": "@vant/weapp/field/index",
-      "van-image": "@vant/weapp/image/index",
-      "van-icon": "@vant/weapp/icon/index",
-      "van-button": "@vant/weapp/button/index",
-      "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
-      "van-dropdown-item": "@vant/weapp/dropdown-item/index"
+      "van-cell": "@vant/weapp/cell/index?root=vant-page",
+      "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page",
+      "van-uploader": "@vant/weapp/uploader/index?root=vant-page",
+      "van-field": "@vant/weapp/field/index?root=vant-page",
+      "van-image": "@vant/weapp/image/index?root=vant-page",
+      "van-icon": "@vant/weapp/icon/index?root=vant-page",
+      "van-button": "@vant/weapp/button/index?root=vant-page",
+      "van-dropdown-menu": "@vant/weapp/dropdown-menu/index?root=vant-page",
+      "van-dropdown-item": "@vant/weapp/dropdown-item/index?root=vant-page"
+    },
+    "componentPlaceholder": {
+      "custom-container": "view",
+      "van-uploader": "view",
+      "van-field": "view",
+      "van-image": "view",
+      "van-icon": "view",
+      "van-button": "view",
+      "van-dropdown-menu": "view",
+      "van-dropdown-item": "view",
+      "van-cell": "view",
+      "van-cell-group": "view"
     }
   }
 </script>

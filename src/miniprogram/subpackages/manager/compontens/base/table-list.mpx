@@ -118,14 +118,23 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "van-button": "@vant/weapp/button/index",
-      "van-cell": "@vant/weapp/cell/index",
-      "van-cell-group": "@vant/weapp/cell-group/index",
-      "van-field": "@vant/weapp/field/index",
-      "van-icon": "@vant/weapp/icon/index",
-      "van-loading": "@vant/weapp/loading/index",
+      "van-button": "@vant/weapp/button/index?root=vant-page",
+      "van-cell": "@vant/weapp/cell/index?root=vant-page",
+      "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page",
+      "van-field": "@vant/weapp/field/index?root=vant-page",
+      "van-icon": "@vant/weapp/icon/index?root=vant-page",
+      "van-loading": "@vant/weapp/loading/index?root=vant-page",
       "tab-item-container": "./tab-item-container",
-      "van-empty": "@vant/weapp/empty/index"
+      "van-empty": "@vant/weapp/empty/index?root=vant-page"
+    },
+    "componentPlaceholder": {
+      "van-cell": "view",
+      "van-cell-group": "view",
+      "van-button": "view",
+      "van-field": "view",
+      "van-icon": "view",
+      "van-loading": "view",
+      "van-empty": "view"
     }
   }
 </script>

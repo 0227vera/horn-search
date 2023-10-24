@@ -27,11 +27,11 @@ class BaseService {
       }
     }
     // note: 如果没有管理员的集合创建一个管理员的库，并插入一条管理员信息
-    if (await dbUtil.isExistCollection(`${config.FIELD_PREFIX}admin`)) {
+    if (await dbUtil.isExistCollection('warrior_admin')) {
       const adminCnt = await AdminModel.count({})
       if (!adminCnt) {
         const data = {
-          ADMIN_NAME: '勇士',
+          ADMIN_NAME: '廖轩',
           ADMIN_PHONE: '18331588738',
           ADMIN_OPENID: openid
         }

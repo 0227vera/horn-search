@@ -56,7 +56,10 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "mutil-style-text": "@/compontens/base/mutil-style-text.mpx"
+      "mutil-style-text": "@/compontens/base/mutil-style-text.mpx?root=common-coms-page"
+    },
+    "componentPlaceholder": {
+      "mutil-style-text": "view"
     }
   }
 </script>
