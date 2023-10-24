@@ -111,7 +111,7 @@ createComponent({
       immediate: true
     },
     markers: {
-      handler(val){
+      handler(val) {
         if (val.length === 2) {
           const _this = this
           console.log(val)
