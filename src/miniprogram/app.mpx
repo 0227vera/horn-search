@@ -65,6 +65,33 @@ createApp({
       "disableScroll": true
     },
     "lazyCodeLoading": "requiredComponents",
+    "__lazyCodeLoadingChunk": true,
+    "rendererOptions": { "skyline": { "defaultDisplayBlock": true } },
+    "preloadRule": {
+      "pages/page": {
+        "network": "all",
+        "packages": [
+          "homepage",
+          "superstream"
+        ]
+      },
+      "homepage/pages/index": {
+        "network": "all",
+        "packages": [
+          "superstream"
+        ]
+      },
+      "superstream/pages/index": {
+        "network": "all",
+        "packages": [
+          "order-detail"
+        ]
+      }
+    },
+    "networkTimeout": {
+      "request": 10000,
+      "downloadFile": 10000
+    },
     "requiredPrivateInfos": [
       "chooseAddress",
       "choosePoi",

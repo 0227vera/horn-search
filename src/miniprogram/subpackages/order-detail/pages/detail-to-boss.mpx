@@ -43,52 +43,15 @@
 import mpx, { createPage } from '@mpxjs/core'
 import { getReleaseOneById, updateRelease } from '@/api'
 import store from '@/store'
+import mixins from '@/subpackages/order-detail/utils.js/mixins.js'
 
 createPage({
-  onShareAppMessage() {
-    const path = encodeURIComponent(`/order-detail/pages/detail-to-worker?id=${this._id}&fromOrigin=${this.fromOrigin}`)
-    return {
-      title: this.shareTitle,
-      path: `/pages/page?type=mp&path=${path}`,
-      imageUrl: this.images?.[0] || ''
-    }
-  },
+  mixins: [mixins],
   data: {
-    loading: true,
-    orderData: {},
     active: '',
     calllist: [],
     readlist: [],
-    images: [],
-    category: '',
     status: ''
-  },
-  async onLoad(params) {
-    this.setState({
-      fromOrigin: params.fromOrigin
-    })
-    this.loading = true
-    if (!params.id) {
-      this.clickLeft()
-      return
-    }
-    this.params = params
-    const res = await getReleaseOneById(params)
-    this.orderData = res.data
-    const { category, categoryName, categorySub, categoryTypeName, categoryNum, images, status, calllist, readlist, _id, OPENID } = res.data || {}
-    this.active = status - 1
-    this.status = status
-    this.category = category
-    this.categoryName = categoryName
-    this.categoryNum = categoryNum
-    this.categorySub = categorySub
-    this.categoryTypeName = categoryTypeName
-    this.OPENID = OPENID
-    this.images = images
-    this._id = _id
-    this.readlist = readlist
-    this.calllist = calllist
-    this.loading = false
   },
   computed: {
     ...store.mapState(['steps', 'openid', 'fromOrigin']),
@@ -98,62 +61,6 @@ createPage({
         return `【${desc}】${this.shareTitle}`
       }
       return '订单详情'
-    },
-    shareTitle() {
-      if (!Object.keys(this.orderData).length) {
-        return ''
-      }
-      const actions = {
-        bossWorker: () => {
-          let text = this.orderData.categoryName
-          if (this.orderData.categorySub) {
-            text += `(${this.orderData.categorySub})`
-          }
-          text += `/${this.orderData.categoryNum}人`
-          text += `/${this.orderData.categoryTypeName}`
-          return text
-        },
-        factoryCooper: () => {
-          return `${this.orderData.cooperTypeName}/${this.orderData.num}件左右`
-        },
-        leaseTransfer: () => {
-          let text = this.orderData.categoryName
-          if (this.orderData.categorySub) {
-            text += `(${this.orderData.categorySub})`
-          }
-          text += `-${this.orderData.area}平米-${this.orderData.price}${this.orderData.priceUnitName}`
-          return text
-        },
-        usedDetect: () => {
-          let text = this.orderData.categoryName
-          if (this.orderData.categorySub) {
-            text += `(${this.orderData.categorySub})`
-          }
-          if (this.orderData.price) {
-            text += `-${this.orderData.price}元`
-          }
-          return text
-        },
-        tailings: () => {
-          let text = this.orderData.categoryName
-          if (this.orderData.categorySub) {
-            text += `(${this.orderData.categorySub})`
-          }
-          return text
-        }
-      }
-      return actions?.[this.fromOrigin]?.()
-    },
-    clickLeft() {
-      return () => {
-        if (this.params.isBack === 'true') {
-          mpx.navigateBack()
-        } else {
-          mpx.reLaunch({
-            url: `/homepage/pages/index`
-          })
-        }
-      }
     },
     footerList() {
       return [{
@@ -201,23 +108,6 @@ createPage({
         id: 'share',
         share: true
       }]
-    }
-  },
-  methods: {
-    ...store.mapMutations(['setState']),
-    clickTel(item) {
-      wx.makePhoneCall({
-        phoneNumber: item.tel
-      })
-    },
-    priviewImage(index) {
-      wx.previewMedia({
-        current: index,
-        sources: this.images.map(i => ({
-          url: i,
-          type: 'image'
-        }))
-      })
     }
   }
 })

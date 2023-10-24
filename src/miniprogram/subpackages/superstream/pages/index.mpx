@@ -2,6 +2,7 @@
   <custom-container
     title="{{title}}"
     clickLeft="{{clickLeft}}"
+    wx:show="{{pageShow}}"
     containerBg="linear-gradient(to bottom, #8aa7ec, #79b3f4, #ffffff)"
   >
     <view class="{{roleType === 'partyA' && currentCom === footerList[0].key ? 'component-container' : ''}}">
@@ -44,6 +45,7 @@ createPage({
   data: {
     currentCom: '',
     roleType: '',
+    pageShow: false,
     categoryTypeId: '',
     popupType: 'radio',
     showPopup: false,
@@ -66,6 +68,10 @@ createPage({
     this.setState({
       fromOrigin: this.fromOrigin
     })
+    // note: 页面中的异步分包太多了，强制晚加载一会
+    setTimeout(() => {
+      this.pageShow = true
+    }, 100)
   },
   onShow() {
     this.setLocation()

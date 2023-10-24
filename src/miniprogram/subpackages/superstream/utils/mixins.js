@@ -53,7 +53,15 @@ export const mixins = {
     this.initAddressPhone()
   },
   pageLifetimes: {
-    show() {
+    async show() {
+      await this.setLocation()
+      if (this.adInfo.address) {
+        this.updateObj.poi = {
+          ...this.adInfo,
+          name: this.adInfo.address,
+          detail: this.adInfo.address
+        }
+      }
       this.initAddressPhone()
     }
   },

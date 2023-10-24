@@ -118,12 +118,11 @@ createPage({
 <script name="json">
 module.exports = {
   usingComponents: {
-    "custom-container": "@/compontens/base/custom-container?root=common-coms-page",
+    "custom-container": "@/compontens/base/custom-container",
     "guide-subcri": "@/compontens/common/service-notice/guide.mpx?root=common-coms-page",
     "tips": "@/compontens/base/tips.mpx?root=common-coms-page"
   },
   "componentPlaceholder": {
-    "custom-container": "view",
     "guide-subcri": "view",
     "tips": "view",
   }
