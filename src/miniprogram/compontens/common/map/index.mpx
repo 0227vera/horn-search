@@ -1,9 +1,12 @@
 <template>
-  <view class="container">
+  <view class="container" wx:style="{{containerStyle}}">
+    <view class="back" wx:if="{{mapFull}}" bind:tap="closeFull" wx:style="{{backIconStyle}}">
+      <van-icon name="arrow-down" />
+    </view>
     <view class="map">
       <map
-        longitude="{{location.longitude}}"
-        latitude="{{location.latitude}}"
+        longitude="{{endInfo.location.lng}}"
+        latitude="{{endInfo.location.lat}}"
         scale="{{scale}}"
         markers="{{markers}}"
         polyline="{{polyline}}"
@@ -25,14 +28,27 @@ createComponent({
     endInfo: {
       type: Object,
       value: {}
+    },
+    mapFull: {
+      mapFull: Boolean,
+      value: false
     }
   },
   data: {
     scale: 12,
+    containerStyle: {},
     polyline: []
   },
   computed: {
-    ...store.mapState(['location', 'mapSdk']),
+    ...store.mapState(['location', 'mapSdk', 'navBarStyle']),
+    backIconStyle() {
+      return {
+        height: this.navBarStyle.height + 'px',
+        width: this.navBarStyle.height + 'px',
+        left: '16px',
+        top: this.navBarStyle.top + 'px'
+      }
+    },
     markers () {
       const markers = []
       if (this.location) {
@@ -77,11 +93,29 @@ createComponent({
     }
   },
   watch: {
+    mapFull: {
+      handler(val) {
+        if (val) {
+          this.containerStyle = {
+            position: 'fixed',
+            height: '100vh',
+            left: 0,
+            top: 0
+          }
+          this.scale = 14
+        } else {
+          this.containerStyle = {}
+          this.scale = 12
+        }
+      },
+      immediate: true
+    },
     markers (val) {
+      console.log('val---->', val)
       if (val.length === 2) {
         const _this = this
         this.mapSdk.direction({
-          mode: 'walking',
+          mode: 'driving',
           from: {
             latitude: val[0].latitude,
             longitude: val[0].longitude
@@ -99,6 +133,7 @@ createComponent({
             _this.scale = 12
           },
           fail(err) {
+            console.log(err)
             console.log(err)
           }
         })
@@ -120,17 +155,30 @@ createComponent({
         pl.push({ latitude: coors[i], longitude: coors[i + 1] })
       }
       return pl
+    },
+    closeFull() {
+      this.triggerEvent('close-full')
     }
   }
 })
 </script>
 
 <style lang="stylus" scoped>
+@import "@/assets/base.styl"
+.back
+  position absolute
+  border-radius 60rpx
+  flex-center()
+  box-shadow $box-shadow
+  z-index 1
+  background #ffffff
 .container
   width 100%
   height 400px
   display flex
   flex-direction column
+  transition height 1s
+  transform-origin bottom
   .map
     flex 1
     width 100%
@@ -142,6 +190,10 @@ createComponent({
 <script name="json">
 module.exports = {
   usingComponents: {
+    "van-icon": "@vant/weapp/icon/index?root=vant-page"
+  },
+  "componentPlaceholder": {
+    "van-icon": "view"
   },
   disableScroll: true
 }

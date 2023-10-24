@@ -3,7 +3,7 @@
     <nav-bar />
     <view class="content" style="padding-top: {{navBarStyle.top + navBarStyle.height + navBarStyle.paddingBottom}}px">
       <view class="content-main">
-        <scroll-view scroll-y class="scroll-container">
+        <scroll-view bindscrolltolower="scrollToLower" scroll-y class="scroll-container">
           <slot />
         </scroll-view>
       </view>
@@ -87,6 +87,9 @@ createComponent({
     ...store.mapMutations(['setNavBarStyle']),
     btnHandle() {
       this.triggerEvent('footer-btn')
+    },
+    scrollToLower() {
+      this.triggerEvent('scrolltobottom')
     }
   }
 })

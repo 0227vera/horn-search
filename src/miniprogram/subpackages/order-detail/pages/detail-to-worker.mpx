@@ -4,6 +4,7 @@
     lefticon="arrow-left"
     clickLeft="{{clickLeft}}"
     containerBg="linear-gradient(to bottom, #79b3f4, #ffffff)"
+    bind:scrolltobottom="scrolltoBottom"
   >
     <view wx:if="{{loading}}" class="status">
       <van-loading type="spinner" color="#1989fa" vertical>
@@ -21,7 +22,7 @@
         </view>
       </item-container>
       <item-container title="位置信息：">
-        <cus-map endInfo="{{poi}}" />
+        <cus-map endInfo="{{poi}}" mapFull="{{mapFull}}" bind:close-full="closeFull" />
       </item-container>
     </view>
   </custom-container>
@@ -39,11 +40,8 @@ createPage({
   mixins: [mixins],
   data: {
     poi: {},
-    isWorker: true
-  },
-  onShow() {
-    console.log(this.readlist)
-    this.readlistFunc(this.readlist)
+    isWorker: true,
+    mapFull: false
   },
   computed: {
     ...store.mapState(['openid', 'fromOrigin']),
@@ -115,6 +113,12 @@ createPage({
           }]
         })
       }
+    },
+    scrolltoBottom() {
+      this.mapFull = true
+    },
+    closeFull() {
+      this.mapFull = false
     }
   }
 })

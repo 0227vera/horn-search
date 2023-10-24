@@ -30,7 +30,7 @@ createComponent({
     renderList() {
       const {
         categoryName, categorySub, categoryType, categoryTypeName, categoryNum, priceMin, priceMax, price, priceUnitName, num, numMin, numMax, origin, poi, tel, images, note, add, calllist, company,
-        factoryScaleName, factoryScale, people, area, cooperTypeName, fabricPropName, productTypeName, orderTypeName, color, code,
+        factoryScaleName, factoryScale, people, area, cooperType, cooperTypeName, fabricPropName, productTypeName, orderTypeName, color, code,
         deposit, device, floor, peopleMin, peopleMax, times
       } = this.orderData
       const list = [{
@@ -93,6 +93,13 @@ createComponent({
           })
         }
       } else if (this.fromOrigin === 'factoryCooper') {
+        if (cooperType !== '3') {
+          list.pop()
+        }
+        list.push({
+          title: '合作方式',
+          value: cooperTypeName
+        })
         let factoryScaleText = factoryScaleName
         if (factoryScale === '1') {
           people && (factoryScaleText += `(${people}人以上)`)
@@ -100,45 +107,52 @@ createComponent({
           people && (factoryScaleText += `(${people}人左右)`)
         }
         list.push({
-          title: '工厂规模',
+          title: '合作规模',
           value: factoryScaleText
         })
         list.push({
-          title: '地域要求',
-          value: area
-        })
-        list.push({
-          title: '合作类型',
-          value: cooperTypeName
-        })
-        list.push({
-          title: '产品类型',
+          title: '产品款式',
           value: productTypeName
         })
-        list.push({
-          title: '面料属性',
-          value: fabricPropName
-        })
-        list.push({
-          title: '生产数量',
-          value: `${num}件(左右)`
-        })
-        if (price) {
+        if (cooperType === '3') {
           list.push({
-            title: '单价',
-            value: `${price}元/件`
+            title: '裁床地址',
+            value: poi.detail || poi.address
           })
-        }
-        if (color && code) {
+          area && list.push({
+            title: '地域要求',
+            value: area
+          })
+        } else {
           list.push({
-            title: '颜色码数',
-            value: `${color}色${code}码`
+            title: '地域要求',
+            value: area
           })
         }
         orderTypeName && list.push({
           title: '订单类型',
           value: orderTypeName
         })
+        // list.push({
+        //   title: '面料属性',
+        //   value: fabricPropName
+        // })
+        list.push({
+          title: '生产数量',
+          value: `${num}件(左右)`
+        })
+        // if (price) {
+        //   list.push({
+        //     title: '单价',
+        //     value: `${price}元/件`
+        //   })
+        // }
+        // if (color && code) {
+        //   list.push({
+        //     title: '颜色码数',
+        //     value: `${color}色${code}码`
+        //   })
+        // }
         if (add) {
           list.push({
             title: '合作概述',

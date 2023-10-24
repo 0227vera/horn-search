@@ -312,15 +312,17 @@ const factoryFilter = [{
   value: [],
   activeList: [],
   list: cooperTypeList
-}, {
-  type: 'checkbox',
-  id: 'fabricProp',
-  text: '面料属性筛选',
-  initText: '面料属性筛选',
-  value: [],
-  activeList: [],
-  list: fabricPropList
-}, {
+},
+// {
+//   type: 'checkbox',
+//   id: 'fabricProp',
+//   text: '面料属性筛选',
+//   initText: '面料属性筛选',
+//   value: [],
+//   activeList: [],
+//   list: fabricPropList
+// },
+{
   type: 'checkbox',
   id: 'orderType',
   text: '订单类型筛选',

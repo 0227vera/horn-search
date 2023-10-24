@@ -1,106 +1,59 @@
 <template>
 <view class="container">
   <van-cell-group class="form" style="background:#fff">
-    <!-- 工厂规模 -->
+    <!-- 合作方式 -->
     <van-field
       size="large"
-      label="工厂规模"
-      title-width="160rpx"
-      required
-      is-link
-      readonly
-      value="{{updateObj.factoryScaleName}}"
-      input-align="right"
-      placeholder="请点击选择工厂规模"
-      bind:tap="showPopupContainer('factoryScale')"
-    />
-    <van-field
-      size="large"
-      wx:if="{{updateObj.factoryScale}}"
-      label="{{updateObj.factoryScale === '1' ? '工厂人数' : '作坊人数'}}"
-      title-width="160rpx"
-      value="{{ updateObj.people }}"
-      placeholder="请输入人数"
-      type="number"
-      input-align="right"
-      bind:change="onFieldChange"
-      id="people"
-      center
-    >
-      <!-- <view slot="input" wx:if="{{updateObj.factoryScale === '2'}}" class="area-container">
-        <input
-          type="number"
-          value="{{updateObj.peopleMin}}"
-          id="peopleMin"
-          bind:input="onAreaFieldChange"
-          placeholder="人数"
-          class="input"
-        />
-        <text class="middle">~</text>
-        <input
-          type="number"
-          value="{{updateObj.peopleMax}}"
-          id="peopleMax"
-          bind:input="onAreaFieldChange"
-          placeholder="人数"
-          class="input"
-        />
-      </view> -->
-      <view slot="right-icon" style="color: #333;">{{updateObj.factoryScale === '1' ? '人(以上)' : '人(左右)'}}</view>
-    </van-field>
-    <!-- 地域要求 -->
-    <van-field
-      size="large"
-      wx:if="{{updateObj.factoryScale}}"
-      label="地域要求"
-      required
-      title-width="240rpx"
-      value="{{ updateObj.area }}"
-      placeholder="例如: 海珠区大塘村"
-      input-align="right"
-      bind:change="onFieldChange"
-      id="area"
-    />
-    <!-- 合作类型 -->
-    <van-field
-      size="large"
-      label="合作类型"
+      label="合作方式"
       title-width="160rpx"
       required
       is-link
       readonly
       value="{{updateObj.cooperTypeName}}"
       input-align="right"
-      placeholder="请点击选择合作类型"
+      placeholder="请点击选择合作方式"
       bind:tap="showPopupContainer('cooperType')"
     />
-     <!-- 产品类型 -->
+    <!-- 合作规模 -->
     <van-field
       size="large"
-      label="产品类型"
+      label="合作规模"
+      title-width="160rpx"
+      required
+      is-link
+      readonly
+      value="{{updateObj.factoryScaleName}}"
+      input-align="right"
+      placeholder="请点击选择合作规模"
+      bind:tap="showPopupContainer('factoryScale')"
+    />
+    <!-- 地域要求 -->
+    <van-field
+      wx:if="{{updateObj.cooperType && updateObj.cooperType !== '3'}}"
+      size="large"
+      label="{{updateObj.factoryScale ? updateObj.factoryScale === '1' ? '工厂地域要求' : '作坊地域要求' : '地域要求'}}"
+      required
+      title-width="240rpx"
+      value="{{ updateObj.area }}"
+      placeholder="例如海珠区康乐、鹭江"
+      input-align="right"
+      bind:change="onFieldChange"
+      id="area"
+    />
+    <!-- 产品款式 -->
+    <van-field
+      size="large"
+      label="产品款式"
       title-width="160rpx"
       required
       is-link
       readonly
       value="{{updateObj.productTypeName}}"
       input-align="right"
-      placeholder="请点击选择产品类型"
+      placeholder="请点击选择产品款式"
       bind:tap="showPopupContainer('productType')"
     />
-     <!-- 面料属性 -->
-    <van-field
-      size="large"
-      label="面料属性"
-      title-width="160rpx"
-      required
-      is-link
-      readonly
-      value="{{updateObj.fabricPropName}}"
-      input-align="right"
-      placeholder="请点击选择面料属性"
-      bind:tap="showPopupContainer('fabricProp')"
-    />
-    <!-- 数量相关 -->
+    <!-- 生产数量 -->
     <van-field
       size="large"
       label="生产数量"
@@ -113,29 +66,80 @@
       bind:change="onFieldChange"
       id="num"
     >
-      <!-- <view slot="input" class="area-container">
-        <input
-          type="number"
-          value="{{updateObj.numMin}}"
-          id="numMin"
-          bind:input="onAreaFieldChange"
-          placeholder="最少"
-          class="input"
-        />
-        <text class="middle">~</text>
-        <input
-          type="number"
-          value="{{updateObj.numMax}}"
-          id="numMax"
-          bind:input="onAreaFieldChange"
-          placeholder="最多"
-          class="input"
-        />
-      </view> -->
       <view slot="right-icon" style="color: #333; font-weight: bold;">件(左右)</view>
     </van-field>
-    <!-- 单价 -->
+    <!-- 裁床地址 -->
     <van-field
+      wx:if="{{updateObj.cooperType === '3'}}"
+      size="large"
+      label="裁床地址"
+      type="textarea"
+      autosize
+      title-width="160rpx"
+      required
+      is-link
+      readonly
+      value="{{updateObj.poi.detail}}"
+      input-align="right"
+      placeholder="请点击进入输入我的详细地址"
+      bind:tap="showPopupContainer('address')"
+    />
+    <!-- 联系电话 -->
+    <van-field
+      size="large"
+      label="联系电话"
+      title-width="160rpx"
+      required
+      value="{{ updateObj.tel }}"
+      type="number"
+      placeholder="请输入联系方式"
+      input-align="right"
+      bind:change="onFieldChange"
+      id="tel"
+    />
+    <!-- 订单类型 -->
+    <van-field
+      size="large"
+      label="订单类型"
+      title-width="160rpx"
+      is-link
+      readonly
+      value="{{updateObj.orderTypeName}}"
+      input-align="right"
+      placeholder="请点击选择订单类型"
+      bind:tap="showPopupContainer('orderType')"
+    />
+    <!-- 人数要求 -->
+    <van-field
+      size="large"
+      wx:if="{{updateObj.factoryScale}}"
+      label="{{updateObj.factoryScale === '1' ? '工厂人数要求' : '作坊人数要求'}}"
+      title-width="200rpx"
+      value="{{ updateObj.people }}"
+      placeholder="请输入人数"
+      type="number"
+      input-align="right"
+      bind:change="onFieldChange"
+      id="people"
+      center
+    >
+      <view slot="right-icon" style="color: #333;">{{updateObj.factoryScale === '1' ? '人(以上)' : '人(左右)'}}</view>
+    </van-field>
+    <!-- 面料属性 -->
+    <!-- <van-field
+      size="large"
+      label="面料属性"
+      title-width="160rpx"
+      required
+      is-link
+      readonly
+      value="{{updateObj.fabricPropName}}"
+      input-align="right"
+      placeholder="请点击选择面料属性"
+      bind:tap="showPopupContainer('fabricProp')"
+    /> -->
+    <!-- 单价 -->
+    <!-- <van-field
       size="large"
       label="单价"
       title-width="160rpx"
@@ -148,9 +152,9 @@
       center
     >
       <view slot="right-icon" style="color: #333; font-weight: bold;">元/件</view>
-    </van-field>
+    </van-field> -->
     <!-- 颜色码数 -->
-    <van-field
+    <!-- <van-field
       size="large"
       label="颜色码数"
       title-width="160rpx"
@@ -179,46 +183,18 @@
         />
         <text class="middle">码</text>
       </view>
-    </van-field>
-    <!-- 订单类型 -->
+    </van-field> -->
+    <!-- 地域要求 -->
     <van-field
+      wx:if="{{updateObj.cooperType === '3'}}"
       size="large"
-      label="订单类型"
-      title-width="160rpx"
-      is-link
-      readonly
-      value="{{updateObj.orderTypeName}}"
-      input-align="right"
-      placeholder="请点击选择订单类型"
-      bind:tap="showPopupContainer('orderType')"
-    />
-    <!-- 位置相关 -->
-    <van-field
-      size="large"
-      label="{{addressName}}"
-      type="textarea"
-      autosize
-      title-width="160rpx"
-      required
-      is-link
-      readonly
-      value="{{updateObj.poi.detail}}"
-      input-align="right"
-      placeholder="请点击进入输入我的详细地址"
-      bind:tap="showPopupContainer('address')"
-    />
-    <!-- 电话 -->
-    <van-field
-      size="large"
-      label="电话"
-      title-width="80rpx"
-      required
-      value="{{ updateObj.tel }}"
-      type="number"
-      placeholder="请输入联系方式"
+      label="{{updateObj.factoryScale ? updateObj.factoryScale === '1' ? '工厂地域要求' : '作坊地域要求' : '地域要求'}}"
+      title-width="240rpx"
+      value="{{ updateObj.area }}"
+      placeholder="例如海珠区康乐、鹭江"
       input-align="right"
       bind:change="onFieldChange"
-      id="tel"
+      id="area"
     />
     <!-- 图片 -->
     <van-cell size="large" title="图片展示" title-width="160rpx" value="{{imagesValue}}" border="{{false}}" />
@@ -255,19 +231,6 @@
       type="textarea"
       autosize
       id="add"
-      bind:change="onFieldChange"
-    />
-    <!-- 工厂名 -->
-    <van-field
-      size="large"
-      label="工厂名"
-      title-width="160rpx"
-      value="{{ updateObj.company }}"
-      placeholder="请输入您的工厂或公司名称"
-      input-align="left"
-      type="textarea"
-      autosize
-      id="company"
       bind:change="onFieldChange"
     />
   </van-cell-group>
@@ -334,11 +297,11 @@ createComponent({
     showPopupContainer(type) {
       if (type === 'factoryScale') {
         this.radioList = this.factoryScaleList
-        this.popupTitle = '请选择工厂规模'
+        this.popupTitle = '请选择合作规模'
         this.initRadio = this.updateObj.factoryScale
       } else if (type === 'cooperType') {
         this.radioList = this.cooperTypeList
-        this.popupTitle = '请选择合作类型'
+        this.popupTitle = '请选择合作方式'
         this.initRadio = this.updateObj.cooperType
       } else if (type === 'fabricProp') {
         this.checkBoxList = this.fabricPropList
@@ -346,7 +309,7 @@ createComponent({
         this.initCheckbox = this.updateObj.fabricProp
       } else if (type === 'productType') {
         this.checkBoxList = this.productTypeList
-        this.popupTitle = '请选择产品类型'
+        this.popupTitle = '请选择产品款式'
         this.initCheckbox = this.updateObj.productType
       } else if (type === 'orderType') {
         this.radioList = this.orderTypeList
@@ -372,6 +335,7 @@ createComponent({
           this.updateObj.factoryScaleName = data.name
         },
         cooperType: () => {
+          console.log(data)
           this.updateObj.cooperType = data.value
           this.updateObj.cooperTypeName = data.name
         },

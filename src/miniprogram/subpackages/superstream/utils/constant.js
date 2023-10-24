@@ -49,22 +49,22 @@ export const initFactoryObj = {
   area: '',
   cooperType: '',
   cooperTypeName: '',
-  price: '',
+  // price: '',
   num: '',
   // numMin: '',
   // numMax: '',
-  fabricProp: '',
-  fabricPropName: '',
+  // fabricProp: '',
+  // fabricPropName: '',
   productType: '',
   productTypeName: '',
   orderType: '',
   orderTypeName: '',
-  color: '',
+  // color: '',
   images: [],
   tel: '',
   poi: {},
-  add: '',
-  company: store.state.company
+  add: ''
+  // company: store.state.company
 }
 
 export const pageInfo = {
