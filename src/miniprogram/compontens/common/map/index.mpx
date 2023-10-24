@@ -96,13 +96,20 @@ createComponent({
     mapFull: {
       handler(val) {
         if (val) {
+          this.scale = 12
+          this.setState({
+            showBottomNav: false
+          })
           this.containerStyle = {
             position: 'fixed',
-            height: '100vh',
+            bottom: 0,
             left: 0,
-            top: 0
+            height: '100vh',
+            width: '100vw'
           }
-          this.scale = 12
+          setTimeout(() => {
+            this.scale = 8
+          })
         } else {
           this.containerStyle = {}
           this.scale = 10
@@ -114,7 +121,6 @@ createComponent({
       handler(val) {
         if (val.length === 2) {
           const _this = this
-          console.log(val)
           this.mapSdk.direction({
             mode: 'driving',
             from: {
@@ -126,7 +132,6 @@ createComponent({
               longitude: val[1].longitude
             },
             success (res) {
-              console.log('---------->', res)
               _this.polyline = res.result.routes.map((item) => ({
                 points: _this.changepolylineData(item.polyline),
                 color: '#07c160',
@@ -149,6 +154,7 @@ createComponent({
   },
   methods: {
     ...store.mapActions(['setLocation']),
+    ...store.mapMutations(['setState']),
     changepolylineData (coors) {
       const kr = 1000000
       const pl = []
@@ -161,6 +167,9 @@ createComponent({
       return pl
     },
     closeFull() {
+      this.setState({
+        showBottomNav: true
+      })
       this.triggerEvent('close-full')
     }
   }
@@ -181,8 +190,6 @@ createComponent({
   height 400px
   display flex
   flex-direction column
-  transition height 1s
-  transform-origin bottom
   .map
     flex 1
     width 100%
