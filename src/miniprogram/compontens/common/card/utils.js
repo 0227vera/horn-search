@@ -89,6 +89,7 @@ const actions = {
       text: '租金:',
       value: `${item.price}${item.priceUnitName}(押{${item.deposit}个月)}`
     })
+    return content
   },
   usedDetect: item => {
     const content = []
