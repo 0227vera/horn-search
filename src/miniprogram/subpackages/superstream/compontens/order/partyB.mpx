@@ -101,11 +101,7 @@
         </view>
       </scroll-view>
     </view>
-    <view wx:if="{{loading}}" class="loading">
-      <van-loading type="spinner" color="#1989fa" vertical>
-        <text style="color: #000000;font-weight: bold;">加载中...</text>
-      </van-loading>
-    </view>
+    <skeleton wx:if="{{loading}}" mstyle="padding: 0 32rpx;" />
     <view wx:elif="{{list.length}}" class="card-list">
       <card
         list="{{list}}"
@@ -240,6 +236,7 @@ createComponent({
     toBottom: {
       handler(val) {
         if (val) {
+          if (this.loading) return
           this.moreLoadHandle()
         }
       },
@@ -633,7 +630,6 @@ createComponent({
   {
     "usingComponents": {
       "card": "@/compontens/common/card/index.mpx?root=common-coms-page",
-      "van-loading": "@vant/weapp/loading/index?root=vant-page",
       "van-button": "@vant/weapp/button/index?root=vant-page",
       "van-icon": "@vant/weapp/icon/index?root=vant-page",
       "van-empty": "@vant/weapp/empty/index?root=vant-page",
@@ -647,12 +643,12 @@ createComponent({
       "van-radio": "@vant/weapp/radio/index?root=vant-page",
       "van-radio-group": "@vant/weapp/radio-group/index?root=vant-page",
       "van-checkbox": "@vant/weapp/checkbox/index?root=vant-page",
-      "van-checkbox-group": "@vant/weapp/checkbox-group/index?root=vant-page"
+      "van-checkbox-group": "@vant/weapp/checkbox-group/index?root=vant-page",
+      "skeleton": "@/compontens/common/card/skeleton.mpx"
     },
     "componentPlaceholder": {
       "card": "view",
       "mutil-style-text": "view",
-      "van-loading": "view",
       "van-button": "view",
       "van-icon": "view",
       "van-dropdown-menu": "view",

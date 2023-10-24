@@ -1,9 +1,5 @@
 <template>
-<view wx:if="{{loading}}" class="status">
-  <van-loading type="spinner" color="#1989fa" vertical>
-    <text style="color: #000000;font-weight: bold;">加载中...</text>
-  </van-loading>
-</view>
+<skeleton wx:if="{{loading}}" />
 <card
   wx:elif="{{list.length}}"
   fromOrigin="{{fromOrigin}}"
@@ -132,7 +128,8 @@ createComponent({
     "usingComponents": {
       "card": "@/compontens/common/card/index.mpx?root=common-coms-page",
       "van-loading": "@vant/weapp/loading/index?root=vant-page",
-      "van-empty": "@vant/weapp/empty/index?root=vant-page"
+      "van-empty": "@vant/weapp/empty/index?root=vant-page",
+      "skeleton": "@/compontens/common/card/skeleton.mpx"
     },
     "componentPlaceholder": {
       "card": "view",

@@ -65,6 +65,7 @@ createComponent({
   watch: {
     toBottom(val) {
       if (val) {
+        if (this.loading) return
         this.moreLoadHandle()
       }
     },

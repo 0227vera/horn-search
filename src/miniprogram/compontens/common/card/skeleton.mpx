@@ -1,0 +1,94 @@
+<template>
+  <view class="container" style="{{mstyle}}">
+    <view class="content" wx:for="{{3}}">
+      <view class="content-top">
+        <view class="content-top-img item"></view>
+        <view class="content-top-texts">
+          <view wx:for="{{4}}" class="content-top-texts-item">
+            <view class="content-top-texts-item-title item"></view>
+            <view class="content-top-texts-item-value item"></view>
+          </view>
+        </view>
+      </view>
+      <view class="content-bottom">
+        <view wx:for="{{3}}" class="content-bottom-btn item"></view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import { createComponent } from '@mpxjs/core'
+createComponent({
+  properties: {
+    mstyle: {
+      type: String,
+      value: 'padding: 0;'
+    }
+  }
+})
+</script>
+
+<style lang="stylus" scoped>
+@import "@/assets/base.styl"
+.item
+  background #f2f3f5
+  border-radius 8rpx
+  animation skeletonName 1s infinite
+.content
+  background #ffffff
+  width 100%
+  height auto
+  border-radius 16rpx
+  padding 16rpx
+  box-sizing border-box
+  margin-bottom 16rpx
+  flex-column()
+  &-top
+    flex-center()
+    overflow hidden
+    &-img
+      width 160rpx
+      height 260rpx
+      border-radius 16rpx
+    &-texts
+      flex 1
+      overflow hidden
+      margin-left 16rpx
+      flex-column()
+      justify-content space-between
+      height 260rpx
+      &-item
+        flex-center()
+        height 40rpx
+        &-title
+          width 120rpx
+          height 40rpx
+        &-value
+          height 40rpx
+          flex 1
+          margin-left 16rpx
+  &-bottom
+    flex-center()
+    justify-content flex-end
+    margin-top 18rpx
+    &-btn
+      width 160rpx
+      height 60rpx
+      border 2rpx solid #ebedf0
+      border-radius 30rpx
+      margin-left 8rpx
+@-webkit-keyframes skeletonName
+  0%
+    opacity 1
+  50%
+    opacity 0.5
+  100%
+    opacity 1
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {}
+  }
+</script>
