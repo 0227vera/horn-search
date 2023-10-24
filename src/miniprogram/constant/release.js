@@ -238,7 +238,7 @@ const factoryScaleList = [{
   name: '工厂',
   value: '1'
 }, {
-  name: '小作坊',
+  name: '作坊',
   value: '2'
 }]
 
@@ -312,17 +312,15 @@ const factoryFilter = [{
   value: [],
   activeList: [],
   list: cooperTypeList
-},
-// {
-//   type: 'checkbox',
-//   id: 'fabricProp',
-//   text: '面料属性筛选',
-//   initText: '面料属性筛选',
-//   value: [],
-//   activeList: [],
-//   list: fabricPropList
-// },
-{
+}, {
+  type: 'checkbox',
+  id: 'fabricProp',
+  text: '面料属性筛选',
+  initText: '面料属性筛选',
+  value: [],
+  activeList: [],
+  list: fabricPropList
+}, {
   type: 'checkbox',
   id: 'orderType',
   text: '订单类型筛选',

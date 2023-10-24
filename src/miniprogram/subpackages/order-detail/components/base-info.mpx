@@ -133,10 +133,10 @@ createComponent({
           title: '订单类型',
           value: orderTypeName
         })
-        // list.push({
-        //   title: '面料属性',
-        //   value: fabricPropName
-        // })
+        fabricPropName && list.push({
+          title: '面料属性',
+          value: fabricPropName
+        })
         list.push({
           title: '生产数量',
           value: `${num}件(左右)`

@@ -109,6 +109,18 @@
       placeholder="请点击选择订单类型"
       bind:tap="showPopupContainer('orderType')"
     />
+    <!-- 面料属性 -->
+    <van-field
+      size="large"
+      label="面料属性"
+      title-width="160rpx"
+      is-link
+      readonly
+      value="{{updateObj.fabricPropName}}"
+      input-align="right"
+      placeholder="请点击选择面料属性"
+      bind:tap="showPopupContainer('fabricProp')"
+    />
     <!-- 人数要求 -->
     <van-field
       size="large"
@@ -125,19 +137,6 @@
     >
       <view slot="right-icon" style="color: #333;">{{updateObj.factoryScale === '1' ? '人(以上)' : '人(左右)'}}</view>
     </van-field>
-    <!-- 面料属性 -->
-    <!-- <van-field
-      size="large"
-      label="面料属性"
-      title-width="160rpx"
-      required
-      is-link
-      readonly
-      value="{{updateObj.fabricPropName}}"
-      input-align="right"
-      placeholder="请点击选择面料属性"
-      bind:tap="showPopupContainer('fabricProp')"
-    /> -->
     <!-- 单价 -->
     <!-- <van-field
       size="large"
