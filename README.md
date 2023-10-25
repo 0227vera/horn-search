@@ -1,18 +1,46 @@
-# test-mpx
+# horn-search
 
-尝试使用mpx云开发一个小程序，并闭环小程序相关能力
+技术栈：[mpx](https://mpxjs.cn/) + [微信小程序开发文档](https://developers.weixin.qq.com/miniprogram/dev/framework/) + [微信云开发](https://developers.weixin.qq.com/miniprogram/dev/wxcloud/basis/getting-started.html)
 
 ## 项目开始
 
 ```sh
 npm i
 # development
-npm run serve
+npm start
 
 # production
 npm run build
 ```
 
+## 云函数部分
+
+### 上线步骤
+
+1. 购买云函数的数据库
+2. 新建云函数
+3. 上线云函数（免部署）
+4. 订阅消息模板申请
+5. 微信支付能力申请和开通（需企业账号）
+
+`src/functions`
+
 ## UI视图部分
 
 `src/miniprogram`
+
+### 组件库
+
+[vant-wabapp](https://vant-contrib.gitee.io/vant-weapp/#/home)
+
+### 需要开通的权限
+
+1. 地图api的方法
+2. 腾讯地图的sdk
+
+### 上线步骤
+
+1. 上传代码
+2. 提交体验版本
+3. 提交审核
+4. 确定上线
