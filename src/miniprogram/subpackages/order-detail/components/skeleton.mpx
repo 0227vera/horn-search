@@ -2,11 +2,16 @@
   <view class="container">
     <view class="content-item" wx:if="{{!isWorker}}">
       <view class="content-item-title item" style="width: 160rpx"></view>
-      <view class="content-item-info item" style="height: 200rpx"></view>
+      <view class="content-item-info item" style="height: 100rpx"></view>
     </view>
     <view class="content-item"  wx:if="{{!isWorker}}">
       <view class="content-item-title item" style="width: 160rpx"></view>
-      <view class="content-item-info item" style="height: 400rpx"></view>
+      <view class="content-item-info push" style="height: 400rpx">
+        <view class="content-item-info-title item"></view>
+        <view class="content-item-info-subtitle item"></view>
+        <view class="content-item-info-range item"></view>
+        <view class="content-item-info-note item"></view>
+      </view>
     </view>
     <view class="content-item">
       <view class="content-item-title item" style="width: 160rpx"></view>
@@ -69,6 +74,25 @@ createComponent({
           overflow hidden
           height 60rpx
           margin-left 32rpx
+      &-title
+        height 30rpx
+        width 300rpx
+        margin-bottom 20rpx
+      &-subtitle
+        height 75rpx
+        width 570rpx
+        margin-bottom 20rpx
+      &-range
+        width 150rpx
+        height 150rpx
+        border-radius 150rpx
+        margin-bottom 20rpx
+      &-note
+        height 24rpx
+        width 150rpx
+      &.push
+        flex-column()
+        flex-center()
       &.image
         flex-center()
         justify-content space-between
