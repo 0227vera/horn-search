@@ -5,9 +5,7 @@
     clickLeft="{{clickLeft}}"
     containerBg="linear-gradient(to bottom, #79b3f4, #ffffff)"
   >
-    <view wx:if="{{loading}}" class="status">
-      <van-loading type="spinner" color="#1989fa" vertical>加载中...</van-loading>
-    </view>
+    <skeleton wx:if="{{loading}}" isWorker="{{false}}" />
     <block wx:else>
       <item-container title="流程信息：">
         <van-steps steps="{{ steps }}" active="{{ active }}" />
@@ -133,7 +131,7 @@ createPage({
   align-items center
 .call-container
   display flex
-  box-sizing border-box
+
   padding 20rpx
 .call-item
   position relative
@@ -164,10 +162,10 @@ createPage({
   line-height 80rpx
   font-weight 500
   font-size 24rpx
-  box-sizing border-box
+
 .proccess
   width 100%
-  box-sizing border-box
+
   padding 0 32rpx
   &-content
     overflow hidden
@@ -193,13 +191,13 @@ createPage({
       "van-cell": "@vant/weapp/cell/index?root=vant-page",
       "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page",
       "van-steps": "@vant/weapp/steps/index?root=vant-page",
-      "van-loading": "@vant/weapp/loading/index?root=vant-page",
       "item-container": "../components/item-container",
       "finder": "@/compontens/base/finder.mpx",
       "nav-footer": "@/compontens/base/nav-footer.mpx?root=common-coms-page",
       "base-info": "../components/base-info.mpx",
       "van-dialog": "@vant/weapp/dialog/index?root=vant-page",
-      "back-home": "@/compontens/base/back-home.mpx?root=common-coms-page"
+      "back-home": "@/compontens/base/back-home.mpx?root=common-coms-page",
+      "skeleton": "@/subpackages/order-detail/components/skeleton.mpx"
     },
     "componentPlaceholder": {
       "custom-container": "view",
@@ -208,7 +206,6 @@ createPage({
       "van-cell": "view",
       "van-cell-group": "view",
       "van-steps": "view",
-      "van-loading": "view",
       "van-dialog": "view"
     },
     "navigationStyle": "custom"

@@ -6,11 +6,7 @@
     containerBg="linear-gradient(to bottom, #79b3f4, #ffffff)"
     bind:scrolltobottom="scrolltoBottom"
   >
-    <view wx:if="{{loading}}" class="status">
-      <van-loading type="spinner" color="#1989fa" vertical>
-        <text style="color: #000000;font-weight: bold;">加载中...</text>
-      </van-loading>
-    </view>
+    <skeleton wx:if="{{loading}}" />
     <view wx:else class="container">
       <item-container title="基本信息：">
         <base-info orderData="{{orderData}}" needList />
@@ -115,6 +111,7 @@ createPage({
       }
     },
     scrolltoBottom() {
+      if (this.loading) return
       this.mapFull = true
     },
     closeFull() {
@@ -141,10 +138,10 @@ createPage({
   line-height 80rpx
   font-weight 500
   font-size 24rpx
-  box-sizing border-box
+
 .proccess
   width 100%
-  box-sizing border-box
+
   padding 0 32rpx
   &-content
     overflow hidden
@@ -169,11 +166,11 @@ createPage({
       "van-cell": "@vant/weapp/cell/index?root=vant-page",
       "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page",
       "van-steps": "@vant/weapp/steps/index?root=vant-page",
-      "van-loading": "@vant/weapp/loading/index?root=vant-page",
       "item-container": "../components/item-container",
       "nav-footer": "@/compontens/base/nav-footer.mpx?root=common-coms-page",
       "base-info": "../components/base-info.mpx",
-      "back-home": "@/compontens/base/back-home.mpx?root=common-coms-page"
+      "back-home": "@/compontens/base/back-home.mpx?root=common-coms-page",
+      "skeleton": "@/subpackages/order-detail/components/skeleton.mpx"
     },
     "componentPlaceholder": {
       "custom-container": "view",
@@ -181,8 +178,7 @@ createPage({
       "back-home": "view",
       "van-cell": "view",
       "van-cell-group": "view",
-      "van-steps": "view",
-      "van-loading": "view"
+      "van-steps": "view"
     },
     "navigationStyle": "custom"
   }

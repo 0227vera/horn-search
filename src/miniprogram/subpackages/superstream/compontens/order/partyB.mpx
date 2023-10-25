@@ -89,6 +89,44 @@
                         <view class="custom-button" slot="right-button">{{ (item.value[1] || 100) / 10}}km</view>
                       </van-slider>
                     </view>
+                    <!-- 模糊搜索 -->
+                    <view wx:if="{{item.type === 'like'}}">
+                      <van-field
+                        size="large"
+                        title-width="160rpx"
+                        label="{{item.label}}"
+                        value="{{item.value}}"
+                        placeholder="{{item.placeholder}}"
+                        bind:change="onChangeInput"
+                        id="{{item.id}}"
+                      />
+                      <view class="notice" wx:class="{{city || district || street || street_number}}">
+                        <view class="notice-title">
+                          <mutil-style-text text="您的位置信息如下{(点击可快速输入)}:" rules="{{textRules}}" />
+                        </view>
+                        <view class="notice-item" wx:if="{{city}}">
+                          <view class="notice-item-label">城市:</view>
+                          <view class="notice-item-value">{{city}}</view>
+                          <van-button round size="small" bind:tap="setInput(item.id, city)">填入城市</van-button>
+                        </view>
+                        <view class="notice-item" wx:if="{{district}}">
+                          <view class="notice-item-label">区域:</view>
+                          <view class="notice-item-value">{{district}}</view>
+                          <van-button round size="small" bind:tap="setInput(item.id, district)">填入区域</van-button>
+                        </view>
+                        <view class="notice-item" wx:if="{{street}}">
+                          <view class="notice-item-label">街道:</view>
+                          <view class="notice-item-value">{{street}}</view>
+                          <van-button round size="small" bind:tap="setInput(item.id, street)">填入街道</van-button>
+                        </view>
+                        <view class="notice-item" wx:if="{{street_number}}">
+                          <view class="notice-item-label">街道号:</view>
+                          <view class="notice-item-value">{{street_number}}</view>
+                          <van-button round size="small" bind:tap="setInput(item.id, street_number)">填入街道号</van-button>
+                        </view>
+                      </view>
+                      <view wx:class="{{item.tips}}" class="tips">备注：{{item.tips}}</view>
+                    </view>
                     <view class="filter-container-btn">
                       <van-button class="btn" block round bind:tap="reset(item)">重置</van-button>
                       <van-button class="btn" type="primary" block round bind:tap="filterSure(item)">确定</van-button>
@@ -147,6 +185,11 @@ createComponent({
   data: {
     loading: true,
     page: JSON.parse(JSON.stringify(pageInfo)),
+    textRules: {
+      '{x}': {
+        style: 'color: #ff525d; font-weight: bold;'
+      }
+    },
     renderFilterList: [],
     mainActiveIndex: 0,
     moreLoad: {
@@ -176,6 +219,18 @@ createComponent({
     top() {
       return 50 + this.navBarStyle.height + this.navBarStyle.top + this.navBarStyle.paddingBottom
     },
+    city() {
+      return this.adInfo?.address_component?.city || ''
+    },
+    district() {
+      return this.adInfo?.address_component?.district || ''
+    },
+    street() {
+      return this.adInfo?.address_component?.street || ''
+    },
+    street_number() {
+      return this.adInfo?.address_component?.street_number || ''
+    },
     categoryList() {
       return config[this.categoryTypeId].category
     },
@@ -198,6 +253,10 @@ createComponent({
               minDistance: value[0] * 100,
               maxDistance: value[1] * 100
             }
+          })
+        } else if (item === 'area' && value?.length) {
+          Object.assign(params, {
+            [item]: ['like', value]
           })
         } else if (value?.length) {
           // array or string
@@ -254,7 +313,6 @@ createComponent({
     },
     adInfo: {
       handler(val) {
-        console.log(val)
         if (val?.location?.lat) {
           this.list.forEach(item => {
             item.distance = getDistance(val.location.lat, val.location.lng, item.poi.location.lat, item.poi.location.lng).toFixed(1)
@@ -426,12 +484,29 @@ createComponent({
         }
       })
     },
+    onChangeInput(e) {
+      const { detail, target } = e
+      this.renderFilterList.forEach(item => {
+        if (item.id === target.id) {
+          item.cacheText = detail
+          item.value = detail
+        }
+      })
+    },
+    setInput(id, detail) {
+      this.renderFilterList.forEach(item => {
+        if (item.id === id) {
+          item.cacheText = detail
+          item.value = detail
+        }
+      })
+    },
     reset(detail) {
       this.renderFilterList.forEach(item => {
         if (item.id === detail.id) {
           item.text = detail.initText
           item.cacheText = detail.initText
-          item.value = []
+          item.value = typeof item.value === 'string' ? '' : []
           item.activeList = []
           item.mergeList?.forEach?.(f => {
             f.value.min = ''
@@ -504,22 +579,43 @@ createComponent({
 }
 </style>
 <style lang="stylus" scoped>
+@import "@/assets/base.styl"
 .container
   padding-bottom 50rpx
+.notice
+  padding 16rpx 32rpx
+  &-title
+    font-size 28rpx
+    padding-bottom 16rpx
+    border-bottom $border
+  &-item
+    flex-center()
+    font-size 28rpx
+    margin-top 16rpx
+    font-weight bold
+    border-bottom $border
+    padding-bottom 16rpx
+    &-label
+      margin-right 8rpx
+    &-value
+      flex 1
+      overflow hidden
+.tips
+  padding 16rpx 32rpx
+  color $color-red
+  font-size 28rpx
 .loading
   width 100%
   height 70vh
-  display flex
-  align-items center
-  justify-content center
-  flex-direction column
+  flex-center()
+  flex-column()
   .text
     font-size 28rpx
-    color #000000
+    color $color-main
     font-weight bold
 .card-list
   padding 0 32rpx
-  box-sizing border-box
+
 .filter-title
   height 70rpx
   text-align center
@@ -574,7 +670,7 @@ createComponent({
   padding 16rpx 0
   &-btn
     padding 16rpx 16rpx
-    box-sizing border-box
+
     display flex
     justify-content space-around
     .btn
@@ -644,11 +740,13 @@ createComponent({
       "van-radio-group": "@vant/weapp/radio-group/index?root=vant-page",
       "van-checkbox": "@vant/weapp/checkbox/index?root=vant-page",
       "van-checkbox-group": "@vant/weapp/checkbox-group/index?root=vant-page",
+      "van-field": "@vant/weapp/field/index?root=vant-page",
       "skeleton": "@/compontens/common/card/skeleton.mpx"
     },
     "componentPlaceholder": {
       "card": "view",
       "mutil-style-text": "view",
+      "van-field": "view",
       "van-button": "view",
       "van-icon": "view",
       "van-dropdown-menu": "view",

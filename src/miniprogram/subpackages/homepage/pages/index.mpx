@@ -72,8 +72,7 @@ createPage({
 <style lang="stylus" scoped>
 @import "@/assets/base.styl"
 .container
-  padding 16rpx 32rpx 100rpx
-  box-sizing border-box
+  padding 16rpx 32rpx 150rpx
   overflow hidden
   .list
     flex-column()
@@ -85,7 +84,6 @@ createPage({
       &_line
         width 50%
         padding 16rpx
-        box-sizing border-box
         position relative
         flex-center()
         flex-column()
@@ -95,7 +93,6 @@ createPage({
           border-radius 50%
           border 2rpx solid #dddddd
           padding 8rpx
-          box-sizing border-box
           margin-bottom 16rpx
           background #ffffff
           box-shadow $box-shadow

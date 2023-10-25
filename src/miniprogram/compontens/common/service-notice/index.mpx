@@ -87,7 +87,7 @@ createComponent({
     background #ffffff
     font-weight bold
     border-radius 32rpx
-    box-sizing border-box
+
     padding 32rpx
     &-item
       width 100%

@@ -85,7 +85,7 @@ createComponent({
 <style lang="stylus">
 .submit
   padding 32rpx
-  box-sizing border-box
+
   margin-top 64rpx
 </style>
 

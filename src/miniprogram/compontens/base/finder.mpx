@@ -58,7 +58,7 @@ createComponent({
   justify-content center
   align-items center
   padding 20rpx 0
-  box-sizing border-box
+
   .title
     font-size 30rpx
     margin-bottom 20rpx

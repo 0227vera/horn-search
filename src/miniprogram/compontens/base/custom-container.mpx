@@ -105,7 +105,7 @@ createComponent({
   height 100vh
   overflow hidden
   .content
-    box-sizing border-box
+
     height 100%
     overflow hidden
     display flex

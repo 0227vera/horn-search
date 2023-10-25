@@ -43,6 +43,13 @@ createApp({
 })
 </script>
 
+<style lang="stylus">
+page
+  font-family PingFangSC-Regular, PingFang SC, STHeitiSC-Light, Helvetica-Light, arial, sans-serif
+  view
+    box-sizing border-box
+</style>
+
 <script type="application/json">
   {
     "pages": [

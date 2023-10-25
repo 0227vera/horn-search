@@ -305,6 +305,16 @@ const factoryFilter = [{
   activeList: [],
   list: productTypeList
 }, {
+  type: 'like',
+  id: 'area',
+  text: '地域要求筛选',
+  initText: '地域要求筛选',
+  placeholder: '输入地域可筛选',
+  label: '地域要求',
+  tips: '将为您筛选所输入的地域',
+  value: '',
+  activeList: []
+}, {
   type: 'checkbox',
   id: 'cooperType',
   text: '合作类型筛选',
