@@ -4,11 +4,11 @@ const UserService = require('../service/user_service.js')
 class UserController extends BaseController {
   async getList() {
     const where = {
-      OPENID: this._openId
+      // OPENID: this._openId
     }
-    Object.assign(where, this._event.params || {})
+    const { fields = '*', ...newWhere } = this._event.params || {}
     const service = new UserService()
-    const res = await service.getList(where)
+    const res = await service.getList(newWhere, fields)
     return res
   }
 

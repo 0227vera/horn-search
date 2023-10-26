@@ -4,8 +4,16 @@
   lefticon="wap-home"
   containerBg="linear-gradient(to bottom, #8aa7ec, #79b3f4, #ffffff)"
 >
+  <view class="navbar">
+    <view class="navbar-content">
+      <view wx:for="{{navbar}}" wx:key="*this" class="navbar-content-item" wx:if="{{!item.hide}}" bindtap="itemtaphandle(item)">
+        <van-icon name="{{item.icon}}" class="navbar-content-item-icon" />
+        <view class="navbar-content-item-name">{{item.name}}</view>
+      </view>
+    </view>
+  </view>
   <view class="list">
-    <view wx:for="{{list}}" wx:key="*this" style="margin-top: 16rpx">
+    <view wx:for="{{list}}" wx:key="*this" class="list-item">
       <van-cell-group inset>
         <van-cell
           size="large"
@@ -62,6 +70,22 @@ createPage({
   },
   computed: {
     ...store.mapState(['company']),
+    navbar() {
+      return [
+        {
+          name: '个人信息',
+          icon: 'manager-o',
+          jumptype: 'mp',
+          url: '/person-center/pages/person-info'
+        },
+        {
+          name: '工厂信息',
+          icon: 'info-o',
+          jumptype: 'mp',
+          url: '/person-center/pages/company-info'
+        }
+      ]
+    },
     list() {
       return [
         [
@@ -154,8 +178,36 @@ createPage({
 </script>
 
 <style lang="stylus" scoped>
+.navbar
+  width 100%
+  padding 0 32rpx
+  margin-top 16rpx
+  .navbar-content
+    background #ffffff
+    box-shadow 0px 4px 20px 0px rgba(0,0,0,0.4)
+    border-radius 16rpx
+    display flex
+    align-items center
+    justify-content space-around
+    padding 32rpx
+    overflow hidden
+    color #000000
+    font-weight bold
+    .navbar-content-item
+      display flex
+      flex-direction column
+      align-items center
+      justify-content center
+      color #333
+      .navbar-content-item-icon
+        font-size 50rpx
+      .navbar-content-item-name
+        font-size 26rpx
+        margin-top 12rpx
 .list
   padding-top 32rpx
+  &-item
+    margin-bottom 16rpx
 .company-container
   min-height 100rpx
 </style>

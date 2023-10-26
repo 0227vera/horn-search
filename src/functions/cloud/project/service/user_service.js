@@ -7,8 +7,8 @@ class UserManagerService extends BaseService {
     return res
   }
 
-  async getList(where = {}) {
-    let res = await UserModel.getList(where)
+  async getList(where = {}, fields = '*') {
+    let res = await UserModel.getList(where, fields)
     return res
   }
 

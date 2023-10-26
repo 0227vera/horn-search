@@ -50,10 +50,6 @@ createComponent({
     btnName: {
       type: String,
       value: ''
-    },
-    needToTop: {
-      type: Boolean,
-      value: false
     }
   },
   attached() {

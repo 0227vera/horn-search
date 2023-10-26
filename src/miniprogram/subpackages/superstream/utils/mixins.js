@@ -1,6 +1,6 @@
 import { ORDER_UPDATE } from '@/setting/noticeInfo.js'
 import { fileUpload, addRelease, updateRelease, updateUserInfo } from '@/api'
-import config, { categoryMap } from '@/constant/release.js'
+import config from '@/constant/release.js'
 import { formatNumSubmitData } from '@/subpackages/superstream/utils/utils.js'
 import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
 import mpx from '@mpxjs/core'

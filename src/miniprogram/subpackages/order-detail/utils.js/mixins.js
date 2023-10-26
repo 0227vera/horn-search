@@ -1,5 +1,6 @@
 import mpx from '@mpxjs/core'
-import { getReleaseOneById } from '@/api'
+import { getReleaseOneById, getUserList } from '@/api'
+import dayjs from 'dayjs'
 import store from '@/store'
 const mixin = {
   onShareAppMessage() {
@@ -106,6 +107,27 @@ const mixin = {
     this.loading = false
     if (this.isWorker) {
       this.readlistFunc(readlist)
+    } else {
+      const currentTime = +dayjs(Date.now()).format('HHmm')
+      if (this.fromOrigin === 'bossWorker') {
+        const and = {
+          'biographical.list.category': ['like', category],
+          'biographical.list.status': 'on',
+          'biographical.list.start': ['<=', currentTime]
+        }
+        const res = await getUserList({ and, fields: 'biographical' })
+        const { list } = res.data || {}
+        console.log(list)
+        const newList = list.map(item => {
+          console.log(item.biographical)
+          item.biographical.list = item.biographical.list.filter(m => {
+            return m.status === 'on' && m.start >= currentTime && (m.end ? m.end <= currentTime : true) && m.category.includes(category)
+          })
+          return item
+        }).filter(item => !item.biographical.list.length)
+        this.talentList = newList
+        console.log(newList)
+      }
     }
   },
   methods: {

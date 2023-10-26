@@ -1,5 +1,5 @@
 <template>
-  <custom-container title="加入我们">
+  <custom-container title="加入我们" containerBg="linear-gradient(to bottom, #79b3f4, #ffffff)">
     <van-cell-group inset>
       <van-cell title="描述" value="{{usInfo.text}}" />
       <van-cell title="电话" value="{{usInfo.phone}}" />

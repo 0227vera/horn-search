@@ -1,6 +1,7 @@
 import mpx, { createStore } from '@mpxjs/core'
 import MapSdk from '@/wx-map-sdk/qqmap-wx-jssdk.min.js'
 import Dialog from '@vant/weapp/dialog/dialog'
+import dayjs from 'dayjs'
 
 export function checkIpx () {
   const systemInfo = wx.getSystemInfoSync()
@@ -46,7 +47,18 @@ export default createStore({
     addressList: [],
     fromOrigin: '',
     cacheForm: {},
-    company: ''
+    company: '',
+    biographical: {
+      categoryName: '',
+      category: '',
+      poi: {},
+      tel: '',
+      note: '',
+      time: {
+        start: dayjs(Date.now()).format('HH:mm'),
+        end: ''
+      }
+    }
   },
   getters: {
     currentGooterList(state) {

@@ -15,10 +15,11 @@
       title="{{title || '选择截止时间'}}"
       value="{{ currentDate }}"
       min-date="{{ minDate }}"
+      min-hour="{{minHour}}"
+      min-minute="{{minMinute}}"
       bind:input="onTimeInput"
       bind:confirm="onTimeConfirm"
       bind:cancel="close"
-      filter="{{ filter }}"
       formatter="{{formatter}}"
     />
     <!-- 位置选择 -->
@@ -50,6 +51,7 @@
         height="75vh"
         items="{{ categoryList }}"
         main-active-index="{{ mainActiveIndex }}"
+        max="{{max}}"
         main-active-class="left-select"
         content-active-class="right-select"
         active-id="{{ activeId }}"
@@ -134,6 +136,10 @@ createComponent({
       type: Array,
       value: []
     },
+    max: {
+      type: Number,
+      value: 1
+    },
     title: {
       type: String,
       value: ''
@@ -162,6 +168,14 @@ createComponent({
       type: Array,
       value: ''
     },
+    minHour: {
+      type: Number,
+      value: 0
+    },
+    minMinute: {
+      type: Number,
+      value: 0
+    },
     timeType: {
       type: String,
       value: 'datetime'
@@ -169,6 +183,10 @@ createComponent({
     initTime: {
       type: String,
       value: ''
+    },
+    initActiveId: {
+      type: String || Array,
+      value: null
     }
   },
   watch: {
@@ -189,13 +207,19 @@ createComponent({
         this.currentDate = val
       },
       immediate: true
+    },
+    initActiveId: {
+      handler(val) {
+        this.activeId = val
+      },
+      immediate: true
     }
   },
   data: {
     // node: 分类相关
     mainActiveIndex: 0,
-    activeId: '',
-    activeCategory: {},
+    activeId: null,
+    activeCategory: null,
     // note: 地址相关
     address: {},
     // note: 时间相关
@@ -213,7 +237,7 @@ createComponent({
     },
     filter(type, options) {
       if (type === 'minute') {
-        return options.filter((option) => option % 15 === 0)
+        return options.filter((option) => option % 5 === 0)
       }
 
       return options
@@ -269,7 +293,8 @@ createComponent({
     onAddressClickRight() {
       this.confirm({
         poi: this.address.address,
-        tel: this.address.phone
+        tel: this.address.phone,
+        name: this.address.name
       })
     },
     // note: 分类
@@ -277,9 +302,23 @@ createComponent({
       this.mainActiveIndex = detail.index
     },
     onClickItem({ detail = {} }) {
-      const activeId = this.activeId === detail.id ? null : detail.id
-      this.activeId = activeId
-      this.activeCategory = detail
+      if (this.max === 1) {
+        const activeId = this.activeId === detail.id ? null : detail.id
+        this.activeId = activeId
+        this.activeCategory = detail
+      } else if (this.max > 1) {
+        let activeId = this.activeId || []
+        let activeCategory = this.activeId ? this.activeCategory : []
+        if (activeId.includes(detail.id)) {
+          activeId = activeId.filter(item => item !== detail.id)
+          activeCategory = activeCategory.filter(item => item.id !== detail.id)
+        } else {
+          activeId.push(detail.id)
+          activeCategory.push(detail)
+        }
+        this.activeId = activeId
+        this.activeCategory = activeCategory
+      }
     },
     onCategoryClickRight() {
       const obj = JSON.parse(JSON.stringify(this.activeCategory))

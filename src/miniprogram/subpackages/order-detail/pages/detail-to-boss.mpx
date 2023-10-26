@@ -51,7 +51,8 @@ createPage({
     active: '',
     calllist: [],
     readlist: [],
-    status: ''
+    status: '',
+    talentList: []
   },
   computed: {
     ...store.mapState(['steps', 'openid', 'fromOrigin']),
