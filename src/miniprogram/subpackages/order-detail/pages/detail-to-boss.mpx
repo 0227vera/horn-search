@@ -21,6 +21,36 @@
           </view>
         </view>
       </item-container>
+      <item-container title="人才市场：" wx:if="{{talentList.length}}">
+        <view class="talent-container">
+          <view wx:for="{{talentList}}" wx:key="_id" class="talent-item">
+            <view class="talent-item-name">{{item.biographical.name || 'XX先生/女士'}}</view>
+            <view style="padding: 16rpx;">
+              <view wx:for="{{item.biographical.list}}" class="talent-item-content" wx:key="id" wx:for-item="content">
+                <view class="talent-item-content_item">
+                  <view class="talent-item-content_item-label">擅长技能：</view>
+                  <view class="talent-item-content_item-value">{{content.categoryName}}</view>
+                </view>
+                <view class="talent-item-content_item">
+                  <view class="talent-item-content_item-label">可到岗时间：</view>
+                  <view class="talent-item-content_item-value">{{content.time.start}}{{content.time.end ? ' ~ ' + content.time.end : '以后均可'}}</view>
+                </view>
+                <view class="talent-item-content_item">
+                  <view class="talent-item-content_item-label">地址：</view>
+                  <view class="talent-item-content_item-value">{{content.poi && content.poi.detail}}</view>
+                </view>
+                <view class="talent-item-content_item" wx:if="{{content.note}}">
+                  <view class="talent-item-content_item-label">备注：</view>
+                  <view class="talent-item-content_item-value">{{content.note}}</view>
+                </view>
+              </view>
+            </view>
+            <view class="talent-item-call">
+              <van-button round type="primary" size="small" bind:tap="callTel(item)">打电话</van-button>
+            </view>
+          </view>
+        </view>
+      </item-container>
       <item-container title="基本信息：">
         <base-info orderData="{{orderData}}" />
       </item-container>
@@ -40,7 +70,7 @@
 
 <script>
 import mpx, { createPage } from '@mpxjs/core'
-import { getReleaseOneById, updateRelease } from '@/api'
+import { getReleaseOneById, updateRelease, updateUserInfo } from '@/api'
 import store from '@/store'
 import Dialog from '@vant/weapp/dialog/dialog'
 import mixins from '@/subpackages/order-detail/utils.js/mixins.js'
@@ -118,12 +148,75 @@ createPage({
         share: true
       }]
     }
+  },
+  methods: {
+    callTel({ biographical, cacheBiographical, _id }) {
+      wx.makePhoneCall({
+        phoneNumber: biographical.tel,
+        success: () => {
+          const newBiographical = { ...cacheBiographical }
+          newBiographical.callList = newBiographical.callList || []
+          const isCall = newBiographical.callList.find(item => item.category === this.category)
+          if (!isCall) {
+            newBiographical.callList.push({
+              category: this.category,
+              times: 1
+            })
+          } else {
+            newBiographical.callList.forEach(item => {
+              if (item.category === this.category) {
+                item.times++
+              }
+            })
+          }
+          updateUserInfo({
+            _id,
+            biographical: newBiographical
+          })
+          console.log(newBiographical)
+        }
+      })
+    }
   }
 })
 
 </script>
 
 <style lang="stylus" scoped>
+.talent
+  &-container
+    padding 16rpx 32rpx
+  &-item
+    margin-bottom 16rpx
+    &-name
+      font-size 36rpx
+      display flex
+      justify-content center
+      align-items center
+      padding-bottom 16rpx
+      border-bottom 2rpx solid #ebedf0
+    &-call
+      display flex
+      justify-content flex-end
+      align-items center
+    &-content
+      margin-bottom 16rpx
+      padding-bottom 16rpx
+      border-bottom 2rpx solid #ebedf0
+      &_item
+        display flex
+        justify-content center
+        align-items center
+        font-size 28rpx
+        color #333333
+        font-weight bold
+        margin-bottom 8rpx
+        &-label
+          width 180rpx
+          text-align right
+        &-value
+         flex 1
+         overflow hidden
 .status
   width 100%
   height 100%
@@ -132,7 +225,6 @@ createPage({
   align-items center
 .call-container
   display flex
-
   padding 20rpx
 .call-item
   position relative
@@ -163,10 +255,8 @@ createPage({
   line-height 80rpx
   font-weight 500
   font-size 24rpx
-
 .proccess
   width 100%
-
   padding 0 32rpx
   &-content
     overflow hidden
@@ -197,6 +287,7 @@ createPage({
       "nav-footer": "@/compontens/base/nav-footer.mpx?root=common-coms-page",
       "base-info": "../components/base-info.mpx",
       "van-dialog": "@vant/weapp/dialog/index?root=vant-page",
+      "van-button": "@vant/weapp/button/index?root=vant-page",
       "back-home": "@/compontens/base/back-home.mpx?root=common-coms-page",
       "skeleton": "@/subpackages/order-detail/components/skeleton.mpx"
     },
@@ -207,6 +298,7 @@ createPage({
       "van-cell": "view",
       "van-cell-group": "view",
       "van-steps": "view",
+      "van-button": "view",
       "van-dialog": "view"
     },
     "navigationStyle": "custom"

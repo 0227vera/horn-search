@@ -19,7 +19,13 @@ class UserManagerService extends BaseService {
 
   async update(data = {}) {
     const { _id, ...newData } = data
-    const res = await UserModel.insertOrUpdate({ OPENID: data.OPENID }, newData)
+    let res = null
+    console.log(data)
+    if (_id) {
+      res = await UserModel.insertOrUpdate({ _id }, newData)
+    } else {
+      res = await UserModel.insertOrUpdate({ OPENID: data.OPENID }, newData)
+    }
     return res
   }
 

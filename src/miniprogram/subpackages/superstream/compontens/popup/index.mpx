@@ -183,10 +183,6 @@ createComponent({
     initTime: {
       type: String,
       value: ''
-    },
-    initActiveId: {
-      type: String || Array,
-      value: null
     }
   },
   watch: {
@@ -205,12 +201,6 @@ createComponent({
     initTime: {
       handler(val) {
         this.currentDate = val
-      },
-      immediate: true
-    },
-    initActiveId: {
-      handler(val) {
-        this.activeId = val
       },
       immediate: true
     }

@@ -91,6 +91,11 @@
         bind:change="onFieldChange"
       />
     </van-cell-group>
+    <view wx:if="{{callListText}}" class="call-container">
+      <view class="call-content">
+        <mutil-style-text text="{{callListText}}" rules="{{textRules}}" />
+      </view>
+    </view>
     <view wx:if="{{list.length}}" class="list">
       <van-collapse wx:for="{{list}}" wx:key="id" value="{{ active }}" bind:change="onActiveChange" style="border-radius: 16rpx;">
         <van-collapse-item title="{{item.categoryName}}" name="{{item.id}}">
@@ -152,7 +157,12 @@ createPage({
     minHour: 0,
     minMinute: 0,
     active: [],
-    toastText: ''
+    toastText: '',
+    textRules: {
+      '{x}': {
+        style: 'margin: 0 16rpx; font-size: 60rpx; color: #07c160;'
+      }
+    }
   },
   computed: {
     ...store.mapState(['addressList', 'adInfo', 'biographical']),
@@ -164,6 +174,16 @@ createPage({
     },
     activeId() {
       return this.biographical.category ? this.biographical.category.split(';') : []
+    },
+    callList() {
+      return this.biographical.callList || []
+    },
+    callListText() {
+      if (this.callList.length) {
+        const times = this.callList.reduce((sum = 0, item) => sum + item.times, 0)
+        return `您累计被呼叫{${times}}次`
+      }
+      return ''
     }
   },
   watch: {
@@ -388,6 +408,7 @@ createPage({
         time: this.biographical.time,
         start: +this.biographical.time.start.replace(':', ''),
         end: +this.biographical.time.end.replace(':', ''),
+        poi: this.biographical.poi,
         id: guid()
       })
       const biographical = JSON.parse(JSON.stringify(this.biographical))
@@ -412,10 +433,19 @@ createPage({
 </script>
 
 <style lang="stylus" scoped>
+.call-container
+  padding 16rpx 32rpx
+  margin-top 16rpx
+  margin-bottom -32rpx
+  .call-content
+    background #fff
+    padding 32rpx
+    font-size 40rpx
+    font-weight bold
+    border-radius 32rpx 32rpx 0 0
 .list
   padding 0 32rpx
   border-radius 16rpx
-  margin-top 16rpx
   overflow hidden
   .switch
     width 100%
@@ -448,10 +478,12 @@ module.exports = {
     "van-collapse": "@vant/weapp/collapse/index",
     "van-collapse-item": "@vant/weapp/collapse-item/index",
     "van-switch": "@vant/weapp/switch/index",
+    "mutil-style-text": "@/compontens/base/mutil-style-text.mpx?root=common-coms-page",
     "toast": "@/compontens/base/toast.mpx",
   },
   "componentPlaceholder": {
     "custom-container": "view",
+    "mutil-style-text": "view",
     "popup": "view",
     "van-cell": "view",
     "van-cell-group": "view",
