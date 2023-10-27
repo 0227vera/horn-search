@@ -266,22 +266,23 @@ createComponent({
         status: ['in', ['2', '3']]
         // OPENID: ['not in', [this.openid]]
       }
-      if (this.adInfo?.location?.lat) {
-        Object.assign(params, {
-          location: this.adInfo.location
-        })
-      }
+      // if (this.adInfo?.location?.lat) {
+      //   Object.assign(params, {
+      //     location: this.adInfo.location
+      //   })
+      // }
       Object.keys(this.filter).forEach(item => {
         const value = this.filter[item]
-        if (item === 'distance') {
-          Object.assign(params, {
-            location: {
-              ...this.adInfo?.location || {},
-              minDistance: value[0] * 100,
-              maxDistance: value[1] * 100
-            }
-          })
-        } else if (item === 'area' && value?.length) {
+        // if (item === 'distance') {
+        //   Object.assign(params, {
+        //     location: {
+        //       ...this.adInfo?.location || {},
+        //       minDistance: value[0] * 100,
+        //       maxDistance: value[1] * 100
+        //     }
+        //   })
+        // } else
+        if (item === 'area' && value?.length) {
           Object.assign(params, {
             [item]: ['like', value]
           })
@@ -319,15 +320,6 @@ createComponent({
     }
   },
   watch: {
-    // toBottom: {
-    //   handler(val) {
-    //     if (val) {
-    //       if (this.loading) return
-    //       this.moreLoadHandle()
-    //     }
-    //   },
-    //   immediate: true
-    // },
     filterSure(val) {
       this.renderFilterList = JSON.parse(JSON.stringify(val))
     },

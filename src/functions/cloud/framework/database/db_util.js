@@ -155,7 +155,6 @@ async function count(collectionName, where) {
     query = await query.doc(where)
   else
     query = await query.where(fmtWhere(where))
-
   query = await query.count()
   return query.total
 }
@@ -680,7 +679,7 @@ async function getAllBig(collectionName, where, fields = '*', orderBy, size = MA
   if (size > MAX_RECORD_SIZE) size = MAX_RECORD_SIZE
 
   // 计算总数
-  let total = await await count(collectionName, where)
+  let total = await count(collectionName, where)
 
   // 页数
   let page = Math.ceil(total / size)
