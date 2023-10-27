@@ -1,6 +1,6 @@
 <template>
   <view class="container">
-    <view class="nav">
+    <view class="nav" wx:if="{{showFilter}}">
       <view class="order-type">
         <view class="order-type-item {{orderSelect === 'push' ? 'selected' : ''}}" bind:tap="clickOrderTypes('push')">
           <view wx:if="{{pushNum}}" class="num">{{pushNum}}</view>
@@ -35,14 +35,11 @@ createComponent({
     updateList: {
       type: Boolean,
       value: false
-    },
-    toBottom: {
-      type: Boolean,
-      value: false
     }
   },
   data: {
     orderSelect: 'push',
+    showFilter: true,
     orderList: [],
     loading: true,
     page: JSON.parse(JSON.stringify(pageInfo)),
@@ -54,6 +51,20 @@ createComponent({
   },
   attached() {
     this.getList()
+    getApp().eventBus.on('scroll-to-lower', () => {
+      this.moreLoadHandle()
+    })
+    getApp().eventBus.on('scroll-to-upper', () => {
+      this.showFilter = true
+    })
+    getApp().eventBus.on('scroll', (e) => {
+      this.showFilter = e.scrollTop <= 50
+    })
+  },
+  detached() {
+    getApp().eventBus.removeListener('scroll-to-lower')
+    getApp().eventBus.removeListener('scroll-to-upper')
+    getApp().eventBus.removeListener('scroll')
   },
   computed: {
     status() {
@@ -63,12 +74,6 @@ createComponent({
     }
   },
   watch: {
-    toBottom(val) {
-      if (val) {
-        if (this.loading) return
-        this.moreLoadHandle()
-      }
-    },
     updateList() {
       this.orderList = []
       this.page = JSON.parse(JSON.stringify(pageInfo))
@@ -103,7 +108,7 @@ createComponent({
       }
     },
     moreLoadHandle() {
-      if (!this.moreLoad.isClick) {
+      if (!this.moreLoad.isClick || this.moreLoad.loading || this.loading) {
         return
       }
       this.page.page++

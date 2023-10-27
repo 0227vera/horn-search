@@ -44,8 +44,12 @@ class UserController extends BaseController {
   }
 
   async update() {
-    const where = {
-      OPENID: this._openId
+    const where = {}
+    // note: 如果是用户自己更新，直接用openid处理，如果是甲方处理，需要用_id处理
+    if (!this._event.params._id) {
+      Object.assign(where, {
+        OPENID: this._openId
+      })
     }
     Object.assign(where, this._event.params || {})
     const service = new UserService()

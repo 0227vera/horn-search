@@ -1,23 +1,11 @@
 <template>
-  <view class="subcri" wx:if="{{show}}" style="bottom: {{bottom}};" bind:tap="clickSub">
-    <view class="info">
-      <view class="mainTitle">消息订阅提醒</view>
-      <view class="subTitle">点击订阅，有新订单第一时间通知您</view>
-    </view>
-    <view class="btn">
-      <van-button size="small" type="primary">消息订阅</van-button>
-    </view>
-    <view class="close" catchtap="close">
-      <van-icon name="cross" />
-    </view>
-  </view>
+  <bottom-info wx:if="{{show}}" bind:click="clickSub" bind:close="close" />
   <service-notice tmplIds="{{tmplIds}}" wx:ref="service" />
 </template>
 
 <script>
 import { createComponent } from '@mpxjs/core'
 import { NEW_ORDER_NOTICE, ORDER_UPDATE } from '@/setting/noticeInfo.js'
-import store from '@/store'
 
 createComponent({
   data: {
@@ -31,16 +19,6 @@ createComponent({
   },
   attached() {
     this.initShowStatus()
-  },
-  computed: {
-    ...store.mapState(['isIphoneX']),
-    bottom() {
-      if (this.isIphoneX) {
-        return '60rpx'
-      } else {
-        return '20rpx'
-      }
-    }
   },
   methods: {
     async initShowStatus() {
@@ -66,52 +44,16 @@ createComponent({
 </script>
 
 <style lang="stylus" scoped>
-  .subcri
-    width 94%
-    padding 16rpx 32rpx
-    box-shadow 0px 4px 20px 0px rgba(0,0,0,0.2)
-    border-radius 12rpx
-    display flex
-    align-items center
-    position fixed
-    left 3%
-    background-image linear-gradient(to right top, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #41dfff);
-    overflow hidden
-    animation showIn 0.5s
-    .info
-      flex 1
-      font-size 28rpx
-      font-weight bold
-      color #333333
-      .subTitle
-        color #666666
-    .close
-      position absolute
-      top 0
-      right 0
-      font-size 28rpx
-      background rgba(0, 0, 0, 0.5)
-      color #ffffff
-      border-radius 0 12rpx 0 12rpx
-@-webkit-keyframes showIn
-  from
-    left -100%
-    opacity 0
-  to
-    left 3%
-    opacity 1
 </style>
 
 <script type="application/json">
   {
     "usingComponents": {
-      "van-button": "@vant/weapp/button/index?root=vant-page",
-      "van-icon": "@vant/weapp/icon/index?root=vant-page",
-      "service-notice": "./index"
+      "service-notice": "./index",
+      "bottom-info": "@/compontens/base/bottom-info.mpx?root=common-coms-page"
     },
-    "componentPlaceholder": {
-      "van-button": "view",
-      "van-icon": "view"
-    }
+     "componentPlaceholder": {
+      "bottom-info": "view"
+     }
   }
 </script>

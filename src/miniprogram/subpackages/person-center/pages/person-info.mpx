@@ -2,9 +2,14 @@
 <custom-container
   title="个人信息"
   containerBg="linear-gradient(to bottom, #8aa7ec, #79b3f4, #ffffff)"
-  btnName="{{list.length ? '更新' : '发布'}}"
+  btnName="{{pageType === 'edit' ? '更新' : '发布'}}"
   bind:footer-btn="release"
 >
+  <view wx:if="{{callListText}}" class="call-container">
+    <view class="call-content">
+      <mutil-style-text text="{{callListText}}" rules="{{textRules}}" />
+    </view>
+  </view>
   <view style="padding-bottom: 100rpx;">
     <van-cell-group inset>
       <!-- 技能相关 -->
@@ -65,7 +70,7 @@
       />
       <van-field
         size="large"
-        label="推送时间"
+        label="截止时间"
         title-width="160rpx"
         is-link
         readonly
@@ -91,35 +96,6 @@
         bind:change="onFieldChange"
       />
     </van-cell-group>
-    <view wx:if="{{callListText}}" class="call-container">
-      <view class="call-content">
-        <mutil-style-text text="{{callListText}}" rules="{{textRules}}" />
-      </view>
-    </view>
-    <view wx:if="{{list.length}}" class="list">
-      <van-collapse wx:for="{{list}}" wx:key="id" value="{{ active }}" bind:change="onActiveChange" style="border-radius: 16rpx;">
-        <van-collapse-item title="{{item.categoryName}}" name="{{item.id}}">
-          <view slot="value" class="switch">
-            <view catchtap="onSwitchChange(item.id)" class="switch-content">
-              <view wx:if="{{item.status !== 'on'}}" style="margin-right: 16rpx;">已关闭推送</view>
-              <van-switch active-color="#07c160" size="36rpx" checked="{{ item.status === 'on' }}" style="margin-bottom: -12rpx;" />
-              <view wx:if="{{item.status === 'on'}}" style="color: #07c160; margin-left: 16rpx;">已开启推送</view>
-            </view>
-          </view>
-          <view class="content">
-            <view class="content-item">
-              推送情况：{{item.status === 'on' ? '正在推送中……' : '已停止推送'}}
-            </view>
-            <view class="content-item">
-              推送时间：{{item.time.start}}{{item.time.end ? ' ~ ' + item.time.end : '以后'}}
-            </view>
-            <view class="content-item">
-              推送情况：已为您推送给所有招工老板
-            </view>
-          </view>
-        </van-collapse-item>
-      </van-collapse>
-    </view>
   </view>
 </custom-container>
 <popup
@@ -169,9 +145,6 @@ createPage({
     categoryList() {
       return config['findWorker'].category
     },
-    list() {
-      return this.biographical.list || []
-    },
     activeId() {
       return this.biographical.category ? this.biographical.category.split(';') : []
     },
@@ -180,20 +153,10 @@ createPage({
     },
     callListText() {
       if (this.callList.length) {
-        console.log('=======+>', this.callList)
-        console.log('=======+>', this.biographical)
         const times = this.callList.reduce((sum, item) => sum + item.times, 0)
         return `您累计被呼叫{${times}}次`
       }
       return ''
-    }
-  },
-  watch: {
-    list: {
-      handler(val) {
-        this.active = val.map(item => item.id)
-      },
-      immediate: true
     }
   },
   onLoad() {
@@ -217,8 +180,13 @@ createPage({
   methods: {
     ...store.mapMutations(['setState']),
     ...store.mapActions(['setLocation']),
+    pageType() {
+      if (this.biographical.id) {
+        return 'edit'
+      }
+      return 'new'
+    },
     initAddressPhone() {
-      console.log(this.addressList)
       const item = this.addressList.find(item => item.checked)
       if (item?.id) {
         this.setState({
@@ -229,59 +197,6 @@ createPage({
             name: item.name
           }
         })
-      }
-    },
-    onActiveChange(e) {
-      this.active = e.detail
-    },
-    async onSwitchChange(id) {
-      const list = JSON.parse(JSON.stringify(this.list))
-      const item = list.find(f => f.id === id)
-      list.forEach(item => {
-        if (item.id === id) {
-          item.status = item.status === 'on' ? 'off' : 'on'
-        }
-      })
-      const biographical = JSON.parse(JSON.stringify(this.biographical))
-      biographical.list = list
-      mpx.showLoading({
-        mask: true,
-        title: '状态更改中……'
-      })
-      const res = await updateUserInfo({
-        biographical
-      })
-      if (res.code === 200) {
-        if (item.status === 'off') {
-          mpx.hideLoading()
-          Dialog.confirm({
-            title: '提示',
-            message: '已为您关闭推送状态，是否需要同时帮您删除这条记录?',
-            confirmButtonText: '需要',
-            cancelButtonText: '不需要'
-          }).then(() => {
-            biographical.list = list.filter(f => f.id !== id)
-            updateUserInfo({
-              biographical
-            }).then(() => {
-              this.setState({ biographical })
-              mpx.showToast({
-                mask: true,
-                title: '删除成功'
-              })
-            })
-          }).catch(() => {
-            this.setState({ biographical })
-          })
-        } else {
-          mpx.showToast({
-            mask: true,
-            title: '更改成功'
-          })
-          this.setState({ biographical })
-        }
-      } else {
-        mpx.hideLoading()
       }
     },
     showPopupContainer(type, currentTimeType) {
@@ -400,32 +315,26 @@ createPage({
         }, 0)
         return
       }
-      console.log('release', this.biographical)
-      const list = JSON.parse(JSON.stringify(this.biographical.list || []))
-      list.unshift({
-        status: 'on',
-        category: this.biographical.category,
-        categoryName: this.biographical.categoryName,
-        note: this.biographical.note,
-        time: this.biographical.time,
-        start: +this.biographical.time.start.replace(':', ''),
-        end: +this.biographical.time.end.replace(':', ''),
-        poi: this.biographical.poi,
-        id: guid()
-      })
       const biographical = JSON.parse(JSON.stringify(this.biographical))
-      biographical.list = list
+      if (!biographical.id) {
+        biographical.id = guid()
+      }
+      biographical.start = +biographical.time.start.replace(':', '')
+      biographical.end = +biographical.time.end.replace(':', '') || null
+      console.log('release', biographical)
+      mpx.showLoading({
+        title: this.pageType === 'edit' ? '更新中……' : '发布中……'
+      })
       const res = await updateUserInfo({
         biographical
       })
       if (res.code === 200) {
         mpx.showToast({
-          title: this.list.length ? '更新成功' : '发布成功',
+          title: this.pageType === 'edit' ? '更新成功' : '发布成功',
           success: () => {
             this.setState({
               biographical
             })
-            mpx.navigateBack()
           }
         })
       }
@@ -437,34 +346,13 @@ createPage({
 <style lang="stylus" scoped>
 .call-container
   padding 16rpx 32rpx
-  margin-top 16rpx
   margin-bottom -32rpx
   .call-content
     background #fff
     padding 32rpx
     font-size 40rpx
     font-weight bold
-    border-radius 32rpx 32rpx 0 0
-.list
-  padding 0 32rpx
-  border-radius 16rpx
-  overflow hidden
-  .switch
-    width 100%
-    display flex
-    justify-content flex-end
-    align-items center
-    &-content
-      margin-right 16rpx
-      display flex
-      justify-content center
-      align-items center
-  .content
-    font-size 28rpx
-    font-weight bold
-    color #000000
-    &-item
-      margin-top 16rpx
+    border-radius 16rpx 16rpx 0 0
 </style>
 
 <script name="json">
@@ -477,9 +365,6 @@ module.exports = {
     "van-dialog": "@vant/weapp/dialog/index?root=vant-page",
     "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page",
     "popup": "@/subpackages/superstream/compontens/popup/index.mpx?root=superstream",
-    "van-collapse": "@vant/weapp/collapse/index",
-    "van-collapse-item": "@vant/weapp/collapse-item/index",
-    "van-switch": "@vant/weapp/switch/index",
     "mutil-style-text": "@/compontens/base/mutil-style-text.mpx?root=common-coms-page",
     "toast": "@/compontens/base/toast.mpx",
   },

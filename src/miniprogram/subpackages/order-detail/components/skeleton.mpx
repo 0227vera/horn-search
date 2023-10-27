@@ -62,6 +62,7 @@ createComponent({
       background #ffffff
       width 100%
       padding 16rpx
+      border-radius 16rpx
       &-item
         height 60rpx
         margin-top 16rpx

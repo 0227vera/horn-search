@@ -437,7 +437,16 @@ export default {
       title: ['我要招工', '招工列表']
     },
     partyB: {
-      title: '我要找事做'
+      title: '我要找事做',
+      bottom: {
+        title: '主动求职',
+        desc: '去填写个人信息，技能，平台将为您主动匹配到对应的招工方中去',
+        btn: {
+          text: '去填写',
+          jumptype: 'mp',
+          link: '/person-center/pages/person-info'
+        }
+      }
     }
   },
   // note: 工厂合作

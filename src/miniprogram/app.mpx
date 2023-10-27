@@ -3,6 +3,7 @@ import mpx, { createApp } from '@mpxjs/core'
 import apiProxy from '@mpxjs/api-proxy'
 import store from './store'
 import { getCommonConfig, getCurrentUser } from '@/api'
+import { EventBus } from '@/utils'
 import setting from './setting/setting'
 
 mpx.use(apiProxy, { usePromise: true })
@@ -38,6 +39,7 @@ createApp({
     this.setState(obj)
   },
   globalStore: store,
+  eventBus: new EventBus(),
   onShareAppMessage() {
     return {
       path: '/pages/page'

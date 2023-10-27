@@ -3,7 +3,19 @@
     <nav-bar />
     <view class="content" style="padding-top: {{navBarStyle.top + navBarStyle.height + navBarStyle.paddingBottom}}px">
       <view class="content-main">
-        <scroll-view bindscrolltolower="scrollToLower" scroll-y class="scroll-container">
+        <scroll-view
+          bindscrolltolower="toLower"
+          bindscrolltoupper="toUpper"
+          bindscroll="scroll"
+          enhanced
+          show-scrollbar="{{false}}"
+          scroll-y
+          class="scroll-container"
+          lower-threshold="{{100}}"
+          enable-back-to-top
+          enable-passive
+          bounces="{{false}}"
+        >
           <slot />
         </scroll-view>
       </view>
@@ -88,8 +100,15 @@ createComponent({
     btnHandle() {
       this.triggerEvent('footer-btn')
     },
-    scrollToLower() {
+    toLower(e) {
       this.triggerEvent('scrolltobottom')
+      getApp().eventBus.emit('scroll-to-lower')
+    },
+    toUpper(e) {
+      getApp().eventBus.emit('scroll-to-upper')
+    },
+    scroll(e) {
+      getApp().eventBus.emit('scroll', e.detail)
     }
   }
 })
@@ -101,7 +120,6 @@ createComponent({
   height 100vh
   overflow hidden
   .content
-
     height 100%
     overflow hidden
     display flex

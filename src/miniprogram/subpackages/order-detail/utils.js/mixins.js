@@ -111,21 +111,13 @@ const mixin = {
       const currentTime = +dayjs(Date.now()).format('HHmm')
       if (this.fromOrigin === 'bossWorker') {
         const and = {
-          'biographical.list.category': ['like', category],
-          'biographical.list.status': 'on',
-          'biographical.list.start': ['<=', currentTime]
+          'biographical.category': ['like', category],
+          'biographical.start': ['<=', currentTime]
         }
         const res = await getUserList({ and, fields: 'biographical' })
         const { list = [] } = res.data || {}
-        const newList = JSON.parse(JSON.stringify(list)).map(item => {
-          item.cacheBiographical = JSON.parse(JSON.stringify(item.biographical))
-          item.biographical.list = item.biographical.list.filter(m => {
-            return m.status === 'on' && m.start <= currentTime && (m.end ? m.end >= currentTime : true) && m.category.includes(category)
-          })
-          return item
-        }).filter(item => !item.biographical.length)
-        this.talentList = newList
-        console.log(newList)
+        this.talentList = list
+        console.log(list)
       }
     }
   },

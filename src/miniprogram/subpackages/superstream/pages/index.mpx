@@ -4,7 +4,6 @@
     clickLeft="{{clickLeft}}"
     wx:show="{{pageShow}}"
     containerBg="linear-gradient(to bottom, #8aa7ec, #79b3f4, #ffffff)"
-    bind:scrolltobottom="scrollToBottom"
   >
     <view class="{{roleType === 'partyA' && currentCom === footerList[0].key ? 'component-container' : ''}}">
       <component
@@ -13,7 +12,6 @@
         updateList="{{updateList}}"
         bind:release-jump-done="releaseJumpDone"
         bind:again-order="againOrder"
-        toBottom="{{toBottom}}"
       />
     </view>
     <footer wx:if="{{shoeFooterList}}" list="{{footerList}}" initActive="{{currentCom}}" bind:tab-change="tabChange" />
@@ -51,8 +49,7 @@ createPage({
     categoryTypeId: '',
     popupType: 'radio',
     showPopup: false,
-    updateList: false,
-    toBottom: ''
+    updateList: false
   },
   async onLoad(params) {
     /**
@@ -73,7 +70,7 @@ createPage({
     // note: 页面中的异步分包太多了，强制晚加载一会
     setTimeout(() => {
       this.pageShow = true
-    }, 100)
+    }, 500)
   },
   onShow() {
     this.setLocation()
@@ -212,12 +209,6 @@ createPage({
         cacheForm: e.detail
       })
       this.currentCom = this.footerList[0].key
-    },
-    scrollToBottom() {
-      this.toBottom = true
-      setTimeout(() => {
-        this.toBottom = false
-      })
     }
   }
 })
@@ -235,7 +226,6 @@ createPage({
     "usingComponents": {
       "custom-container": "@/compontens/base/custom-container",
       "popup": "@/subpackages/superstream/compontens/popup/index.mpx",
-      "back-home": "@/compontens/base/back-home.mpx?root=common-coms-page",
       "footer": "@/compontens/base/footer.mpx",
       "order": "@/subpackages/superstream/compontens/order",
       "bossWorker":"@/subpackages/superstream/compontens/release/boss-worker",
@@ -250,7 +240,6 @@ createPage({
     },
     "componentPlaceholder": {
       "tips": "view",
-      "back-home": "view",
       "van-dialog": "view"
     },
     "disableScroll": true

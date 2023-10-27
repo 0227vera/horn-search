@@ -12,7 +12,7 @@ AddressModel.DB_STRUCTURE = {
   role: 'string|false',
   address: 'array|false',
   company: 'string|false',
-  biographical: 'object|true',
+  biographical: 'object|false',
   OPENID: 'string|true',
   USER_ID: 'string|true',
   USER_ADD_TIME: 'int|false',
