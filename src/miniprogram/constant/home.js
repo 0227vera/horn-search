@@ -94,39 +94,41 @@ export default [[{
     }
   },
   extraInfo: {}
-}], [{
-  text: '公司直聘发布',
-  icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/4.1 直聘.png',
-  id: '',
-  dot: false,
-  tips: '',
-  action: {
-    url: '/superstream/pages/index',
-    jumptype: 'mp',
-    params: {
-      key: 'employAppli',
-      id: 'employment',
-      type: 'partyA'
-    }
-  },
-  extraInfo: {}
-}, {
-  text: '我要应聘公司岗',
-  icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/4.2 应聘.png',
-  id: '',
-  dot: false,
-  tips: '靠谱',
-  action: {
-    url: '/superstream/pages/index',
-    jumptype: 'mp',
-    params: {
-      key: 'partyB',
-      id: 'application',
-      type: 'partyB'
-    }
-  },
-  extraInfo: {}
-}], [{
+}],
+// [{
+//   text: '公司直聘发布',
+//   icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/4.1 直聘.png',
+//   id: '',
+//   dot: false,
+//   tips: '',
+//   action: {
+//     url: '/superstream/pages/index',
+//     jumptype: 'mp',
+//     params: {
+//       key: 'employAppli',
+//       id: 'employment',
+//       type: 'partyA'
+//     }
+//   },
+//   extraInfo: {}
+// }, {
+//   text: '我要应聘公司岗',
+//   icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/4.2 应聘.png',
+//   id: '',
+//   dot: false,
+//   tips: '靠谱',
+//   action: {
+//     url: '/superstream/pages/index',
+//     jumptype: 'mp',
+//     params: {
+//       key: 'partyB',
+//       id: 'application',
+//       type: 'partyB'
+//     }
+//   },
+//   extraInfo: {}
+// }],
+[{
   text: '出售二手设备发布',
   icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/5.1 二手设备.png',
   id: '',

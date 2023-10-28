@@ -442,7 +442,10 @@ export default {
         title: '主动求职',
         desc: '去填写个人信息，技能，平台将为您主动匹配到对应的招工方中去',
         btn: {
-          text: '去填写',
+          icon: 'user-o',
+          id: 'gotoUserInfo',
+          tips: ['精准为您推送'],
+          name: '完善个人资料',
           jumptype: 'mp',
           link: '/person-center/pages/person-info'
         }
@@ -478,16 +481,16 @@ export default {
     }
   },
   // note: 公司直聘
-  employ: {
-    fromOrigin: 'employAppli',
-    filterList: [],
-    partyA: {
-      title: ['公司直聘', '直聘列表']
-    },
-    partyB: {
-      title: '应聘公司岗'
-    }
-  },
+  // employ: {
+  //   fromOrigin: 'employAppli',
+  //   filterList: [],
+  //   partyA: {
+  //     title: ['公司直聘', '直聘列表']
+  //   },
+  //   partyB: {
+  //     title: '应聘公司岗'
+  //   }
+  // },
   // note: 二手设备
   usedDetect: {
     fromOrigin: 'usedDetect',

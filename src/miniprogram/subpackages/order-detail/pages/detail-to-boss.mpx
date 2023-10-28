@@ -64,7 +64,6 @@
     </block>
   </custom-container>
   <nav-footer wx:if="{{shareTitle}}" list="{{footerList}}" />
-  <back-home wx:if="{{shareTitle}}" showShare />
   <van-dialog id="van-dialog" />
 </template>
 
@@ -95,6 +94,15 @@ createPage({
     },
     footerList() {
       return [{
+        name: '回首页',
+        icon: 'wap-home-o',
+        id: 'baohome',
+        click: () => {
+          mpx.reLaunch({
+            url: '/homepage/pages/index'
+          })
+        }
+      }, {
         name: '关单',
         hide: this.status === '4',
         icon: 'passed',
@@ -303,13 +311,11 @@ createPage({
       "base-info": "../components/base-info.mpx",
       "van-dialog": "@vant/weapp/dialog/index?root=vant-page",
       "van-button": "@vant/weapp/button/index?root=vant-page",
-      "back-home": "@/compontens/base/back-home.mpx?root=common-coms-page",
       "skeleton": "@/subpackages/order-detail/components/skeleton.mpx"
     },
     "componentPlaceholder": {
       "custom-container": "view",
       "nav-footer": "view",
-      "back-home": "view",
       "van-cell": "view",
       "van-cell-group": "view",
       "van-steps": "view",

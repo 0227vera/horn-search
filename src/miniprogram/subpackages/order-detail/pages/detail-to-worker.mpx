@@ -23,7 +23,6 @@
     </view>
   </custom-container>
   <nav-footer wx:if="{{shareTitle}}" list="{{footerList}}" />
-  <back-home wx:if="{{shareTitle}}" showShare />
 </template>
 
 <script>
@@ -43,6 +42,15 @@ createPage({
     ...store.mapState(['openid', 'fromOrigin']),
     footerList() {
       return [{
+        name: '回首页',
+        icon: 'wap-home-o',
+        id: 'baohome',
+        click: () => {
+          mpx.reLaunch({
+            url: '/homepage/pages/index'
+          })
+        }
+      }, {
         name: '打电话',
         icon: 'phone-o',
         id: 'call',
@@ -138,10 +146,8 @@ createPage({
   line-height 80rpx
   font-weight 500
   font-size 24rpx
-
 .proccess
   width 100%
-
   padding 0 32rpx
   &-content
     overflow hidden
@@ -169,13 +175,11 @@ createPage({
       "item-container": "../components/item-container",
       "nav-footer": "@/compontens/base/nav-footer.mpx?root=common-coms-page",
       "base-info": "../components/base-info.mpx",
-      "back-home": "@/compontens/base/back-home.mpx?root=common-coms-page",
       "skeleton": "@/subpackages/order-detail/components/skeleton.mpx"
     },
     "componentPlaceholder": {
       "custom-container": "view",
       "nav-footer": "view",
-      "back-home": "view",
       "van-cell": "view",
       "van-cell-group": "view",
       "van-steps": "view"
