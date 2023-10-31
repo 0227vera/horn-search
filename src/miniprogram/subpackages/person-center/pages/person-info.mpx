@@ -7,7 +7,15 @@
 >
   <view wx:if="{{callListText}}" class="call-container">
     <view class="call-content">
-      <mutil-style-text text="{{callListText}}" rules="{{textRules}}" />
+      <view>
+        <mutil-style-text text="{{constText}}" />
+      </view>
+      <view>
+        <mutil-style-text text="{{callListNum}}" rules="{{textRules}}" />
+      </view>
+      <view>
+        <mutil-style-text text="{{callListText}}" rules="{{textRules}}" />
+      </view>
     </view>
   </view>
   <view style="padding-bottom: 100rpx;">
@@ -79,6 +87,7 @@
         input-align="right"
         placeholder="请点击选择截止时间点"
         error-message="{{biographical.time.end ? '' : '备注：不填写将为您持续推送，需要您手动关闭推动'}}"
+        error-message-align="right"
         bind:tap="showPopupContainer('time', 'end')"
       />
       <!-- 补充信息 -->
@@ -92,6 +101,7 @@
         type="textarea"
         autosize
         error-message="{{biographical.note ? '' : '例如：城市可信、技术好、踏实肯干等'}}"
+        error-message-align="right"
         id="note"
         bind:change="onFieldChange"
       />
@@ -103,6 +113,7 @@
   type="{{popupType}}"
   timeType="time"
   initActiveId="{{activeId}}"
+  title="{{popupTitle}}"
   minHour="{{minHour}}"
   minMinute="{{minMinute}}"
   initTime="{{initTime}}"
@@ -134,6 +145,7 @@ createPage({
     minMinute: 0,
     active: [],
     toastText: '',
+    popupTitle: '',
     textRules: {
       '{x}': {
         style: 'margin: 0 16rpx; font-size: 60rpx; color: #07c160;'
@@ -142,6 +154,15 @@ createPage({
   },
   computed: {
     ...store.mapState(['addressList', 'adInfo', 'biographical']),
+    pageType() {
+      if (this.biographical.id) {
+        return 'edit'
+      }
+      return 'new'
+    },
+    constText() {
+      return this.pageType === 'new' ? '{发布}将为您{推送}给对应匹配{招工方}' : '{已}为您{推送}给能匹配的{招工方}'
+    },
     categoryList() {
       return config['findWorker'].category
     },
@@ -154,7 +175,14 @@ createPage({
     callListText() {
       if (this.callList.length) {
         const times = this.callList.reduce((sum, item) => sum + item.times, 0)
-        return `您累计被呼叫{${times}}次`
+        return `累计被呼叫{${times}}次`
+      }
+      return ''
+    },
+    callListNum() {
+      if (this.callList.length) {
+        const times = this.callList.reduce((sum, item) => sum + item.times, 0)
+        return `已有{${this.callList.length}}人呼叫过您`
       }
       return ''
     }
@@ -180,12 +208,6 @@ createPage({
   methods: {
     ...store.mapMutations(['setState']),
     ...store.mapActions(['setLocation']),
-    pageType() {
-      if (this.biographical.id) {
-        return 'edit'
-      }
-      return 'new'
-    },
     initAddressPhone() {
       const item = this.addressList.find(item => item.checked)
       if (item?.id) {
@@ -203,7 +225,9 @@ createPage({
       if (type === 'time') {
         this.currentTimeType = currentTimeType
         this.initTime = this.biographical.time[currentTimeType]
+        this.popupTitle = '请选择到岗时间'
         if (currentTimeType === 'end' && this.biographical.time.start) {
+          this.popupTitle = '请选择截止时间'
           if (!this.initTime) {
             this.initTime = dayjs(Date.now()).format('HH:mm')
           }
@@ -211,6 +235,7 @@ createPage({
           this.minMinute = +this.biographical.time.start.split(':')[1]
         }
       } else if (!this.addressList.length && type === 'address') {
+        this.popupTitle = '请选择地址'
         mpx.navigateTo({
           url: AddAddressUrl
         })

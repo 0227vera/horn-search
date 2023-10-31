@@ -462,10 +462,23 @@ export default {
     filterList: factoryFilter,
     fromOrigin: 'factoryCooper',
     partyA: {
-      title: ['我要找工厂', '找工厂列表']
+      title: ['我要找工厂', '找工厂列表', '合作列表'],
+      extraCom: 'company-list'
     },
     partyB: {
-      title: '我要找货做'
+      title: '我要找货做',
+      bottom: {
+        title: '主动求合作',
+        desc: '去填写公司/工厂信息，平台将为您主动匹配到对应的合作方中去',
+        btn: {
+          icon: 'user-o',
+          id: 'gotoCompanyInfo',
+          tips: ['精准为您推送'],
+          name: '完善公司/工厂资料',
+          jumptype: 'mp',
+          link: '/person-center/pages/company-info'
+        }
+      }
     }
   },
   // note: 出租转让

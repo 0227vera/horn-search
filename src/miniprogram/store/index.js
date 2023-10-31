@@ -58,6 +58,20 @@ export default createStore({
         start: dayjs(Date.now()).format('HH:mm'),
         end: ''
       }
+    },
+    companyInfo: {
+      area: '',
+      parkSpace: '',
+      category: '',
+      sincere: '',
+      advantage: '',
+      poi: {},
+      tel: '',
+      status: 'on',
+      time: {
+        start: dayjs(Date.now()).format('HH:mm'),
+        end: ''
+      }
     }
   },
   getters: {

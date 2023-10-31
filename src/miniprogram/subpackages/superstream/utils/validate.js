@@ -1,4 +1,5 @@
 const telReg = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/
+const testIncludesPhone = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/
 
 export const validateBossWorker = ({ updateObj, subCategoryInfo } = {}) => {
   if (!updateObj) {
@@ -70,19 +71,19 @@ export const validateBossWorker = ({ updateObj, subCategoryInfo } = {}) => {
     result.text = '请输入{正确的手机号}'
     return result
   }
-  if (telReg.test(updateObj.origin)) {
+  if (testIncludesPhone.test(updateObj.origin)) {
     result.text = '{货源(品质层次)}中不可带{电话号码}'
     return result
   }
-  if (telReg.test(updateObj.note)) {
+  if (testIncludesPhone.test(updateObj.note)) {
     result.text = '{岗位要求}中不可带{电话号码}'
     return result
   }
-  if (telReg.test(updateObj.add)) {
+  if (testIncludesPhone.test(updateObj.add)) {
     result.text = '{招工概述}中不可带{电话号码}'
     return result
   }
-  if (telReg.test(updateObj.company)) {
+  if (testIncludesPhone.test(updateObj.company)) {
     result.text = '{工厂名}中不可带{电话号码}'
     return result
   }
@@ -127,7 +128,7 @@ export const validateFactory = ({ updateObj } = {}) => {
     result.text = '请输入{正确的手机号}'
     return result
   }
-  if (telReg.test(updateObj.add)) {
+  if (testIncludesPhone.test(updateObj.add)) {
     result.text = '{合作概述}中不可带{电话号码}'
     return result
   }
@@ -180,11 +181,11 @@ export const validateLease = ({ updateObj, subCategoryInfo } = {}) => {
     result.text = '请输入{正确的手机号}'
     return result
   }
-  if (telReg.test(updateObj.device)) {
+  if (testIncludesPhone.test(updateObj.device)) {
     result.text = '{设备}中不可带{电话号码}'
     return result
   }
-  if (telReg.test(updateObj.add)) {
+  if (testIncludesPhone.test(updateObj.add)) {
     result.text = '{补充}中不可带{电话号码}'
     return result
   }
@@ -221,7 +222,7 @@ export const validateUsed = ({ updateObj, subCategoryInfo } = {}) => {
     result.text = '请输入{正确的手机号}'
     return result
   }
-  if (telReg.test(updateObj.note)) {
+  if (testIncludesPhone.test(updateObj.note)) {
     result.text = '{产品概述说明}中不可带{电话号码}'
     return result
   }
@@ -261,7 +262,7 @@ export const tailingsValidate = ({ updateObj, subCategoryInfo } = {}) => {
       return result
     }
   }
-  if (telReg.test(updateObj.note)) {
+  if (testIncludesPhone.test(updateObj.note)) {
     result.text = '{补充说明}中不可带{电话号码}'
     return result
   }

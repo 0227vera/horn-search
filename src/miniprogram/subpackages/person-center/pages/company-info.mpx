@@ -1,50 +1,447 @@
 <template>
 <custom-container
-  title="工厂/公司信息"
+  title="城寻客户"
   containerBg="linear-gradient(to bottom, #8aa7ec, #79b3f4, #ffffff)"
+  btnName="{{pageType === 'edit' ? '更新' : '发布'}}"
+  bind:footer-btn="release"
 >
+  <view class="call-container">
+    <view class="call-content">
+      <view>
+        <mutil-style-text text="{{constText}}" />
+      </view>
+      <view wx:if="{{callListNum}}">
+        <mutil-style-text text="{{callListNum}}" rules="{{textRules}}" />
+      </view>
+      <view wx:if="{{callListText}}">
+        <mutil-style-text text="{{callListText}}" rules="{{textRules}}" />
+      </view>
+    </view>
+  </view>
+  <view style="padding-bottom: 100rpx;">
+    <van-cell-group inset>
+      <!-- 本厂面积 -->
+      <van-field
+        size="large"
+        label="本厂面积"
+        title-width="160rpx"
+        required
+        type="number"
+        value="{{companyInfo.area}}"
+        input-align="right"
+        placeholder="请输入厂房面积"
+        id="area"
+        bind:change="onFieldChange"
+      >
+        <view slot="right-icon" style="color: #333; font-weight: bold;">平</view>
+      </van-field>
+      <!-- 固定车位 -->
+      <van-field
+        size="large"
+        label="固定车位"
+        title-width="160rpx"
+        required
+        type="number"
+        value="{{companyInfo.parkSpace}}"
+        placeholder="请输入固定车位数量"
+        input-align="right"
+        id="parkSpace"
+        bind:change="onFieldChange"
+      >
+        <view slot="right-icon" style="color: #333; font-weight: bold;">人</view>
+      </van-field>
+      <!-- 擅长品类 -->
+      <van-field
+        size="large"
+        label="擅长品类"
+        title-width="160rpx"
+        required
+        value="{{companyInfo.category}}"
+        autosize
+        type="textarea"
+        input-align="right"
+        placeholder="例如针织外套小香风等"
+        id="category"
+        bind:change="onFieldChange"
+      />
+      <!-- 诚寻 -->
+      <van-field
+        size="large"
+        label="诚寻"
+        title-width="160rpx"
+        required
+        value="{{companyInfo.sincere}}"
+        autosize
+        type="textarea"
+        input-align="right"
+        placeholder="例如南城拼多多直播等"
+        error-message="客户长期合作"
+        error-message-align="right"
+        id="sincere"
+        bind:change="onFieldChange"
+      >
+        <!-- <view slot="right-icon" style="color: #333; font-weight: bold;">客户长期合作</view> -->
+      </van-field>
+      <!-- 本厂优势 -->
+      <van-field
+        size="large"
+        label="本厂优势"
+        title-width="160rpx"
+        required
+        value="{{companyInfo.advantage}}"
+        autosize
+        type="textarea"
+        input-align="right"
+        placeholder="包头包尾,保证质量,出货快捷!管理质检配备齐全"
+        id="advantage"
+        bind:change="onFieldChange"
+      />
+      <!-- 位置相关 -->
+      <van-field
+        size="large"
+        label="地址"
+        title-width="80rpx"
+        required
+        is-link
+        readonly
+        type="textarea"
+        autosize
+        value="{{companyInfo.poi.detail}}"
+        input-align="right"
+        placeholder="请点击输入我的详细地址"
+        bind:tap="showPopupContainer('address')"
+      />
+      <!-- 电话 -->
+      <van-field
+        size="large"
+        label="电话"
+        title-width="80rpx"
+        required
+        value="{{ companyInfo.tel }}"
+        type="number"
+        placeholder="请输入联系方式"
+        input-align="right"
+        bind:change="onFieldChange"
+        id="tel"
+      />
+      <!-- 工厂/公司名 -->
+      <van-field
+        wx:if="{{company}}"
+        size="large"
+        label="工厂/公司名"
+        readonly
+        title-width="200rpx"
+        input-align="right"
+        value="{{ company }}"
+      />
+      <van-field
+        size="large"
+        label="推送状态"
+        title-width="160rpx"
+        readonly
+        input-align="right"
+        required
+      >
+        <view class="btn-slot" slot="button">
+          <view style="margin-right: 12rpx;color: #07c160;" wx:if="{{ companyInfo.status === 'on' }}">已开启</view>
+          <van-switch style="margin-bottom: -12rpx;" active-color="#07c160" checked="{{ companyInfo.status === 'on' }}" bind:change="onSwitchChange" />
+          <view style="margin-left: 12rpx" wx:if="{{ companyInfo.status !== 'on' }}">已关闭</view>
+        </view>
+      </van-field>
+    </van-cell-group>
+  </view>
 </custom-container>
+<popup
+  show="{{showPopup}}"
+  type="{{popupType}}"
+  title="{{popupTitle}}"
+  bind:close="closePopupContainer"
+  bind:confirm="onConfirmHandle"
+/>
+<toast wx:ref="toast" text="{{toastText}}" />
 </template>
 
 <script>
 import mpx, { createPage } from '@mpxjs/core'
-import { isAdmin, updateUserInfo } from '@/api'
-import Dialog from '@vant/weapp/dialog/dialog'
-import jumpAction from '@/utils/jump'
+import { updateUserInfo } from '@/api'
+import config from '@/constant/release.js'
 import store from '@/store'
+import dayjs from 'dayjs'
+import guid from '@/utils'
+import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
 
 createPage({
+  options: {
+    styleIsolation: 'shared'
+  },
   data: {
+    showPopup: false,
+    popupType: '',
+    toastText: '',
+    textRules: {
+      '{x}': {
+        style: 'margin: 0 16rpx; font-size: 60rpx; color: #07c160;'
+      }
+    }
   },
   computed: {
-    ...store.mapState(['company'])
+    ...store.mapState(['addressList', 'adInfo', 'biographical', 'company', 'companyInfo']),
+    pageType() {
+      if (this.companyInfo.id) {
+        return 'edit'
+      }
+      return 'new'
+    },
+    constText() {
+      return this.pageType === 'new' ? '{发布}将为您{推送}给所有的{合作方}' : this.companyInfo.status === 'on' ? '{已}为您{推送给}所有的{合作方}' : '{开启推送状态并更新}将为您{推送}给所有的{合作方}'
+    },
+    key() {
+      return 'findFactory'
+    },
+    configById() {
+      return config[this.key]
+    },
+    callList() {
+      return this.companyInfo.callList || []
+    },
+    callListText() {
+      if (this.callList.length) {
+        const times = this.callList.reduce((sum, item) => sum + item.times, 0)
+        return `累计被呼叫{${times}}次`
+      }
+      return ''
+    },
+    callListNum() {
+      if (this.callList.length) {
+        const times = this.callList.reduce((sum, item) => sum + item.times, 0)
+        return `已有{${this.callList.length}}人呼叫过您`
+      }
+      return ''
+    }
   },
   onLoad() {
   },
+  async onShow() {
+    await this.setLocation()
+    if (this.adInfo.address) {
+      this.setState({
+        companyInfo: {
+          ...this.companyInfo,
+          poi: {
+            ...this.adInfo,
+            name: this.adInfo.address,
+            detail: this.adInfo.address
+          }
+        }
+      })
+    }
+    this.initAddressPhone()
+  },
   methods: {
-    ...store.mapMutations(['setState'])
+    ...store.mapMutations(['setState']),
+    ...store.mapActions(['setLocation']),
+    initAddressPhone() {
+      const item = this.addressList.find(item => item.checked)
+      if (item?.id) {
+        this.setState({
+          companyInfo: {
+            ...this.companyInfo,
+            tel: item.phone,
+            poi: item.address,
+            name: item.name
+          }
+        })
+      }
+    },
+    showPopupContainer(type, currentTimeType) {
+      if (!this.addressList.length && type === 'address') {
+        mpx.navigateTo({
+          url: AddAddressUrl
+        })
+        return
+      }
+      this.popupType = type
+      this.showPopup = true
+    },
+    closePopupContainer() {
+      this.showPopup = false
+    },
+    onConfirmHandle({ detail = {} } = {}) {
+      const { data, type } = detail
+      const actions = {
+        address: () => {
+          this.setState({
+            companyInfo: {
+              ...this.companyInfo,
+              poi: data.poi,
+              tel: data.tel
+            }
+          })
+        }
+      }
+      actions?.[type]?.()
+      this.closePopupContainer()
+    },
+    onFieldChange(e) {
+      this.setState({
+        companyInfo: {
+          ...this.companyInfo,
+          [e.target.id]: e.detail
+        }
+      })
+    },
+    onSwitchChange(e) {
+      this.setState({
+        companyInfo: {
+          ...this.companyInfo,
+          status: this.companyInfo.status === 'on' ? 'off' : 'on'
+        }
+      })
+    },
+    validate() {
+      const telReg = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/
+      const testIncludesPhone = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/
+      const result = {
+        text: '',
+        success: false
+      }
+      if (!this.companyInfo.area) {
+        result.text = "请输入{本厂面积}"
+        return result
+      }
+      if (!this.companyInfo.parkSpace) {
+        result.text = "请输入{固定车位}"
+        return result
+      }
+      if (!this.companyInfo.category) {
+        result.text = "请输入{擅长品类}"
+        return result
+      }
+      if (testIncludesPhone.test(this.companyInfo.category)) {
+        result.text = '{擅长品类}中不可带{电话号码}'
+        return result
+      }
+      if (!this.companyInfo.sincere) {
+        result.text = "请输入{诚寻类型}"
+        return result
+      }
+      if (testIncludesPhone.test(this.companyInfo.sincere)) {
+        result.text = '{诚寻类型}中不可带{电话号码}'
+        return result
+      }
+      if (!this.companyInfo.advantage) {
+        result.text = "请输入{本厂优势}"
+        return result
+      }
+      if (testIncludesPhone.test(this.companyInfo.advantage)) {
+        result.text = '{本厂优势}中不可带{电话号码}'
+        return result
+      }
+      if (!this.companyInfo.poi.detail) {
+        result.text = "请填入{地址}"
+        return result
+      }
+      if (!this.companyInfo.tel) {
+        result.text = "请填入{电话}"
+        return result
+      }
+      if (!telReg.test(this.companyInfo.tel)) {
+        result.text = '请输入{正确的手机号}'
+        return result
+      }
+      result.success = true
+      return result
+    },
+    async release() {
+      const vali = this.validate()
+      if (!vali.success) {
+        this.toastText = vali.text
+        setTimeout(() => {
+          this.$refs.toast.show()
+        }, 0)
+        return
+      }
+      const companyInfo = JSON.parse(JSON.stringify(this.companyInfo))
+      if (!companyInfo.id) {
+        companyInfo.id = guid()
+      }
+      if (companyInfo.status === 'on') {
+        const start = Date.now()
+        const end = start + 3600 * 24 * 7 * 1000
+        companyInfo.start = start
+        companyInfo.end = end
+        companyInfo.time = {
+          start: dayjs(start).format("YYYY-MM-DD HH:mm"),
+          end: dayjs(end).format("YYYY-MM-DD HH:mm")
+        }
+      }
+      companyInfo.company = this.company
+      console.log('release', companyInfo)
+      mpx.showLoading({
+        title: this.pageType === 'edit' ? '更新中……' : '发布中……'
+      })
+      const res = await updateUserInfo({
+        companyInfo
+      })
+      if (res.code === 200) {
+        mpx.showToast({
+          title: this.pageType === 'edit' ? '更新成功' : '发布成功',
+          success: () => {
+            this.setState({
+              companyInfo
+            })
+          }
+        })
+      }
+    }
   }
 })
 </script>
 
+<style>
+.van-field__error-message{
+  color: #000000!important;
+  font-size: 32rpx!important;
+  font-weight: bold;
+}
+</style>
+
 <style lang="stylus" scoped>
+.btn-slot
+  display flex
+  justify-content center
+  align-items center
+.call-container
+  padding 16rpx 32rpx
+  margin-bottom -32rpx
+  .call-content
+    background #fff
+    padding 32rpx
+    font-size 40rpx
+    font-weight bold
+    border-radius 16rpx 16rpx 0 0
 </style>
 
 <script name="json">
 module.exports = {
   usingComponents: {
     "custom-container": "@/compontens/base/custom-container?root=common-coms-page",
-    "van-dialog": "@vant/weapp/dialog/index?root=vant-page",
     "van-icon": "@vant/weapp/icon/index?root=vant-page",
     "van-field": "@vant/weapp/field/index?root=vant-page",
     "van-cell": "@vant/weapp/cell/index?root=vant-page",
-    "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page"
+    "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page",
+    "popup": "@/subpackages/superstream/compontens/popup/index.mpx?root=superstream",
+    "mutil-style-text": "@/compontens/base/mutil-style-text.mpx?root=common-coms-page",
+    "van-switch": "@vant/weapp/switch/index",
+    "toast": "@/compontens/base/toast.mpx"
   },
   "componentPlaceholder": {
     "custom-container": "view",
+    "van-switch": "view",
+    "mutil-style-text": "view",
+    "popup": "view",
     "van-cell": "view",
     "van-cell-group": "view",
-    "van-dialog": "view",
     "van-icon": "view",
     "van-field": "view"
   }

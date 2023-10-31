@@ -185,10 +185,6 @@ createPage({
             _id,
             biographical: newBiographical
           }).then(() => {
-            // 先更新store里面的数据
-            this.setState({
-              biographical: newBiographical
-            })
             // 更新一下this.talentList
             this.talentList.forEach(item => {
               if (item._id === _id) {

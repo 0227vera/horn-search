@@ -157,6 +157,13 @@ createPage({
         title: this.partyA?.title?.[1],
         icon: 'comment',
         key: 'order'
+      }, {
+        name: this.partyA?.title?.[2],
+        title: this.partyA?.title?.[2],
+        icon: 'birthday-cake-o',
+        key: this.partyA?.extraCom,
+        hide: !this.partyA?.extraCom,
+        hideChange: true
       }]
     },
     title() {
@@ -198,6 +205,9 @@ createPage({
     },
     tabChange(e) {
       this.currentCom = e.detail.key
+      this.setNavBarStyle({
+        showDropdown: !e.detail.hideChange
+      })
     },
     releaseJumpDone(e) {
       mpx.navigateTo({
@@ -236,7 +246,8 @@ createPage({
       "tailings":"@/subpackages/superstream/compontens/release/tailings",
       "partyB": "@/subpackages/superstream/compontens/order/partyB.mpx",
       "tips": "@/compontens/base/tips.mpx?root=common-coms-page",
-      "van-dialog": "@vant/weapp/dialog/index?root=vant-page"
+      "van-dialog": "@vant/weapp/dialog/index?root=vant-page",
+      "company-list": "@/subpackages/superstream/compontens/extra/company-list.mpx"
     },
     "componentPlaceholder": {
       "tips": "view",

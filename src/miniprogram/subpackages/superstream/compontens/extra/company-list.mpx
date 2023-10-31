@@ -1,0 +1,259 @@
+<template>
+<skeleton wx:if="{{loading}}" />
+<view class="list-container" wx:elif="{{renderList.length}}">
+  <view class="list-item" wx:for="{{renderList}}" wx:key="_id">
+    <view class="list-item-title">
+      <mutil-style-text text="{{item.title}}" />
+    </view>
+    <view class="list-item-field" wx:for="{{item.content}}" wx:key="id" wx:for-item="content">
+      <view class="list-item-field-label">{{content.label}}</view>
+      <view class="list-item-field-value">
+        <mutil-style-text text="{{content.value}}" />
+      </view>
+    </view>
+    <view class="list-item-opa">
+      <van-button
+        wx:for="{{buttons}}"
+        size="small"
+        style="margin-left: 8rpx"
+        wx:for-item="b"
+        round
+        type="{{b.type || 'default'}}"
+        catchtap="clickBtn(item, b)"
+        icon="{{b.icon || ''}}"
+        custom-class="btn-custom"
+      >
+        {{b.text}}
+      </van-button>
+    </view>
+  </view>
+</view>
+<view wx:else class="status">
+  <van-empty />
+  <view class="text">暂无数据</view>
+</view>
+</template>
+
+<script>
+import mpx, { createComponent } from '@mpxjs/core'
+import { getUserList, updateUserInfo } from '@/api'
+import Dialog from '@vant/weapp/dialog/dialog'
+import store from '@/store'
+import { pageInfo } from '@/subpackages/superstream/utils/constant.js'
+createComponent({
+  data: {
+    list: [],
+    loading: true,
+    pageInfo: JSON.parse(JSON.stringify(pageInfo)),
+    moreLoad: {}
+  },
+  attached() {
+    this.loading = true
+    this.getList()
+  },
+  computed: {
+    ...store.mapState(['fromOrigin', 'openid']),
+    paramsList() {
+      const currentTime = Date.now()
+      return Object.assign(this.pageInfo, {
+        'companyInfo.status': 'on',
+        'companyInfo.start': ['<=', currentTime],
+        'companyInfo.end': ['>=', currentTime],
+        fields: 'companyInfo'
+      })
+    },
+    renderList() {
+      const renderList = this.list.map(item => {
+        const content = []
+        content.push({
+          label: '本厂面积：',
+          value: `${item.companyInfo.area}平(${item.companyInfo.parkSpace}个车位)`
+        })
+        content.push({
+          label: '擅长品类：',
+          value: item.companyInfo.category
+        })
+        content.push({
+          label: '本厂优势：',
+          value: item.companyInfo.advantage
+        })
+        const title = item.companyInfo.company ? `${item.companyInfo.company}诚寻{${item.companyInfo.sincere}}单` : `诚寻{${item.companyInfo.sincere}}单`
+        item.content = content
+        item.title = title
+        return item
+      })
+      return renderList
+    },
+    buttons() {
+      return [{
+        text: '打电话',
+        icon: 'phone-o',
+        type: 'primary',
+        id: 'callPhone'
+      }, {
+        text: '导航去考察',
+        icon: 'location-o',
+        id: 'nav'
+      }]
+    }
+  },
+  methods: {
+    async getList() {
+      const res = await getUserList(this.paramsList)
+      this.loading = false
+      this.list = res.data.list || []
+      console.log(res.data.list)
+    },
+    clickBtn(item, e) {
+      const { id } = e
+      const { _id } = item
+      switch (id) {
+        case 'callPhone':
+          wx.makePhoneCall({
+            phoneNumber: item.companyInfo.tel,
+            success: () => {
+              const companyInfo = JSON.parse(JSON.stringify(item.companyInfo))
+              const callList = companyInfo.callList || []
+              const isCallInfo = callList.find(f => f.openid === this.openid)
+              if (isCallInfo) {
+                callList.forEach(f => {
+                  if (f.openid === this.openid) {
+                    f.times++
+                  }
+                })
+              } else {
+                callList.push({
+                  openid: this.openid,
+                  times: 1
+                })
+              }
+              companyInfo.callList = callList
+              updateUserInfo({
+                _id,
+                companyInfo
+              }).then(() => {
+                this.list.forEach(f => {
+                  if (f._id === _id) {
+                    f.companyInfo = companyInfo
+                  }
+                })
+              })
+            }
+          })
+          break
+        case 'nav':
+          wx.openLocation({
+            latitude: item.companyInfo.poi.location.lat,
+            longitude: item.companyInfo.poi.location.lat,
+            name: item.companyInfo.poi.name,
+            address: item.companyInfo.poi.name
+          })
+          break
+      }
+      console.log(item, e)
+    },
+    async footerBtn(e) {
+      const { item, buttonInfo } = e.detail
+      switch (buttonInfo.id) {
+        case 'close':
+          if (item.OPENID !== this.openid) {
+            mpx.showToast({
+              icon: 'none',
+              title: '您不是发单人，不可关单'
+            })
+            return
+          }
+          Dialog.confirm({
+            title: '提示',
+            message: `是否确定关闭此订单？`
+          }).then(async () => {
+            mpx.showLoading({
+              title: '关单中……'
+            })
+            await updateRelease({
+              _id: item._id,
+              status: '4'
+            })
+            mpx.showToast({
+              icon: 'success',
+              title: '关单成功'
+            })
+            this.triggerEvent('close-order', item)
+          })
+
+          break
+        case 'again':
+          this.triggerEvent('again-order', item)
+          break
+        case 'gotoDetail':
+          this.gotoDetail(item)
+          break
+      }
+    }
+  }
+})
+</script>
+
+<style lang="stylus" scoped>
+.list
+  &-container
+   padding 16rpx 32rpx
+  &-item
+    width 100%
+    background #ffffff
+    padding 16rpx 32rpx
+    border-radius 16rpx
+    margin-bottom 16rpx
+    &-title
+      width 100%
+      line-height 60rpx
+      text-align center
+      font-size 36rpx
+      font-weight bold
+      border-bottom 2rpx solid #ebedf0
+      padding-bottom 8rpx
+    &-field
+      display flex
+      align-items center
+      padding 8rpx 0
+      &-label
+        width 160rpx
+        color #333333
+      &-value
+        flex 1
+        overflow hidden
+    &-opa
+      border-top 2rpx solid #ebedf0
+      display flex
+      justify-content flex-end
+      padding-top 16rpx
+.status
+  width 100%
+  height 60vh
+  display flex
+  justify-content center
+  align-items center
+  flex-direction column
+  .text
+    font-size 28rpx
+    color #000000
+    font-weight bold
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "card": "@/compontens/common/card/index.mpx?root=common-coms-page",
+      "van-empty": "@vant/weapp/empty/index?root=vant-page",
+      "mutil-style-text": "@/compontens/base/mutil-style-text.mpx?root=common-coms-page",
+      "skeleton": "@/compontens/common/card/skeleton.mpx",
+      "van-button": "@vant/weapp/button/index?root=vant-page"
+    },
+    "componentPlaceholder": {
+      "card": "view",
+      "mutil-style-text": "view",
+      "van-button": "view",
+      "van-empty": "view"
+    }
+  }
+</script>

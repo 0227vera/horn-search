@@ -79,7 +79,7 @@ createComponent({
         flex-direction column
         padding 8rpx
         background #ff525d
-        border-radius 6rpx
+        border-radius 32rpx
         color #ffffff
         transform translateX(100%)
         left 60rpx

@@ -8,7 +8,8 @@ class UserManagerService extends BaseService {
   }
 
   async getList(where = {}, fields = '*') {
-    let res = await UserModel.getList(where, fields)
+    const { fromOrigin, page, size, ...newWhere } = where
+    let res = await UserModel.getList(newWhere, fields, { RELEASE_ADD_TIME: 'desc' }, page, size)
     return res
   }
 

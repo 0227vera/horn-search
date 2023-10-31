@@ -4,6 +4,7 @@
     bind:change="onChange"
   >
     <van-tabbar-item
+      wx:if="{{!item.hide}}"
       wx:key="key"
       wx:for="{{list}}"
       icon="{{item.icon}}"
