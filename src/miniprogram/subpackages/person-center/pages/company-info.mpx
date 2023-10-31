@@ -2,9 +2,151 @@
 <custom-container
   title="城寻客户"
   containerBg="linear-gradient(to bottom, #8aa7ec, #79b3f4, #ffffff)"
-  btnName="{{pageType === 'edit' ? '更新' : '发布'}}"
+  btnName="{{pageType === 'edit' ? '' : '发布'}}"
   bind:footer-btn="release"
 >
+  <van-cell-group inset>
+    <!-- 本厂面积 -->
+    <van-field
+      size="large"
+      label="本厂面积"
+      title-width="160rpx"
+      required
+      readonly="{{!pageCanEdit}}"
+      type="number"
+      value="{{companyInfo.area}}"
+      input-align="right"
+      placeholder="请输入厂房面积"
+      id="area"
+      bind:change="onFieldChange"
+      bind:tap="gotoChangeStatus"
+    >
+      <view slot="right-icon" style="color: #333; font-weight: bold;">平</view>
+    </van-field>
+    <!-- 固定车位 -->
+    <van-field
+      size="large"
+      label="固定车位"
+      title-width="160rpx"
+      required
+      readonly="{{!pageCanEdit}}"
+      type="number"
+      value="{{companyInfo.parkSpace}}"
+      placeholder="请输入固定车位数量"
+      input-align="right"
+      id="parkSpace"
+      bind:change="onFieldChange"
+        bind:tap="gotoChangeStatus"
+    >
+      <view slot="right-icon" style="color: #333; font-weight: bold;">人</view>
+    </van-field>
+    <!-- 擅长品类 -->
+    <van-field
+      size="large"
+      label="擅长品类"
+      title-width="160rpx"
+      required
+      readonly="{{!pageCanEdit}}"
+      value="{{companyInfo.category}}"
+      autosize
+      type="textarea"
+      input-align="right"
+      placeholder="例如针织外套小香风等"
+      id="category"
+      bind:change="onFieldChange"
+        bind:tap="gotoChangeStatus"
+    />
+    <!-- 诚寻 -->
+    <van-field
+      size="large"
+      label="诚寻"
+      title-width="160rpx"
+      required
+      readonly="{{!pageCanEdit}}"
+      value="{{companyInfo.sincere}}"
+      autosize
+      type="textarea"
+      input-align="right"
+      placeholder="例如南城拼多多直播等"
+      error-message="客户长期合作"
+      error-message-align="right"
+      id="sincere"
+      bind:change="onFieldChange"
+        bind:tap="gotoChangeStatus"
+    >
+      <!-- <view slot="right-icon" style="color: #333; font-weight: bold;">客户长期合作</view> -->
+    </van-field>
+    <!-- 本厂优势 -->
+    <van-field
+      size="large"
+      label="本厂优势"
+      title-width="160rpx"
+      required
+      readonly="{{!pageCanEdit}}"
+      value="{{companyInfo.advantage}}"
+      autosize
+      type="textarea"
+      input-align="right"
+      placeholder="包头包尾,保证质量,出货快捷!管理质检配备齐全"
+      id="advantage"
+      bind:change="onFieldChange"
+        bind:tap="gotoChangeStatus"
+    />
+    <!-- 位置相关 -->
+    <van-field
+      size="large"
+      label="地址"
+      title-width="80rpx"
+      required
+      is-link
+      readonly
+      type="textarea"
+      autosize
+      value="{{companyInfo.poi.detail}}"
+      input-align="right"
+      placeholder="请点击输入我的详细地址"
+      bind:tap="showPopupContainer('address')"
+    />
+    <!-- 电话 -->
+    <van-field
+      size="large"
+      label="电话"
+      title-width="80rpx"
+      required
+      readonly="{{!pageCanEdit}}"
+      value="{{ companyInfo.tel }}"
+      type="number"
+      placeholder="请输入联系方式"
+      input-align="right"
+      bind:change="onFieldChange"
+      id="tel"
+      bind:tap="gotoChangeStatus"
+    />
+    <!-- 工厂/公司名 -->
+    <van-field
+      wx:if="{{company}}"
+      size="large"
+      label="工厂/公司名"
+      readonly
+      title-width="200rpx"
+      input-align="right"
+      value="{{ company }}"
+    />
+    <van-field
+      size="large"
+      label="推送状态"
+      title-width="160rpx"
+      readonly
+      input-align="right"
+      required
+    >
+      <view class="btn-slot" slot="button">
+        <view style="margin-right: 12rpx;color: #07c160;" wx:if="{{ companyInfo.status === 'on' }}">已开启</view>
+        <van-switch style="margin-bottom: -12rpx;" active-color="#07c160" checked="{{ companyInfo.status === 'on' }}" bind:change="onSwitchChange" />
+        <view style="margin-left: 12rpx" wx:if="{{ companyInfo.status !== 'on' }}">已关闭</view>
+      </view>
+    </van-field>
+  </van-cell-group>
   <view class="call-container">
     <view class="call-content">
       <view>
@@ -18,138 +160,6 @@
       </view>
     </view>
   </view>
-  <view style="padding-bottom: 100rpx;">
-    <van-cell-group inset>
-      <!-- 本厂面积 -->
-      <van-field
-        size="large"
-        label="本厂面积"
-        title-width="160rpx"
-        required
-        type="number"
-        value="{{companyInfo.area}}"
-        input-align="right"
-        placeholder="请输入厂房面积"
-        id="area"
-        bind:change="onFieldChange"
-      >
-        <view slot="right-icon" style="color: #333; font-weight: bold;">平</view>
-      </van-field>
-      <!-- 固定车位 -->
-      <van-field
-        size="large"
-        label="固定车位"
-        title-width="160rpx"
-        required
-        type="number"
-        value="{{companyInfo.parkSpace}}"
-        placeholder="请输入固定车位数量"
-        input-align="right"
-        id="parkSpace"
-        bind:change="onFieldChange"
-      >
-        <view slot="right-icon" style="color: #333; font-weight: bold;">人</view>
-      </van-field>
-      <!-- 擅长品类 -->
-      <van-field
-        size="large"
-        label="擅长品类"
-        title-width="160rpx"
-        required
-        value="{{companyInfo.category}}"
-        autosize
-        type="textarea"
-        input-align="right"
-        placeholder="例如针织外套小香风等"
-        id="category"
-        bind:change="onFieldChange"
-      />
-      <!-- 诚寻 -->
-      <van-field
-        size="large"
-        label="诚寻"
-        title-width="160rpx"
-        required
-        value="{{companyInfo.sincere}}"
-        autosize
-        type="textarea"
-        input-align="right"
-        placeholder="例如南城拼多多直播等"
-        error-message="客户长期合作"
-        error-message-align="right"
-        id="sincere"
-        bind:change="onFieldChange"
-      >
-        <!-- <view slot="right-icon" style="color: #333; font-weight: bold;">客户长期合作</view> -->
-      </van-field>
-      <!-- 本厂优势 -->
-      <van-field
-        size="large"
-        label="本厂优势"
-        title-width="160rpx"
-        required
-        value="{{companyInfo.advantage}}"
-        autosize
-        type="textarea"
-        input-align="right"
-        placeholder="包头包尾,保证质量,出货快捷!管理质检配备齐全"
-        id="advantage"
-        bind:change="onFieldChange"
-      />
-      <!-- 位置相关 -->
-      <van-field
-        size="large"
-        label="地址"
-        title-width="80rpx"
-        required
-        is-link
-        readonly
-        type="textarea"
-        autosize
-        value="{{companyInfo.poi.detail}}"
-        input-align="right"
-        placeholder="请点击输入我的详细地址"
-        bind:tap="showPopupContainer('address')"
-      />
-      <!-- 电话 -->
-      <van-field
-        size="large"
-        label="电话"
-        title-width="80rpx"
-        required
-        value="{{ companyInfo.tel }}"
-        type="number"
-        placeholder="请输入联系方式"
-        input-align="right"
-        bind:change="onFieldChange"
-        id="tel"
-      />
-      <!-- 工厂/公司名 -->
-      <van-field
-        wx:if="{{company}}"
-        size="large"
-        label="工厂/公司名"
-        readonly
-        title-width="200rpx"
-        input-align="right"
-        value="{{ company }}"
-      />
-      <van-field
-        size="large"
-        label="推送状态"
-        title-width="160rpx"
-        readonly
-        input-align="right"
-        required
-      >
-        <view class="btn-slot" slot="button">
-          <view style="margin-right: 12rpx;color: #07c160;" wx:if="{{ companyInfo.status === 'on' }}">已开启</view>
-          <van-switch style="margin-bottom: -12rpx;" active-color="#07c160" checked="{{ companyInfo.status === 'on' }}" bind:change="onSwitchChange" />
-          <view style="margin-left: 12rpx" wx:if="{{ companyInfo.status !== 'on' }}">已关闭</view>
-        </view>
-      </van-field>
-    </van-cell-group>
-  </view>
 </custom-container>
 <popup
   show="{{showPopup}}"
@@ -159,6 +169,7 @@
   bind:confirm="onConfirmHandle"
 />
 <toast wx:ref="toast" text="{{toastText}}" />
+<van-dialog id="van-dialog" />
 </template>
 
 <script>
@@ -169,6 +180,7 @@ import store from '@/store'
 import dayjs from 'dayjs'
 import guid from '@/utils'
 import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
+import Dialog from '@vant/weapp/dialog/dialog'
 
 createPage({
   options: {
@@ -186,6 +198,15 @@ createPage({
   },
   computed: {
     ...store.mapState(['addressList', 'adInfo', 'biographical', 'company', 'companyInfo']),
+    pageCanEdit() {
+      if (this.companyInfo.status === 'off') {
+        return true
+      }
+      if (this.companyInfo.id) {
+        return false
+      }
+      return true
+    },
     pageType() {
       if (this.companyInfo.id) {
         return 'edit'
@@ -193,7 +214,7 @@ createPage({
       return 'new'
     },
     constText() {
-      return this.pageType === 'new' ? '{发布}将为您{推送}给所有的{合作方}' : this.companyInfo.status === 'on' ? '{已}为您{推送给}所有的{合作方}' : '{开启推送状态并更新}将为您{推送}给所有的{合作方}'
+      return this.pageType === 'new' ? '{发布}将为您{推送}给所有的{合作方}' : this.companyInfo.status === 'on' ? '{已}为您{推送给}所有的{合作方}' : '{开启推送状态}将为您{推送}给所有的{合作方}'
     },
     key() {
       return 'findFactory'
@@ -254,6 +275,10 @@ createPage({
       }
     },
     showPopupContainer(type, currentTimeType) {
+      if (!this.pageCanEdit) {
+        this.gotoChangeStatus()
+        return
+      }
       if (!this.addressList.length && type === 'address') {
         mpx.navigateTo({
           url: AddAddressUrl
@@ -290,13 +315,51 @@ createPage({
         }
       })
     },
-    onSwitchChange(e) {
-      this.setState({
-        companyInfo: {
-          ...this.companyInfo,
-          status: this.companyInfo.status === 'on' ? 'off' : 'on'
+    async onSwitchChange(e) {
+      const companyInfo = JSON.parse(JSON.stringify(this.companyInfo))
+      companyInfo.status = companyInfo.status === 'on' ? 'off' : 'on'
+      if (companyInfo.id) {
+        if (companyInfo.status === 'on') {
+          const start = Date.now()
+          const end = start + 3600 * 24 * 7 * 1000
+          companyInfo.start = start
+          companyInfo.end = end
+          companyInfo.time = {
+            start: dayjs(start).format("YYYY-MM-DD HH:mm"),
+            end: dayjs(end).format("YYYY-MM-DD HH:mm")
+          }
         }
-      })
+        mpx.showLoading({
+          title: '更新状态中……'
+        })
+        const res = await updateUserInfo({ companyInfo })
+        if (res.code === 200) {
+          mpx.showToast({
+            title: '更新状态成功'
+          })
+          this.setState({ companyInfo })
+        } else {
+          mpx.hideLoading()
+        }
+      } else {
+        this.setState({ companyInfo })
+      }
+    },
+    gotoChangeStatus() {
+      if (this.pageCanEdit) {
+        return
+      }
+      Dialog.confirm({
+        title: '提示',
+        message: '编辑信息需要在推送状态关闭的情况下，是否先自动帮您关闭推送状态？（备注：编辑完成后需要手动开启推送状态）'
+      }).then(() => {
+        this.setState({
+          companyInfo: {
+            ...this.companyInfo,
+            status: 'off'
+          }
+        })
+      }).catch(() => {})
     },
     validate() {
       const telReg = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/
@@ -413,13 +476,13 @@ createPage({
   align-items center
 .call-container
   padding 16rpx 32rpx
-  margin-bottom -32rpx
+  margin-bottom 100rpx
   .call-content
     background #fff
     padding 32rpx
     font-size 40rpx
     font-weight bold
-    border-radius 16rpx 16rpx 0 0
+    border-radius 16rpx
 </style>
 
 <script name="json">
@@ -433,6 +496,7 @@ module.exports = {
     "popup": "@/subpackages/superstream/compontens/popup/index.mpx?root=superstream",
     "mutil-style-text": "@/compontens/base/mutil-style-text.mpx?root=common-coms-page",
     "van-switch": "@vant/weapp/switch/index",
+    "van-dialog": "@vant/weapp/dialog/index?root=vant-page",
     "toast": "@/compontens/base/toast.mpx"
   },
   "componentPlaceholder": {
@@ -442,6 +506,7 @@ module.exports = {
     "popup": "view",
     "van-cell": "view",
     "van-cell-group": "view",
+    "van-dialog": "view",
     "van-icon": "view",
     "van-field": "view"
   }

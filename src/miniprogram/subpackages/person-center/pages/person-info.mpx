@@ -5,107 +5,105 @@
   btnName="{{pageType === 'edit' ? '更新' : '发布'}}"
   bind:footer-btn="release"
 >
-  <view wx:if="{{callListText}}" class="call-container">
+  <van-cell-group inset>
+    <!-- 技能相关 -->
+    <van-field
+      size="large"
+      label="技能"
+      title-width="80rpx"
+      required
+      is-link
+      readonly
+      border="{{false}}"
+      value="{{biographical.categoryName}}"
+      input-align="right"
+      placeholder="请点击选择您擅长的技能"
+      bind:tap="showPopupContainer('category')"
+    />
+    <!-- 位置相关 -->
+    <van-field
+      size="large"
+      label="地址"
+      title-width="80rpx"
+      required
+      is-link
+      readonly
+      type="textarea"
+      autosize
+      value="{{biographical.poi.detail}}"
+      input-align="right"
+      placeholder="请点击输入我的详细地址"
+      bind:tap="showPopupContainer('address')"
+    />
+    <!-- 电话 -->
+    <van-field
+      size="large"
+      label="电话"
+      title-width="80rpx"
+      required
+      value="{{ biographical.tel }}"
+      type="number"
+      placeholder="请输入联系方式"
+      input-align="right"
+      bind:change="onFieldChange"
+      id="tel"
+    />
+    <!-- 时间先关 -->
+    <van-field
+      size="large"
+      label="到岗时间"
+      title-width="160rpx"
+      required
+      is-link
+      readonly
+      border="{{false}}"
+      value="{{biographical.time.start}}"
+      input-align="right"
+      placeholder="请点击选择您能到岗的时间"
+      bind:tap="showPopupContainer('time', 'start')"
+    />
+    <van-field
+      size="large"
+      label="截止时间"
+      title-width="160rpx"
+      is-link
+      readonly
+      border="{{false}}"
+      value="{{biographical.time.end}}"
+      input-align="right"
+      placeholder="请点击选择截止时间点"
+      error-message="{{biographical.time.end ? '' : '备注：不填写将为您持续推送，需要您手动关闭推动'}}"
+      error-message-align="right"
+      bind:tap="showPopupContainer('time', 'end')"
+    />
+    <!-- 补充信息 -->
+    <van-field
+      size="large"
+      label="补充信息"
+      title-width="160rpx"
+      value="{{ biographical.note }}"
+      placeholder="请输入补充信息"
+      input-align="left"
+      type="textarea"
+      autosize
+      error-message="{{biographical.note ? '' : '例如：城市可信、技术好、踏实肯干等'}}"
+      error-message-align="right"
+      id="note"
+      bind:change="onFieldChange"
+    />
+  </van-cell-group>
+  <view class="call-container">
     <view class="call-content">
       <view>
         <mutil-style-text text="{{constText}}" />
       </view>
-      <view>
+      <view wx:if="{{callListNum}}">
         <mutil-style-text text="{{callListNum}}" rules="{{textRules}}" />
       </view>
-      <view>
+      <view wx:if="{{callListText}}">
         <mutil-style-text text="{{callListText}}" rules="{{textRules}}" />
       </view>
     </view>
-  </view>
-  <view style="padding-bottom: 100rpx;">
-    <van-cell-group inset>
-      <!-- 技能相关 -->
-      <van-field
-        size="large"
-        label="技能"
-        title-width="80rpx"
-        required
-        is-link
-        readonly
-        border="{{false}}"
-        value="{{biographical.categoryName}}"
-        input-align="right"
-        placeholder="请点击选择您擅长的技能"
-        bind:tap="showPopupContainer('category')"
-      />
-      <!-- 位置相关 -->
-      <van-field
-        size="large"
-        label="地址"
-        title-width="80rpx"
-        required
-        is-link
-        readonly
-        type="textarea"
-        autosize
-        value="{{biographical.poi.detail}}"
-        input-align="right"
-        placeholder="请点击输入我的详细地址"
-        bind:tap="showPopupContainer('address')"
-      />
-      <!-- 电话 -->
-      <van-field
-        size="large"
-        label="电话"
-        title-width="80rpx"
-        required
-        value="{{ biographical.tel }}"
-        type="number"
-        placeholder="请输入联系方式"
-        input-align="right"
-        bind:change="onFieldChange"
-        id="tel"
-      />
-      <!-- 时间先关 -->
-      <van-field
-        size="large"
-        label="到岗时间"
-        title-width="160rpx"
-        required
-        is-link
-        readonly
-        border="{{false}}"
-        value="{{biographical.time.start}}"
-        input-align="right"
-        placeholder="请点击选择您能到岗的时间"
-        bind:tap="showPopupContainer('time', 'start')"
-      />
-      <van-field
-        size="large"
-        label="截止时间"
-        title-width="160rpx"
-        is-link
-        readonly
-        border="{{false}}"
-        value="{{biographical.time.end}}"
-        input-align="right"
-        placeholder="请点击选择截止时间点"
-        error-message="{{biographical.time.end ? '' : '备注：不填写将为您持续推送，需要您手动关闭推动'}}"
-        error-message-align="right"
-        bind:tap="showPopupContainer('time', 'end')"
-      />
-      <!-- 补充信息 -->
-      <van-field
-        size="large"
-        label="补充信息"
-        title-width="160rpx"
-        value="{{ biographical.note }}"
-        placeholder="请输入补充信息"
-        input-align="left"
-        type="textarea"
-        autosize
-        error-message="{{biographical.note ? '' : '例如：城市可信、技术好、踏实肯干等'}}"
-        error-message-align="right"
-        id="note"
-        bind:change="onFieldChange"
-      />
-    </van-cell-group>
   </view>
 </custom-container>
 <popup
@@ -377,7 +375,8 @@ createPage({
     padding 32rpx
     font-size 40rpx
     font-weight bold
-    border-radius 16rpx 16rpx 0 0
+    border-radius 16rpx
+    padding-bottom 100rpx
 </style>
 
 <script name="json">

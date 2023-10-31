@@ -27,6 +27,12 @@
       </van-button>
     </view>
   </view>
+  <view class="moreload">
+    <van-loading wx:if="{{moreLoad.loading}}" type="spinner" size="14px" color="#1989fa">
+      <text style="color: #000000;font-weight: bold;">加载中...</text>
+    </van-loading>
+    <view wx:else bind:tap="moreLoadHandle">{{moreLoad.text}}</view>
+  </view>
 </view>
 <view wx:else class="status">
   <van-empty />
@@ -45,11 +51,21 @@ createComponent({
     list: [],
     loading: true,
     pageInfo: JSON.parse(JSON.stringify(pageInfo)),
-    moreLoad: {}
+    moreLoad: {
+      loading: false,
+      isClick: true,
+      text: '~~没有更多啦~~'
+    }
   },
   attached() {
     this.loading = true
     this.getList()
+    getApp().eventBus.on('scroll-to-lower', () => {
+      this.moreLoadHandle()
+    })
+  },
+  detached() {
+    getApp().eventBus.removeListener('scroll-to-lower')
   },
   computed: {
     ...store.mapState(['fromOrigin', 'openid']),
@@ -99,10 +115,24 @@ createComponent({
   },
   methods: {
     async getList() {
+      this.moreLoad.loading = true
       const res = await getUserList(this.paramsList)
       this.loading = false
-      this.list = res.data.list || []
+      this.moreLoad.loading = false
+      this.list = this.list.concat(res.data.list || [])
+      if (this.list.length < res.data.total) {
+        this.moreLoad.text = '~点击加载更多~'
+        this.moreLoad.isClick = true
+      } else {
+        this.moreLoad.isClick = false
+        this.moreLoad.text = '~~没有更多啦~~'
+      }
       console.log(res.data.list)
+    },
+    moreLoadHandle() {
+      if (!this.moreLoad.isClick || this.loading || this.moreLoad.loading) return
+      this.page.page++
+      this.getList()
     },
     clickBtn(item, e) {
       const { id } = e
@@ -238,6 +268,15 @@ createComponent({
     font-size 28rpx
     color #000000
     font-weight bold
+.moreload
+  color #000000
+  font-size 28rpx
+  font-weight bold
+  width 100%
+  display flex
+  align-items center
+  justify-content center
+  padding 50rpx 0
 </style>
 
 <script type="application/json">
@@ -247,11 +286,13 @@ createComponent({
       "van-empty": "@vant/weapp/empty/index?root=vant-page",
       "mutil-style-text": "@/compontens/base/mutil-style-text.mpx?root=common-coms-page",
       "skeleton": "@/compontens/common/card/skeleton.mpx",
+      "van-loading": "@vant/weapp/loading/index?root=vant-page",
       "van-button": "@vant/weapp/button/index?root=vant-page"
     },
     "componentPlaceholder": {
       "card": "view",
       "mutil-style-text": "view",
+      "van-loading": "view",
       "van-button": "view",
       "van-empty": "view"
     }

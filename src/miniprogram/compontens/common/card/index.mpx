@@ -205,7 +205,6 @@ createComponent({
 .list-item
   background #ffffff
   padding 16rpx
-
   border-radius 16rpx
   position relative
   margin-bottom 16rpx
@@ -260,7 +259,6 @@ createComponent({
           display flex
           &-item
             padding 2rpx 8rpx
-
             background #ffffff
             border-radius 8rpx
             box-shadow 0px 4px 20px 0px rgba(0,0,0,0.1)

@@ -2,6 +2,18 @@
 <template>
   <view class="container">
     <view class="list" wx:if="{{renderFilterList.length}}">
+      <view wx:if="{{bottom && bottom.btn}}" class="guide">
+        <view class="guide-content">
+          <view class="guide-content-title">{{bottom.title}}</view>
+          <view class="guide-content-desc">{{bottom.desc}}</view>
+        </view>
+        <view class="guide-opa">
+          <van-button size="small" type="primary" round bind:tap="jumpAction(bottom.btn)">
+            {{bottom.btn.name}}
+            <van-icon name="{{bottom.btn.icon}}" />
+          </van-button>
+        </view>
+      </view>
       <scroll-view scroll-x style="width: 100%;" class="list-scroll">
         <view class="list-filter">
           <block wx:for="{{renderFilterList}}" wx:key="id">
@@ -156,7 +168,7 @@
       <view class="text">暂无数据</view>
     </view>
   </view>
-  <nav-footer wx:if="{{showBottom}}" list="{{footerList}}" />
+  <nav-footer wx:if="{{showBottom && false}}" list="{{footerList}}" />
   <back-home wx:if="{{showRightShare}}" showShare showBackHome="{{false}}"/>
 </template>
 
@@ -590,6 +602,9 @@ createComponent({
     },
     closeBottom() {
       this.showBottomTip = false
+    },
+    jumpAction(item) {
+      jumpAction(item)
     }
   }
 })
@@ -659,7 +674,6 @@ createComponent({
     font-weight bold
 .card-list
   padding 0 32rpx
-
 .filter-title
   height 70rpx
   text-align center
@@ -670,11 +684,29 @@ createComponent({
 .list
   position sticky
   top 0
+  padding 0 32rpx
   z-index 20
+  .guide
+    flex-center()
+    background #ffffff
+    border-radius 16rpx
+    padding 6rpx 16rpx
+    border-bottom $border
+    margin-bottom 16rpx
+    &-content
+      flex 1
+      flex-center()
+      &-title
+        font-size 32rpx
+        color #000000
+        font-weight bold
+      &-desc
+        font-size 24rpx
+        color #000000
+        margin-left 8rpx
   &-scroll
     background #ffffff
     border-radius 16rpx
-    box-shadow 0px 4px 20px 0px rgba(0,0,0,0.1)
     margin-bottom 16rpx
     height 50px
     overflow hidden
@@ -714,7 +746,6 @@ createComponent({
   padding 16rpx 0
   &-btn
     padding 16rpx 16rpx
-
     display flex
     justify-content space-around
     .btn
