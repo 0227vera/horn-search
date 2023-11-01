@@ -73,13 +73,13 @@ createPage({
     navbar() {
       return [
         {
-          name: '个人信息',
+          name: '主动求职',
           icon: 'manager-o',
           jumptype: 'mp',
           url: '/person-center/pages/person-info'
         },
         {
-          name: '工厂信息',
+          name: '城寻客户',
           icon: 'info-o',
           jumptype: 'mp',
           url: '/person-center/pages/company-info'

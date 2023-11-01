@@ -22,34 +22,7 @@
         </view>
       </item-container>
       <item-container title="人才市场：" wx:if="{{talentList.length}}">
-        <view class="talent-container">
-          <view wx:for="{{talentList}}" wx:key="_id" class="talent-item">
-            <view class="talent-item-name">{{item.biographical.name || 'XX先生/女士'}}</view>
-            <view style="padding: 16rpx;">
-              <view class="talent-item-content">
-                <view class="talent-item-content_item">
-                  <view class="talent-item-content_item-label">擅长技能：</view>
-                  <view class="talent-item-content_item-value">{{item.biographical.categoryName}}</view>
-                </view>
-                <view class="talent-item-content_item">
-                  <view class="talent-item-content_item-label">可到岗时间：</view>
-                  <view class="talent-item-content_item-value">{{item.biographical.time.start}}{{item.biographical.time.end ? ' ~ ' + item.biographical.time.end : '以后均可'}}</view>
-                </view>
-                <view class="talent-item-content_item">
-                  <view class="talent-item-content_item-label">地址：</view>
-                  <view class="talent-item-content_item-value">{{item.biographical.poi && item.biographical.poi.detail}}</view>
-                </view>
-                <view class="talent-item-content_item" wx:if="{{item.biographical.note}}">
-                  <view class="talent-item-content_item-label">备注：</view>
-                  <view class="talent-item-content_item-value">{{item.biographical.note}}</view>
-                </view>
-              </view>
-            </view>
-            <view class="talent-item-call">
-              <van-button round type="primary" size="small" bind:tap="callTel(item)">打电话</van-button>
-            </view>
-          </view>
-        </view>
+        <talent talentList="{{talentList}}" orderid="{{orderid}}" bind:update="updateList" />
       </item-container>
       <item-container title="基本信息：">
         <base-info orderData="{{orderData}}" />
@@ -69,7 +42,7 @@
 
 <script>
 import mpx, { createPage } from '@mpxjs/core'
-import { getReleaseOneById, updateRelease, updateUserInfo } from '@/api'
+import { updateRelease } from '@/api'
 import store from '@/store'
 import Dialog from '@vant/weapp/dialog/dialog'
 import mixins from '@/subpackages/order-detail/utils.js/mixins.js'
@@ -78,6 +51,7 @@ createPage({
   mixins: [mixins],
   data: {
     active: '',
+    orderid: '',
     calllist: [],
     readlist: [],
     status: '',
@@ -99,7 +73,7 @@ createPage({
         id: 'baohome',
         click: () => {
           mpx.reLaunch({
-            url: '/homepage/pages/index'
+            url: '/pages/home'
           })
         }
       }, {
@@ -158,43 +132,8 @@ createPage({
     }
   },
   methods: {
-    callTel({ biographical, _id }) {
-      wx.makePhoneCall({
-        phoneNumber: biographical.tel,
-        success: () => {
-          const newBiographical = JSON.parse(JSON.stringify(biographical))
-          newBiographical.callList = newBiographical.callList || []
-          const callInfo = newBiographical.callList.find(item => item.orderid === this._id)
-          if (callInfo) {
-            // 之前就呼叫过
-            newBiographical.callList.forEach(item => {
-              if (item.orderid === this._id) {
-                item.times++
-              }
-            })
-          } else {
-            // 之前没有呼叫过
-            newBiographical.callList.push({
-              orderid: this._id,
-              category: this.category,
-              categoryTypeName: this.categoryTypeName,
-              times: 1
-            })
-          }
-          updateUserInfo({
-            _id,
-            biographical: newBiographical
-          }).then(() => {
-            // 更新一下this.talentList
-            this.talentList.forEach(item => {
-              if (item._id === _id) {
-                item.biographical = newBiographical
-              }
-            })
-          })
-          console.log(newBiographical)
-        }
-      })
+    updateList(e) {
+      this.talentList = e.detail
     }
   }
 })
@@ -202,40 +141,6 @@ createPage({
 </script>
 
 <style lang="stylus" scoped>
-.talent
-  &-container
-    padding 16rpx 32rpx
-  &-item
-    margin-bottom 16rpx
-    &-name
-      font-size 36rpx
-      display flex
-      justify-content center
-      align-items center
-      padding-bottom 16rpx
-      border-bottom 2rpx solid #ebedf0
-    &-call
-      display flex
-      justify-content flex-end
-      align-items center
-    &-content
-      margin-bottom 16rpx
-      padding-bottom 16rpx
-      border-bottom 2rpx solid #ebedf0
-      &_item
-        display flex
-        justify-content center
-        align-items center
-        font-size 28rpx
-        color #333333
-        font-weight bold
-        margin-bottom 8rpx
-        &-label
-          width 180rpx
-          text-align right
-        &-value
-         flex 1
-         overflow hidden
 .status
   width 100%
   height 100%
@@ -307,7 +212,8 @@ createPage({
       "base-info": "../components/base-info.mpx",
       "van-dialog": "@vant/weapp/dialog/index?root=vant-page",
       "van-button": "@vant/weapp/button/index?root=vant-page",
-      "skeleton": "@/subpackages/order-detail/components/skeleton.mpx"
+      "skeleton": "@/subpackages/order-detail/components/skeleton.mpx",
+      "talent": "@/subpackages/order-detail/components/talent.mpx"
     },
     "componentPlaceholder": {
       "custom-container": "view",

@@ -4,10 +4,10 @@ import dayjs from 'dayjs'
 import store from '@/store'
 const mixin = {
   onShareAppMessage() {
-    const path = encodeURIComponent(`/order-detail/pages/detail-to-worker?id=${this._id}&fromOrigin=${this.fromOrigin}`)
+    const path = `/order-detail/pages/detail-to-worker?id=${this._id}&fromOrigin=${this.fromOrigin}`
     return {
       title: this.shareTitle,
-      path: `/pages/page?type=mp&path=${path}`,
+      path,
       imageUrl: this.images?.[0] || ''
     }
   },
@@ -70,7 +70,7 @@ const mixin = {
           mpx.navigateBack()
         } else {
           mpx.reLaunch({
-            url: `/homepage/pages/index`
+            url: `/pages/home`
           })
         }
       }
@@ -88,10 +88,11 @@ const mixin = {
     this.loading = true
     const res = await getReleaseOneById(params)
     this.orderData = res.data || {}
-    const { categoryName, categorySub, categoryNum, categoryTypeName, category, price, priceUnit, poi, tel, images, note, status, calllist, _id, readlist, OPENID } = res.data || {}
+    const { categoryName, categorySub, categoryNum, categoryTypeName, category, price, priceUnit, poi, tel, images, note, status, calllist, _id, readlist, OPENID, cooperType } = res.data || {}
     this.poi = poi
     this.tel = tel
     this._id = _id
+    this.orderid = _id
     this.images = images
     this.categoryName = categoryName
     this.categoryTypeName = categoryTypeName
@@ -100,7 +101,7 @@ const mixin = {
     this.category = category
     this.active = status - 1
     this.status = status
-    this.category = category
+    this.cooperType = cooperType
     this.OPENID = OPENID
     this.readlist = readlist
     this.calllist = calllist
@@ -111,6 +112,7 @@ const mixin = {
       const currentTime = +dayjs(Date.now()).format('HHmm')
       if (this.fromOrigin === 'bossWorker') {
         const and = {
+          'biographical.status': 'on',
           'biographical.category': ['like', category],
           'biographical.start': ['<=', currentTime]
         }

@@ -285,7 +285,7 @@ createComponent({
       "card": "@/compontens/common/card/index.mpx?root=common-coms-page",
       "van-empty": "@vant/weapp/empty/index?root=vant-page",
       "mutil-style-text": "@/compontens/base/mutil-style-text.mpx?root=common-coms-page",
-      "skeleton": "@/compontens/common/card/skeleton.mpx",
+      "skeleton": "./skeleton.mpx",
       "van-loading": "@vant/weapp/loading/index?root=vant-page",
       "van-button": "@vant/weapp/button/index?root=vant-page"
     },

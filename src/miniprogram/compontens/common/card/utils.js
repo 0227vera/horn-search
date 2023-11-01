@@ -48,7 +48,7 @@ const actions = {
   },
   factoryCooper: item => {
     const content = []
-    if (item.cooperType === '3') {
+    if (item.cooperType === 'a3') {
       content.push(getAddressAndDistance(item, '裁床地址:'))
     } else {
       content.push({

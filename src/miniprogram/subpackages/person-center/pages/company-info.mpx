@@ -72,7 +72,7 @@
       error-message-align="right"
       id="sincere"
       bind:change="onFieldChange"
-        bind:tap="gotoChangeStatus"
+      bind:tap="gotoChangeStatus"
     >
       <!-- <view slot="right-icon" style="color: #333; font-weight: bold;">客户长期合作</view> -->
     </van-field>
@@ -90,7 +90,7 @@
       placeholder="包头包尾,保证质量,出货快捷!管理质检配备齐全"
       id="advantage"
       bind:change="onFieldChange"
-        bind:tap="gotoChangeStatus"
+      bind:tap="gotoChangeStatus"
     />
     <!-- 位置相关 -->
     <van-field
@@ -169,7 +169,18 @@
   bind:confirm="onConfirmHandle"
 />
 <toast wx:ref="toast" text="{{toastText}}" />
-<van-dialog id="van-dialog" />
+<van-dialog
+  title="提示"
+  use-slot
+  show-cancel-button
+  show="{{ dialogShow }}"
+  bind:confirm="dialogConfirm"
+  bind:close="onClose"
+>
+  <view class="dialog-container">
+    <mutil-style-text text="{{noticeText}}" rules="{{noticeRules}}" />
+  </view>
+</van-dialog>
 </template>
 
 <script>
@@ -180,7 +191,6 @@ import store from '@/store'
 import dayjs from 'dayjs'
 import guid from '@/utils'
 import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
-import Dialog from '@vant/weapp/dialog/dialog'
 
 createPage({
   options: {
@@ -189,10 +199,17 @@ createPage({
   data: {
     showPopup: false,
     popupType: '',
+    dialogShow: false,
     toastText: '',
+    noticeText: '如需更改工厂信息，请先关闭推送状态，{完成后再开启}，确认关闭？',
     textRules: {
       '{x}': {
         style: 'margin: 0 16rpx; font-size: 60rpx; color: #07c160;'
+      }
+    },
+    noticeRules: {
+      '{x}': {
+        style: 'color: #ff525d;font-weight:bold;'
       }
     }
   },
@@ -214,7 +231,7 @@ createPage({
       return 'new'
     },
     constText() {
-      return this.pageType === 'new' ? '{发布}将为您{推送}给所有的{合作方}' : this.companyInfo.status === 'on' ? '{已}为您{推送给}所有的{合作方}' : '{开启推送状态}将为您{推送}给所有的{合作方}'
+      return this.pageType === 'new' ? '{发布}将为您{推送}给所有的{合作方}' : this.companyInfo.status === 'on' ? '{已}将您的工厂{推送}给所有{正在找工厂的用户}' : '{开启推送状态}将为您{推送}给所有的{正在找工厂的用户}'
     },
     key() {
       return 'findFactory'
@@ -349,17 +366,18 @@ createPage({
       if (this.pageCanEdit) {
         return
       }
-      Dialog.confirm({
-        title: '提示',
-        message: '编辑信息需要在推送状态关闭的情况下，是否先自动帮您关闭推送状态？（备注：编辑完成后需要手动开启推送状态）'
-      }).then(() => {
-        this.setState({
-          companyInfo: {
-            ...this.companyInfo,
-            status: 'off'
-          }
-        })
-      }).catch(() => {})
+      this.dialogShow = true
+    },
+    onClose() {
+      this.dialogShow = false
+    },
+    dialogConfirm() {
+      this.setState({
+        companyInfo: {
+          ...this.companyInfo,
+          status: 'off'
+        }
+      })
     },
     validate() {
       const telReg = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/
@@ -470,6 +488,11 @@ createPage({
 </style>
 
 <style lang="stylus" scoped>
+.dialog-container
+  padding 32rpx
+  font-szie 32rpx
+  letter-spacing 2rpx
+  border-top 2rpx solid #ebedf0
 .btn-slot
   display flex
   justify-content center

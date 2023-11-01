@@ -1,0 +1,145 @@
+<template>
+  <view class="talent-container">
+    <view wx:for="{{talentList}}" wx:key="_id" class="talent-item">
+      <view class="talent-item-name">
+        <view>
+          {{item.biographical.name || 'XX先生/女士'}}
+        </view>
+        <van-button round type="primary" size="small" bind:tap="callTel(item)">给他(她)打电话</van-button>
+      </view>
+      <view class="talent-item-container">
+        <view class="talent-item-content">
+          <view class="talent-item-content_item">
+            <view class="talent-item-content_item-label">擅长技能：</view>
+            <view class="talent-item-content_item-value">{{item.biographical.categoryName}}</view>
+          </view>
+          <view class="talent-item-content_item">
+            <view class="talent-item-content_item-label">可到岗时间：</view>
+            <view class="talent-item-content_item-value">{{item.biographical.time.start}}{{item.biographical.time.end ? ' ~ ' + item.biographical.time.end : '以后均可'}}</view>
+          </view>
+          <view class="talent-item-content_item">
+            <view class="talent-item-content_item-label">地址：</view>
+            <view class="talent-item-content_item-value">{{item.biographical.poi && item.biographical.poi.detail}}</view>
+          </view>
+          <view class="talent-item-content_item" wx:if="{{item.biographical.note}}">
+            <view class="talent-item-content_item-label">备注：</view>
+            <view class="talent-item-content_item-value">{{item.biographical.note}}</view>
+          </view>
+        </view>
+      </view>
+      <!-- <view class="talent-item-call">
+        <van-button round type="primary" size="small" bind:tap="callTel(item)">打电话</van-button>
+      </view> -->
+    </view>
+  </view>
+</template>
+
+<script>
+import { createComponent } from '@mpxjs/core'
+import { updateUserInfo } from '@/api'
+createComponent({
+  properties: {
+    talentList: {
+      type: Array,
+      value: []
+    },
+    // 订单的id
+    orderid: {
+      type: String,
+      value: ''
+    }
+  },
+  methods: {
+    callTel({ biographical, _id }) {
+      console.log(this.orderid)
+      wx.makePhoneCall({
+        phoneNumber: biographical.tel,
+        success: () => {
+          const newBiographical = JSON.parse(JSON.stringify(biographical))
+          newBiographical.callList = newBiographical.callList || []
+          const callInfo = newBiographical.callList.find(item => item.orderid === this.orderid)
+          if (callInfo) {
+            // 之前就呼叫过
+            newBiographical.callList.forEach(item => {
+              if (item.orderid === this.orderid) {
+                item.times++
+              }
+            })
+          } else {
+            // 之前没有呼叫过
+            newBiographical.callList.push({
+              orderid: this.orderid,
+              times: 1
+            })
+          }
+          updateUserInfo({
+            _id,
+            biographical: newBiographical
+          }).then(() => {
+            const talentList = this.talentList.map(item => {
+              if (item._id === _id) {
+                item.biographical = newBiographical
+              }
+              return item
+            })
+            this.triggerEvent('update', talentList)
+          })
+        }
+      })
+    }
+  }
+})
+</script>
+
+<style lang="stylus" scoped>
+.talent
+  &-container
+    padding 16rpx
+  &-item
+    margin-bottom 16rpx
+    background #f6f6f6
+    border-radius 8rpx
+    padding 8rpx
+    &:last-child
+      margin-bottom 0
+    &-name
+      font-size 36rpx
+      display flex
+      justify-content space-between
+      align-items center
+      padding-bottom 8rpx
+    &-call
+      display flex
+      justify-content flex-end
+      align-items center
+    &-container
+      padding 0 16rpx
+    &-content
+      border-top 2rpx solid #ebedf0
+      &_item
+        display flex
+        justify-content center
+        align-items center
+        font-size 28rpx
+        color #333333
+        margin-top 8rpx
+        margin-bottom 8rpx
+        &-label
+          width 180rpx
+          text-align right
+        &-value
+         flex 1
+         overflow hidden
+         font-weight bold
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "van-button": "@vant/weapp/button/index?root=vant-page"
+    },
+    "componentPlaceholder": {
+      "van-button": "view"
+    }
+  }
+</script>

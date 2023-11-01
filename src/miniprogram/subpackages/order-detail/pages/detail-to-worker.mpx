@@ -17,7 +17,7 @@
           <view class="image-item" wx:for="{{3 - images.length % 3}}"></view>
         </view>
       </item-container>
-      <item-container title="位置信息：">
+      <item-container title="位置信息：" wx:if="{{!hideMap}}">
         <cus-map endInfo="{{poi}}" mapFull="{{mapFull}}" bind:close-full="closeFull" />
       </item-container>
     </view>
@@ -40,6 +40,9 @@ createPage({
   },
   computed: {
     ...store.mapState(['openid', 'fromOrigin']),
+    hideMap() {
+      return this.fromOrigin === 'factoryCooper' && this.cooperType !== 'a3'
+    },
     footerList() {
       return [{
         name: '回首页',
@@ -47,7 +50,7 @@ createPage({
         id: 'baohome',
         click: () => {
           mpx.reLaunch({
-            url: '/homepage/pages/index'
+            url: '/pages/home'
           })
         }
       }, {
@@ -65,6 +68,7 @@ createPage({
       }, {
         name: '导航去询问',
         icon: 'location-o',
+        hide: this.hideMap,
         id: 'nav',
         click: () => {
           wx.openLocation({

@@ -32,7 +32,7 @@ createComponent({
   methods: {
     backHome() {
       mpx.reLaunch({
-        url: '/homepage/pages/index'
+        url: '/pages/home'
       })
     }
   }

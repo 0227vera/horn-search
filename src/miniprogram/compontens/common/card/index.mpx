@@ -29,7 +29,7 @@
         <view class="list-item_ope" wx:if="{{buttons.length}}">
           <van-button
             wx:for="{{buttons}}"
-            wx:if="{{!b.hide}}"
+            wx:if="{{!b.hide && !(b.isExtraCondition && item.cooperType !== 'a3')}}"
             size="small"
             style="margin-left: 8rpx"
             wx:for-item="b"

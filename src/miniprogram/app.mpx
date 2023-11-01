@@ -45,7 +45,7 @@ createApp({
   eventBus: new EventBus(),
   onShareAppMessage() {
     return {
-      path: '/pages/page'
+      path: '/pages/home'
     }
   }
 })
@@ -61,11 +61,10 @@ page
 <script type="application/json">
   {
     "pages": [
-      "./pages/page",
+      "./pages/home",
       "./pages/webview"
     ],
     "packages": [
-      "./subpackages/homepage/app?root=homepage",
       "./subpackages/person-center/app?root=person-center",
       "./subpackages/superstream/app?root=superstream",
       "./subpackages/order-detail/app?root=order-detail",
@@ -83,14 +82,7 @@ page
     "__lazyCodeLoadingChunk": true,
     "rendererOptions": { "skyline": { "defaultDisplayBlock": true } },
     "preloadRule": {
-      "pages/page": {
-        "network": "all",
-        "packages": [
-          "homepage",
-          "superstream"
-        ]
-      },
-      "homepage/pages/index": {
+      "pages/home": {
         "network": "all",
         "packages": [
           "superstream"

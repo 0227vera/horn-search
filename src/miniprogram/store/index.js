@@ -54,6 +54,7 @@ export default createStore({
       poi: {},
       tel: '',
       note: '',
+      status: 'on',
       time: {
         start: dayjs(Date.now()).format('HH:mm'),
         end: ''

@@ -223,24 +223,27 @@ createComponent({
       text: '~~没有更多啦~~'
     },
     list: [],
-    filter: {},
-    buttons: [{
-      text: '打电话',
-      id: 'call',
-      type: 'primary',
-      icon: 'phone-o'
-    }, {
-      text: '导航去',
-      id: 'nav',
-      icon: 'location-o'
-    }, {
-      text: '看详情',
-      id: 'gotoDetail',
-      icon: 'eye-o'
-    }]
+    filter: {}
   },
   computed: {
     ...store.mapState(['openid', 'fromOrigin', 'showBottomNav', 'navBarStyle', 'adInfo', 'mapSdk']),
+    buttons() {
+      return [{
+        text: '打电话',
+        id: 'call',
+        type: 'primary',
+        icon: 'phone-o'
+      }, {
+        text: '导航去',
+        id: 'nav',
+        icon: 'location-o',
+        isExtraCondition: this.fromOrigin === 'factoryCooper'
+      }, {
+        text: '看详情',
+        id: 'gotoDetail',
+        icon: 'eye-o'
+      }]
+    },
     bottom() {
       return config[this.categoryTypeId]?.partyB?.bottom
     },

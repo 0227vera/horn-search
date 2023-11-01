@@ -45,6 +45,8 @@
       size="large"
       label="产品款式"
       title-width="160rpx"
+      type="textarea"
+      autosize
       required
       is-link
       readonly
@@ -70,7 +72,7 @@
     </van-field>
     <!-- 裁床地址 -->
     <van-field
-      wx:if="{{updateObj.cooperType === '3'}}"
+      wx:if="{{updateObj.cooperType === 'a3'}}"
       size="large"
       label="裁床地址"
       type="textarea"
@@ -116,6 +118,8 @@
       title-width="160rpx"
       is-link
       readonly
+      type="textarea"
+      autosize
       value="{{updateObj.fabricPropName}}"
       input-align="right"
       placeholder="请点击选择面料属性"
@@ -185,7 +189,7 @@
     </van-field> -->
     <!-- 地域要求 -->
     <van-field
-      wx:if="{{updateObj.cooperType === '3'}}"
+      wx:if="{{updateObj.cooperType === 'a3'}}"
       size="large"
       label="{{updateObj.factoryScale ? updateObj.factoryScale === '1' ? '工厂地域要求' : '作坊地域要求' : '地域要求'}}"
       title-width="240rpx"
@@ -285,7 +289,7 @@ createComponent({
       return this.configById.orderTypeList
     },
     addressName() {
-      if (this.updateObj.cooperType === '3') {
+      if (this.updateObj.cooperType === 'a3') {
         return '裁床地址'
       }
       return '地址'

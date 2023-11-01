@@ -1,23 +1,25 @@
 <template>
 <custom-container
-  title="个人信息"
+  title="主动求职"
   containerBg="linear-gradient(to bottom, #8aa7ec, #79b3f4, #ffffff)"
-  btnName="{{pageType === 'edit' ? '更新' : '发布'}}"
+  btnName="{{pageType === 'edit' ? '' : '发布'}}"
   bind:footer-btn="release"
 >
   <van-cell-group inset>
     <!-- 技能相关 -->
     <van-field
       size="large"
-      label="技能"
-      title-width="80rpx"
+      label="擅长岗位"
+      title-width="160rpx"
       required
       is-link
       readonly
+      autosize
+      type="textarea"
       border="{{false}}"
       value="{{biographical.categoryName}}"
       input-align="right"
-      placeholder="请点击选择您擅长的技能"
+      placeholder="请点击选择您擅长的岗位"
       bind:tap="showPopupContainer('category')"
     />
     <!-- 位置相关 -->
@@ -40,12 +42,14 @@
       size="large"
       label="电话"
       title-width="80rpx"
+      readonly="{{!pageCanEdit}}"
       required
       value="{{ biographical.tel }}"
       type="number"
       placeholder="请输入联系方式"
       input-align="right"
       bind:change="onFieldChange"
+      bind:tap="gotoChangeStatus"
       id="tel"
     />
     <!-- 时间先关 -->
@@ -53,7 +57,6 @@
       size="large"
       label="到岗时间"
       title-width="160rpx"
-      required
       is-link
       readonly
       border="{{false}}"
@@ -83,14 +86,30 @@
       title-width="160rpx"
       value="{{ biographical.note }}"
       placeholder="请输入补充信息"
+      readonly="{{!pageCanEdit}}"
       input-align="left"
       type="textarea"
       autosize
-      error-message="{{biographical.note ? '' : '例如：城市可信、技术好、踏实肯干等'}}"
+      error-message="{{biographical.note ? '' : '例如：诚实可信、技术好、踏实肯干等'}}"
       error-message-align="right"
       id="note"
       bind:change="onFieldChange"
+      bind:tap="gotoChangeStatus"
     />
+    <van-field
+      size="large"
+      label="推送状态"
+      title-width="160rpx"
+      readonly
+      input-align="right"
+      required
+    >
+      <view class="btn-slot" slot="button">
+        <view style="margin-right: 12rpx;color: #07c160;" wx:if="{{ biographical.status === 'on' }}">已开启</view>
+        <van-switch style="margin-bottom: -12rpx;" active-color="#07c160" checked="{{ biographical.status === 'on' }}" bind:change="onSwitchChange" />
+        <view style="margin-left: 12rpx" wx:if="{{ biographical.status !== 'on' }}">已关闭</view>
+      </view>
+    </van-field>
   </van-cell-group>
   <view class="call-container">
     <view class="call-content">
@@ -121,7 +140,18 @@
   bind:confirm="onConfirmHandle"
 />
 <toast wx:ref="toast" text="{{toastText}}" />
-<van-dialog id="van-dialog" />
+<van-dialog
+  title="提示"
+  use-slot
+  show-cancel-button
+  show="{{ dialogShow }}"
+  bind:confirm="dialogConfirm"
+  bind:close="onClose"
+>
+  <view class="dialog-container">
+    <mutil-style-text text="{{noticeText}}" rules="{{noticeRules}}" />
+  </view>
+</van-dialog>
 </template>
 
 <script>
@@ -131,12 +161,13 @@ import config from '@/constant/release.js'
 import store from '@/store'
 import dayjs from 'dayjs'
 import guid from '@/utils'
-import Dialog from '@vant/weapp/dialog/dialog'
 import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
 
 createPage({
   data: {
     showPopup: false,
+    dialogShow: false,
+    noticeText: '如需更改工厂信息，请先关闭推送状态，{完成后再开启}，确认关闭？',
     popupType: '',
     initTime: '',
     minHour: 0,
@@ -148,10 +179,24 @@ createPage({
       '{x}': {
         style: 'margin: 0 16rpx; font-size: 60rpx; color: #07c160;'
       }
+    },
+    noticeRules: {
+      '{x}': {
+        style: 'color: #ff525d;font-weight:bold;'
+      }
     }
   },
   computed: {
     ...store.mapState(['addressList', 'adInfo', 'biographical']),
+    pageCanEdit() {
+      if (this.biographical.status === 'off') {
+        return true
+      }
+      if (this.biographical.id) {
+        return false
+      }
+      return true
+    },
     pageType() {
       if (this.biographical.id) {
         return 'edit'
@@ -220,6 +265,10 @@ createPage({
       }
     },
     showPopupContainer(type, currentTimeType) {
+      if (!this.pageCanEdit) {
+        this.gotoChangeStatus()
+        return
+      }
       if (type === 'time') {
         this.currentTimeType = currentTimeType
         this.initTime = this.biographical.time[currentTimeType]
@@ -291,6 +340,47 @@ createPage({
       }
       actions?.[type]?.()
       this.closePopupContainer()
+    },
+    gotoChangeStatus() {
+      if (this.pageCanEdit) {
+        return
+      }
+      this.dialogShow = true
+    },
+    onClose() {
+      this.dialogShow = false
+    },
+    async onSwitchChange() {
+      const biographical = JSON.parse(JSON.stringify(this.biographical))
+      biographical.status = biographical.status === 'on' ? 'off' : 'on'
+      if (biographical.id) {
+        if (biographical.status === 'on') {
+          biographical.start = +biographical.time.start.replace(':', '')
+          biographical.end = +biographical.time.end.replace(':', '') || null
+        }
+        mpx.showLoading({
+          title: '更新状态中……'
+        })
+        const res = await updateUserInfo({ biographical })
+        if (res.code === 200) {
+          mpx.showToast({
+            title: '更新状态成功'
+          })
+          this.setState({ biographical })
+        } else {
+          mpx.hideLoading()
+        }
+      } else {
+        this.setState({ biographical })
+      }
+    },
+    dialogConfirm() {
+      this.setState({
+        biographical: {
+          ...this.biographical,
+          status: 'off'
+        }
+      })
     },
     onFieldChange(e) {
       this.setState({
@@ -367,16 +457,25 @@ createPage({
 </script>
 
 <style lang="stylus" scoped>
+.dialog-container
+  padding 32rpx
+  font-szie 32rpx
+  letter-spacing 2rpx
+  border-top 2rpx solid #ebedf0
+.btn-slot
+  display flex
+  justify-content center
+  align-items center
 .call-container
   padding 16rpx 32rpx
   margin-bottom -32rpx
+  padding-bottom 100rpx
   .call-content
     background #fff
     padding 32rpx
     font-size 40rpx
     font-weight bold
     border-radius 16rpx
-    padding-bottom 100rpx
 </style>
 
 <script name="json">
@@ -388,6 +487,7 @@ module.exports = {
     "van-cell": "@vant/weapp/cell/index?root=vant-page",
     "van-dialog": "@vant/weapp/dialog/index?root=vant-page",
     "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page",
+    "van-switch": "@vant/weapp/switch/index",
     "popup": "@/subpackages/superstream/compontens/popup/index.mpx?root=superstream",
     "mutil-style-text": "@/compontens/base/mutil-style-text.mpx?root=common-coms-page",
     "toast": "@/compontens/base/toast.mpx",
@@ -395,6 +495,7 @@ module.exports = {
   "componentPlaceholder": {
     "custom-container": "view",
     "mutil-style-text": "view",
+    "van-switch": "view",
     "popup": "view",
     "van-cell": "view",
     "van-cell-group": "view",

@@ -3,15 +3,17 @@ const findWorkerCategory = [
   {
     text: '车间生产类',
     children: [
-      { text: "主裁/师傅", id: "1-0", showCategoryType: true },
-      { text: "电剪", id: "1-3", showCategoryType: true },
+      { text: "裁工师傅/主裁", id: "1-0", showCategoryType: true },
+      { text: "电剪/副裁", id: "1-3", showCategoryType: true },
       { text: "拉布", id: "1-6", showCategoryType: true },
       { text: "大烫", id: "1-9", showCategoryType: true },
       { text: "中烫", id: "1-12", showCategoryType: true },
       { text: "剪线", id: "1-15", showCategoryType: true },
       { text: "包装", id: "1-18", showCategoryType: true },
+      { text: "车位", id: "1-19", showCategoryType: true },
       { text: "成件车位", id: "1-21", showCategoryType: true },
-      { text: "四线/五线", id: "1-24", showCategoryType: true },
+      { text: "四线", id: "1-24", showCategoryType: true },
+      { text: "五线", id: "1-25", showCategoryType: true },
       { text: "平车", id: "1-27", showCategoryType: true },
       { text: "冚车", id: "1-30", showCategoryType: true },
       { text: "卷边", id: "1-33", showCategoryType: true },
@@ -38,10 +40,10 @@ const findWorkerCategory = [
     children: [
       { text: "纸样师/打版师", id: "3-0", showCategoryType: true, categoryType: '2' },
       { text: "车版师/样衣工", id: "3-3", showCategoryType: true, categoryType: '2' },
-      { text: "放码员", id: "3-6", showCategoryType: true, categoryType: '2' },
-      { text: "唛架师", id: "3-9", showCategoryType: true, categoryType: '2' },
       { text: "打版兼车版", id: "3-12", showCategoryType: true, categoryType: '2' },
       { text: "核价师", id: "3-15", showCategoryType: true, categoryType: '2' },
+      { text: "放码员", id: "3-6", showCategoryType: true, categoryType: '2' },
+      { text: "唛架师", id: "3-9", showCategoryType: true, categoryType: '2' },
       { text: "纸样学徒", id: "3-18", showCategoryType: true, categoryType: '2' }
     ]
   },
@@ -66,6 +68,7 @@ const findWorkerCategory = [
     children: [
       { text: "男装设计师", id: "9-0", showCategoryType: true, categoryType: '2' },
       { text: "女装设计师", id: "9-3", showCategoryType: true, categoryType: '2' },
+      { text: "童装设计师", id: "9-4", showCategoryType: true, categoryType: '2' },
       { text: "男裤设计师", id: "9-6", showCategoryType: true, categoryType: '2' },
       { text: "女裤设计师", id: "9-9", showCategoryType: true, categoryType: '2' },
       { text: "毛织设计师", id: "9-12", showCategoryType: true, categoryType: '2' },
@@ -79,17 +82,17 @@ const findWorkerCategory = [
 // note: 工厂相关的分类
 const cooperTypeList = [{
   name: '包工包料',
-  value: '1'
+  value: 'a1'
 }, {
   name: '来料加工',
-  value: '2'
+  value: 'a2'
 }, {
   name: '裁片外发',
-  value: '3',
+  value: 'a3',
   showAddress: true
 }, {
   name: '开发生产供应商',
-  value: '4'
+  value: 'a4'
 }]
 
 const usedDetectCategory = [{
@@ -122,124 +125,124 @@ const usedDetectCategory = [{
 
 const fabricPropList = [{
   name: '针织',
-  value: '1'
+  value: 'b1'
 }, {
   name: '梭织',
-  value: '2'
+  value: 'b2'
 }, {
   name: '毛织',
-  value: '3'
+  value: 'b3'
 }, {
   name: '卫衣',
-  value: '4'
+  value: 'b4'
 }, {
   name: '牛仔',
-  value: '5'
+  value: 'b5'
 }, {
   name: '雪纺/真丝',
-  value: '6'
+  value: 'b6'
 }, {
   name: '蕾丝/网纱',
-  value: '7'
+  value: 'b7'
 }, {
   name: '毛呢',
-  value: '8'
+  value: 'b8'
 }, {
   name: '毛毛料',
-  value: '9'
+  value: 'b9'
 }, {
   name: '皮革料',
-  value: '10'
+  value: 'b10'
 }, {
   name: '毛毛料',
-  value: '11'
+  value: 'b11'
 }, {
   name: '水洗料',
-  value: '12'
+  value: 'b12'
 }, {
   name: '灯芯绒',
-  value: '13'
+  value: 'b13'
 }]
 
 const productTypeList = [{
   name: 'T恤',
-  value: '1'
+  value: 'c1'
 }, {
   name: '小衫',
-  value: '2'
+  value: 'c2'
 }, {
   name: '衬衣',
-  value: '3'
+  value: 'c3'
 }, {
   name: '连衣裙',
-  value: '4'
+  value: 'c4'
 }, {
   name: '裤子',
-  value: '5'
+  value: 'c5'
 }, {
   name: '裙子',
-  value: '6'
+  value: 'c6'
 }, {
   name: '连体裤',
-  value: '7'
+  value: 'c7'
 }, {
   name: '外套',
-  value: '8'
+  value: 'c8'
 }, {
   name: '套装',
-  value: '9'
+  value: 'c9'
 }, {
   name: '两件套',
-  value: '10'
+  value: 'c10'
 }, {
   name: '毛毛衣',
-  value: '11'
+  value: 'c11'
 }, {
   name: '马夹',
-  value: '12'
+  value: 'c12'
 }, {
   name: '羽绒服/棉服',
-  value: '13'
+  value: 'c13'
 }, {
   name: '羽绒裤/棉裤',
-  value: '14'
+  value: 'c14'
 }, {
   name: '童装',
-  value: '15'
+  value: 'c15'
 }, {
   name: '男装',
-  value: '16'
+  value: 'c16'
 }]
 
 const orderTypeList = [{
   name: '档口货',
-  value: '1'
+  value: 'd1'
 }, {
   name: '网档单',
-  value: '2'
+  value: 'd2'
 }, {
   name: '直播单',
-  value: '3'
+  value: 'd3'
 }, {
   name: '电商单',
-  value: '4'
+  value: 'd4'
 }, {
   name: '公司单',
-  value: '5'
+  value: 'd5'
 }, {
   name: '卓天商务单',
-  value: '6'
+  value: 'd6'
 }, {
   name: '外单',
-  value: '7'
+  value: 'd7'
 }]
 
 const factoryScaleList = [{
   name: '工厂',
-  value: '1'
+  value: 'e1'
 }, {
   name: '作坊',
-  value: '2'
+  value: 'e2'
 }]
 
 const leaseTransferCategory = [{
@@ -440,12 +443,12 @@ export default {
       title: '我要找事做',
       bottom: {
         title: '主动求职',
-        desc: '填写个人信息、技能，平台将为您主动匹配到对应的招工方中去',
+        desc: '填写个人信息、技能，平台将为您智能匹配到对应的招工方',
         btn: {
           icon: 'arrow',
           id: 'gotoUserInfo',
           tips: ['精准为您推送'],
-          name: '去填写',
+          name: '去发布',
           jumptype: 'mp',
           link: '/person-center/pages/person-info'
         }
@@ -462,7 +465,7 @@ export default {
     filterList: factoryFilter,
     fromOrigin: 'factoryCooper',
     partyA: {
-      title: ['我要找工厂', '找工厂列表', '合作列表'],
+      title: ['我要找工厂', '找工厂列表', '优质工厂推荐'],
       extraCom: 'company-list'
     },
     partyB: {

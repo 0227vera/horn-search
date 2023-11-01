@@ -114,7 +114,7 @@ createComponent({
           title: '产品款式',
           value: productTypeName
         })
-        if (cooperType === '3') {
+        if (cooperType === 'a3') {
           list.push({
             title: '裁床地址',
             value: poi.detail || poi.address

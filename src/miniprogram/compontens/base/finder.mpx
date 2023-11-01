@@ -35,7 +35,7 @@ createComponent({
   computed: {
     subTitle() {
       if (this.readlist?.length) {
-        return `已有{${this.readlist.length}}人阅读你发出的订单`
+        return `已有{${this.readlist.length}}人阅读您发出的订单`
       }
       return '正在为您疯狂推送中'
     }
@@ -58,18 +58,16 @@ createComponent({
   justify-content center
   align-items center
   padding 20rpx 0
-
   .title
     font-size 30rpx
-    margin-bottom 20rpx
   .subTitle
     font-size 40rpx
     font-weight bold
-    margin-bottom 20rpx
+    margin-bottom 10rpx
   .text
     font-size 24rpx
     color #333333
-    margin-top 20rpx
+    margin-top 10rpx
 .loader
   position relative
   width 150rpx
