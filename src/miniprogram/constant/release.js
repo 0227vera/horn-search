@@ -165,6 +165,9 @@ const fabricPropList = [{
 }]
 
 const productTypeList = [{
+  name: '全品类',
+  value: 'c0'
+}, {
   name: 'T恤',
   value: 'c1'
 }, {
