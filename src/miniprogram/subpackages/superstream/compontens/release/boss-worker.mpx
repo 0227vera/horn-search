@@ -268,7 +268,7 @@ createComponent({
       placeholder: ''
     },
     originLabel: '货源(品质层次)',
-    updateObj: initBossWorkerObj
+    updateObj: JSON.parse(JSON.stringify(initBossWorkerObj))
   },
   computed: {
     categoryList() {
@@ -276,6 +276,14 @@ createComponent({
     }
   },
   methods: {
+    initObj() {
+      this.updateObj = JSON.parse(JSON.stringify(initBossWorkerObj))
+      this.subCategoryInfo = {
+        show: false,
+        label: '',
+        placeholder: ''
+      }
+    },
     // 弹窗确认
     onConfirmHandle({ detail = {} } = {}) {
       const { data, type } = detail
@@ -305,6 +313,7 @@ createComponent({
             this.originLabel = `${data.text}说明`
           } else {
             this.subCategoryInfo.show = false
+            this.updateObj.categorySub = ''
             this.originLabel = '货源(品质层次)'
           }
         },

@@ -23,25 +23,23 @@
       wx:if="{{subCategoryInfo.show}}"
       title-width="240rpx"
       required
+      is-link
+      readonly
       value="{{ updateObj.categorySub }}"
       placeholder="{{subCategoryInfo.placeholder}}"
       input-align="right"
-      bind:change="onFieldChange"
-      id="categorySub"
+      bind:tap="showPopupContainer('categorySubId')"
     />
-     <!-- 位置相关 -->
     <van-field size="large"
-      label="招租/转让地址"
-      title-width="220rpx"
-      type="textarea"
-      autosize
-      required
+      label="{{useInfo.label}}"
+      wx:if="{{useInfo.show}}"
+      title-width="240rpx"
       is-link
       readonly
-      value="{{updateObj.poi.detail}}"
+      value="{{ updateObj.useName }}"
+      placeholder="{{useInfo.placeholder}}"
       input-align="right"
-      placeholder="请点击进入输入招租/转让地址"
-      bind:tap="showPopupContainer('address')"
+      bind:tap="showPopupContainer('useId')"
     />
     <!-- 面积 -->
     <van-field size="large"
@@ -50,7 +48,7 @@
       required
       value="{{ updateObj.area }}"
       type="digit"
-      placeholder="请输入面积大小，单位（平米）"
+      placeholder="请输入面积大小"
       input-align="right"
       bind:change="onFieldChange"
       id="area"
@@ -101,44 +99,18 @@
         />
       </van-dropdown-menu>
     </view>
-    <!-- 押金 -->
+    <!-- 家具电器 -->
     <van-field size="large"
-      label="押金"
-      title-width="80rpx"
-      required
-      value="{{ updateObj.deposit }}"
-      type="number"
-      placeholder="请输入押金"
-      input-align="right"
-      bind:change="onFieldChange"
-      id="deposit"
-    >
-      <view slot="right-icon" style="color: #333; font-weight: bold;">个月</view>
-    </van-field>
-    <!-- 设备 -->
-    <van-field size="large"
-      label="设备"
-      required
+      wx:if="{{showDevice}}"
+      label="{{labelDevice}}"
       title-width="200rpx"
       value="{{ updateObj.device }}"
-      placeholder="请输入设备"
+      placeholder="{{placeholderDevice}}"
       input-align="right"
       type="textarea"
       autosize
       id="device"
       bind:change="onFieldChange"
-    />
-    <!-- 电话 -->
-    <van-field size="large"
-      label="电话"
-      title-width="80rpx"
-      required
-      value="{{ updateObj.tel }}"
-      type="number"
-      placeholder="请输入联系方式"
-      input-align="right"
-      bind:change="onFieldChange"
-      id="tel"
     />
     <!-- 图片 -->
     <van-cell title="图片展示" size="large" title-width="160rpx" value="{{imagesValue}}" border="{{false}}" />
@@ -169,11 +141,38 @@
       title-width="120rpx"
       value="{{ updateObj.add }}"
       placeholder="可以在此输入需要补充的内容"
+      error-message="{{updateObj.add ? '' : '例如：有电梯、格局方正、采光好、带停车位等'}}"
       input-align="left"
       type="textarea"
       autosize
       id="add"
       bind:change="onFieldChange"
+    />
+    <!-- 位置相关 -->
+    <van-field size="large"
+      label="招租/转让地址"
+      title-width="220rpx"
+      type="textarea"
+      autosize
+      required
+      is-link
+      readonly
+      value="{{updateObj.poi.detail}}"
+      input-align="right"
+      placeholder="请点击进入输入招租/转让地址"
+      bind:tap="showPopupContainer('address')"
+    />
+    <!-- 电话 -->
+    <van-field size="large"
+      label="电话"
+      title-width="80rpx"
+      required
+      value="{{ updateObj.tel }}"
+      type="number"
+      placeholder="请输入联系方式"
+      input-align="right"
+      bind:change="onFieldChange"
+      id="tel"
     />
   </van-cell-group>
   <van-cell border="{{false}}" wx:if="{{showBottomNav}}">
@@ -184,6 +183,9 @@
   show="{{showPopup}}"
   type="{{popupType}}"
   categoryList="{{categoryList}}"
+  radioList="{{radioList}}"
+  initRadio="{{initRadio}}"
+  title="{{popupTitle}}"
   bind:close="closePopupContainer"
   bind:confirm="onConfirmHandle"
 />
@@ -196,18 +198,32 @@ import mpx, { createComponent } from '@mpxjs/core'
 import { mixins } from '@/subpackages/superstream/utils/mixins.js'
 import { validateLease } from '@/subpackages/superstream/utils/validate.js'
 import { initLeaseObj, rentUnitList } from '@/subpackages/superstream/utils/constant.js'
+import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
 const store = getApp().globalStore
 
 createComponent({
   mixins: [mixins],
   data: {
     rentUnitList,
+    radioList: [],
+    initRadio: '',
+    popupTitle: '',
+    showDevice: false,
+    labelDevice: '',
+    placeholderDevice: '',
+    useInfo: {
+      show: false,
+      label: '',
+      placeholder: '',
+      radioList: []
+    },
     subCategoryInfo: {
       show: false,
       label: '',
-      placeholder: ''
+      placeholder: '',
+      radioList: []
     },
-    updateObj: initLeaseObj
+    updateObj: JSON.parse(JSON.stringify(initLeaseObj))
   },
   computed: {
     categoryList() {
@@ -215,6 +231,40 @@ createComponent({
     }
   },
   methods: {
+    initObj() {
+      this.updateObj = JSON.parse(JSON.stringify(initLeaseObj))
+      this.useInfo = {
+        show: false,
+        label: '',
+        placeholder: '',
+        radioList: []
+      }
+      this.subCategoryInfo = {
+        show: false,
+        label: '',
+        placeholder: '',
+        radioList: []
+      }
+      this.showDevice = false
+    },
+    showPopupContainer(type) {
+      if (!this.addressList.length && type === 'address') {
+        mpx.navigateTo({
+          url: AddAddressUrl
+        })
+        return
+      } else if (type === 'categorySubId') {
+        this.radioList = this.subCategoryInfo.radioList
+        this.initRadio = this.updateObj.categorySubId
+        this.popupTitle = '请选择具体房型'
+      } else if (type === 'useId') {
+        this.radioList = this.useInfo.radioList
+        this.initRadio = this.updateObj.useId
+        this.popupTitle = '请选择房屋用途'
+      }
+      this.showPopup = true
+      this.popupType = type
+    },
     // 弹窗确认
     onConfirmHandle({ detail = {} } = {}) {
       const { data, type } = detail
@@ -222,13 +272,38 @@ createComponent({
         category: () => {
           this.updateObj.category = data.id
           this.updateObj.categoryName = data.text
+          this.showDevice = data.showDevice
+          if (data.showDevice) {
+            this.labelDevice = data.labelDevice
+            this.placeholderDevice = `请输入有哪些${data.labelDevice}`
+          }
           if (data.needDetail) {
-            this.subCategoryInfo.show = true
-            this.subCategoryInfo.label = `${data.text}(分类)`
-            this.subCategoryInfo.placeholder = `请输入${data.text}的具体类别`
+            this.subCategoryInfo = {
+              ...data.subCategoryInfo,
+              show: true
+            }
+            if (data.useInfo) {
+              this.useInfo = {
+                ...data.useInfo,
+                show: true
+              }
+            }
           } else {
             this.subCategoryInfo.show = false
+            this.updateObj.categorySubId = ''
+            this.updateObj.categorySub = ''
+            this.useInfo.show = false
+            this.updateObj.useId = ''
+            this.updateObj.useName = ''
           }
+        },
+        categorySubId: () => {
+          this.updateObj.categorySubId = data.value
+          this.updateObj.categorySub = data.name
+        },
+        useId: () => {
+          this.updateObj.useId = data.value
+          this.updateObj.useName = data.name
         },
         address: () => {
           this.updateObj.poi = data.poi

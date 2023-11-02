@@ -51,7 +51,6 @@ createComponent({
   },
   methods: {
     callTel({ biographical, _id }) {
-      console.log(this.orderid)
       wx.makePhoneCall({
         phoneNumber: biographical.tel,
         success: () => {

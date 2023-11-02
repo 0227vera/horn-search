@@ -39,7 +39,10 @@ const mixin = {
         leaseTransfer: () => {
           let text = this.orderData.categoryName
           if (this.orderData.categorySub) {
-            text += `(${this.orderData.categorySub})`
+            text += `~${this.orderData.categorySub}`
+          }
+          if (this.orderData.useName) {
+            text += `(${this.orderData.useName})`
           }
           text += `-${this.orderData.area}平米-${this.orderData.price}${this.orderData.priceUnitName}`
           return text

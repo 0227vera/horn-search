@@ -29,9 +29,9 @@ createComponent({
     ...store.mapState(['fromOrigin']),
     renderList() {
       const {
-        categoryName, categorySub, categoryType, categoryTypeName, categoryNum, priceMin, priceMax, price, priceUnitName, num, numMin, numMax, origin, poi, tel, images, note, add, calllist, company,
+        category, categoryName, categorySub, categoryType, categoryTypeName, categoryNum, priceMin, priceMax, price, priceUnitName, num, numMin, numMax, origin, poi, tel, images, note, add, calllist, company,
         factoryScaleName, factoryScale, people, area, cooperType, cooperTypeName, fabricPropName, productTypeName, orderTypeName, color, code,
-        deposit, device, floor, peopleMin, peopleMax, times
+        device, floor, peopleMin, peopleMax, times, useName
       } = this.orderData
       const list = [{
         title: '位置',
@@ -162,7 +162,7 @@ createComponent({
       } else if (this.fromOrigin === 'leaseTransfer') {
         list.push({
           title: '类别',
-          value: `${categoryName}${categorySub ? `(${categorySub})` : ''}`
+          value: `${categoryName}${categorySub ? `~${categorySub}` : ''}${useName ? `(${useName})` : ''}`
         })
         list.push({
           title: '面积',
@@ -176,12 +176,8 @@ createComponent({
           title: '租金',
           value: `${price}${priceUnitName}`
         })
-        list.push({
-          title: '押金',
-          value: `${deposit}个月`
-        })
-        list.push({
-          title: '设备',
+        device && list.push({
+          title: category === '1-15' ? '家具电器' : '设备',
           value: device
         })
         if (add) {

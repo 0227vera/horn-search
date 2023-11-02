@@ -134,7 +134,7 @@ createComponent({
       label: '',
       placeholder: ''
     },
-    updateObj: initUsedObj
+    updateObj: JSON.parse(JSON.stringify(initUsedObj))
   },
   computed: {
     categoryList() {
@@ -142,6 +142,9 @@ createComponent({
     }
   },
   methods: {
+    initObj() {
+      this.updateObj = JSON.parse(JSON.stringify(initUsedObj))
+    },
     // 弹窗确认
     onConfirmHandle({ detail = {} } = {}) {
       const { data, type } = detail
@@ -155,6 +158,7 @@ createComponent({
             this.subCategoryInfo.placeholder = `请输入${data.text}的具体类别`
           } else {
             this.subCategoryInfo.show = false
+            this.updateObj.categorySub = ''
           }
         },
         address: () => {

@@ -165,14 +165,6 @@ export const validateLease = ({ updateObj, subCategoryInfo } = {}) => {
     result.text = '请填写{租金}'
     return result
   }
-  if (!updateObj.deposit) {
-    result.text = '请填写{押金}'
-    return result
-  }
-  if (!updateObj.device) {
-    result.text = '请填写{设备}'
-    return result
-  }
   if (!updateObj.tel) {
     result.text = '请输入{手机号}'
     return result
@@ -182,7 +174,7 @@ export const validateLease = ({ updateObj, subCategoryInfo } = {}) => {
     return result
   }
   if (testIncludesPhone.test(updateObj.device)) {
-    result.text = '{设备}中不可带{电话号码}'
+    result.text = '{家具电器}中不可带{电话号码}'
     return result
   }
   if (testIncludesPhone.test(updateObj.add)) {

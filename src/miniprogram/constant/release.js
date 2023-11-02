@@ -104,14 +104,12 @@ const usedDetectCategory = [{
     { text: "四线", id: "1-9" },
     { text: "五线", id: "1-12" },
     { text: "冚车", id: "1-15" },
-    { text: "模板纷棉车", id: "1-18" },
-    { text: "专机类", id: "1-21", needDetail: true },
+    { text: "模板绗棉车", id: "1-18" },
+    { text: "专机机器", id: "1-21" },
     { text: "唛架机", id: "1-24" },
     { text: "烫炉/烫台", id: "1-27" },
     { text: "凤眼机", id: "1-30" },
-    { text: "打揽机", id: "1-33" },
-    { text: "手工类", id: "1-36" },
-    { text: "手工类", id: "1-39" }
+    { text: "打揽机", id: "1-33" }
   ]
 }, {
   text: '生活类',
@@ -255,23 +253,63 @@ const leaseTransferCategory = [{
     { text: "公司/写字楼招租", id: "1-3" },
     { text: "直播间招租", id: "1-6" },
     { text: "店铺招租", id: "1-9" },
-    { text: "商铺招租", id: "1-12", needDetail: true },
-    { text: "房屋出租", id: "1-15", needDetail: true }
+    { text: "仓库招租", id: "1-12" },
+    {
+      text: "房屋出租",
+      id: "1-15",
+      needDetail: true,
+      showDevice: true,
+      labelDevice: '家具电器',
+      subCategoryInfo: {
+        label: '房型',
+        placeholder: '请点击选择具体房型',
+        radioList: [{
+          name: '单房',
+          value: 'f1'
+        }, {
+          name: '大单房',
+          value: 'f2'
+        }, {
+          name: '一房一厅',
+          value: 'f3'
+        }, {
+          name: '两房一厅',
+          value: 'f4'
+        }, {
+          name: '三房一厅',
+          value: 'f5'
+        }, {
+          name: '三房两厅',
+          value: 'f6'
+        }]
+      },
+      useInfo: {
+        label: '用途',
+        placeholder: '请点击选择房屋用途',
+        radioList: [{
+          name: '可制衣',
+          value: 'g1'
+        }, {
+          name: '不可制衣',
+          value: 'g2'
+        }]
+      }
+    }
   ]
 }, {
   text: '转让',
   children: [
-    { text: "公司/写字楼转让", id: "2-0" },
-    { text: "直播间转让", id: "2-3" },
-    { text: "店铺转让", id: "2-6" },
-    { text: "商铺转让", id: "2-9" },
-    { text: "厂房转让", id: "2-12" },
-    { text: "制衣厂转让", id: "2-15" },
-    { text: "裁床转让", id: "2-18" },
-    { text: "烫房转让", id: "2-21" },
-    { text: "专机店转让", id: "2-24" },
-    { text: "住房转让", id: "2-27" },
-    { text: "餐管转让", id: "2-30" }
+    { text: "公司/写字楼转让", id: "2-0", showDevice: true, labelDevice: '设备' },
+    { text: "直播间转让", id: "2-3", showDevice: true, labelDevice: '设备' },
+    { text: "店铺转让", id: "2-6", showDevice: true, labelDevice: '设备' },
+    { text: "仓库转让", id: "2-9", showDevice: true, labelDevice: '设备' },
+    { text: "厂房转让", id: "2-12", showDevice: true, labelDevice: '设备' },
+    { text: "制衣厂转让", id: "2-15", showDevice: true, labelDevice: '设备' },
+    { text: "裁床转让", id: "2-18", showDevice: true, labelDevice: '设备' },
+    { text: "烫房转让", id: "2-21", showDevice: true, labelDevice: '设备' },
+    { text: "专机店转让", id: "2-24", showDevice: true, labelDevice: '设备' },
+    { text: "住房转让", id: "2-27", showDevice: true, labelDevice: '设备' },
+    { text: "餐馆转让", id: "2-30", showDevice: true, labelDevice: '设备' }
   ]
 }]
 
@@ -415,7 +453,7 @@ const tailingsList = [{
   name: '面料',
   value: '1'
 }, {
-  name: '成品',
+  name: '衣服',
   value: '2'
 }, {
   name: '辅料',

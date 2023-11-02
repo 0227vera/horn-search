@@ -17,7 +17,6 @@ ReleaseModel.DB_STRUCTURE = {
   price: 'string|true',
   priceUnit: 'string|true',
   priceUnitName: 'string|true',
-  deposit: 'string|true',
   device: 'string|true',
   status: 'string|true',
   calllist: 'array|false',

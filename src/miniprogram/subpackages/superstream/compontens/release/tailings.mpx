@@ -150,6 +150,8 @@ import config from '@/constant/release.js'
 import { mixins } from '@/subpackages/superstream/utils/mixins.js'
 import { tailingsValidate } from '@/subpackages/superstream/utils/validate.js'
 import { initTailingsObj } from '@/subpackages/superstream/utils/constant.js'
+import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
+
 import dayjs from 'dayjs'
 const store = getApp().globalStore
 
@@ -166,7 +168,7 @@ createComponent({
     initRadio: '',
     initTime: 0,
     currentTimeId: '',
-    updateObj: initTailingsObj
+    updateObj: JSON.parse(JSON.stringify(initTailingsObj))
   },
   computed: {
     tailingsList() {
@@ -174,6 +176,9 @@ createComponent({
     }
   },
   methods: {
+    initObj() {
+      this.updateObj = JSON.parse(JSON.stringify(initTailingsObj))
+    },
     showPopupContainer(type, id) {
       this.initRadio = ''
       this.popupTitle = ''
@@ -209,6 +214,7 @@ createComponent({
             this.subCategoryInfo.placeholder = `请输入${data.name}的具体类别`
           } else {
             this.subCategoryInfo.show = false
+            this.updateObj.categorySub = ''
           }
         },
         address: () => {

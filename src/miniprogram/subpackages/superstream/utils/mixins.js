@@ -33,27 +33,26 @@ export const mixins = {
     }
   },
   async attached() {
-    if (Object.keys(this.cacheForm).length) {
-      Object.keys(this.updateObj).forEach(item => {
-        this.updateObj[item] = this.cacheForm[item] || this.updateObj[item]
-      })
-      this.setState({
-        cacheForm: {}
-      })
-      return
-    }
-    await this.setLocation()
-    if (this.adInfo.address) {
-      this.updateObj.poi = {
-        ...this.adInfo,
-        name: this.adInfo.address,
-        detail: this.adInfo.address
-      }
-    }
-    this.initAddressPhone()
+    this.initComDate()
   },
   pageLifetimes: {
-    async show() {
+    show() {
+      this.initComDate()
+    }
+  },
+  methods: {
+    ...store.mapActions(['setLocation']),
+    ...store.mapMutations(['setState']),
+    async initComDate() {
+      if (Object.keys(this.cacheForm).length) {
+        Object.keys(this.updateObj).forEach(item => {
+          this.updateObj[item] = this.cacheForm[item] || this.updateObj[item]
+        })
+        this.setState({
+          cacheForm: {}
+        })
+        return
+      }
       await this.setLocation()
       if (this.adInfo.address) {
         this.updateObj.poi = {
@@ -63,11 +62,7 @@ export const mixins = {
         }
       }
       this.initAddressPhone()
-    }
-  },
-  methods: {
-    ...store.mapActions(['setLocation']),
-    ...store.mapMutations(['setState']),
+    },
     initAddressPhone() {
       const item = this.addressList.find(item => item.checked)
       if (item?.id) {
@@ -175,6 +170,7 @@ export const mixins = {
               status: '2'
             })
             mpx.hideLoading()
+            this.initObj()
             self.triggerEvent('release-jump-done', res.data)
           }
         })

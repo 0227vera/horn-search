@@ -265,7 +265,7 @@ import { initFactoryObj } from '@/subpackages/superstream/utils/constant.js'
 createComponent({
   mixins: [mixins],
   data: {
-    updateObj: initFactoryObj,
+    updateObj: JSON.parse(JSON.stringify(initFactoryObj)),
     radioList: [],
     popupTitle: '',
     checkBoxList: [],
@@ -296,6 +296,9 @@ createComponent({
     }
   },
   methods: {
+    initObj() {
+      this.updateObj = JSON.parse(JSON.stringify(initFactoryObj))
+    },
     // note: 弹窗处理
     showPopupContainer(type) {
       if (type === 'factoryScale') {

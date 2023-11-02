@@ -248,7 +248,7 @@ createComponent({
   },
   computed: {
     showRadio() {
-      const radioShowList = ['cooperType', 'orderType', 'factoryScale', 'tailingsCategory']
+      const radioShowList = ['cooperType', 'orderType', 'factoryScale', 'tailingsCategory', 'categorySubId', 'useId']
       return radioShowList.includes(this.type) || this.needShowRadio
     },
     showCheckBox() {

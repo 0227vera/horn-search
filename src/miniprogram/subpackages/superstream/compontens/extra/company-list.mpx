@@ -127,7 +127,6 @@ createComponent({
         this.moreLoad.isClick = false
         this.moreLoad.text = '~~没有更多啦~~'
       }
-      console.log(res.data.list)
     },
     moreLoadHandle() {
       if (!this.moreLoad.isClick || this.loading || this.moreLoad.loading) return
@@ -180,7 +179,6 @@ createComponent({
           })
           break
       }
-      console.log(item, e)
     },
     async footerBtn(e) {
       const { item, buttonInfo } = e.detail

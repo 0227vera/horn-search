@@ -82,12 +82,12 @@ const actions = {
     content.push({
       type: 'map',
       text: '类别:',
-      value: `${item.categoryName}-{${item.floor}楼}-{${item.area}平}`
+      value: `${item.categoryName}${item.useName ? `(${item.useName})` : ''}-{${item.floor}楼}-{${item.area}平}`
     })
     content.push({
       type: 'map',
       text: '租金:',
-      value: `${item.price}${item.priceUnitName}(押{${item.deposit}个月)}`
+      value: `${item.price}${item.priceUnitName}}`
     })
     return content
   },
