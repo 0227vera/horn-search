@@ -7,7 +7,8 @@
   >
     <view class="container">
       <view class="list" wx:if="{{list.length}}">
-        <view wx:for="{{list}}" wx:key="*this" style="animation-duration: {{0.3 * (index + 1)}}s" class="list-item {{index % 2 === 0 ? 'jishu' : 'oushu'}} animation{{index}}">
+      <!-- animation-duration: {{0.3 * (index + 1)}}s -->
+        <view wx:for="{{list}}" wx:key="*this" style="animation-name: {{index % 2 === 0 ? 'homeJishu' : 'homeOushu'}}" class="list-item">
           <view wx:for="{{item}}" wx:for-item="m" wx:key="*this" class="list-item_line" bind:tap="jump(m)">
             <image class="image" src="{{m.icon}}"></image>
             <view class="text">{{m.text}}</view>
@@ -79,8 +80,11 @@ createPage({
     &-item
       flex-space-between()
       margin-bottom 32rpx
-      border-bottom 2rpx dashed #999999
-      animation-name showbotomToUp
+      border-bottom 2rpx dashed #666666
+      &:last-child
+        border-bottom none
+      // animation-name showbotomToUp
+      animation-duration 0.5s
       &_line
         width 50%
         padding 16rpx
