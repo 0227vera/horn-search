@@ -1,6 +1,7 @@
 export default [[{
   // text: '工厂招工发布',
   text: '去招工',
+  desc: '点击填写所要招工的信息',
   icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/1.1 招工.png',
   id: 'findWorker',
   dot: false,
@@ -17,7 +18,8 @@ export default [[{
   extraInfo: {}
 }, {
   // text: '我要找事做',
-  text: '去找事做',
+  text: '招长工/临工信息公示',
+  desc: '点击查找您想做的事',
   icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/1.2 找工作.png',
   id: 'findJob',
   dot: false,
@@ -35,6 +37,7 @@ export default [[{
 }], [{
   // text: '找工厂合作发布',
   text: '去找工厂合作',
+  desc: '点击填写对工厂的要求',
   icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/2.1 找合作.png',
   id: '',
   dot: false,
@@ -52,6 +55,7 @@ export default [[{
 }, {
   // text: '我要找货做',
   text: '去找货做',
+  desc: '点击查看有哪些合作需求',
   icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/2.2 找货做.png',
   id: '',
   dot: false,

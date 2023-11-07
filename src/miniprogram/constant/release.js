@@ -478,7 +478,8 @@ export default {
     filterList: workerFilter,
     fromOrigin: 'bossWorker',
     partyA: {
-      title: ['我要招工', '招工列表']
+      fristTab: '发布招工信息',
+      title: ['我要招工', '我的招工列表']
     },
     partyB: {
       title: '我要找事做',
@@ -506,7 +507,8 @@ export default {
     filterList: factoryFilter,
     fromOrigin: 'factoryCooper',
     partyA: {
-      title: ['我要找工厂', '找工厂列表', '优质工厂推荐'],
+      fristTab: '发布工厂合作信息',
+      title: ['我要找工厂', '我的找工厂列表', '优质工厂推荐'],
       extraCom: 'company-list'
     },
     partyB: {
@@ -531,7 +533,8 @@ export default {
     filterList: leaseTransferFilter,
     fromOrigin: 'leaseTransfer',
     partyA: {
-      title: ['出租转让', '出租转让列表']
+      fristTab: '发布出租转让信息',
+      title: ['出租转让', '我的出租转让列表']
     },
     partyB: {
       title: '租房'
@@ -554,7 +557,8 @@ export default {
     category: usedDetectCategory,
     filterList: usedDetectFilter,
     partyA: {
-      title: ['出售二手设备', '二手设备列表']
+      fristTab: '发布二手设备信息',
+      title: ['出售二手设备', '我的二手设备列表']
     },
     partyB: {
       title: '我要捡漏二手没备'
@@ -566,7 +570,8 @@ export default {
     category: tailingsList,
     filterList: tailingsFilter,
     partyA: {
-      title: ['尾货处理', '尾货处理列表']
+      fristTab: '发布尾货处理信息',
+      title: ['尾货处理', '我的尾货处理列表']
     },
     partyB: {
       title: '货尾中心'

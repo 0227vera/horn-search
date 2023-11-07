@@ -27,7 +27,7 @@
   />
   <back-home showShare showBackHome="{{false}}" wx:if="{{roleType === 'partyB'}}"/>
   <van-dialog id="van-dialog" />
-  <tips autoStyle="{{tipsStyle}}" key="superstream-tips" text="可点击进行类型切换" upLeft="170rpx" />
+  <!-- <tips autoStyle="{{tipsStyle}}" key="superstream-tips" text="可点击进行类型切换" upLeft="170rpx" /> -->
 </template>
 
 <script>
@@ -147,7 +147,7 @@ createPage({
     },
     footerList() {
       return [{
-        name: '发单',
+        name: this.partyA?.fristTab || '发单',
         title: this.partyA?.title?.[0],
         icon: 'upgrade',
         key: this.fromOrigin
