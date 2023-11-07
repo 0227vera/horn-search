@@ -16,7 +16,7 @@
         </view>
       </view>
       <!-- 只展示甲方 -->
-      <view class="list-filter list" wx:if="{{homeset.id === '2'}}">
+      <view class="list-filter list" style="animation-duration: {{0.3 * (index + 1)}}s" wx:if="{{homeset.id === '2'}}">
         <view wx:for="{{list}}" wx:key="*this" class="list-item">
           <view class="list-item_line" bind:tap="jump(item[0])">
             <image class="image" src="{{item[0].icon}}"></image>
@@ -26,7 +26,7 @@
         </view>
       </view>
       <!-- 只展示乙方 -->
-      <view class="list-filter list" wx:if="{{homeset.id === '3'}}">
+      <view class="list-filter list" style="animation-duration: {{0.3 * (index + 1)}}s" wx:if="{{homeset.id === '3'}}">
         <view wx:for="{{list}}" wx:key="*this" class="list-item">
           <view class="list-item_line" bind:tap="jump(item[1])">
             <image class="image" src="{{item[1].icon}}"></image>
@@ -128,6 +128,7 @@ createPage({
       flex-direction row
       .list-item
         border-bottom none
+        animation-name showbotomToUp
         width 50%
         flex-shrink 0
         .list-item_line
