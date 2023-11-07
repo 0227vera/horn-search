@@ -14,6 +14,7 @@ AddressModel.DB_STRUCTURE = {
   company: 'string|false',
   biographical: 'object|false',
   companyInfo: 'object|false',
+  homeset: 'object|false',
   OPENID: 'string|true',
   USER_ID: 'string|true',
   USER_ADD_TIME: 'int|false',

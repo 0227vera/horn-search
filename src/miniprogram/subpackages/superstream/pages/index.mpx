@@ -3,7 +3,6 @@
     title="{{title}}"
     clickLeft="{{clickLeft}}"
     wx:show="{{pageShow}}"
-    containerBg="linear-gradient(to bottom, #8aa7ec, #79b3f4, #ffffff)"
   >
     <view class="{{roleType === 'partyA' && currentCom === footerList[0].key ? 'component-container' : ''}}">
       <component

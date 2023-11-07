@@ -3,7 +3,6 @@
     title="地址管理"
     btnName="去新增"
     bind:footer-btn="gotoAddAddress"
-    containerBg="linear-gradient(to bottom, #79b3f4, #ffffff)"
   >
     <address-list
       isCanChoose="{{false}}"

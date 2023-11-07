@@ -1,7 +1,6 @@
 <template>
   <custom-container
     title="后台管理"
-    containerBg="linear-gradient(to bottom, #79b3f4, #ffffff)"
   >
     <van-tabs
       swipeable

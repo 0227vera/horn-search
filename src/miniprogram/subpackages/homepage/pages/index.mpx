@@ -3,7 +3,6 @@
     title="首页"
     lefticon="friends"
     clickLeft="{{clickLeft}}"
-    containerBg="linear-gradient(to left bottom, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #41dfff);"
   >
     <view class="container">
       <view class="list" wx:if="{{list.length}}">

@@ -29,9 +29,9 @@
     />
     <!-- 地域要求 -->
     <van-field
-      wx:if="{{updateObj.cooperType && updateObj.cooperType !== '3'}}"
+      wx:if="{{updateObj.cooperType && updateObj.cooperType !== 'a3'}}"
       size="large"
-      label="{{updateObj.factoryScale ? updateObj.factoryScale === '1' ? '工厂地域要求' : '作坊地域要求' : '地域要求'}}"
+      label="{{updateObj.factoryScale ? updateObj.factoryScale === 'e1' ? '工厂地域要求' : '作坊地域要求' : '地域要求'}}"
       required
       title-width="240rpx"
       value="{{ updateObj.area }}"
@@ -129,7 +129,7 @@
     <van-field
       size="large"
       wx:if="{{updateObj.factoryScale}}"
-      label="{{updateObj.factoryScale === '1' ? '工厂人数要求' : '作坊人数要求'}}"
+      label="{{updateObj.factoryScale === 'e1' ? '工厂人数要求' : '作坊人数要求'}}"
       title-width="200rpx"
       value="{{ updateObj.people }}"
       placeholder="请输入人数"
@@ -139,7 +139,7 @@
       id="people"
       center
     >
-      <view slot="right-icon" style="color: #333;">{{updateObj.factoryScale === '1' ? '人(以上)' : '人(左右)'}}</view>
+      <view slot="right-icon" style="color: #333;">{{updateObj.factoryScale === 'e1' ? '人(以上)' : '人(左右)'}}</view>
     </van-field>
     <!-- 单价 -->
     <!-- <van-field
@@ -191,7 +191,7 @@
     <van-field
       wx:if="{{updateObj.cooperType === 'a3'}}"
       size="large"
-      label="{{updateObj.factoryScale ? updateObj.factoryScale === '1' ? '工厂地域要求' : '作坊地域要求' : '地域要求'}}"
+      label="{{updateObj.factoryScale ? updateObj.factoryScale === 'e1' ? '工厂地域要求' : '作坊地域要求' : '地域要求'}}"
       title-width="240rpx"
       value="{{ updateObj.area }}"
       placeholder="例如海珠区康乐、鹭江"

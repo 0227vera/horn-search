@@ -58,9 +58,9 @@ const actions = {
       })
     }
     let factoryScaleValue = `${item.factoryScaleName}`
-    if (item.factoryScale === '1') {
+    if (item.factoryScale === 'e1') {
       item.people && (factoryScaleValue += `-${item.people}人以上`)
-    } else if (item.factoryScale === '2') {
+    } else if (item.factoryScale === 'e2') {
       item.people && (factoryScaleValue += `-${item.people}人左右`)
     }
     factoryScaleValue += `-{${item.cooperTypeName}}`

@@ -1,25 +1,51 @@
 <template>
   <custom-container
-    title="首页"
+    title="{{showGuide ? '' : '首页'}}"
     lefticon="friends"
     clickLeft="{{clickLeft}}"
-    containerBg="linear-gradient(to left bottom, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #41dfff);"
   >
     <view class="container">
-      <view class="list" wx:if="{{list.length}}">
-      <!-- animation-duration: {{0.3 * (index + 1)}}s -->
-        <view wx:for="{{list}}" wx:key="*this" style="animation-name: {{index % 2 === 0 ? 'homeJishu' : 'homeOushu'}}" class="list-item">
-          <view wx:for="{{item}}" wx:for-item="m" wx:key="*this" class="list-item_line" bind:tap="jump(m)">
+      <view class="list" wx:if="{{list.length}}" wx:if="{{homeset.id === '1'}}">
+        <!-- animation-duration: {{0.3 * (index + 1)}}s -->
+        <view wx:for="{{list}}" wx:key="*this" style="animation-name: {{index % 2 === 0 ? 'homeJishu' : 'homeOushu'}}; {{showGuide ? 'border: none': ''}}" class="list-item">
+          <view wx:for="{{item}}" wx:for-index="mIndex" wx:for-item="m" wx:key="*this" class="list-item_line {{step - 1 === mIndex ? 'active' : ''}}" bind:tap="jump(m)">
             <image class="image" src="{{m.icon}}"></image>
             <view class="text">{{m.text}}</view>
             <view class="tips" wx:if="{{m.tips}}">{{m.tips}}</view>
           </view>
         </view>
       </view>
+      <!-- 只展示甲方 -->
+      <view class="list-filter list" wx:if="{{homeset.id === '2'}}">
+        <view wx:for="{{list}}" wx:key="*this" class="list-item">
+          <view class="list-item_line" bind:tap="jump(item[0])">
+            <image class="image" src="{{item[0].icon}}"></image>
+            <view class="text">{{item[0].text}}</view>
+            <view class="tips" wx:if="{{item[0].tips}}">{{item[0].tips}}</view>
+          </view>
+        </view>
+      </view>
+      <!-- 只展示乙方 -->
+      <view class="list-filter list" wx:if="{{homeset.id === '3'}}">
+        <view wx:for="{{list}}" wx:key="*this" class="list-item">
+          <view class="list-item_line" bind:tap="jump(item[1])">
+            <image class="image" src="{{item[1].icon}}"></image>
+            <view class="text">{{item[1].text}}</view>
+            <view class="tips" wx:if="{{item[1].tips}}">{{item[1].tips}}</view>
+          </view>
+        </view>
+      </view>
     </view>
   </custom-container>
-  <guide-subcri />
+  <guide-subcri wx:if="{{!showGuide}}" />
   <tips autoStyle="{{tipsStyle}}" key="home-tips" text="{{tipsText}}" upLeft="46rpx" />
+  <used-guide
+    show="{{showGuide}}"
+    step="{{step}}"
+    bind:next="guideNext"
+    bind:pre="guidePre"
+    bind:know="guideKnow"
+  />
 </template>
 
 <script>
@@ -28,13 +54,16 @@ import jumpAction from '@/utils/jump.js'
 import list from '@/constant/home.js'
 import ParsonCenter from '@/subpackages/person-center/pages/index.mpx?resolve'
 import store from '@/store'
+const key = 'guide_used'
 
 createPage({
   onShareAppMessage() {
     getApp().onShareAppMessage()
   },
   data: {
-    list: [],
+    list,
+    step: !(mpx.getStorageSync(key) === 'true') ? 1 : 0,
+    showGuide: !(mpx.getStorageSync(key) === 'true'),
     tipsText: '点击进入个人中心进行基础设置',
     clickLeft() {
       mpx.navigateTo({
@@ -43,13 +72,15 @@ createPage({
     }
   },
   computed: {
-    ...store.mapState(['navBarStyle']),
+    ...store.mapState(['navBarStyle', 'homeset']),
     top() {
       return this.navBarStyle.height + this.navBarStyle.top + this.navBarStyle.paddingBottom
     },
     tipsStyle() {
       return `top: ${this.top}px; left: 0;`
     }
+  },
+  onLoad() {
   },
   onShow() {
     this.list = list
@@ -63,6 +94,20 @@ createPage({
   },
   methods: {
     ...store.mapMutations(['setNavBarStyle']),
+    guideNext() {
+      this.step = 2
+    },
+    guidePre() {
+      this.step = 1
+    },
+    guideKnow() {
+      this.showGuide = false
+      this.step = 0
+      mpx.setStorage({
+        key,
+        data: 'true'
+      })
+    },
     jump(m) {
       jumpAction(m.action)
     }
@@ -77,6 +122,16 @@ createPage({
   overflow hidden
   .list
     flex-column()
+    &.list-filter
+      display flex
+      flex-wrap wrap
+      flex-direction row
+      .list-item
+        border-bottom none
+        width 50%
+        flex-shrink 0
+        .list-item_line
+          width 100%
     &-item
       flex-space-between()
       margin-bottom 32rpx
@@ -92,6 +147,8 @@ createPage({
         position relative
         flex-center()
         flex-column()
+        &.active
+          animation scaleContent 2s infinite
         .image
           width 80rpx
           height 80rpx
@@ -116,6 +173,13 @@ createPage({
           border-radius 20rpx
           font-size 24rpx
           font-weight bold
+@-webkit-keyframes scaleContent
+  0%
+    transform scale(1)
+  50%
+    transform scale(1.1)
+  to
+    transform scale(1)
 </style>
 
 <script name="json">
@@ -123,7 +187,8 @@ module.exports = {
   usingComponents: {
     "custom-container": "@/compontens/base/custom-container",
     "guide-subcri": "@/compontens/common/service-notice/guide.mpx?root=common-coms-page",
-    "tips": "@/compontens/base/tips.mpx?root=common-coms-page"
+    "tips": "@/compontens/base/tips.mpx?root=common-coms-page",
+    "used-guide": "@/compontens/common/guide/index.mpx"
   },
   "componentPlaceholder": {
     "guide-subcri": "view",

@@ -1,0 +1,123 @@
+<template>
+  <van-overlay wx:if="{{show}}" show>
+    <view class="container">
+      <view class="content" wx:if="{{step === 1}}">
+        <view class="content-info">
+          <view class="content-info-item" wx:for="{{leftList}}">
+            <mutil-style-text wx:key="*this" text="{{item}}" />
+          </view>
+        </view>
+        <view class="content-opt">
+          <van-button type="primary" round bind:tap="know" wx:if="{{showKnowAlways}}">开始使用</van-button>
+          <van-button type="primary" round bind:tap="next">下一步</van-button>
+        </view>
+      </view>
+      <view class="content" wx:if="{{step === 2}}">
+        <view class="content-info">
+          <view class="content-info-item" wx:for="{{rightList}}">
+            <mutil-style-text wx:key="*this" text="{{item}}" />
+          </view>
+        </view>
+        <view class="content-opt">
+          <van-button type="primary" round bind:tap="pre">上一步</van-button>
+          <van-button type="primary" round bind:tap="know">开始使用</van-button>
+        </view>
+      </view>
+    </view>
+  </van-overlay>
+</template>
+
+<script>
+import { createComponent } from '@mpxjs/core'
+createComponent({
+  properties: {
+    step: {
+      type: Number,
+      value: 1
+    },
+    show: {
+      type: Boolean,
+      value: false
+    }
+  },
+  watch: {
+    step: {
+      handler(val) {
+        this.step === 2 && (this.showKnowAlways = true)
+      },
+      immediate: true
+    }
+  },
+  data: {
+    showKnowAlways: false,
+    leftList: [
+      '点击左侧不同的选项',
+      '可填写表单信息',
+      '去发布不同的需求',
+      '如：招工、找工厂合作、房屋出租转让、出售二手设备、处理尾货'
+    ],
+    rightList: [
+      '点击右侧不同的选项',
+      '可以找事做、找货做、租房租仓库、买二手设备、找尾货渠道'
+    ]
+  },
+  methods: {
+    pre() {
+      this.triggerEvent('pre')
+    },
+    next() {
+      this.triggerEvent('next')
+    },
+    know() {
+      this.triggerEvent('know')
+    }
+  }
+})
+</script>
+
+<style lang="stylus" scoped>
+.container
+  display flex
+  width 100%
+  height 100%
+  color #ffffff
+  letter-spacing 4rpx
+  font-size 32rpx
+  align-items flex-end
+  justify-content center
+  .line
+    width 2rpx
+    height 100%
+    border-left 2rpx dashed #666666
+  .content
+    width 60%
+    height 100%
+    display flex
+    flex-direction column
+    justify-content flex-end
+    align-items center
+    padding 0 16rpx 50rpx
+    font-weight bold
+    font-size 36rpx
+    &-info
+      display flex
+      flex-direction column
+      &-item
+        width 100%
+        margin-top 8rpx
+    &-opt
+      width 100%
+      margin-top 32rpx
+      display flex
+      justify-content space-around
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "van-overlay": "@vant/weapp/overlay/index",
+      "van-button": "@vant/weapp/button/index",
+      "mutil-style-text": "@/compontens/base/mutil-style-text.mpx"
+    }
+  }
+</script>

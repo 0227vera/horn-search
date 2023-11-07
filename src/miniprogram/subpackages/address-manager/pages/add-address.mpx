@@ -3,7 +3,6 @@
     title="{{pageType === 'new' ? '添加地址' : '修改地址'}}"
     btnName="保存"
     bind:footer-btn="addAddress"
-    containerBg="linear-gradient(to bottom, #79b3f4, #ffffff)"
   >
     <van-cell-group class="content" border="{{ false }}" inset>
       <van-field size="large"

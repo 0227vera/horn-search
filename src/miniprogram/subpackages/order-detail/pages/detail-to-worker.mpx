@@ -3,7 +3,6 @@
     title="{{shareTitle}}"
     lefticon="arrow-left"
     clickLeft="{{clickLeft}}"
-    containerBg="linear-gradient(to bottom, #79b3f4, #ffffff)"
     bind:scrolltobottom="scrolltoBottom"
   >
     <skeleton wx:if="{{loading}}" />

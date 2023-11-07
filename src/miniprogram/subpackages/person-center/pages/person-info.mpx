@@ -1,7 +1,6 @@
 <template>
 <custom-container
   title="主动求职"
-  containerBg="linear-gradient(to bottom, #8aa7ec, #79b3f4, #ffffff)"
   btnName="{{pageType === 'edit' ? '' : '发布'}}"
   bind:footer-btn="release"
 >

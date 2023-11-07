@@ -2,7 +2,6 @@
 <custom-container
   title="个人中心"
   lefticon="wap-home"
-  containerBg="linear-gradient(to bottom, #8aa7ec, #79b3f4, #ffffff)"
 >
   <view class="navbar">
     <view class="navbar-content">
@@ -19,7 +18,7 @@
           size="large"
           wx:for="{{item}}"
           wx:for-item="subitem"
-          wx:key="name"
+          wx:key="*this"
           title="{{subitem.name}}"
           icon="{{subitem.icon}}"
           value="{{subitem.value}}"
@@ -53,6 +52,21 @@
     />
   </view>
 </van-dialog>
+<van-popup
+  show="{{ showHomeSet }}"
+  position="bottom"
+  round
+  bind:close="onHomeSetClose"
+>
+  <view class="popupTitle">选择首页展示方式</view>
+  <van-radio-group value="{{ homeset.id }}" bind:change="onRadioChange">
+    <van-cell-group wx:for="{{homeSetList}}" wx:key="name">
+      <van-cell title="{{item.text}}" clickable data-name="{{item.id}}" bind:click="onRadioClick">
+        <van-radio slot="right-icon" name="{{item.id}}" />
+      </van-cell>
+    </van-cell-group>
+  </van-radio-group>
+</van-popup>
 </template>
 
 <script>
@@ -66,10 +80,21 @@ createPage({
   data: {
     showManagerEntry: false,
     show: false,
-    cacheCompany: ''
+    showHomeSet: false,
+    cacheCompany: '',
+    homeSetList: [{
+      text: '展示左右两侧',
+      id: '1'
+    }, {
+      text: '只展示左侧',
+      id: '2'
+    }, {
+      text: '只展示右侧',
+      id: '3'
+    }]
   },
   computed: {
-    ...store.mapState(['company']),
+    ...store.mapState(['company', 'homeset']),
     navbar() {
       return [
         {
@@ -112,7 +137,13 @@ createPage({
         ],
         [
           {
-            name: '设置',
+            name: '首页设置',
+            icon: 'wap-home-o',
+            jumptype: 'homeSet',
+            value: this.homeset.text
+          },
+          {
+            name: '系统设置',
             icon: 'setting-o',
             jumptype: 'setting'
           }
@@ -144,9 +175,44 @@ createPage({
       if (item.jumptype === 'company') {
         this.cacheCompany = this.company
         this.show = true
+      } else if (item.jumptype === 'homeSet') {
+        this.showHomeSet = true
       } else {
         jumpAction(item)
       }
+    },
+    onHomeSetClose() {
+      this.showHomeSet = false
+    },
+    onRadioChange({ detail }) {
+      this.setHomeSet(this.homeSetList.find(item => item.id === detail))
+    },
+    onRadioClick(e) {
+      const name = e.currentTarget.dataset.name
+      this.setHomeSet(this.homeSetList.find(item => item.id === name))
+    },
+    setHomeSet(homeset) {
+      console.log(homeset)
+      mpx.showLoading({
+        mask: true,
+        title: '更新设置中……'
+      })
+      updateUserInfo({
+        homeset
+      }).then(() => {
+        mpx.showToast({
+          title: '更新完成'
+        })
+        this.setState({
+          homeset
+        })
+        this.showHomeSet = false
+      }).catch(err => {
+        mpx.showToast({
+          title: err
+        })
+        this.showHomeSet = false
+      })
     },
     onClose() {
       this.show = false
@@ -178,6 +244,11 @@ createPage({
 </script>
 
 <style lang="stylus" scoped>
+.popupTitle
+  width 100%
+  height 100rpx
+  line-height 100rpx
+  text-align center
 .navbar
   width 100%
   padding 0 32rpx
@@ -220,7 +291,10 @@ module.exports = {
     "van-icon": "@vant/weapp/icon/index?root=vant-page",
     "van-field": "@vant/weapp/field/index?root=vant-page",
     "van-cell": "@vant/weapp/cell/index?root=vant-page",
-    "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page"
+    "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page",
+    "van-popup": "@vant/weapp/popup/index?root=vant-pag",
+    "van-radio": "@vant/weapp/radio/index?root=vant-page",
+    "van-radio-group": "@vant/weapp/radio-group/index?root=vant-page"
   },
   "componentPlaceholder": {
     "custom-container": "view",
@@ -228,7 +302,10 @@ module.exports = {
     "van-cell-group": "view",
     "van-dialog": "view",
     "van-icon": "view",
-    "van-field": "view"
+    "van-field": "view",
+    "van-popup": "view",
+    "van-radio": "view",
+    "van-radio-group": "view"
   }
 }
 </script>

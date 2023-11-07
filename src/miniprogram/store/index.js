@@ -73,7 +73,8 @@ export default createStore({
         start: dayjs(Date.now()).format('HH:mm'),
         end: ''
       }
-    }
+    },
+    homeset: {}
   },
   getters: {
     currentGooterList(state) {
@@ -133,6 +134,7 @@ export default createStore({
         mpx.getLocation({
           type: 'gcj02',
           success (res) {
+            Dialog.close()
             const { longitude, latitude } = res
             commit('setState', {
               location: { longitude, latitude }

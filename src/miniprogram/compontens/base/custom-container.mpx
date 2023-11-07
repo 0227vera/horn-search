@@ -51,7 +51,7 @@ createComponent({
     },
     containerBg: {
       type: String,
-      value: 'linear-gradient(#E3E0F3, #ffffff 100%)'
+      value: 'linear-gradient(to bottom, #79b3f4 40%, #ffffff)'
     },
     clickLeft: {
       type: Function,

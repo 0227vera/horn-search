@@ -93,7 +93,7 @@ createComponent({
           })
         }
       } else if (this.fromOrigin === 'factoryCooper') {
-        if (cooperType !== '3') {
+        if (cooperType !== 'a3') {
           list.pop()
         }
         list.push({
@@ -101,9 +101,9 @@ createComponent({
           value: cooperTypeName
         })
         let factoryScaleText = factoryScaleName
-        if (factoryScale === '1') {
+        if (factoryScale === 'e1') {
           people && (factoryScaleText += `(${people}人以上)`)
-        } else if (factoryScale === '2') {
+        } else if (factoryScale === 'e2') {
           people && (factoryScaleText += `(${people}人左右)`)
         }
         list.push({
