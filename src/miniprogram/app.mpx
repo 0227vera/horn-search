@@ -111,6 +111,8 @@ page
     "window": {
       "navigationStyle": "custom"
     },
+    "lazyCodeLoading": "requiredComponents",
+    "__usePrivacyCheck__": true,
     "preloadRule": {
       "pages/home": {
         "network": "all",
