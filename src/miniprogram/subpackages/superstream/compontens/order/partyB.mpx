@@ -168,8 +168,6 @@
       <view class="text">暂无数据</view>
     </view>
   </view>
-  <nav-footer wx:if="{{showBottom && false}}" list="{{footerList}}" />
-  <back-home wx:if="{{showRightShare}}" showShare showBackHome="{{false}}"/>
 </template>
 
 <script>
@@ -207,8 +205,6 @@ createComponent({
   },
   data: {
     loading: true,
-    showBottomTip: true,
-    showShare: true,
     page: JSON.parse(JSON.stringify(pageInfo)),
     textRules: {
       '{x}': {
@@ -247,12 +243,6 @@ createComponent({
     bottom() {
       return config[this.categoryTypeId]?.partyB?.bottom
     },
-    showRightShare() {
-      return !this.bottom?.btn || false
-    },
-    showBottom() {
-      return this.bottom?.title && this.showBottomTip && !this.loading
-    },
     top() {
       return 50 + this.navBarStyle.height + this.navBarStyle.top + this.navBarStyle.paddingBottom
     },
@@ -271,27 +261,10 @@ createComponent({
     categoryList() {
       return config[this.categoryTypeId].category
     },
-    footerList() {
-      return [{
-        name: '分享',
-        icon: 'share-o',
-        share: true
-      }, Object.assign({}, this.bottom?.btn, {
-        click: () => {
-          jumpAction(this.bottom?.btn)
-        }
-      })]
-    },
     listParams() {
       const params = {
         status: ['in', ['2', '3']]
-        // OPENID: ['not in', [this.openid]]
       }
-      // if (this.adInfo?.location?.lat) {
-      //   Object.assign(params, {
-      //     location: this.adInfo.location
-      //   })
-      // }
       Object.keys(this.filter).forEach(item => {
         const value = this.filter[item]
         // if (item === 'distance') {
@@ -369,19 +342,9 @@ createComponent({
     getApp().eventBus.on('scroll-to-lower', () => {
       this.moreLoadHandle()
     })
-    getApp().eventBus.on('scroll-to-upper', () => {
-      this.showBottomTip = true
-      this.showShare = true
-    })
-    getApp().eventBus.on('scroll', (e) => {
-      this.showBottomTip = e.scrollTop < 50
-      this.showShare = e.scrollTop < 50
-    })
   },
   detached() {
     getApp().eventBus.removeListener('scroll-to-lower')
-    getApp().eventBus.removeListener('scroll-to-upper')
-    getApp().eventBus.removeListener('scroll')
   },
   methods: {
     ...store.mapMutations(['setState']),
@@ -603,9 +566,6 @@ createComponent({
       this.page = JSON.parse(JSON.stringify(pageInfo))
       this.getList()
     },
-    closeBottom() {
-      this.showBottomTip = false
-    },
     jumpAction(item) {
       jumpAction(item)
     }
@@ -803,47 +763,12 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "card": "@/compontens/common/card/index.mpx?root=common-coms-page",
-      "back-home": "@/compontens/base/back-home.mpx?root=common-coms-page",
-      "van-button": "@vant/weapp/button/index?root=vant-page",
-      "van-icon": "@vant/weapp/icon/index?root=vant-page",
-      "van-empty": "@vant/weapp/empty/index?root=vant-page",
+      "card": "@/subpackages/superstream/compontens/card/index.mpx",
       "mutil-style-text": "@/compontens/base/mutil-style-text.mpx?root=common-coms-page",
-      "van-dropdown-menu": "@vant/weapp/dropdown-menu/index?root=vant-page",
-      "van-dropdown-item": "@vant/weapp/dropdown-item/index?root=vant-page",
-      "van-tree-select": "@vant/weapp/tree-select/index?root=vant-page",
-      "van-slider": "@vant/weapp/slider/index?root=vant-page",
-      "van-cell": "@vant/weapp/cell/index?root=vant-page",
-      "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page",
-      "van-radio": "@vant/weapp/radio/index?root=vant-page",
-      "van-radio-group": "@vant/weapp/radio-group/index?root=vant-page",
-      "van-checkbox": "@vant/weapp/checkbox/index?root=vant-page",
-      "van-checkbox-group": "@vant/weapp/checkbox-group/index?root=vant-page",
-      "van-field": "@vant/weapp/field/index?root=vant-page",
-      "skeleton": "@/compontens/common/card/skeleton.mpx",
-      "bottom-info": "@/compontens/base/bottom-info.mpx?root=common-coms-page",
-      "nav-footer": "@/compontens/base/nav-footer.mpx?root=common-coms-page"
+      "skeleton": "@/subpackages/superstream/compontens/card/skeleton.mpx"
     },
     "componentPlaceholder": {
-      "card": "view",
-      "mutil-style-text": "view",
-      "bottom-info": "view",
-      "van-field": "view",
-      "van-button": "view",
-      "van-icon": "view",
-      "van-dropdown-menu": "view",
-      "van-dropdown-item": "view",
-      "van-tree-select": "view",
-      "van-slider": "view",
-      "van-cell": "view",
-      "nav-footer": "view",
-      "van-cell-group": "view",
-      "van-radio": "view",
-      "van-radio-group": "view",
-      "van-checkbox": "view",
-      "van-checkbox-group": "view",
-      "van-empty": "view",
-      "back-home": "view"
+      "mutil-style-text": "view"
     },
     "disableScroll": true
   }

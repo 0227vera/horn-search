@@ -73,17 +73,44 @@ page
       "./subpackages/order-detail/app?root=order-detail",
       "./subpackages/address-manager/app?root=address-manager",
       "./subpackages/manager/app?root=manager",
-      "./subpackages/vant-page/app?root=vant-page",
       "./subpackages/common-coms-page/app?root=common-coms-page",
       "./subpackages/company/app?root=company"
     ],
-    "window": {
-      "navigationStyle": "custom",
-      "disableScroll": true
+    "usingComponents": {
+      "custom-container": "@/compontens/base/custom-container",
+      "van-tabbar": "@vant/weapp/tabbar/index",
+      "van-tabbar-item": "@vant/weapp/tabbar-item/index",
+      "van-slider": "@vant/weapp/slider/index",
+      "van-steps": "@vant/weapp/steps/index",
+      "van-loading": "@vant/weapp/loading/index",
+      "van-area": "@vant/weapp/area/index",
+      "van-switch": "@vant/weapp/switch/index",
+      "van-overlay": "@vant/weapp/overlay/index",
+      "van-swipe-cell": "@vant/weapp/swipe-cell/index",
+      "van-empty": "@vant/weapp/empty/index",
+      "van-button": "@vant/weapp/button/index",
+      "van-checkbox": "@vant/weapp/checkbox/index",
+      "van-cell": "@vant/weapp/cell/index",
+      "van-cell-group": "@vant/weapp/cell-group/index",
+      "van-divider": "@vant/weapp/divider/index",
+      "van-dialog": "@vant/weapp/dialog/index",
+      "van-datetime-picker": "@vant/weapp/datetime-picker/index",
+      "van-popup": "@vant/weapp/popup/index",
+      "van-nav-bar": "@vant/weapp/nav-bar/index",
+      "van-tree-select": "@vant/weapp/tree-select/index",
+      "van-radio": "@vant/weapp/radio/index",
+      "van-radio-group": "@vant/weapp/radio-group/index",
+      "van-checkbox-group": "@vant/weapp/checkbox-group/index",
+      "van-uploader": "@vant/weapp/uploader/index",
+      "van-field": "@vant/weapp/field/index",
+      "van-image": "@vant/weapp/image/index",
+      "van-icon": "@vant/weapp/icon/index",
+      "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
+      "van-dropdown-item": "@vant/weapp/dropdown-item/index"
     },
-    "lazyCodeLoading": "requiredComponents",
-    "__lazyCodeLoadingChunk": true,
-    "rendererOptions": { "skyline": { "defaultDisplayBlock": true } },
+    "window": {
+      "navigationStyle": "custom"
+    },
     "preloadRule": {
       "pages/home": {
         "network": "all",

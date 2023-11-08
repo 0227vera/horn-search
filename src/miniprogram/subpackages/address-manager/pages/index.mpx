@@ -34,14 +34,10 @@ createPage({
 <script type="application/json">
   {
     "usingComponents": {
-      "custom-container": "@/compontens/base/custom-container?root=common-coms-page",
-      "address-list": "@/compontens/common/address-list?root=common-coms-page",
-      "van-dialog": "@vant/weapp/dialog/index?root=vant-page"
+      "address-list": "@/compontens/common/address-list?root=common-coms-page"
     },
     "componentPlaceholder": {
-      "custom-container": "view",
-      "address-list": "view",
-      "van-dialog": "view"
+      "address-list": "view"
     },
     "navigationStyle": "custom"
   }

@@ -205,15 +205,9 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "partyA": "./partyA",
-      "van-icon": "@vant/weapp/icon/index?root=vant-page",
-      "van-dropdown-menu": "@vant/weapp/dropdown-menu/index?root=vant-page",
-      "van-dropdown-item": "@vant/weapp/dropdown-item/index?root=vant-page"
+      "partyA": "./partyA"
     },
     "componentPlaceholder": {
-      "van-dropdown-menu": "view",
-      "van-dropdown-item": "view",
-      "van-icon": "view"
     }
   }
 </script>

@@ -170,22 +170,13 @@ createPage({
 <script type="application/json">
   {
     "usingComponents": {
-      "custom-container": "@/compontens/base/custom-container?root=common-coms-page",
       "cus-map": "@/compontens/common/map",
-      "van-cell": "@vant/weapp/cell/index?root=vant-page",
-      "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page",
-      "van-steps": "@vant/weapp/steps/index?root=vant-page",
       "item-container": "../components/item-container",
-      "nav-footer": "@/compontens/base/nav-footer.mpx?root=common-coms-page",
+      "nav-footer": "@/subpackages/order-detail/components/nav-footer.mpx",
       "base-info": "../components/base-info.mpx",
       "skeleton": "@/subpackages/order-detail/components/skeleton.mpx"
     },
     "componentPlaceholder": {
-      "custom-container": "view",
-      "nav-footer": "view",
-      "van-cell": "view",
-      "van-cell-group": "view",
-      "van-steps": "view"
     },
     "navigationStyle": "custom"
   }

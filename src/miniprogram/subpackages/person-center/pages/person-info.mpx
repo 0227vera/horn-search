@@ -480,27 +480,14 @@ createPage({
 <script name="json">
 module.exports = {
   usingComponents: {
-    "custom-container": "@/compontens/base/custom-container?root=common-coms-page",
-    "van-icon": "@vant/weapp/icon/index?root=vant-page",
-    "van-field": "@vant/weapp/field/index?root=vant-page",
-    "van-cell": "@vant/weapp/cell/index?root=vant-page",
-    "van-dialog": "@vant/weapp/dialog/index?root=vant-page",
-    "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page",
-    "van-switch": "@vant/weapp/switch/index",
     "popup": "@/subpackages/superstream/compontens/popup/index.mpx?root=superstream",
     "mutil-style-text": "@/compontens/base/mutil-style-text.mpx?root=common-coms-page",
-    "toast": "@/compontens/base/toast.mpx",
+    "toast": "@/compontens/base/toast.mpx?root=common-coms-page",
   },
   "componentPlaceholder": {
-    "custom-container": "view",
     "mutil-style-text": "view",
-    "van-switch": "view",
     "popup": "view",
-    "van-cell": "view",
-    "van-cell-group": "view",
-    "van-dialog": "view",
-    "van-icon": "view",
-    "van-field": "view"
+    "toast": "view"
   }
 }
 </script>

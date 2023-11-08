@@ -7,7 +7,7 @@
     <view class="container">
       <view class="list" wx:if="{{list.length}}" wx:if="{{homeset.id === '1'}}">
         <!-- animation-duration: {{0.3 * (index + 1)}}s -->
-        <view wx:for="{{list}}" wx:key="*this" style="animation-name: {{index % 2 === 0 ? 'homeJishu' : 'homeOushu'}}; {{showGuide ? 'border: none': ''}}" class="list-item">
+        <view wx:for="{{list}}" wx:key="*this" style="animation-name: {{index % 2 === 0 ? 'homeJishu' : 'homeOushu'}};" class="list-item">
           <view wx:for="{{item}}" wx:for-index="mIndex" wx:for-item="m" wx:key="*this" class="list-item_line {{step - 1 === mIndex ? 'active' : ''}}" bind:tap="jump(m)">
             <image class="image" src="{{m.icon}}"></image>
             <view class="text">{{m.text}}</view>
@@ -22,6 +22,7 @@
           <view class="list-item_line" bind:tap="jump(item[0])">
             <image class="image" src="{{item[0].icon}}"></image>
             <view class="text">{{item[0].text}}</view>
+            <view class="desc" wx:if="{{item[0].desc}}">{{item[0].desc}}</view>
             <view class="tips" wx:if="{{item[0].tips}}">{{item[0].tips}}</view>
           </view>
         </view>
@@ -32,21 +33,14 @@
           <view class="list-item_line" bind:tap="jump(item[1])">
             <image class="image" src="{{item[1].icon}}"></image>
             <view class="text">{{item[1].text}}</view>
+            <view class="desc" wx:if="{{item[1].desc}}">{{item[1].desc}}</view>
             <view class="tips" wx:if="{{item[1].tips}}">{{item[1].tips}}</view>
           </view>
         </view>
       </view>
     </view>
   </custom-container>
-  <guide-subcri wx:if="{{!showGuide}}" />
-  // <tips autoStyle="{{tipsStyle}}" key="home-tips" text="{{tipsText}}" upLeft="46rpx" />
-  // <used-guide
-  //   show="{{showGuide}}"
-  //   step="{{step}}"
-  //   bind:next="guideNext"
-  //   bind:pre="guidePre"
-  //   bind:know="guideKnow"
-  // />
+  <guide-subcri />
 </template>
 
 <script>
@@ -55,7 +49,6 @@ import jumpAction from '@/utils/jump.js'
 import list from '@/constant/home.js'
 import ParsonCenter from '@/subpackages/person-center/pages/index.mpx?resolve'
 import store from '@/store'
-const key = 'guide_used'
 
 createPage({
   onShareAppMessage() {
@@ -63,11 +56,6 @@ createPage({
   },
   data: {
     list,
-    // step: !(mpx.getStorageSync(key) === 'true') ? 1 : 0,
-    step: 0,
-    // showGuide: !(mpx.getStorageSync(key) === 'true'),
-    showGuide: false,
-    tipsText: '点击进入个人中心进行基础设置',
     clickLeft() {
       mpx.navigateTo({
         url: ParsonCenter
@@ -97,20 +85,6 @@ createPage({
   },
   methods: {
     ...store.mapMutations(['setNavBarStyle']),
-    guideNext() {
-      this.step = 2
-    },
-    guidePre() {
-      this.step = 1
-    },
-    guideKnow() {
-      this.showGuide = false
-      this.step = 0
-      mpx.setStorage({
-        key,
-        data: 'true'
-      })
-    },
     jump(m) {
       jumpAction(m.action)
     }
@@ -194,14 +168,10 @@ createPage({
 <script name="json">
 module.exports = {
   usingComponents: {
-    "custom-container": "@/compontens/base/custom-container",
-    "guide-subcri": "@/compontens/common/service-notice/guide.mpx?root=common-coms-page",
-    "tips": "@/compontens/base/tips.mpx?root=common-coms-page",
-    "used-guide": "@/compontens/common/guide/index.mpx"
+    "guide-subcri": "@/compontens/common/service-notice/guide.mpx?root=common-coms-page"
   },
-  "componentPlaceholder": {
-    "guide-subcri": "view",
-    "tips": "view",
-  }
+    "componentPlaceholder": {
+      "guide-subcri": "view"
+    }
 }
 </script>

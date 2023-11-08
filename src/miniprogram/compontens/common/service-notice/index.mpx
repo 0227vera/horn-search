@@ -106,20 +106,10 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "van-overlay": "@vant/weapp/overlay/index?root=vant-page",
-      "mutil-style-text": "@/compontens/base/mutil-style-text.mpx?root=common-coms-page",
-      "van-switch": "@vant/weapp/switch/index?root=vant-page",
-      "van-radio": "@vant/weapp/radio/index?root=vant-page",
-      "van-radio-group": "@vant/weapp/radio-group/index?root=vant-page",
-      "van-button": "@vant/weapp/button/index?root=vant-page"
+      "mutil-style-text": "@/compontens/base/mutil-style-text.mpx?root=common-coms-page"
     },
     "componentPlaceholder": {
-      "mutil-style-text": "view",
-      "van-overlay": "view",
-      "van-radio": "view",
-      "van-radio-group": "view",
-      "van-button": "view",
-      "van-switch": "view"
+      "mutil-style-text": "view"
     }
   }
 </script>

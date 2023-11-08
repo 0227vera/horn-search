@@ -133,13 +133,10 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "card": "@/compontens/common/card/index.mpx?root=common-coms-page",
-      "van-empty": "@vant/weapp/empty/index?root=vant-page",
-      "skeleton": "@/compontens/common/card/skeleton.mpx"
+      "card": "@/subpackages/superstream/compontens/card/index.mpx",
+      "skeleton": "@/subpackages/superstream/compontens/card/skeleton.mpx"
     },
     "componentPlaceholder": {
-      "card": "view",
-      "van-empty": "view"
     }
   }
 </script>

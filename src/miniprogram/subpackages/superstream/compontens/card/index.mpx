@@ -283,16 +283,10 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "van-loading": "@vant/weapp/loading/index?root=vant-page",
-      "van-button": "@vant/weapp/button/index?root=vant-page",
-      "van-swipe-cell": "@vant/weapp/swipe-cell/index?root=vant-page",
       "mutil-style-text": "@/compontens/base/mutil-style-text.mpx?root=common-coms-page"
     },
     "componentPlaceholder": {
-      "mutil-style-text": "view",
-      "van-loading": "view",
-      "van-button": "view",
-      "van-swipe-cell": "view"
+      "mutil-style-text": "view"
     },
     "disableScroll": true
   }

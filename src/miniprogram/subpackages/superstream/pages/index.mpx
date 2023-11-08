@@ -2,7 +2,6 @@
   <custom-container
     title="{{title}}"
     clickLeft="{{clickLeft}}"
-    wx:show="{{pageShow}}"
   >
     <view class="{{roleType === 'partyA' && currentCom === footerList[0].key ? 'component-container' : ''}}">
       <component
@@ -25,9 +24,7 @@
     bind:confirm="onConfirmHandle"
     initRadio="{{fromOrigin}}"
   />
-  <back-home showShare showBackHome="{{false}}" wx:if="{{roleType === 'partyB'}}"/>
   <van-dialog id="van-dialog" />
-  <!-- <tips autoStyle="{{tipsStyle}}" key="superstream-tips" text="可点击进行类型切换" upLeft="170rpx" /> -->
 </template>
 
 <script>
@@ -44,7 +41,6 @@ createPage({
   data: {
     currentCom: '',
     roleType: '',
-    pageShow: false,
     categoryTypeId: '',
     popupType: 'radio',
     showPopup: false,
@@ -66,10 +62,6 @@ createPage({
     this.setState({
       fromOrigin: this.fromOrigin
     })
-    // note: 页面中的异步分包太多了，强制晚加载一会
-    setTimeout(() => {
-      this.pageShow = true
-    }, 500)
   },
   onShow() {
     this.setLocation()
@@ -233,9 +225,8 @@ createPage({
 <script type="application/json">
   {
     "usingComponents": {
-      "custom-container": "@/compontens/base/custom-container",
       "popup": "@/subpackages/superstream/compontens/popup/index.mpx",
-      "footer": "@/compontens/base/footer.mpx",
+      "footer": "@/subpackages/superstream/compontens/footer.mpx",
       "order": "@/subpackages/superstream/compontens/order",
       "bossWorker":"@/subpackages/superstream/compontens/release/boss-worker",
       "factoryCooper":"@/subpackages/superstream/compontens/release/factory-cooper",
@@ -244,13 +235,9 @@ createPage({
       "usedDetect":"@/subpackages/superstream/compontens/release/used-detect",
       "tailings":"@/subpackages/superstream/compontens/release/tailings",
       "partyB": "@/subpackages/superstream/compontens/order/partyB.mpx",
-      "tips": "@/compontens/base/tips.mpx?root=common-coms-page",
-      "van-dialog": "@vant/weapp/dialog/index?root=vant-page",
       "company-list": "@/subpackages/superstream/compontens/extra/company-list.mpx"
     },
     "componentPlaceholder": {
-      "tips": "view",
-      "van-dialog": "view"
     },
     "disableScroll": true
   }

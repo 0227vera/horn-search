@@ -92,16 +92,8 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "van-button": "@vant/weapp/button/index?root=vant-page",
-      "van-field": "@vant/weapp/field/index?root=vant-page",
-      "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page",
-      "van-cell": "@vant/weapp/cell/index?root=vant-page"
     },
     "componentPlaceholder": {
-      "van-cell": "view",
-      "van-cell-group": "view",
-      "van-button": "view",
-      "van-field": "view"
     }
   }
 </script>

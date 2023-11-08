@@ -95,11 +95,9 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "van-icon": "@vant/weapp/icon/index?root=vant-page",
       "mutil-style-text": "@/compontens/base/mutil-style-text.mpx?root=common-coms-page"
     },
     "componentPlaceholder": {
-      "van-icon": "view",
       "mutil-style-text": "view"
     }
   }

@@ -410,30 +410,10 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "van-popup": "@vant/weapp/popup/index?root=vant-page",
-      "address-list": "@/compontens/common/address-list?root=common-coms-page",
-      "van-datetime-picker": "@vant/weapp/datetime-picker/index?root=vant-page",
-      "van-nav-bar": "@vant/weapp/nav-bar/index?root=vant-page",
-      "van-tree-select": "@vant/weapp/tree-select/index?root=vant-page",
-      "van-cell": "@vant/weapp/cell/index?root=vant-page",
-      "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page",
-      "van-radio": "@vant/weapp/radio/index?root=vant-page",
-      "van-radio-group": "@vant/weapp/radio-group/index?root=vant-page",
-      "van-checkbox": "@vant/weapp/checkbox/index?root=vant-page",
-      "van-checkbox-group": "@vant/weapp/checkbox-group/index?root=vant-page"
+      "address-list": "@/compontens/common/address-list?root=common-coms-page"
     },
     "componentPlaceholder": {
-      "address-list": "view",
-      "van-tree-select": "view",
-      "van-popup": "view",
-      "van-datetime-picker": "view",
-      "van-nav-bar": "view",
-      "van-cell": "view",
-      "van-cell-group": "view",
-      "van-radio": "view",
-      "van-radio-group": "view",
-      "van-checkbox": "view",
-      "van-checkbox-group": "view"
+      "address-list": "view"
     }
   }
 </script>

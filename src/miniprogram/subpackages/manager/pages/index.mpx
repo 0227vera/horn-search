@@ -48,17 +48,12 @@ createPage({
 <script type="application/json">
   {
     "usingComponents": {
-      "custom-container": "@/compontens/base/custom-container?root=common-coms-page",
-      "van-tab": "@vant/weapp/tab/index?root=vant-page",
-      "van-tabs": "@vant/weapp/tabs/index?root=vant-page",
+      "van-tab": "@vant/weapp/tab/index",
+      "van-tabs": "@vant/weapp/tabs/index",
       "user-manager":"../compontens/user-manager",
       "company":"../compontens/company"
     },
-    "componentPlaceholder": {
-      "custom-container": "view",
-      "van-tab": "view",
-      "van-tabs": "view"
-    },
+    "componentPlaceholder": {},
     "navigationStyle": "custom"
   }
 </script>

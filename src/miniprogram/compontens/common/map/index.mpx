@@ -200,10 +200,8 @@ createComponent({
 <script name="json">
 module.exports = {
   usingComponents: {
-    "van-icon": "@vant/weapp/icon/index?root=vant-page"
   },
   "componentPlaceholder": {
-    "van-icon": "view"
   },
   disableScroll: true
 }

@@ -91,7 +91,6 @@ createComponent({
 module.exports = {
   component: true,
   usingComponents: {
-    "van-icon": "@vant/weapp/icon/index"
   }
 }
 </script>

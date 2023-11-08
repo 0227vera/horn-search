@@ -23,6 +23,7 @@
           icon="{{subitem.icon}}"
           value="{{subitem.value}}"
           is-link
+          clickable
           bindtap="itemtaphandle(subitem)"
           wx:if="{{!subitem.hide}}"
         />
@@ -83,13 +84,13 @@ createPage({
     showHomeSet: false,
     cacheCompany: '',
     homeSetList: [{
-      text: '展示左右两侧',
+      text: '展示左右两侧(既能发布需求又能寻求信息)',
       id: '1'
     }, {
-      text: '只展示左侧',
+      text: '只展示左侧(我只发布需求)',
       id: '2'
     }, {
-      text: '只展示右侧',
+      text: '只展示右侧(我只寻求信息)',
       id: '3'
     }]
   },
@@ -286,26 +287,7 @@ createPage({
 <script name="json">
 module.exports = {
   usingComponents: {
-    "custom-container": "@/compontens/base/custom-container?root=common-coms-page",
-    "van-dialog": "@vant/weapp/dialog/index?root=vant-page",
-    "van-icon": "@vant/weapp/icon/index?root=vant-page",
-    "van-field": "@vant/weapp/field/index?root=vant-page",
-    "van-cell": "@vant/weapp/cell/index?root=vant-page",
-    "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page",
-    "van-popup": "@vant/weapp/popup/index?root=vant-pag",
-    "van-radio": "@vant/weapp/radio/index?root=vant-page",
-    "van-radio-group": "@vant/weapp/radio-group/index?root=vant-page"
   },
-  "componentPlaceholder": {
-    "custom-container": "view",
-    "van-cell": "view",
-    "van-cell-group": "view",
-    "van-dialog": "view",
-    "van-icon": "view",
-    "van-field": "view",
-    "van-popup": "view",
-    "van-radio": "view",
-    "van-radio-group": "view"
-  }
+  "componentPlaceholder": {}
 }
 </script>

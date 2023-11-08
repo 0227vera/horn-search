@@ -115,8 +115,6 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "van-overlay": "@vant/weapp/overlay/index",
-      "van-button": "@vant/weapp/button/index",
       "mutil-style-text": "@/compontens/base/mutil-style-text.mpx"
     }
   }

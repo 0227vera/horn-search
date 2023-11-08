@@ -49,11 +49,12 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "service-notice": "./index",
-      "bottom-info": "@/compontens/base/bottom-info.mpx?root=common-coms-page"
+      "service-notice": "./index?root=common-coms-page",
+      "bottom-info": "./bottom-info.mpx?root=common-coms-page"
     },
-     "componentPlaceholder": {
-      "bottom-info": "view"
-     }
+    "componentPlaceholder": {
+      "bottom-info": "view",
+      "service-notice": "view"
+    }
   }
 </script>

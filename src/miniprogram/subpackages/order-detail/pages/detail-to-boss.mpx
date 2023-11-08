@@ -201,28 +201,14 @@ createPage({
 <script type="application/json">
   {
     "usingComponents": {
-      "custom-container": "@/compontens/base/custom-container?root=common-coms-page",
-      "van-cell": "@vant/weapp/cell/index?root=vant-page",
-      "van-cell-group": "@vant/weapp/cell-group/index?root=vant-page",
-      "van-steps": "@vant/weapp/steps/index?root=vant-page",
       "item-container": "../components/item-container",
-      "finder": "@/compontens/base/finder.mpx",
-      "nav-footer": "@/compontens/base/nav-footer.mpx?root=common-coms-page",
+      "finder": "@/subpackages/order-detail/components/finder.mpx",
+      "nav-footer": "@/subpackages/order-detail/components/nav-footer.mpx",
       "base-info": "../components/base-info.mpx",
-      "van-dialog": "@vant/weapp/dialog/index?root=vant-page",
-      "van-button": "@vant/weapp/button/index?root=vant-page",
       "skeleton": "@/subpackages/order-detail/components/skeleton.mpx",
       "talent": "@/subpackages/order-detail/components/talent.mpx"
     },
-    "componentPlaceholder": {
-      "custom-container": "view",
-      "nav-footer": "view",
-      "van-cell": "view",
-      "van-cell-group": "view",
-      "van-steps": "view",
-      "van-button": "view",
-      "van-dialog": "view"
-    },
+    "componentPlaceholder": {},
     "navigationStyle": "custom"
   }
 </script>
