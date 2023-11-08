@@ -288,6 +288,8 @@ createPage({
 module.exports = {
   usingComponents: {
   },
-  "componentPlaceholder": {}
+  "componentPlaceholder": {},
+  "navigationStyle": "custom",
+  "disableScroll": true
 }
 </script>

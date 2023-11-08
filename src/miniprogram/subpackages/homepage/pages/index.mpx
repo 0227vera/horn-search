@@ -120,6 +120,7 @@ module.exports = {
   "componentPlaceholder": {
     "guide-subcri": "view",
     "tips": "view",
-  }
+  },
+  "disableScroll": true
 }
 </script>

@@ -209,6 +209,7 @@ createPage({
       "talent": "@/subpackages/order-detail/components/talent.mpx"
     },
     "componentPlaceholder": {},
+    "disableScroll": true,
     "navigationStyle": "custom"
   }
 </script>

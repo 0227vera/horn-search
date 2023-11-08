@@ -16,7 +16,7 @@
     <view class="content-item">
       <view class="content-item-title item" style="width: 160rpx"></view>
       <view class="content-item-info">
-        <view wx:for="{{4}}" class="content-item-info-item">
+        <view wx:for="{{4}}" wx:key="*this" class="content-item-info-item">
           <view class="content-item-info-item-label item"></view>
           <view class="content-item-info-item-value item"></view>
         </view>
@@ -25,7 +25,7 @@
     <view class="content-item">
       <view class="content-item-title item" style="width: 300rpx"></view>
       <view class="content-item-info image" style="height: 300rpx">
-        <view wx:for="{{3}}" class="content-item-info-image item"></view>
+        <view wx:for="{{3}}" wx:key="*this" class="content-item-info-image item"></view>
       </view>
     </view>
     <view class="content-item"  wx:if="{{isWorker}}">

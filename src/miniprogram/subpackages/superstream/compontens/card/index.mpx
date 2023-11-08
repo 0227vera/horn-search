@@ -1,14 +1,14 @@
 
 <template>
   <view class="container">
-    <van-swipe-cell custom-class="{{index % 2 === 1 ? 'jishu' : 'oushu'}}" wx:for="{{renderList}}" wx:key="*this" right-width="{{ canDelete ? 65 : 0 }}">
+    <van-swipe-cell custom-class="{{index % 2 === 1 ? 'jishu' : 'oushu'}}" wx:for="{{renderList}}" wx:key="_id" right-width="{{ canDelete ? 65 : 0 }}">
       <view wx:if="{{canDelete}}" slot="right" class="van-swipe-cell__right" bind:tap="delete(item)">删除</view>
       <view class="list-item" bind:tap="gotoDetail(item)">
         <view wx:if="{{item.tag}}" class="tag">{{item.tag}}</view>
         <view class="list-item_info">
           <image class="list-item_info-img" catchtap="priview(item)" src="{{item.thumb}}"></image>
           <view class="list-item_info-content">
-            <view wx:for="{{item.contentList}}" wx:key="title" wx:for-item="content" class="list-item_info-content-item">
+            <view wx:for="{{item.contentList}}" wx:key="*this" wx:for-item="content" class="list-item_info-content-item">
               <block wx:if="{{content.type === 'map'}}">
                 <text class="list-item_info-content-item_text">{{content.text}}</text>
                 <view class="list-item_info-content-item_value">
@@ -18,7 +18,7 @@
               </block>
               <block wx:elif="{{content.type === 'tag'}}">
                 <view class="list-item_info-content-item_tags">
-                  <view class="list-item_info-content-item_tags-item" wx:for="{{content.tags}}" wx:key="text" wx:for-item="tag">
+                  <view class="list-item_info-content-item_tags-item" wx:for="{{content.tags}}" wx:key="*this" wx:for-item="tag">
                     <mutil-style-text text="{{tag.text}}" rules="{{tag.rules || textRules}}" />
                   </view>
                 </view>
@@ -34,6 +34,7 @@
             style="margin-left: 8rpx"
             wx:for-item="b"
             round
+            wx:key="id"
             type="{{b.type || 'default'}}"
             catchtap="clickBtn(item, b)"
             icon="{{b.icon || ''}}"

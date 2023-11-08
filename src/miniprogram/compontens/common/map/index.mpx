@@ -202,7 +202,6 @@ module.exports = {
   usingComponents: {
   },
   "componentPlaceholder": {
-  },
-  disableScroll: true
+  }
 }
 </script>

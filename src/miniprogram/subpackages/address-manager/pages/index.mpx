@@ -39,6 +39,7 @@ createPage({
     "componentPlaceholder": {
       "address-list": "view"
     },
-    "navigationStyle": "custom"
+    "navigationStyle": "custom",
+    "disableScroll": true
   }
 </script>

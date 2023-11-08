@@ -170,8 +170,9 @@ module.exports = {
   usingComponents: {
     "guide-subcri": "@/compontens/common/service-notice/guide.mpx?root=common-coms-page"
   },
-    "componentPlaceholder": {
-      "guide-subcri": "view"
-    }
+  "componentPlaceholder": {
+    "guide-subcri": "view"
+  },
+  "disableScroll": true
 }
 </script>

@@ -1,17 +1,17 @@
 <template>
   <view class="container" style="{{mstyle}}">
-    <view class="content" wx:for="{{4}}">
+    <view class="content" wx:for="{{4}}" wx:key="*this">
       <view class="content-top">
         <view class="content-top-img item"></view>
         <view class="content-top-texts">
-          <view wx:for="{{4}}" class="content-top-texts-item">
+          <view wx:for="{{4}}" wx:key="*this" class="content-top-texts-item">
             <view class="content-top-texts-item-title item"></view>
             <view class="content-top-texts-item-value item"></view>
           </view>
         </view>
       </view>
       <view class="content-bottom">
-        <view wx:for="{{3}}" class="content-bottom-btn item"></view>
+        <view wx:for="{{3}}" wx:key="*this" class="content-bottom-btn item"></view>
       </view>
     </view>
   </view>

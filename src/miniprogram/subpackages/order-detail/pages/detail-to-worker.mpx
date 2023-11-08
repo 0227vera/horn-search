@@ -178,6 +178,7 @@ createPage({
     },
     "componentPlaceholder": {
     },
+    "disableScroll": true,
     "navigationStyle": "custom"
   }
 </script>

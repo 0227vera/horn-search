@@ -54,6 +54,7 @@ createPage({
       "company":"../compontens/company"
     },
     "componentPlaceholder": {},
-    "navigationStyle": "custom"
+    "navigationStyle": "custom",
+    "disableScroll": true
   }
 </script>
