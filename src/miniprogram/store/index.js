@@ -2,6 +2,7 @@ import mpx, { createStore } from '@mpxjs/core'
 import MapSdk from '@/wx-map-sdk/qqmap-wx-jssdk.min.js'
 import Dialog from '@vant/weapp/dialog/dialog'
 import dayjs from 'dayjs'
+import steps from '../constant/steps'
 
 export function checkIpx () {
   const systemInfo = wx.getSystemInfoSync()
@@ -43,7 +44,7 @@ export default createStore({
     orderList: [],
     orderListReqLoading: true,
     categoryItems: {},
-    steps: [],
+    steps,
     addressList: [],
     fromOrigin: '',
     cacheForm: {},

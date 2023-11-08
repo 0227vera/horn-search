@@ -22,7 +22,6 @@ class UserController extends BaseController {
     if (!res) {
       // note: 查不到用户就先在库里建立一个use在返回相关信息
       const user = await this.create({
-        address: [],
         OPENID: this._openId
       })
       res = await service.getOne(where)

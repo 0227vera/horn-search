@@ -72,6 +72,7 @@ createPage({
     }
   },
   onLoad() {
+    console.log('', this.homeset)
   },
   onShow() {
     this.list = list

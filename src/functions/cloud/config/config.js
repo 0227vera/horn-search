@@ -2,7 +2,7 @@ const Warrior_Prefix = 'warrior_'
 
 module.exports = {
   // ### 环境相关
-  CLOUD_ID: 'cloud1-0gfibr1283141-0b78337d158', // 你的云环境id
+  CLOUD_ID: 'cloud1-2ghfxje8f4990d8f', // 你的云环境id
   // ##################################################################
   PID: 'A00',
   COLLECTION_NAME: [
@@ -15,8 +15,7 @@ module.exports = {
     'warrior_release_lease_transfer', // 出租转让
     'warrior_release_employ_appli', // 公司直聘
     'warrior_release_used_detect', // 二手设备
-    'warrior_release_tailings', // 尾货
-    'warrior_constant' // node: 常量配置
+    'warrior_release_tailings' // 尾货
   ],
   // ## 缓存相关
   IS_CACHE: true, // 是否开启缓存

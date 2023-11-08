@@ -19,24 +19,23 @@ createApp({
     this.setState({
       appReady: false
     })
-    const [constant, userInfo] = await Promise.all([getCommonConfig(), getCurrentUser()])
-    const { steps, categoryItems } = constant.data
-    const { address = [], OPENID, company, biographical, companyInfo, homeset = { id: '1', text: '展示左右两侧' } } = userInfo.data
+    const userInfo = await getCurrentUser()
+    const { address = [], OPENID, company, biographical, companyInfo, homeset } = userInfo.data
+    if (!Object.keys(homeset).length) {
+      Object.assign(homeset, { id: '1', text: '展示左右两侧' })
+    }
     let obj = {
-      steps,
-      appReady: true
+      appReady: true,
+      homeset
     }
     address.length && Object.assign(obj, {
       addressList: address
     })
-    biographical && Object.assign(obj, {
+    biographical && Object.keys(biographical).length && Object.assign(obj, {
       biographical
     })
-    companyInfo && Object.assign(obj, {
+    companyInfo && Object.keys(companyInfo).length && Object.assign(obj, {
       companyInfo
-    })
-    homeset && Object.assign(obj, {
-      homeset
     })
     OPENID && Object.assign(obj, {
       openid: OPENID
