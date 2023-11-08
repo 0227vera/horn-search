@@ -33,7 +33,7 @@ export default createStore({
     footerNavBar: [],
     usInfo: {},
     mapSdk: new MapSdk({
-      key: 'PECBZ-2K76U-PCTVV-2WL2B-V3YXE-PFBIR'
+      key: 'H3QBZ-NGN6Q-NPL5M-4W72L-NKC55-ZFF3O'
     }),
     adInfo: {},
     location: {
