@@ -1,0 +1,163 @@
+<template>
+  <custom-container
+    title="服装招工桥 | 发货找货平台"
+    lefticon="friends"
+    clickLeft="{{clickLeft}}"
+  >
+    <view class="container">
+      <view class="partyA">
+        <view class="partyA-item first-item">免费发布</view>
+        <view wx:for="{{renderPartyAList}}" class="partyA-item" bind:tap="jump(item)">
+          {{item.text}}
+        </view>
+      </view>
+      <view class="partyB">
+        <van-tabs ellipsis="{{false}}" active="{{ tabActive }}" bind:change="onTabChange">
+          <van-tab wx:for="{{renderPartyBList}}" title="{{item.text}}"></van-tab>
+        </van-tabs>
+      </view>
+      <view class="list" wx:if="{{fromOrigin}}">
+        <partyB
+          categoryTypeId="{{categoryTypeId}}"
+          updateList="{{updateList}}"
+        />
+      </view>
+    </view>
+  </custom-container>
+</template>
+
+<script>
+import mpx, { createPage } from '@mpxjs/core'
+import jumpAction from '@/utils/jump.js'
+import list from '@/constant/home.js'
+import ParsonCenter from '@/subpackages/person-center/pages/index.mpx?resolve'
+import config, { categoryMap } from '@/constant/release.js'
+import store from '@/store'
+
+createPage({
+  onShareAppMessage() {
+    getApp().onShareAppMessage()
+  },
+  data: {
+    tabActive: 0,
+    list,
+    updateList: false,
+    clickLeft() {
+      mpx.navigateTo({
+        url: ParsonCenter
+      })
+    }
+  },
+  watch: {
+    categoryTypeId: {
+      handler(val) {
+        const { fromOrigin } = config[val]
+        this.setState({
+          fromOrigin
+        })
+      },
+      immediate: true
+    }
+  },
+  computed: {
+    ...store.mapState(['navBarStyle', 'homeset', 'fromOrigin']),
+    top() {
+      return this.navBarStyle.height + this.navBarStyle.top + this.navBarStyle.paddingBottom
+    },
+    currentTab() {
+      return this.renderPartyBList.find((_, index) => index === this.tabActive)
+    },
+    categoryTypeId() {
+      return categoryMap[this.currentTab.action.params.id]
+    },
+    extraList() {
+      return [{
+        text: '主动求职',
+        id: 'gotoUserInfo',
+        action: {
+          icon: 'arrow',
+          name: '去发布',
+          jumptype: 'mp',
+          link: '/person-center/pages/person-info'
+        }
+      }, {
+        text: '诚寻客户',
+        id: 'gotoCompanyInfo',
+        action: {
+          icon: 'arrow',
+          id: 'gotoCompanyInfo',
+          name: '去发布',
+          jumptype: 'mp',
+          link: '/person-center/pages/company-info'
+        }
+      }]
+    },
+    renderPartyAList() {
+      return this.list.map(item => item[0]).concat(this.extraList)
+    },
+    renderPartyBList() {
+      return this.list.map(item => item[1])
+    }
+  },
+  onLoad() {
+  },
+  onShow() {
+    this.setNavBarStyle({
+      showDropdown: false,
+      clickDropdown: null
+    })
+  },
+  methods: {
+    ...store.mapMutations(['setNavBarStyle', 'setState']),
+    jump(m) {
+      jumpAction(m.action)
+    },
+    onTabChange({ detail }) {
+      const { index } = detail
+      this.tabActive = index
+      this.updateList = !this.updateList
+    }
+  }
+})
+</script>
+
+<style lang="stylus" scoped>
+@import "@/assets/base.styl"
+.container
+  padding 0 0 150rpx
+  overflow hidden
+  .partyA
+    padding 16rpx 16rpx 0
+    background #ffffff
+    display flex
+    flex-wrap wrap
+    justify-content space-around
+    &-item
+      width 24%
+      height 50rpx
+      background #79b3f4
+      border-radius 16rpx
+      flex-center()
+      margin-bottom 16rpx
+      color #ffffff
+      font-size 32rpx
+      font-weight bold
+      &.first-item
+        color #000000
+        background none
+  .partyB
+    margin-top 16rpx
+  .list
+    margin-top 16rpx
+</style>
+
+<script name="json">
+module.exports = {
+  usingComponents: {
+    "partyB": "@/subpackages/superstream/compontens/order/partyB.mpx"
+  },
+  "componentPlaceholder": {
+  },
+  "disableScroll": true
+}
+</script>

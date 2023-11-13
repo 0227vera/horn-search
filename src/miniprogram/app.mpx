@@ -64,8 +64,7 @@ page
 <script type="application/json">
   {
     "pages": [
-      "./pages/home",
-      "./pages/webview"
+      "./pages/index"
     ],
     "packages": [
       "./subpackages/person-center/app?root=person-center",
@@ -77,6 +76,8 @@ page
       "./subpackages/company/app?root=company"
     ],
     "usingComponents": {
+      "van-tab": "@vant/weapp/tab/index",
+      "van-tabs": "@vant/weapp/tabs/index",
       "custom-container": "@/compontens/base/custom-container",
       "van-tabbar": "@vant/weapp/tabbar/index",
       "van-tabbar-item": "@vant/weapp/tabbar-item/index",
@@ -114,7 +115,7 @@ page
     "lazyCodeLoading": "requiredComponents",
     "__usePrivacyCheck__": true,
     "preloadRule": {
-      "pages/home": {
+      "pages/index": {
         "network": "all",
         "packages": [
           "superstream"

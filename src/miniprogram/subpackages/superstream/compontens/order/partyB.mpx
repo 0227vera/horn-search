@@ -2,7 +2,7 @@
 <template>
   <view class="container">
     <view class="list" wx:if="{{renderFilterList.length}}">
-      <view wx:if="{{bottom && bottom.btn}}" class="guide">
+      <!-- <view wx:if="{{bottom && bottom.btn}}" class="guide">
         <view class="guide-content">
           <view class="guide-content-title">{{bottom.title}}</view>
           <view class="guide-content-desc">{{bottom.desc}}</view>
@@ -13,7 +13,7 @@
             <van-icon name="{{bottom.btn.icon}}" />
           </van-button>
         </view>
-      </view>
+      </view> -->
       <scroll-view scroll-x style="width: 100%;" class="list-scroll">
         <view class="list-filter">
           <block wx:for="{{renderFilterList}}" wx:key="id">
@@ -318,9 +318,9 @@ createComponent({
       this.renderFilterList = JSON.parse(JSON.stringify(val))
     },
     updateList() {
+      this.list = []
       this.renderFilterList = JSON.parse(JSON.stringify(this.filterList))
       this.loading = true
-      this.list = []
       this.page = JSON.parse(JSON.stringify(pageInfo))
       this.getList()
     },

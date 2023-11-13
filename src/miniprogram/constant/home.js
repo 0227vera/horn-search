@@ -1,6 +1,6 @@
 export default [[{
   // text: '工厂招工发布',
-  text: '去招工',
+  text: '招工',
   desc: '点击填写所要招工的信息',
   icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/1.1 招工.png',
   id: 'findWorker',
@@ -18,7 +18,7 @@ export default [[{
   extraInfo: {}
 }, {
   // text: '我要找事做',
-  text: '招长工/临工信息公示',
+  text: '长临工找事做',
   desc: '点击查找您想做的事',
   icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/1.2 找工作.png',
   id: 'findJob',
@@ -36,7 +36,7 @@ export default [[{
   extraInfo: {}
 }], [{
   // text: '找工厂合作发布',
-  text: '去找工厂合作',
+  text: '找工厂合作',
   desc: '点击填写对工厂的要求',
   icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/2.1 找合作.png',
   id: '',
@@ -54,7 +54,7 @@ export default [[{
   extraInfo: {}
 }, {
   // text: '我要找货做',
-  text: '去找货做',
+  text: '裁片外发',
   desc: '点击查看有哪些合作需求',
   icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/2.2 找货做.png',
   id: '',
@@ -71,7 +71,7 @@ export default [[{
   },
   extraInfo: {}
 }], [{
-  text: '去出租转让',
+  text: '出租转让',
   icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/3.1 转让.png',
   id: '',
   dot: false,
@@ -88,7 +88,7 @@ export default [[{
   extraInfo: {}
 }, {
   // text: '出租转让公示',
-  text: '去找房',
+  text: '找房',
   icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/3.2 转让公示.png',
   id: '',
   dot: false,
@@ -139,7 +139,7 @@ export default [[{
 // }],
 [{
   // text: '出售二手设备发布',
-  text: '去出售二手设备',
+  text: '二手设备',
   icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/5.1 二手设备.png',
   id: '',
   dot: false,
@@ -156,7 +156,7 @@ export default [[{
   extraInfo: {}
 }, {
   // text: '我要捡漏二手没备',
-  text: '去捡漏二手没备',
+  text: '二手设备',
   icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/5.2 捡漏.png',
   id: '',
   dot: false,
@@ -173,7 +173,7 @@ export default [[{
   extraInfo: {}
 }], [{
   // text: '尾货处理发布',
-  text: '去处理尾货',
+  text: '处理尾货',
   icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/6.1 调仓.png',
   id: '',
   dot: false,
@@ -190,7 +190,7 @@ export default [[{
   extraInfo: {}
 }, {
   // text: '货尾中心公示',
-  text: '去找货尾',
+  text: '找货尾',
   icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/6.2 货运.png',
   id: '',
   dot: false,
