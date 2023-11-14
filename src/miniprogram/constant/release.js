@@ -2,6 +2,7 @@
 const findWorkerCategory = [
   {
     text: '车间生产类',
+    id: '1-',
     children: [
       { text: "裁工师傅/主裁", id: "1-0", showCategoryType: true },
       { text: "电剪/副裁", id: "1-3", showCategoryType: true },
@@ -37,6 +38,7 @@ const findWorkerCategory = [
   },
   {
     text: '打版车版类',
+    id: '2-',
     children: [
       { text: "纸样师/打版师", id: "3-0", showCategoryType: true, categoryType: '2' },
       { text: "车版师/样衣工", id: "3-3", showCategoryType: true, categoryType: '2' },
@@ -49,6 +51,7 @@ const findWorkerCategory = [
   },
   {
     text: '工厂管理类',
+    id: '3-',
     children: [
       { text: "厂长/主管", id: "6-0", showCategoryType: true, categoryType: '2' },
       { text: "裁床主管", id: "6-3", showCategoryType: true, categoryType: '2' },
@@ -65,6 +68,7 @@ const findWorkerCategory = [
   },
   {
     text: '设计开发类',
+    id: '4-',
     children: [
       { text: "男装设计师", id: "9-0", showCategoryType: true, categoryType: '2' },
       { text: "女装设计师", id: "9-3", showCategoryType: true, categoryType: '2' },
@@ -313,16 +317,30 @@ const leaseTransferCategory = [{
   ]
 }]
 
-const workerFilter = [{
-  type: 'category',
-  id: 'category',
-  text: '岗位筛选',
-  initText: '岗位筛选',
-  value: [],
-  activeList: [],
-  list: findWorkerCategory,
-  max: 3
-}]
+const workerFilter = findWorkerCategory.map((item, index) => {
+  return {
+    type: 'radio',
+    id: 'category',
+    text: item.text,
+    initText: item.text,
+    activeList: [],
+    list: item.children.map(m => ({
+      name: m.text,
+      value: m.id
+    }))
+  }
+})
+
+// [{
+//   type: 'category',
+//   id: 'category',
+//   text: '岗位筛选',
+//   initText: '岗位筛选',
+//   value: [],
+//   activeList: [],
+//   list: findWorkerCategory,
+//   max: 3
+// }]
 // , {
 //   type: 'dropdown',
 //   id: 'distance',
