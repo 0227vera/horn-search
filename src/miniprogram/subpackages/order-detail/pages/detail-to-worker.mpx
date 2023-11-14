@@ -12,8 +12,8 @@
       </item-container>
       <item-container wx:if="{{images.length}}" title="图片展示{(可点击查看大图)}：">
         <view class="image-list">
-          <image class="image-item" bind:tap="priviewImage(index)" wx:for="{{images}}" wx:key="item" src="{{item}}"></image>
-          <view class="image-item" wx:for="{{3 - images.length % 3}}"></view>
+          <image class="image-item" bind:tap="priviewImage(index)" wx:for="{{images}}" wx:key="*this" src="{{item}}"></image>
+          <view class="image-item" wx:for="{{3 - images.length % 3}}" wx:key="*this"></view>
         </view>
       </item-container>
       <item-container title="位置信息：" wx:if="{{!hideMap}}">

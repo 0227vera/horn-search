@@ -23,6 +23,7 @@
       <view class="btns">
         <van-button
           wx:for="{{buttons}}"
+          wx:key="*this"
           size="small"
           wx:for-item="b"
           style="margin-left: 8rpx"

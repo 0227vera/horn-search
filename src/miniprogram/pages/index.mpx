@@ -2,18 +2,19 @@
   <custom-container
     title="服装招工桥 | 发货找货平台"
     lefticon="friends"
+    needScroll="{{false}}"
     clickLeft="{{clickLeft}}"
   >
     <view class="container">
       <view class="partyA">
         <view class="partyA-item first-item">免费发布</view>
-        <view wx:for="{{renderPartyAList}}" class="partyA-item" bind:tap="jump(item)">
+        <view wx:for="{{renderPartyAList}}" wx:key="*this" class="partyA-item" bind:tap="jump(item)">
           {{item.text}}
         </view>
       </view>
       <view class="partyB">
         <van-tabs ellipsis="{{false}}" active="{{ tabActive }}" bind:change="onTabChange">
-          <van-tab wx:for="{{renderPartyBList}}" title="{{item.text}}"></van-tab>
+          <van-tab wx:key="*this" wx:for="{{renderPartyBList}}" title="{{item.text}}"></van-tab>
         </van-tabs>
       </view>
       <view class="list" wx:if="{{fromOrigin}}">
@@ -100,6 +101,7 @@ createPage({
     }
   },
   onLoad() {
+    this.setLocation()
   },
   onShow() {
     this.setNavBarStyle({
@@ -109,6 +111,7 @@ createPage({
   },
   methods: {
     ...store.mapMutations(['setNavBarStyle', 'setState']),
+    ...store.mapActions(['setLocation']),
     jump(m) {
       jumpAction(m.action)
     },
@@ -124,31 +127,35 @@ createPage({
 <style lang="stylus" scoped>
 @import "@/assets/base.styl"
 .container
-  padding 0 0 150rpx
+  width 100%
+  height 100%
   overflow hidden
+  flex-column()
   .partyA
-    padding 16rpx 16rpx 0
-    background #ffffff
+    padding 0 16rpx
     display flex
     flex-wrap wrap
     justify-content space-around
     &-item
       width 24%
       height 50rpx
-      background #79b3f4
+      background #ffffff
       border-radius 16rpx
       flex-center()
-      margin-bottom 16rpx
-      color #ffffff
-      font-size 32rpx
+      margin-top 16rpx
+      color #000000
+      font-size 28rpx
       font-weight bold
       &.first-item
         color #000000
         background none
+        font-size 36rpx
   .partyB
     margin-top 16rpx
   .list
-    margin-top 16rpx
+    border-top $border
+    flex 1
+    overflow hidden
 </style>
 
 <script name="json">

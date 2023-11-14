@@ -9,7 +9,7 @@
           bindscroll="scroll"
           enhanced
           show-scrollbar="{{false}}"
-          scroll-y
+          scroll-y="{{needScroll}}"
           class="scroll-container"
           lower-threshold="{{100}}"
           enable-back-to-top
@@ -37,6 +37,10 @@ createComponent({
     ...store.mapState(['navBarStyle'])
   },
   properties: {
+    needScroll: {
+      type: Boolean,
+      value: true
+    },
     title: {
       type: String,
       value: 'home'

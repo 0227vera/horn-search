@@ -6,8 +6,8 @@
       swipeable
       animated
       sticky
-      ellipsis=false
-      swipe-threshold=4
+      ellipsis="{{false}}"
+      swipe-threshold="{{4}}"
       active="{{ active }}"
       bind:change="tabChange"
     >
@@ -17,7 +17,11 @@
         wx:key="*this"
         name="{{item.com}}"
       >
-        <component is="{{item.com}}" ref="com"/>
+        <component
+          is="{{item.com}}"
+          ref="com"
+          range="user-manager,company"
+        />
       </van-tab>
     </van-tabs>
   </custom-container>

@@ -20,22 +20,22 @@ const getAddressAndDistance = (item, text = '位置:') => {
 const actions = {
   bossWorker: item => {
     const content = []
-    content.push(getAddressAndDistance(item))
-    let categoryValue = `${item.categoryName}${item.categorySub ? `(${item.categorySub})` : ''}-{${item.categoryNum}人}-${item.categoryTypeName}`
+    // content.push(getAddressAndDistance(item))
+    let categoryValue = `${item.categoryName}${item.categorySub ? `(${item.categorySub})` : ''}-${item.categoryNum}人-${item.categoryTypeName}`
     content.push({
       type: 'map',
-      text: '岗位:',
+      text: '急招:',
       value: categoryValue
     })
     // 薪资/单价
     const priceText = item.categoryType === '2' ? '薪资:' : '单价:'
     let priceValue = ''
     if (item.categoryType === '2') {
-      priceValue = `{${item.priceMin}${item.priceUnitName}} ~ {${item.priceMax}${item.priceUnitName}}`
+      priceValue = `${item.priceMin}${item.priceUnitName} ~ ${item.priceMax}${item.priceUnitName}`
     } else {
-      priceValue = `{${item.price}${item.priceUnitName}}`
+      priceValue = `${item.price}${item.priceUnitName}`
       if (item.num) {
-        priceValue += `(单量：{${item.num}件})`
+        priceValue += `(单量：${item.num}件)`
       }
     }
     content.push({
@@ -49,7 +49,7 @@ const actions = {
   factoryCooper: item => {
     const content = []
     if (item.cooperType === 'a3') {
-      content.push(getAddressAndDistance(item, '裁床地址:'))
+      // content.push(getAddressAndDistance(item, '裁床地址:'))
     } else {
       content.push({
         type: 'map',
@@ -78,7 +78,7 @@ const actions = {
   },
   leaseTransfer: item => {
     const content = []
-    content.push(getAddressAndDistance(item))
+    // content.push(getAddressAndDistance(item))
     content.push({
       type: 'map',
       text: '类别:',
@@ -93,7 +93,7 @@ const actions = {
   },
   usedDetect: item => {
     const content = []
-    content.push(getAddressAndDistance(item))
+    // content.push(getAddressAndDistance(item))
     let categoryValue = `{${item.categoryName}${item.categorySub ? `(${item.categorySub})` : ''}}`
     content.push({
       type: 'map',
@@ -114,7 +114,7 @@ const actions = {
   },
   tailings: item => {
     const content = []
-    content.push(getAddressAndDistance(item))
+    // content.push(getAddressAndDistance(item))
     content.push({
       type: 'map',
       text: '类别:',

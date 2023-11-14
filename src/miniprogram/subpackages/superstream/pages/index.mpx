@@ -6,6 +6,7 @@
     <view class="{{roleType === 'partyA' && currentCom === footerList[0].key ? 'component-container' : ''}}">
       <component
         is="{{currentCom}}"
+        range="bossWorker,factoryCooper,leaseTransfer,usedDetect,tailings"
         categoryTypeId="{{categoryTypeId}}"
         updateList="{{updateList}}"
         bind:release-jump-done="releaseJumpDone"

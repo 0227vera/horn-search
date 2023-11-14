@@ -100,7 +100,7 @@
             <van-cell
               size="large"
               wx:for="{{ checkBoxList }}"
-              wx:key="index"
+              wx:key="*this"
               title="{{ item.name }}"
               value-class="value-class"
               clickable

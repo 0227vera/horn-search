@@ -14,7 +14,7 @@
       </item-container>
       <item-container wx:if="{{active === 2}}" title="呼叫人信息：">
         <view class="call-container">
-          <view wx:for="{{calllist}}" wx:key="opneid" class="call-item">
+          <view wx:for="{{calllist}}" wx:key="*this" class="call-item">
             <image class="call-item-image" src="{{item.avatarUrl}}"></image>
             <text class="call-item-num">{{item.times}}</text>
           </view>
@@ -28,8 +28,8 @@
       </item-container>
       <item-container wx:if="{{images.length}}" title="图片展示{(可点击查看大图)}：">
         <view class="image-list">
-          <image class="image-item" bind:tap="priviewImage(index)" wx:for="{{images}}" wx:key="item" src="{{item}}"></image>
-          <view class="image-item" wx:for="{{3 - images.length % 3}}"></view>
+          <image class="image-item" bind:tap="priviewImage(index)" wx:for="{{images}}" wx:key="*this" src="{{item}}"></image>
+          <view class="image-item" wx:for="{{3 - images.length % 3}}" wx:key="*this"></view>
         </view>
       </item-container>
       <view class="bottom"></view>
