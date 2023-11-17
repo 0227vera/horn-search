@@ -309,6 +309,7 @@ createComponent({
     },
     updateList() {
       this.list = []
+      this.filter = {}
       this.renderFilterList = JSON.parse(JSON.stringify(this.filterList))
       this.loading = true
       this.page = JSON.parse(JSON.stringify(pageInfo))
