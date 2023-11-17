@@ -320,7 +320,7 @@ const leaseTransferCategory = [{
 const workerFilter = findWorkerCategory.map((item, index) => {
   return {
     type: 'radio',
-    id: 'category',
+    id: `category${index}`,
     text: item.text,
     initText: item.text,
     activeList: [],

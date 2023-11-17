@@ -4,13 +4,14 @@
       <view class="content-top">
         <view class="content-top-img item"></view>
         <view class="content-top-texts">
-          <view wx:for="{{4}}" wx:key="*this" class="content-top-texts-item">
+          <view wx:for="{{3}}" wx:key="*this" class="content-top-texts-item">
             <view class="content-top-texts-item-title item"></view>
             <view class="content-top-texts-item-value item"></view>
           </view>
         </view>
       </view>
       <view class="content-bottom">
+        <view class="content-bottom-distance item"></view>
         <view wx:for="{{3}}" wx:key="*this" class="content-bottom-btn item"></view>
       </view>
     </view>
@@ -52,7 +53,6 @@ createComponent({
   height auto
   border-radius 16rpx
   padding 16rpx
-
   margin-bottom 16rpx
   flex-column()
   &-top
@@ -60,15 +60,15 @@ createComponent({
     overflow hidden
     &-img
       width 160rpx
-      height 260rpx
+      height 160rpx
       border-radius 16rpx
     &-texts
       flex 1
       overflow hidden
       margin-left 16rpx
       flex-column()
-      justify-content space-between
-      height 260rpx
+      justify-content space-around
+      height 160rpx
       &-item
         flex-center()
         height 40rpx
@@ -82,6 +82,7 @@ createComponent({
   &-bottom
     flex-center()
     justify-content flex-end
+    align-items center
     margin-top 18rpx
     &-btn
       width 160rpx
@@ -89,6 +90,11 @@ createComponent({
       border 2rpx solid #ebedf0
       border-radius 30rpx
       margin-left 8rpx
+    &-distance
+      width 120rpx
+      height 40rpx
+      border-radius 6rpx
+      margin-right auto
 @-webkit-keyframes skeletonName
   0%
     opacity 1

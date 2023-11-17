@@ -73,6 +73,10 @@ createComponent({
       type: Array,
       value: []
     },
+    filterKeys: {
+      type: Array,
+      value: []
+    },
     buttons: {
       type: Array,
       value: []
@@ -121,7 +125,7 @@ createComponent({
           }
         }
         item.distanceText = distanceText
-        const content = actions?.[this.fromOrigin]?.(item) ?? []
+        const content = actions?.[this.fromOrigin]?.(item, this.filterKeys) ?? []
         const disTime = Date.now() - item.RELEASE_ADD_TIME
         const oneMin = 60 * 1000
         const oneHour = 60 * oneMin

@@ -18,10 +18,12 @@ const getAddressAndDistance = (item, text = '位置:') => {
 }
 
 const actions = {
-  bossWorker: item => {
+  bossWorker: (item, filterKeys) => {
     const content = []
-    // content.push(getAddressAndDistance(item))
     let categoryValue = `${item.categoryName}${item.categorySub ? `(${item.categorySub})` : ''}-${item.categoryNum}人-${item.categoryTypeName}`
+    if (filterKeys.includes('category')) {
+      categoryValue = `{${categoryValue}}`
+    }
     content.push({
       type: 'map',
       text: '急招:',
@@ -43,18 +45,15 @@ const actions = {
       text: priceText,
       value: priceValue
     })
-
     return content
   },
-  factoryCooper: item => {
+  factoryCooper: (item, filterKeys) => {
     const content = []
-    if (item.cooperType === 'a3') {
-      // content.push(getAddressAndDistance(item, '裁床地址:'))
-    } else {
+    if (item.cooperType !== 'a3') {
       content.push({
         type: 'map',
         text: '地域要求:',
-        value: `{${item.area}}`
+        value: filterKeys.includes('area') ? `{${item.area}}` : `${item.area}`
       })
     }
     let factoryScaleValue = `${item.factoryScaleName}`
@@ -63,22 +62,28 @@ const actions = {
     } else if (item.factoryScale === 'e2') {
       item.people && (factoryScaleValue += `-${item.people}人左右`)
     }
-    factoryScaleValue += `-{${item.cooperTypeName}}`
+    factoryScaleValue += `-${item.cooperTypeName}`
+    if (filterKeys.includes('factoryScale')) {
+      factoryScaleValue = `{${factoryScaleValue}}`
+    }
     content.push({
       type: 'map',
       text: '规模要求:',
       value: factoryScaleValue
     })
+    let numText = `${item.num}件左右-${item.productTypeName}`
+    if (filterKeys.includes('productType')) {
+      numText = `{${numText}}`
+    }
     content.push({
       type: 'map',
       text: '加工数量:',
-      value: `{${item.num}}件左右-{${item.productTypeName}}`
+      value: numText
     })
     return content
   },
   leaseTransfer: item => {
     const content = []
-    // content.push(getAddressAndDistance(item))
     content.push({
       type: 'map',
       text: '类别:',
