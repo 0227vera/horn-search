@@ -320,7 +320,12 @@ createComponent({
     },
     adInfo: {
       handler(val) {
-        this.refreshList()
+        if (val?.location?.lat) {
+          this.list.forEach(item => {
+            item.distance = getDistance(val.location.lat, val.location.lng, item.poi.location.lat, item.poi.location.lng).toFixed(1)
+          })
+          this.list = this.list.sort((a, b) => a.distance - b.distance)
+        }
       },
       immediate: true
     }
