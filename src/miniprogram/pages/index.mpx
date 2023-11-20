@@ -5,7 +5,7 @@
     needScroll="{{false}}"
     clickLeft="{{clickLeft}}"
   >
-    <view class="container">
+    <view class="container"  wx:show="{{showPage}}">
       <view class="partyA">
         <view class="partyA-item first-item">免费发布</view>
         <view wx:for="{{renderPartyAList}}" wx:key="*this" class="partyA-item" bind:tap="jump(item)">
@@ -25,6 +25,7 @@
       </view>
     </view>
   </custom-container>
+  <van-dialog id="van-dialog" />
 </template>
 
 <script>
@@ -43,6 +44,7 @@ createPage({
     tabActive: 0,
     list,
     updateList: false,
+    showPage: false,
     clickLeft() {
       mpx.navigateTo({
         url: ParsonCenter
@@ -100,14 +102,21 @@ createPage({
       return this.list.map(item => item[1])
     }
   },
-  onLoad() {
-    this.setLocation()
+  async onLoad() {
+    await this.setLocation()
   },
   onShow() {
     this.setNavBarStyle({
       showDropdown: false,
       clickDropdown: null
     })
+    const { fromOrigin } = config[this.categoryTypeId]
+    fromOrigin && this.setState({ fromOrigin })
+    this.updateList = !this.updateList
+    this.showPage = true
+  },
+  onHide() {
+    this.showPage = false
   },
   methods: {
     ...store.mapMutations(['setNavBarStyle', 'setState']),

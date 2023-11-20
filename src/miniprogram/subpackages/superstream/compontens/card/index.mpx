@@ -285,16 +285,16 @@ createComponent({
           align-items center
           width 100%
           &-item
-            padding 2rpx 8rpx
+            padding 0 8rpx
             background #ffffff
             border-radius 8rpx
             box-shadow 0px 4px 20px 0px rgba(0,0,0,0.1)
             margin-right 16rpx
-            font-size 28rpx
+            font-size 24rpx
             color #1989fa
             border 2rpx solid #1989fa
           .timeText
-            font-size 28rpx
+            font-size 24rpx
   &_ope
     display flex
     justify-content flex-end

@@ -20,10 +20,11 @@ const getAddressAndDistance = (item, text = '位置:') => {
 const actions = {
   bossWorker: (item, filterKeys) => {
     const content = []
-    let categoryValue = `${item.categoryName}${item.categorySub ? `(${item.categorySub})` : ''}-${item.categoryNum}人-${item.categoryTypeName}`
+    let categoryName = item.categoryName
     if (filterKeys.includes('category')) {
-      categoryValue = `{${categoryValue}}`
+      categoryName = `{${categoryName}}`
     }
+    let categoryValue = `${categoryName}${item.categorySub ? `(${item.categorySub})` : ''}-${item.categoryNum}人-${item.categoryTypeName}`
     content.push({
       type: 'map',
       text: '急招:',
@@ -57,24 +58,25 @@ const actions = {
       })
     }
     let factoryScaleValue = `${item.factoryScaleName}`
+    if (filterKeys.includes('factoryScale')) {
+      factoryScaleValue = `{${factoryScaleValue}}`
+    }
     if (item.factoryScale === 'e1') {
       item.people && (factoryScaleValue += `-${item.people}人以上`)
     } else if (item.factoryScale === 'e2') {
       item.people && (factoryScaleValue += `-${item.people}人左右`)
     }
     factoryScaleValue += `-${item.cooperTypeName}`
-    if (filterKeys.includes('factoryScale')) {
-      factoryScaleValue = `{${factoryScaleValue}}`
-    }
     content.push({
       type: 'map',
       text: '规模要求:',
       value: factoryScaleValue
     })
-    let numText = `${item.num}件左右-${item.productTypeName}`
+    let productTypeName = item.productTypeName
     if (filterKeys.includes('productType')) {
-      numText = `{${numText}}`
+      productTypeName = `{${productTypeName}}`
     }
+    let numText = `${item.num}件左右-${productTypeName}`
     content.push({
       type: 'map',
       text: '加工数量:',
@@ -82,24 +84,40 @@ const actions = {
     })
     return content
   },
-  leaseTransfer: item => {
+  leaseTransfer: (item, filterKeys) => {
     const content = []
+    let { categoryName, floor, area } = item
+    if (filterKeys.includes('category')) {
+      categoryName = `{${categoryName}}`
+    }
+    if (filterKeys.includes('floor')) {
+      floor = `{${floor}}`
+    }
+    if (filterKeys.includes('area')) {
+      area = `{${area}}`
+    }
     content.push({
       type: 'map',
       text: '类别:',
-      value: `${item.categoryName}${item.useName ? `(${item.useName})` : ''}-{${item.floor}楼}-{${item.area}平}`
+      value: `${categoryName}${item.useName ? `(${item.useName})` : ''}-${floor}楼-${area}平`
     })
     content.push({
       type: 'map',
       text: '租金:',
-      value: `${item.price}${item.priceUnitName}}`
+      value: `${item.price}${item.priceUnitName}`
     })
     return content
   },
-  usedDetect: item => {
+  usedDetect: (item, filterKeys) => {
     const content = []
-    // content.push(getAddressAndDistance(item))
-    let categoryValue = `{${item.categoryName}${item.categorySub ? `(${item.categorySub})` : ''}}`
+    let { categoryName, price } = item
+    if (filterKeys.includes('category')) {
+      categoryName = `{${categoryName}}`
+    }
+    if (filterKeys.includes('price')) {
+      price = `{${price}}`
+    }
+    let categoryValue = `${categoryName}${item.categorySub ? `(${item.categorySub})` : ''}`
     content.push({
       type: 'map',
       text: '名称:',
@@ -108,22 +126,20 @@ const actions = {
     item.price && content.push({
       type: 'map',
       text: '价格:',
-      value: `{${item.price}元}`
-    })
-    item.note && content.push({
-      type: 'map',
-      text: '概述:',
-      value: item.note
+      value: `${price}元`
     })
     return content
   },
-  tailings: item => {
+  tailings: (item, filterKeys) => {
     const content = []
-    // content.push(getAddressAndDistance(item))
+    let { categoryName } = item
+    if (filterKeys.includes('category')) {
+      categoryName = `{${categoryName}}`
+    }
     content.push({
       type: 'map',
       text: '类别:',
-      value: `${item.categoryName}${item.categorySub ? `(${item.categorySub})` : ''}`
+      value: `${categoryName}${item.categorySub ? `(${item.categorySub})` : ''}`
     })
     if (item.times?.length) {
       const [start, end] = item.times
@@ -138,13 +154,9 @@ const actions = {
       text && content.push({
         type: 'map',
         text: '联系点:',
-        value: `{${text}}`
+        value: `${text}`
       })
     }
-    item.note && content.push({
-      title: '补充:',
-      value: item.note
-    })
     return content
   }
 }

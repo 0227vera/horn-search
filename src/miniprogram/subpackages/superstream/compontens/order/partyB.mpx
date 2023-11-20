@@ -252,6 +252,14 @@ createComponent({
       const params = {
         status: ['in', ['2', '3']]
       }
+      console.log('=======>', this.adInfo?.location)
+      if (this.adInfo?.location) {
+        Object.assign(params, {
+          location: {
+            ...this.adInfo?.location
+          }
+        })
+      }
       Object.keys(this.filter).forEach(item => {
         const value = this.filter[item]
         if (item === 'area' && value?.length) {
@@ -308,21 +316,11 @@ createComponent({
       this.renderFilterList = JSON.parse(JSON.stringify(val))
     },
     updateList() {
-      this.list = []
-      this.filter = {}
-      this.renderFilterList = JSON.parse(JSON.stringify(this.filterList))
-      this.loading = true
-      this.page = JSON.parse(JSON.stringify(pageInfo))
-      this.getList()
+      this.refreshList()
     },
     adInfo: {
       handler(val) {
-        if (val?.location?.lat) {
-          this.list.forEach(item => {
-            item.distance = getDistance(val.location.lat, val.location.lng, item.poi.location.lat, item.poi.location.lng).toFixed(1)
-          })
-          this.list = this.list.sort((a, b) => a.distance - b.distance)
-        }
+        this.refreshList()
       },
       immediate: true
     }
@@ -333,6 +331,14 @@ createComponent({
   },
   methods: {
     ...store.mapMutations(['setState']),
+    refreshList() {
+      this.list = []
+      this.filter = {}
+      this.renderFilterList = JSON.parse(JSON.stringify(this.filterList))
+      this.loading = true
+      this.page = JSON.parse(JSON.stringify(pageInfo))
+      this.getList()
+    },
     async getList() {
       this.moreLoad.loading = true
       const res = await getReleaseList(this.listParams)
