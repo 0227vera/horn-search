@@ -13,7 +13,13 @@
         </view>
       </view>
       <view class="partyB">
-        <van-tabs ellipsis="{{false}}" active="{{ tabActive }}" bind:change="onTabChange">
+        <van-tabs
+          ellipsis="{{false}}"
+          tab-active-class="tabClassActive"
+          tab-class="tabClass"
+          active="{{ tabActive }}"
+          bind:change="onTabChange"
+        >
           <van-tab wx:key="*this" wx:for="{{renderPartyBList}}" title="{{item.text}}"></van-tab>
         </van-tabs>
       </view>
@@ -132,13 +138,24 @@ createPage({
   }
 })
 </script>
+<style scoped>
+.van-tabs__line{
+  background-color: #1989fa !important;
+}
+</style>
 
 <style lang="stylus" scoped>
 @import "@/assets/base.styl"
+.tabClass
+  font-weight bold !important
+.tabClassActive
+  font-size 34rpx !important
+  color #1989fa !important
 .container
   width 100%
   height 100%
   overflow hidden
+  border-top 4rpx solid #ebedf0
   flex-column()
   .partyA
     padding 0 16rpx

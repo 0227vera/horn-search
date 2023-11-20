@@ -252,7 +252,6 @@ createComponent({
       const params = {
         status: ['in', ['2', '3']]
       }
-      console.log('=======>', this.adInfo?.location)
       if (this.adInfo?.location) {
         Object.assign(params, {
           location: {
@@ -316,6 +315,9 @@ createComponent({
       this.renderFilterList = JSON.parse(JSON.stringify(val))
     },
     updateList() {
+      if (this.moreLoad.loading || this.loading) {
+        return
+      }
       this.refreshList()
     },
     adInfo: {
@@ -432,14 +434,17 @@ createComponent({
       const { currentTarget } = e
       const { dataset } = currentTarget
       const { name, id } = dataset
+      console.log(e, id, this.renderFilterList)
       this.renderFilterList.forEach(item => {
         if (item.id === id) {
           item.value = name
+          item.activeList = item.list.filter(f => item.value.includes(f.value))
           item.cacheText = item.list.find(f => f.value === name).name
         }
       })
     },
     onRadioChange(e) {
+      console.log('onRadioChange', e)
       const { detail, target } = e
       this.renderFilterList.forEach(item => {
         if (item.id === target.id) {
@@ -570,6 +575,10 @@ createComponent({
 </script>
 <style>
 
+.dropdown{
+  font-size: 28rpx;
+  margin-top: -10rpx;
+}
 .van-empty__description{
   color: #000000;
   font-size: 28rpx;
@@ -622,7 +631,7 @@ createComponent({
   font-size 28rpx
 .loading
   width 100%
-  height 70vh
+  height 50vh
   flex-center()
   flex-column()
   .text

@@ -39,7 +39,7 @@
             style="margin-left: 8rpx"
             wx:for-item="b"
             round
-            wx:key="id"
+            wx:key="*this"
             type="{{b.type || 'default'}}"
             catchtap="clickBtn(item, b)"
             icon="{{b.icon || ''}}"
@@ -144,12 +144,12 @@ createComponent({
         if (this.isBoss) {
           if (item.calllist?.length) {
             tags.push({
-              text: `已被{${item.calllist.length}人呼叫过}`
+              text: `{${item.calllist.length}人呼叫}`
             })
           }
           if (item.readlist?.length) {
             tags.push({
-              text: `已有{${item.readlist.length}人阅读}`
+              text: `{${item.readlist.length}人阅读}`
             })
           }
         } else if (this.isWorker) {
@@ -216,7 +216,8 @@ createComponent({
 
 <style lang="stylus">
 .btn-custom{
-  font-weight: bolder;
+  font-weight: bold;
+  font-size: 24rpx;
 }
 </style>
 <style lang="stylus" scoped>
