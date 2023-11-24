@@ -50,27 +50,27 @@ const actions = {
   },
   factoryCooper: (item, filterKeys) => {
     const content = []
-    if (item.cooperType !== 'a3') {
-      content.push({
-        type: 'map',
-        text: '地域要求:',
-        value: filterKeys.includes('area') ? `{${item.area}}` : `${item.area}`
-      })
-    }
-    let factoryScaleValue = `${item.factoryScaleName}`
-    if (filterKeys.includes('factoryScale')) {
-      factoryScaleValue = `{${factoryScaleValue}}`
-    }
+    // let factoryScaleValue = `${item.factoryScaleName}`
+    // if (filterKeys.includes('factoryScale')) {
+    //   factoryScaleValue = `{${factoryScaleValue}}`
+    // }
+    // if (item.factoryScale === 'e1') {
+    //   item.people && (factoryScaleValue += `-${item.people}人以上`)
+    // } else if (item.factoryScale === 'e2') {
+    //   item.people && (factoryScaleValue += `-${item.people}人左右`)
+    // }
+    // factoryScaleValue += `-${item.cooperTypeName}`
+    let cooperTypeName = item.cooperTypeName
+    cooperTypeName += `-${item.factoryScaleName}`
     if (item.factoryScale === 'e1') {
-      item.people && (factoryScaleValue += `-${item.people}人以上`)
+      item.people && (cooperTypeName += `-${item.people}人以上`)
     } else if (item.factoryScale === 'e2') {
-      item.people && (factoryScaleValue += `-${item.people}人左右`)
+      item.people && (cooperTypeName += `-${item.people}人左右`)
     }
-    factoryScaleValue += `-${item.cooperTypeName}`
     content.push({
       type: 'map',
-      text: '规模要求:',
-      value: factoryScaleValue
+      text: '合作方式:',
+      value: cooperTypeName
     })
     let productTypeName = item.productTypeName
     if (filterKeys.includes('productType')) {
@@ -82,6 +82,13 @@ const actions = {
       text: '加工数量:',
       value: numText
     })
+    if (item.cooperType !== 'a3') {
+      content.push({
+        type: 'map',
+        text: '地域要求:',
+        value: filterKeys.includes('area') ? `{${item.area}}` : `${item.area}`
+      })
+    }
     return content
   },
   leaseTransfer: (item, filterKeys) => {
@@ -110,7 +117,7 @@ const actions = {
   },
   usedDetect: (item, filterKeys) => {
     const content = []
-    let { categoryName, price } = item
+    let { categoryName, price, num, unit } = item
     if (filterKeys.includes('category')) {
       categoryName = `{${categoryName}}`
     }
@@ -123,11 +130,17 @@ const actions = {
       text: '名称:',
       value: categoryValue
     })
-    item.price && content.push({
+    num && content.push({
+      type: 'map',
+      text: '数量',
+      value: `${num}${unit}`
+    })
+    content.push({
       type: 'map',
       text: '价格:',
-      value: `${price}元`
+      value: price ? `${price}元` : '面议'
     })
+
     return content
   },
   tailings: (item, filterKeys) => {
@@ -151,10 +164,10 @@ const actions = {
       } else if (end) {
         text = `${end}以前`
       }
-      text && content.push({
+      content.push({
         type: 'map',
-        text: '联系点:',
-        value: `${text}`
+        text: '联系时间:',
+        value: text || '全天'
       })
     }
     return content

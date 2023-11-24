@@ -48,7 +48,7 @@ createApp({
   eventBus: new EventBus(),
   onShareAppMessage() {
     return {
-      path: '/pages/home'
+      path: '/pages/index'
     }
   }
 })

@@ -607,6 +607,7 @@ createComponent({
   overflow hidden
   flex-column()
   height 100%
+  margin-top 16rpx
 .notice
   padding 16rpx 32rpx
   &-title
@@ -650,9 +651,9 @@ createComponent({
   line-height 70rpx
   border-bottom 2rpx solid #ebedf0
 .list
+  display none
   &-scroll
     background #ffffff
-    margin-bottom 16rpx
     height 44px
     overflow hidden
   &-filter

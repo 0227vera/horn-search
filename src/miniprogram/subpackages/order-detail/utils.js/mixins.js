@@ -73,7 +73,7 @@ const mixin = {
           mpx.navigateBack()
         } else {
           mpx.reLaunch({
-            url: `/pages/home`
+            url: `/pages/index`
           })
         }
       }

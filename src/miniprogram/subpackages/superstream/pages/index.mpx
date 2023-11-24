@@ -36,7 +36,7 @@ const store = getApp().globalStore
 createPage({
   onShareAppMessage() {
     return {
-      path: '/pages/home'
+      path: '/pages/index'
     }
   },
   data: {

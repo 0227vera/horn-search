@@ -49,7 +49,7 @@ createPage({
         id: 'baohome',
         click: () => {
           mpx.reLaunch({
-            url: '/pages/home'
+            url: '/pages/index'
           })
         }
       }, {

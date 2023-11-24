@@ -30,7 +30,7 @@ createComponent({
       const {
         category, categoryName, categorySub, categoryType, categoryTypeName, categoryNum, priceMin, priceMax, price, priceUnitName, num, numMin, numMax, origin, poi, tel, images, note, add, calllist, company,
         factoryScaleName, factoryScale, people, area, cooperType, cooperTypeName, fabricPropName, productTypeName, orderTypeName, color, code,
-        device, floor, peopleMin, peopleMax, times, useName
+        device, floor, peopleMin, peopleMax, times, useName, unit
       } = this.orderData
       const list = [{
         title: '位置',
@@ -190,10 +190,14 @@ createComponent({
           title: '设备名称',
           value: `${categoryName}${categorySub ? `(${categorySub})` : ''}`
         })
-        if (price) {
+        list.push({
+          title: '价格',
+          value: price ? `${price}元` : '面议'
+        })
+        if (num) {
           list.push({
-            title: '价格',
-            value: `${price}元`
+            title: '数量',
+            value: `${num}${unit}`
           })
         }
         if (note) {
