@@ -83,8 +83,9 @@ createPage({
     },
     extraList() {
       return [{
-        text: '主动求职',
+        text: '我要主动求职',
         id: 'gotoUserInfo',
+        sort: 7,
         action: {
           icon: 'arrow',
           name: '去发布',
@@ -92,8 +93,9 @@ createPage({
           link: '/person-center/pages/person-info'
         }
       }, {
-        text: '诚寻客户',
+        text: '我要诚寻客户',
         id: 'gotoCompanyInfo',
+        sort: 4,
         action: {
           icon: 'arrow',
           id: 'gotoCompanyInfo',
@@ -104,7 +106,7 @@ createPage({
       }]
     },
     renderPartyAList() {
-      return this.list.map(item => item[0]).concat(this.extraList)
+      return this.list.map(item => item[0]).concat(this.extraList).sort((a, b) => a.sort - b.sort)
     },
     renderPartyBList() {
       return this.list.map(item => item[1])
@@ -177,18 +179,26 @@ createPage({
       margin-top 8rpx
       margin-bottom 8rpx
       color #000000
-      font-size 28rpx
+      font-size 26rpx
       font-weight bold
       &.first-item
-        color #000000
+        color $color-red
         background none
-        font-size 36rpx
+        font-size 32rpx
+        // animation scaleAni 1s infinite
   .partyB
     margin-top 16rpx
   .list
     border-top $border
     flex 1
     overflow hidden
+@-webkit-keyframes scaleAni
+  0%
+    transform scale(1)
+  50%
+    transform scale(1.1)
+  100%
+    transform scale(1)
 </style>
 
 <script name="json">
