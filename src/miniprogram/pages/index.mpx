@@ -122,7 +122,6 @@ createPage({
     })
     const { fromOrigin } = config[this.categoryTypeId]
     fromOrigin && this.setState({ fromOrigin })
-    this.updateList = !this.updateList
     this.showPage = true
   },
   onHide() {
@@ -146,14 +145,23 @@ createPage({
 .van-tabs__line{
   background-color: #79b3f4 !important;
 }
+.van-tabs__scroll--line {
+  height: 88rpx !important;
+}
+.van-tabs--line{
+  height: 88rpx !important;
+}
 </style>
 
 <style lang="stylus" scoped>
 @import "@/assets/base.styl"
 .tabClass
   font-weight bold !important
+  font-size 26rpx !important
+  height 88rpx !important
+  line-height 88rpx !important
 .tabClassActive
-  font-size 34rpx !important
+  font-size 32rpx !important
   color #79b3f4 !important
 .container
   width 100%

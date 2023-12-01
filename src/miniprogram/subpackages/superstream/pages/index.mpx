@@ -3,7 +3,7 @@
     title="{{title}}"
     clickLeft="{{clickLeft}}"
   >
-    <view class="{{roleType === 'partyA' && currentCom === footerList[0].key ? 'component-container' : ''}}">
+    <view class="{{roleType === 'partyA' && currentCom === footerList[0].key ? 'component-container' : ''}} {{isIphoneX ? 'isIphoneX': ''}}">
       <component
         is="{{currentCom}}"
         range="bossWorker,factoryCooper,leaseTransfer,usedDetect,tailings,order,company-list"
@@ -83,7 +83,7 @@ createPage({
     })
   },
   computed: {
-    ...store.mapState(['showBottomNav', 'cacheForm', 'navBarStyle']),
+    ...store.mapState(['showBottomNav', 'cacheForm', 'navBarStyle', 'isIphoneX']),
     top() {
       return this.navBarStyle.height + this.navBarStyle.top + this.navBarStyle.paddingBottom
     },
@@ -221,7 +221,9 @@ createPage({
   width 100%
   height 100%
   overflow hidden
-  padding-bottom 150rpx
+  padding-bottom 50px
+  &.isIphoneX
+    padding-bottom 84px
 </style>
 <script type="application/json">
   {
