@@ -158,7 +158,6 @@ async function count(collectionName, where) {
     if (newWhere && newWhere.and && newWhere.and.location) {
       delete newWhere.and.location
     }
-    console.log('location======>', where, newWhere)
     query = await query.where(fmtWhere(newWhere))
   }
   query = await query.count()

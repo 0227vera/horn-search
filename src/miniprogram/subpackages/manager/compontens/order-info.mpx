@@ -1,0 +1,21 @@
+<template>
+  <view>
+    平台信息：
+    任何一天有哪些订单
+  </view>
+</template>
+
+<script setup lang="ts">
+import mpx from '@mpxjs/core'
+defineExpose({})
+</script>
+
+<style lang="stylus" scoped>
+
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {}
+  }
+</script>

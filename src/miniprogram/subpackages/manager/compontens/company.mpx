@@ -45,47 +45,52 @@
   </view>
 </template>
 
-<script>
-import mpx, { createComponent } from '@mpxjs/core'
+<script setup lang="ts">
+import mpx, { reactive, onMounted } from '@mpxjs/core'
 import { getComPanyInfo, updateComPanyInfo } from '@/api'
-import Dialog from '@vant/weapp/dialog/dialog'
-
-createComponent({
-  data: {
-    submitObj: {
-      text: '',
-      wechat: '',
-      email: '',
-      phone: ''
-    }
-  },
-  async ready() {
-    const res = await getComPanyInfo()
-    Object.keys(this.submitObj).forEach(item => {
-      this.submitObj[item] = res?.data?.[item]
-    })
-  },
-  methods: {
-    onChange(e) {
-      this.submitObj[e.target.id] = e.detail
-    },
-    async submitData() {
-      const res = await updateComPanyInfo(this.submitObj)
-      mpx.showToast({
-        title: res.code === 200 ? '更新成功' : '更新失败，请联系开发者',
-        icon: res.code === 200 ? 'success' : 'error',
-        mask: true
-      })
-    }
-  }
+interface SubmitObj {
+  text: string
+  wechat: string
+  email: string
+  phone: string
+}
+const submitObj = reactive<SubmitObj>({
+  text: '',
+  wechat: '',
+  email: '',
+  phone: ''
 })
-
+onMounted(async() => {
+  const res = await getComPanyInfo()
+  Object.keys(submitObj).forEach(item => {
+    submitObj[item] = res?.data?.[item]
+  })
+})
+const onChange = e => {
+  submitObj[e.target.id] = e.detail
+}
+const submitData = async() => {
+  mpx.showLoading({
+    title: '更改中……',
+    mask: true
+  })
+  const res = await updateComPanyInfo(submitObj)
+  mpx.showToast({
+    title: res.code === 200 ? '更新成功' : '更新失败，请联系开发者',
+    icon: res.code === 200 ? 'success' : 'error',
+    mask: true
+  })
+}
+defineExpose({
+  submitObj,
+  submitData,
+  onChange
+})
 </script>
 
 <style lang="stylus">
 .submit
   padding 32rpx
-
   margin-top 64rpx
 </style>
 
