@@ -31,42 +31,17 @@
     </view>
   </view>
 </custom-container>
-<van-dialog id="van-dialog" />
-<van-dialog
-  use-slot
-  title="工厂/公司名修改"
-  show="{{ show }}"
-  show-cancel-button
-  bind:close="onClose"
-  bind:confirm="onConfirm"
->
-  <view class="company-container">
-    <van-field
-      size="large"
-      value="{{ cacheCompany }}"
-      label="工厂/公司名"
-      type="textarea"
-      autosize
-      placeholder="请输入工厂/公司名"
-      border="{{ false }}"
-      bind:change="onCompanyChange"
-    />
-  </view>
-</van-dialog>
 </template>
 
 <script>
 import mpx, { createPage } from '@mpxjs/core'
 import { isAdmin, updateUserInfo } from '@/api'
-import Dialog from '@vant/weapp/dialog/dialog'
 import jumpAction from '@/utils/jump'
 import store from '@/store'
 
 createPage({
   data: {
-    showManagerEntry: false,
-    show: false,
-    cacheCompany: ''
+    showManagerEntry: false
   },
   computed: {
     ...store.mapState(['company', 'homeset']),
@@ -140,37 +115,35 @@ createPage({
         this.showManagerEntry = true
       }
     },
-    itemtaphandle(item) {
+    async itemtaphandle(item) {
       if (item.jumptype === 'company') {
-        this.cacheCompany = this.company
-        this.show = true
+        const res = await mpx.showModal({
+          title: '工厂/公司名修改',
+          content: this.company,
+          editable: true,
+          placeholderText: '请输入工厂/公司名'
+        })
+        if (res.confirm) {
+          mpx.showLoading({ title: '更新中……' })
+          const inter = await updateUserInfo({
+            company: res.content
+          })
+          if (inter.code === 200) {
+            this.setState({
+              company: res.content
+            })
+            mpx.showToast({
+              title: '更新成功！'
+            })
+          } else {
+            mpx.showToast({
+              title: res.msg,
+              icon: 'none'
+            })
+          }
+        }
       } else {
         jumpAction(item)
-      }
-    },
-    onClose() {
-      this.show = false
-    },
-    onCompanyChange(e) {
-      this.cacheCompany = e.detail
-    },
-    async onConfirm() {
-      mpx.showLoading({ title: '更新中……' })
-      const res = await updateUserInfo({
-        company: this.cacheCompany
-      })
-      if (res.code === 200) {
-        this.setState({
-          company: this.cacheCompany
-        })
-        mpx.showToast({
-          title: '更新成功！'
-        })
-      } else {
-        mpx.showToast({
-          title: res.msg,
-          icon: 'none'
-        })
       }
     }
   }

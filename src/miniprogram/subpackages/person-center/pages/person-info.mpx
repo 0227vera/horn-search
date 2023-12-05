@@ -139,18 +139,6 @@
   bind:confirm="onConfirmHandle"
 />
 <toast wx:ref="toast" text="{{toastText}}" />
-<van-dialog
-  title="提示"
-  use-slot
-  show-cancel-button
-  show="{{ dialogShow }}"
-  bind:confirm="dialogConfirm"
-  bind:close="onClose"
->
-  <view class="dialog-container">
-    <mutil-style-text text="{{noticeText}}" rules="{{noticeRules}}" />
-  </view>
-</van-dialog>
 </template>
 
 <script>
@@ -165,7 +153,6 @@ import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?r
 createPage({
   data: {
     showPopup: false,
-    dialogShow: false,
     noticeText: '如需更改工厂信息，请先关闭推送状态，{完成后再开启}，确认关闭？',
     popupType: '',
     initTime: '',
@@ -340,14 +327,22 @@ createPage({
       actions?.[type]?.()
       this.closePopupContainer()
     },
-    gotoChangeStatus() {
+    async gotoChangeStatus() {
       if (this.pageCanEdit) {
         return
       }
-      this.dialogShow = true
-    },
-    onClose() {
-      this.dialogShow = false
+      const res = mpx.showModal({
+        title: '提示',
+        content: '如需更改工厂信息，请先关闭推送状态，完成后再开启，确认关闭？'
+      })
+      if (res.confrim) {
+        this.setState({
+          biographical: {
+            ...this.biographical,
+            status: 'off'
+          }
+        })
+      }
     },
     async onSwitchChange() {
       const biographical = JSON.parse(JSON.stringify(this.biographical))
@@ -372,14 +367,6 @@ createPage({
       } else {
         this.setState({ biographical })
       }
-    },
-    dialogConfirm() {
-      this.setState({
-        biographical: {
-          ...this.biographical,
-          status: 'off'
-        }
-      })
     },
     onFieldChange(e) {
       this.setState({

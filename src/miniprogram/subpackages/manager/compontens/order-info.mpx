@@ -1,21 +1,182 @@
 <template>
-  <view>
-    平台信息：
-    任何一天有哪些订单
-  </view>
+  <picker mode="date" value="{{date}}" bindchange="bindDateChange">
+    <view class="filterTime">
+      默认查看前三天数据，点击可筛选数据
+    </view>
+  </picker>
+
+  <item-container wx:for="{{layoutData}}" wx:key="*this" title="{{item.title}}">
+    <view class="release">
+      <view class="release-nav">
+        <van-sidebar active-key="{{ item.active }}" id="{{index}}" bind:change="onChange">
+          <van-sidebar-item
+            wx:for="{{item.leftNav}}"
+            wx:key="*this"
+            wx:for-item="content"
+            title="{{content.title}}"
+            badge="{{content.total}}"
+          />
+        </van-sidebar>
+      </view>
+      <view class="release-content">
+        <view wx:for="{{item.activeList}}" wx:key="_id" class="release-content-item">
+          <view>
+            {{index + 1}}.
+            {{item.time}}
+          </view>
+          <view>
+            {{item.showName}}
+          </view>
+        </view>
+      </view>
+    </view>
+  </item-container>
 </template>
 
 <script setup lang="ts">
-import mpx from '@mpxjs/core'
-defineExpose({})
+import mpx, { onMounted, ref } from '@mpxjs/core'
+import { getReleaseList } from '@/api'
+import dayjs from 'dayjs'
+const currentStamps = Date.now()
+const oneDayBefore = currentStamps - 24 * 60 * 60 * 1000
+const twoDayBefore = currentStamps - 2 * 24 * 60 * 60 * 1000
+const thereDayBefore = currentStamps - 3 * 24 * 60 * 60 * 1000
+const beforeThrerDay = [{
+  title: '一天前',
+  start: oneDayBefore,
+  end: currentStamps
+},
+{
+  title: '两天前',
+  start: twoDayBefore,
+  end: twoDayBefore
+},
+{
+  title: '三天前',
+  start: thereDayBefore,
+  end: oneDayBefore
+}]
+
+const fromOrigins = [
+  { id: 'bossWorker', title: '我要招工' },
+  { id: 'factoryCooper', title: '我找工厂' },
+  { id: 'leaseTransfer', title: '出租转让' },
+  { id: 'usedDetect', title: '二手设备' },
+  { id: 'tailings', title: '尾货处理' }
+]
+
+interface leftNatItem {
+  id: string
+  title: string
+}
+interface renderRight {
+  [key:string]: string
+}
+interface InfoItem<T> {
+  title: string
+  leftNav: Array<leftNatItem>
+  active: string
+  list: Array<T>
+  total: number
+  activeList: Array<renderRight>
+}
+interface tabItem {
+  list: Array<renderRight>,
+  total: number
+}
+
+const layoutData = ref<Array<InfoItem<tabItem>>>([])
+
+const originData = ref<any>([])
+
+onMounted(async () => {
+  const res = await Promise.all(beforeThrerDay.map(item => getAreaTimeData(item.start, item.end)))
+  layoutData.value = res.map((item: Array<tabItem>, index: number) => {
+    const resultItem = {} as InfoItem<tabItem>
+    resultItem.title = beforeThrerDay[index].title
+    resultItem.leftNav = fromOrigins.map((fr, fI) => ({
+      ...fr,
+      total: item[fI].total
+    }))
+    resultItem.active = 'bossWorker'
+    resultItem.activeList = item[0].list.map(re => {
+      re.showName = re.categoryName || re.cooperTypeName
+      re.time = dayjs(re.RELEASE_ADD_TIME).format('YYYY-MM-DD HH点')
+      return re
+    })
+    return resultItem
+  })
+  originData.value = res
+})
+
+const getAreaTimeData = (start: number, end: number) => {
+  return new Promise((resolve, reject) => {
+    Promise.all(fromOrigins.map(item => getReleaseList({
+      fromOrigin: item.id,
+      page: 1,
+      size: 100,
+      and: {
+        // RELEASE_ADD_TIME: ['between', [start, end]]
+      }
+    }))).then(res => {
+      resolve(res.map(item => item.data))
+    }).catch(err => reject(err))
+  })
+}
+
+const onChange = e => {
+  layoutData.value[e.target.id].activeList = originData.value[e.target.id][e.detail].list.map(re => {
+    re.showName = re.categoryName || re.cooperTypeName
+    re.time = dayjs(re.RELEASE_ADD_TIME).format('YYYY-MM-DD HH点')
+    return re
+  })
+}
+
+const time = ref<string>('')
+const date = ref<string>('2016-09-01')
+const bindDateChange = e => {
+  console.log(e)
+}
+defineExpose({
+  layoutData,
+  time,
+  date,
+  bindDateChange,
+  onChange
+})
 </script>
 
 <style lang="stylus" scoped>
-
+@import "@/assets/base.styl"
+.release
+  display flex
+  height 300px
+  &-nav
+    width 80px
+  &-content
+    flex 1
+    height 100%
+    padding 16rpx
+    overflow-x hidden
+    &-item
+      display flex
+      justify-content space-between
+      align-items center
+      padding 16rpx 0
+      border-bottom $border
+      font-size 24rpx
+      font-weight bold
 </style>
 
 <script type="application/json">
   {
-    "usingComponents": {}
+    "usingComponents": {
+      "van-sidebar": "@vant/weapp/sidebar/index",
+      "van-sidebar-item": "@vant/weapp/sidebar-item/index",
+      "item-container": "@/subpackages/order-detail/components/item-container.mpx?root=order-detail"
+    },
+    "componentPlaceholder": {
+      "item-container": "view"
+    }
   }
 </script>

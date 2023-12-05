@@ -109,8 +109,8 @@ defineExpose({
   flex-column()
   padding 32rpx
   .total
-    height 60rpx
-    line-height 60rpx
+    height 80rpx
+    line-height 80rpx
     background #ffffff
     border-radius 16rpx 16rpx 0 0
     padding 0 16rpx

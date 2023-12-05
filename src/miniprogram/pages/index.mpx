@@ -112,8 +112,8 @@ createPage({
       return this.list.map(item => item[1])
     }
   },
-  async onLoad() {
-    await this.setLocation()
+  onLoad() {
+    this.setLocation()
   },
   onShow() {
     this.setNavBarStyle({
@@ -123,6 +123,7 @@ createPage({
     const { fromOrigin } = config[this.categoryTypeId]
     fromOrigin && this.setState({ fromOrigin })
     this.showPage = true
+    this.setLocation()
   },
   onHide() {
     this.showPage = false

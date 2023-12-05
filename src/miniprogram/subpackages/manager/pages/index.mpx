@@ -20,7 +20,7 @@
         <component
           is="{{item.com}}"
           ref="com"
-          range="user-manager,company"
+          range="user-manager,company,order-info"
         />
       </van-tab>
     </van-tabs>
@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import mpx, { ref } from '@mpxjs/core'
-const active = ref<string>('user-manager')
+const active = ref<string>('order-info')
 const tabChange = e => {
   active.value = e.detail.name
 }
@@ -55,6 +55,7 @@ defineExpose({
   {
     "usingComponents": {
       "user-manager":"../compontens/user-manager",
+      "order-info":"../compontens/order-info",
       "company":"../compontens/company"
     },
     "navigationStyle": "custom",
