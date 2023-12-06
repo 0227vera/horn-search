@@ -1,10 +1,39 @@
 <template>
-  <picker mode="date" value="{{date}}" bindchange="bindDateChange">
-    <view class="filterTime">
-      默认查看前三天数据，点击可筛选数据
+<view class="container">
+  <view class="filter">
+    <view class="date-container">
+      <picker
+        mode="date"
+        value="{{dateArea.start}}"
+        id="start"
+        bindchange="bindDateChange"
+        end="{{dateArea.end}}"
+      >
+        <view>
+          {{dateArea.start || '开始日期'}}
+        </view>
+      </picker>
+      <view>~</view>
+      <picker
+        mode="date"
+        value="{{dateArea.end}}"
+        id="end"
+        bindchange="bindDateChange"
+        start="{{dateArea.start}}"
+      >
+        <view>
+          {{dateArea.end || '结束日期'}}
+        </view>
+      </picker>
     </view>
-  </picker>
-
+    <van-button
+      disabled="{{!dateArea.start || !dateArea.end}}"
+      size="mini"
+      type="primary"
+      round
+      bindtap="filterFunc"
+    >查看</van-button>
+  </view>
   <item-container wx:for="{{layoutData}}" wx:key="*this" title="{{item.title}}">
     <view class="release">
       <view class="release-nav">
@@ -14,7 +43,7 @@
             wx:key="*this"
             wx:for-item="content"
             title="{{content.title}}"
-            badge="{{content.total}}"
+            badge="{{content.total || ''}}"
           />
         </van-sidebar>
       </view>
@@ -31,10 +60,11 @@
       </view>
     </view>
   </item-container>
+</view>
 </template>
 
 <script setup lang="ts">
-import mpx, { onMounted, ref } from '@mpxjs/core'
+import mpx, { onMounted, reactive, ref } from '@mpxjs/core'
 import { getReleaseList } from '@/api'
 import dayjs from 'dayjs'
 const currentStamps = Date.now()
@@ -68,31 +98,44 @@ const fromOrigins = [
 interface leftNatItem {
   id: string
   title: string
+  total: number
 }
 interface renderRight {
   [key:string]: string
 }
-interface InfoItem<T> {
+interface InfoItem {
   title: string
   leftNav: Array<leftNatItem>
   active: string
-  list: Array<T>
-  total: number
   activeList: Array<renderRight>
 }
 interface tabItem {
-  list: Array<renderRight>,
+  list: Array<renderRight>
   total: number
 }
 
-const layoutData = ref<Array<InfoItem<tabItem>>>([])
+interface DateArea {
+  start: string
+  end: string
+}
+
+const layoutData = ref<Array<InfoItem>>([])
+const dateArea = reactive<DateArea>({
+  start: '',
+  end: ''
+})
+
+const cacheDate = reactive<DateArea>({
+  start: '',
+  end: ''
+})
 
 const originData = ref<any>([])
 
 onMounted(async () => {
   const res = await Promise.all(beforeThrerDay.map(item => getAreaTimeData(item.start, item.end)))
   layoutData.value = res.map((item: Array<tabItem>, index: number) => {
-    const resultItem = {} as InfoItem<tabItem>
+    const resultItem = {} as InfoItem
     resultItem.title = beforeThrerDay[index].title
     resultItem.leftNav = fromOrigins.map((fr, fI) => ({
       ...fr,
@@ -107,16 +150,22 @@ onMounted(async () => {
     return resultItem
   })
   originData.value = res
+  setTimeout(() => {
+    mpx.hideLoading()
+  }, 1000)
 })
 
 const getAreaTimeData = (start: number, end: number) => {
+  mpx.showLoading({
+    title: '加载中……'
+  })
   return new Promise((resolve, reject) => {
     Promise.all(fromOrigins.map(item => getReleaseList({
       fromOrigin: item.id,
       page: 1,
       size: 100,
       and: {
-        // RELEASE_ADD_TIME: ['between', [start, end]]
+        RELEASE_ADD_TIME: ['between', start, end]
       }
     }))).then(res => {
       resolve(res.map(item => item.data))
@@ -132,22 +181,63 @@ const onChange = e => {
   })
 }
 
-const time = ref<string>('')
-const date = ref<string>('2016-09-01')
 const bindDateChange = e => {
-  console.log(e)
+  dateArea[e.target.id] = e.detail?.value || e.detail
 }
+
+const filterFunc = async () => {
+  const res = await getAreaTimeData(dayjs(dateArea.start).valueOf(), dayjs(dateArea.end).valueOf()) as tabItem[]
+  originData.value.unshift(res)
+  const obj = {
+    title: `${dateArea.start}~${dateArea.end}`,
+    leftNav: fromOrigins.map((fr, fi) => ({
+      ...fr,
+      total: res[fi].total
+    })),
+    active: 'bossWorker',
+    activeList: res[0].list.map(re => {
+      re.showName = re.categoryName || re.cooperTypeName
+      re.time = dayjs(re.RELEASE_ADD_TIME).format('YYYY-MM-DD HH点')
+      return re
+    })
+  }
+  if (layoutData.value.length > 3) {
+    layoutData.value.shift()
+  }
+  layoutData.value.unshift(obj)
+  setTimeout(() => {
+    mpx.hideLoading()
+  }, 1000)
+}
+
 defineExpose({
   layoutData,
-  time,
-  date,
+  onChange,
+  dateArea,
   bindDateChange,
-  onChange
+  filterFunc
 })
 </script>
 
 <style lang="stylus" scoped>
 @import "@/assets/base.styl"
+.container
+  padding-bottom 100rpx
+.filter
+  display flex
+  justify-content space-between
+  align-items center
+  padding 16rpx
+  background #ffffff
+  margin 0 32rpx
+  border-radius 8rpx
+  margin-top 16rpx
+  .date-container
+    display flex
+    align-items center
+    justify-content space-around
+    flex 1
+    padding 0 16rpx
 .release
   display flex
   height 300px

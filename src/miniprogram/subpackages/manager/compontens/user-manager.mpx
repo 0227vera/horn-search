@@ -63,7 +63,11 @@ onMounted(() => {
 
 const getList = async () => {
   loadmore.loading = true
+  mpx.showLoading({
+    title: '加载中……'
+  })
   const res = await getUserList(page)
+  mpx.hideLoading()
   list.value = list.value.concat(res.data?.list || [])
   total.value = res.data.total
   loadmore.loading = false
@@ -108,6 +112,7 @@ defineExpose({
 .container
   flex-column()
   padding 32rpx
+  padding-bottom 100rpx
   .total
     height 80rpx
     line-height 80rpx

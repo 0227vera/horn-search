@@ -91,7 +91,6 @@ defineExpose({
 <style lang="stylus">
 .submit
   padding 32rpx
-  margin-top 64rpx
 </style>
 
 <script type="application/json">

@@ -7,6 +7,8 @@ declare module '@vant/weapp/dialog/dialog' {
 
 declare module '@/api'
 
+declare module 'dayjs'
+
 declare module '@/setting/common'
 
 declare module '@/wx-map-sdk/qqmap-wx-jssdk.min.js'
