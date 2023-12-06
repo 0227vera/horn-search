@@ -77,12 +77,12 @@ const beforeThrerDay = [{
   end: currentStamps
 },
 {
-  title: '两天前',
+  title: '两天前(不包含前一天)',
   start: twoDayBefore,
   end: twoDayBefore
 },
 {
-  title: '三天前',
+  title: '三天前(不包含前两天)',
   start: thereDayBefore,
   end: oneDayBefore
 }]
