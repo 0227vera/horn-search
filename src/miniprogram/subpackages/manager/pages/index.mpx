@@ -6,8 +6,8 @@
       swipeable
       animated
       sticky
-      ellipsis=false
-      swipe-threshold=4
+      ellipsis="false"
+      swipe-threshold="4"
       active="{{ active }}"
       bind:change="tabChange"
     >

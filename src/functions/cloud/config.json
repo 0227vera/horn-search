@@ -5,7 +5,8 @@
 			"security.imgSecCheck",
 			"security.msgSecCheck",
 			"serviceMarket.invokeService",
-			"subscribeMessage.send"
+			"subscribeMessage.send",
+			"phonenumber.getPhoneNumber"
 		]
 	}
 }

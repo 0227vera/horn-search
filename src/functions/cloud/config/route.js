@@ -31,6 +31,9 @@ module.exports = {
 
   // node: 固定配置
   'common/getconstant': 'constant_controlle@getOne',
+
+  // note: 获取电话
+  'common/getphone': 'constant_controlle@getPhone',
   // note: 管理员权限
   'admin/isadmin': 'admin/base_admin_controller@isAdmin',
 

@@ -2,6 +2,7 @@ import mpx, { createStore } from '@mpxjs/core'
 import MapSdk from '@/wx-map-sdk/qqmap-wx-jssdk.min.js'
 import Dialog from '@vant/weapp/dialog/dialog'
 import dayjs from 'dayjs'
+import steps from '../constant/steps'
 
 export function checkIpx () {
   const systemInfo = wx.getSystemInfoSync()
@@ -32,7 +33,7 @@ export default createStore({
     footerNavBar: [],
     usInfo: {},
     mapSdk: new MapSdk({
-      key: 'PECBZ-2K76U-PCTVV-2WL2B-V3YXE-PFBIR'
+      key: '7KUBZ-RTTWB-MY3UF-JFREG-DZJ52-5WB3B'
     }),
     adInfo: {},
     location: {
@@ -43,7 +44,7 @@ export default createStore({
     orderList: [],
     orderListReqLoading: true,
     categoryItems: {},
-    steps: [],
+    steps,
     addressList: [],
     fromOrigin: '',
     cacheForm: {},
@@ -136,12 +137,14 @@ export default createStore({
           success (res) {
             Dialog.close()
             const { longitude, latitude } = res
+            console.log('========>', res)
             commit('setState', {
               location: { longitude, latitude }
             })
             state.mapSdk.reverseGeocoder({
               location: `${latitude},${longitude}`,
               success (res) {
+                console.log(res)
                 const { result } = res || {}
                 commit('setState', {
                   location: {
@@ -151,6 +154,9 @@ export default createStore({
                   adInfo: result
                 })
                 resolve(res)
+              },
+              fail(err) {
+                console.log(err)
               }
             })
           },
