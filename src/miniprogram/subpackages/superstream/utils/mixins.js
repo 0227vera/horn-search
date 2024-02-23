@@ -18,7 +18,9 @@ export const mixins = {
     popupType: '',
     tmplIds: [ORDER_UPDATE],
     uploaderDisabled: false,
-    toastText: ''
+    toastText: '',
+    checkBoxList: [],
+    initCheckbox: undefined
   },
   computed: {
     ...store.mapState(['adInfo', 'fromOrigin', 'cacheForm', 'addressList', 'showBottomNav']),
@@ -137,7 +139,7 @@ export const mixins = {
         title: '提交中...',
         mask: true
       });
-      await this.$refs.serviceNotice?.showServiceNotice?.()
+      // await this.$refs.serviceNotice?.showServiceNotice?.()
       if (formatList.length) {
         this.updateObj = formatNumSubmitData({ obj: this.updateObj, formatList })
       }

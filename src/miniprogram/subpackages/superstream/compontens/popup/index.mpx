@@ -102,7 +102,7 @@
             <van-cell
               size="large"
               wx:for="{{ checkBoxList }}"
-              wx:key="*this"
+              wx:key="value"
               title="{{ item.name }}"
               value-class="value-class"
               clickable
@@ -254,7 +254,16 @@ createComponent({
       return radioShowList.includes(this.type) || this.needShowRadio
     },
     showCheckBox() {
-      const checkboxShowList = ['fabricProp', 'productType']
+      const checkboxShowList = [
+        'fabricProp',
+        'productType',
+        'note',
+        'category-copy',
+        'sincere',
+        'advantage',
+        'origin',
+        'add'
+      ]
       return checkboxShowList.includes(this.type) || this.needShowCheckbox
     }
   },

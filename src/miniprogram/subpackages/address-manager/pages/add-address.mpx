@@ -15,6 +15,7 @@
         input-align="right"
         required
       />
+      </van-field>
       <van-field size="large"
         label="电话"
         value="{{ addInfo.phone }}"
@@ -25,7 +26,9 @@
         id="phone"
         required
         input-align="right"
-      />
+      >
+        <van-button wx:if="{{!addInfo.phone}}" size="mini" round type="primary" slot="right-icon" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">快速获取</van-button>
+      </van-field>
       <van-field size="large"
         label="省市区"
         value="{{ addInfo.address.area }}"
@@ -93,7 +96,7 @@
 import mpx, { createPage } from '@mpxjs/core'
 import { areaList } from '@vant/area-data'
 import store from '@/store'
-import { updateUserInfo } from '@/api'
+import { updateUserInfo, getPhone } from '@/api'
 import guid from '@/utils'
 
 createPage({
@@ -144,6 +147,17 @@ createPage({
     onDetailChange(e) {
       this.addInfo.address.detail = e.detail
     },
+    // note: 获取昵称
+    onChooseAvatar(e) {
+      console.log(e)
+    },
+    // note: 获取电话
+    async getPhoneNumber(e) {
+      const res = await getPhone(e.detail)
+      const phone = res.data.phoneInfo.phoneNumber
+      this.addInfo.phone = phone
+      console.log(phone)
+    },
     // note: popup的处理
     closePopupContainer() {
       this.showPopup = false
@@ -165,6 +179,7 @@ createPage({
     // note: 详细地址
     openSearchDetail() {
       const _this = this
+      console.log(this.addInfo)
       wx.chooseLocation({
         latitude: this.addInfo.address.location.lat,
         longitude: this.addInfo.address.location.lng,
@@ -187,6 +202,9 @@ createPage({
               _this.addInfo.address.location = re.location
             }
           })
+        },
+        fail(err) {
+          console.log(err)
         }
       })
     },

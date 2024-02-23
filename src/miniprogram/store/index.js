@@ -31,7 +31,7 @@ export default createStore({
     footerNavBar: [],
     usInfo: {},
     mapSdk: new MapSdk({
-      key: 'PECBZ-2K76U-PCTVV-2WL2B-V3YXE-PFBIR'
+      key: '7KUBZ-RTTWB-MY3UF-JFREG-DZJ52-5WB3B'
     }),
     adInfo: {},
     location: {
@@ -134,12 +134,14 @@ export default createStore({
           type: 'gcj02',
           success (res) {
             const { longitude, latitude } = res
+            console.log('========>', res)
             commit('setState', {
               location: { longitude, latitude }
             })
             state.mapSdk.reverseGeocoder({
               location: `${latitude},${longitude}`,
               success (res) {
+                console.log(res)
                 const { result } = res || {}
                 commit('setState', {
                   location: {
@@ -149,6 +151,9 @@ export default createStore({
                   adInfo: result
                 })
                 resolve(res)
+              },
+              fail(err) {
+                console.log(err)
               }
             })
           },

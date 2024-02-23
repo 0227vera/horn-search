@@ -45,15 +45,15 @@
       label="擅长品类"
       title-width="160rpx"
       required
-      readonly="{{!pageCanEdit}}"
+      is-link
+      readonly
       value="{{companyInfo.category}}"
       autosize
       type="textarea"
       input-align="right"
       placeholder="例如针织外套小香风等"
       id="category"
-      bind:change="onFieldChange"
-        bind:tap="gotoChangeStatus"
+      bind:tap="showPopupContainer('category')"
     />
     <!-- 诚寻 -->
     <van-field
@@ -61,7 +61,7 @@
       label="诚寻"
       title-width="160rpx"
       required
-      readonly="{{!pageCanEdit}}"
+      readonly
       value="{{companyInfo.sincere}}"
       autosize
       type="textarea"
@@ -70,8 +70,8 @@
       error-message="客户长期合作"
       error-message-align="right"
       id="sincere"
-      bind:change="onFieldChange"
-      bind:tap="gotoChangeStatus"
+      is-link
+      bind:tap="showPopupContainer('sincere')"
     >
       <!-- <view slot="right-icon" style="color: #333; font-weight: bold;">客户长期合作</view> -->
     </van-field>
@@ -81,15 +81,15 @@
       label="本厂优势"
       title-width="160rpx"
       required
-      readonly="{{!pageCanEdit}}"
+      readonly
       value="{{companyInfo.advantage}}"
+      is-link
       autosize
       type="textarea"
       input-align="right"
       placeholder="包头包尾,保证质量,出货快捷!管理质检配备齐全"
       id="advantage"
-      bind:change="onFieldChange"
-      bind:tap="gotoChangeStatus"
+      bind:tap="showPopupContainer('advantage')"
     />
     <!-- 位置相关 -->
     <van-field
@@ -164,6 +164,7 @@
   show="{{showPopup}}"
   type="{{popupType}}"
   title="{{popupTitle}}"
+  checkBoxList="{{checkBoxList}}"
   bind:close="closePopupContainer"
   bind:confirm="onConfirmHandle"
 />
@@ -173,6 +174,7 @@
 <script>
 import mpx, { createPage } from '@mpxjs/core'
 import { updateUserInfo } from '@/api'
+import { companyInfoCategoryList, companyInfoSincereList, companyInfoAdvantageList } from '@/constant/config.js'
 import config from '@/constant/release.js'
 import store from '@/store'
 import dayjs from 'dayjs'
@@ -196,7 +198,8 @@ createPage({
       '{x}': {
         style: 'color: #ff525d;font-weight:bold;'
       }
-    }
+    },
+    checkBoxList: []
   },
   computed: {
     ...store.mapState(['addressList', 'adInfo', 'biographical', 'company', 'companyInfo']),
@@ -287,6 +290,14 @@ createPage({
         })
         return
       }
+      if (type === 'category') {
+        type = 'category-copy'
+        this.checkBoxList = companyInfoCategoryList
+      } else if (type === 'sincere') {
+        this.checkBoxList = companyInfoSincereList
+      } else if (type === 'advantage') {
+        this.checkBoxList = companyInfoAdvantageList
+      }
       this.popupType = type
       this.showPopup = true
     },
@@ -295,6 +306,7 @@ createPage({
     },
     onConfirmHandle({ detail = {} } = {}) {
       const { data, type } = detail
+      console.log(data, type)
       const actions = {
         address: () => {
           this.setState({
@@ -302,6 +314,30 @@ createPage({
               ...this.companyInfo,
               poi: data.poi,
               tel: data.tel
+            }
+          })
+        },
+        'category-copy': () => {
+          this.setState({
+            companyInfo: {
+              ...this.companyInfo,
+              category: data.selectedList.map(item => item.name).join('、')
+            }
+          })
+        },
+        sincere: () => {
+          this.setState({
+            companyInfo: {
+              ...this.companyInfo,
+              sincere: data.selectedList.map(item => item.name).join('、')
+            }
+          })
+        },
+        advantage: () => {
+          this.setState({
+            companyInfo: {
+              ...this.companyInfo,
+              advantage: data.selectedList.map(item => item.name).join('、')
             }
           })
         }
