@@ -202,10 +202,10 @@ export const validateUsed = ({ updateObj, subCategoryInfo } = {}) => {
     result.text = subCategoryInfo.placeholder
     return result
   }
-  if (!updateObj.images.length) {
-    result.text = '请上传图片信息'
-    return result
-  }
+  // if (!updateObj.images.length) {
+  //   result.text = '请上传图片信息'
+  //   return result
+  // }
   if (!updateObj.tel) {
     result.text = '请输入{手机号}'
     return result

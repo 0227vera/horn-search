@@ -228,6 +228,7 @@
     />
     <!-- 工厂名 -->
     <van-field
+      wx:if="{{false}}"
       size="large"
       label="工厂名"
       title-width="160rpx"

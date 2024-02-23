@@ -113,40 +113,43 @@
       bind:change="onFieldChange"
     />
     <!-- 图片 -->
-    <van-cell title="图片展示" size="large" title-width="160rpx" value="{{imagesValue}}" border="{{false}}" />
-    <view class="image-container">
-      <view class="iamge-content">
-        <van-uploader
-          bind:after-read="afterRead"
-          accept="media"
-          deletable
-          disabled="{{uploaderDisabled}}"
-        />
-        <view class="imgurl-container" wx:for="{{updateObj.images}}" wx:key="*this">
-          <van-image
-            bind:click="previewMedia(index)"
-            width="80"
-            height="80"
-            src="{{item}}"
-            radius="8"
-            fit="cover"
+    <block wx:if="{{false}}">
+      <van-cell title="图片展示" size="large" title-width="160rpx" value="{{imagesValue}}" border="{{false}}" />
+      <view class="image-container">
+        <view class="iamge-content">
+          <van-uploader
+            bind:after-read="afterRead"
+            accept="media"
+            deletable
+            disabled="{{uploaderDisabled}}"
           />
-          <van-icon name="clear" bindtap="clearImg(item)" class="image-clear-icon"/>
+          <view class="imgurl-container" wx:for="{{updateObj.images}}" wx:key="*this">
+            <van-image
+              bind:click="previewMedia(index)"
+              width="80"
+              height="80"
+              src="{{item}}"
+              radius="8"
+              fit="cover"
+            />
+            <van-icon name="clear" bindtap="clearImg(item)" class="image-clear-icon"/>
+          </view>
         </view>
       </view>
-    </view>
+    </block>
     <!-- 补充 -->
     <van-field size="large"
       label="补充"
       title-width="120rpx"
       value="{{ updateObj.add }}"
-      placeholder="可以在此输入需要补充的内容"
-      error-message="{{updateObj.add ? '' : '例如：有电梯、格局方正、采光好、带停车位等'}}"
-      input-align="left"
+      placeholder="请选择补充内容"
       type="textarea"
       autosize
       id="add"
-      bind:change="onFieldChange"
+      readonly
+      is-link
+      input-align="right"
+      bind:tap="showPopupContainer('add')"
     />
     <!-- 位置相关 -->
     <van-field size="large"
@@ -188,6 +191,8 @@
   title="{{popupTitle}}"
   bind:close="closePopupContainer"
   bind:confirm="onConfirmHandle"
+  checkBoxList="{{checkBoxList}}"
+  initCheckbox="{{initCheckbox}}"
 />
 <toast wx:ref="toast" text="{{toastText}}" />
 <service-notice wx:ref="serviceNotice" tmplIds="{{tmplIds}}" />
@@ -199,6 +204,7 @@ import { mixins } from '@/subpackages/superstream/utils/mixins.js'
 import { validateLease } from '@/subpackages/superstream/utils/validate.js'
 import { initLeaseObj, rentUnitList } from '@/subpackages/superstream/utils/constant.js'
 import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
+import { leaseTransferAddList } from '@/constant/config.js'
 const store = getApp().globalStore
 
 createComponent({
@@ -261,6 +267,10 @@ createComponent({
         this.radioList = this.useInfo.radioList
         this.initRadio = this.updateObj.useId
         this.popupTitle = '请选择房屋用途'
+      } else if (type === 'add') {
+        this.popupTitle = '请选择补充内容'
+        this.checkBoxList = leaseTransferAddList
+        this.initCheckbox = this.updateObj.addValue
       }
       this.showPopup = true
       this.popupType = type
@@ -308,6 +318,10 @@ createComponent({
         address: () => {
           this.updateObj.poi = data.poi
           this.updateObj.tel = data.tel
+        },
+        add: () => {
+          this.updateObj.add = data.selectedList.map(item => item.name).join('、')
+          this.updateObj.addValue = data.value
         }
       }
       actions?.[type]?.()

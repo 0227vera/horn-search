@@ -55,6 +55,28 @@ export const factoryCooperAddList = [{
   value: 'h5'
 }]
 
+export const leaseTransferAddList = [{
+  name: '有电梯',
+  value: 'i1'
+}, {
+  name: '格局方正',
+  value: 'i2'
+}, {
+  name: '采光好',
+  value: 'i3'
+}, {
+  name: '带停车位',
+  value: 'i4'
+}]
+
+export const tailingsAddList = [{
+  name: '数量多',
+  value: 'j1'
+}, {
+  name: '质量好',
+  value: 'j2'
+}]
+
 export const personInfoNoteList = [{
   name: '诚实可信',
   value: 'a1'
