@@ -37,6 +37,24 @@ export const bossWorkerAddList = [{
   name: '周末不加班',
   value: 'g6'
 }]
+
+export const factoryCooperAddList = [{
+  name: '十三行写字楼货源',
+  value: 'h1'
+}, {
+  name: '要求管理质检等人员齐全能马上开货',
+  value: 'h2'
+}, {
+  name: '看质量返单',
+  value: 'h3'
+}, {
+  name: '配合度高',
+  value: 'h4'
+}, {
+  name: '跑量为主',
+  value: 'h5'
+}]
+
 export const personInfoNoteList = [{
   name: '诚实可信',
   value: 'a1'

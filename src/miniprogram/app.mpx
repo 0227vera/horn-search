@@ -19,11 +19,9 @@ createApp({
     this.setState({
       appReady: false
     })
-    const [constant, userInfo] = await Promise.all([getCommonConfig(), getCurrentUser()])
-    const { steps, categoryItems } = constant.data
+    const userInfo = await getCurrentUser()
     const { address = [], OPENID, company, biographical, companyInfo, homeset = { id: '1', text: '展示左右两侧' } } = userInfo.data
     let obj = {
-      steps,
       appReady: true
     }
     address.length && Object.assign(obj, {
