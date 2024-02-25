@@ -139,6 +139,9 @@ page
     "permission": {
       "scope.userLocation": {
         "desc": "你的位置信息将用于小程序位置接口的效果展示"
+      },
+      "scope.userInfo": {
+        "desc": "授权头衔昵称，将更好的为您在对方展示相关信息"
       }
     }
   }

@@ -1,8 +1,12 @@
 <template>
 <custom-container
-  title="个人中心"
+  title="{{userInfo.nickName || '点击头像获取图片、昵称'}}"
   lefticon="wap-home"
 >
+  <view class="userInfo" bindtap="getUserProfile">
+    <image class="avatar" wx:if="{{userInfo.avatar}}" src="{{userInfo.avatar}}"></image>
+    <van-icon class="avatar" name="user" />
+  </view>
   <view class="navbar">
     <view class="navbar-content">
       <view wx:for="{{navbar}}" wx:key="*this" class="navbar-content-item" wx:if="{{!item.hide}}" bindtap="itemtaphandle(item)">
@@ -41,15 +45,19 @@ import store from '@/store'
 
 createPage({
   data: {
-    showManagerEntry: false
+    showManagerEntry: false,
+    defaultAvatar: ''
   },
   computed: {
-    ...store.mapState(['company', 'homeset']),
+    ...store.mapState(['company', 'homeset', 'userInfo']),
+    hasUserInfo() {
+      return false
+    },
     navbar() {
       return [
         {
           name: '主动求职',
-          icon: 'manager-o',
+          icon: 'gift-o',
           jumptype: 'mp',
           url: '/person-center/pages/person-info'
         },
@@ -145,6 +153,17 @@ createPage({
       } else {
         jumpAction(item)
       }
+    },
+    getUserProfile(e) {
+      wx.getUserProfile({
+        desc: '用于更好的为您在对方展示相关信息',
+        success(res) {
+          console.log(res)
+        },
+        fail(err) {
+          console.log('=======>', err)
+        }
+      })
     }
   }
 })
@@ -188,6 +207,20 @@ createPage({
     margin-bottom 16rpx
 .company-container
   min-height 100rpx
+.userInfo
+  display flex
+  align-items center
+  justify-content center
+  margin-bottom -40rpx
+  .avatar
+    width 120rpx
+    height 120rpx
+    background #ffffff
+    border-radius 60rpx
+    display flex
+    align-items center
+    justify-content center
+    font-size 60rpx
 </style>
 
 <script name="json">

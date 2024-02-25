@@ -74,6 +74,10 @@ export default createStore({
         end: ''
       }
     },
+    userInfo: {
+      nickName: '',
+      avatar: ''
+    },
     homeset: {}
   },
   getters: {
