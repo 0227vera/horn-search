@@ -11,7 +11,6 @@ export const fileUpload = filePath => {
       success(res) {
         const { fileID } = res
         const type = filePath.split('.').pop()
-        console.log(res, type)
         const params = {
           url: fileID,
           type
@@ -25,14 +24,14 @@ export const fileUpload = filePath => {
           } else {
             wx.showToast({
               icon: 'none',
-              title: res.msg || '图片检验未通过'
+              title: data.msg || '图片检验未通过'
             })
             reject(res.msg)
           }
         }).catch(error => {
           wx.showToast({
             icon: 'none',
-            title: res.msg || '图片检验未通过'
+            title: '图片检验未通过'
           })
           reject(error)
         }).finally(() => {

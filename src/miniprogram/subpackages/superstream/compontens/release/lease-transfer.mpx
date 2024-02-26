@@ -113,7 +113,7 @@
       bind:change="onFieldChange"
     />
     <!-- 图片 -->
-    <block wx:if="{{false}}">
+    <block wx:if="{{true}}">
       <van-cell title="图片展示" size="large" title-width="160rpx" value="{{imagesValue}}" border="{{false}}" />
       <view class="image-container">
         <view class="iamge-content">

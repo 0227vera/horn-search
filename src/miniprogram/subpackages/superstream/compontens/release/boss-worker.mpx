@@ -172,7 +172,7 @@
       bind:tap="showPopupContainer('origin')"
     />
     <!-- 图片 -->
-    <block wx:if="{{false}}">
+    <block wx:if="{{true}}">
       <van-cell size="large" title-width="160rpx" title="图片展示" value="{{imagesValue}}" border="{{false}}" />
       <view class="image-container">
         <view class="iamge-content">
@@ -228,10 +228,10 @@
     />
     <!-- 工厂名 -->
     <van-field
-      wx:if="{{false}}"
       size="large"
       label="工厂名"
       title-width="160rpx"
+      wx:if="{{false}}"
       value="{{ updateObj.company }}"
       placeholder="请输入您的工厂或公司名称"
       input-align="right"
