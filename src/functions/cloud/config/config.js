@@ -2,7 +2,7 @@ const Warrior_Prefix = 'warrior_'
 
 module.exports = {
   // ### 环境相关
-  CLOUD_ID: 'cloud1-2ghfxje8f4990d8f', // 你的云环境id
+  CLOUD_ID: 'prod-horn-search-6f0zg662fe589c3', // 你的云环境id
   // ##################################################################
   PID: 'A00',
   COLLECTION_NAME: [

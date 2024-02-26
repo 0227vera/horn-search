@@ -1,8 +1,12 @@
 <template>
 <custom-container
-  title="个人中心"
+  title="{{userInfo.nickName || '个人中心'}}"
   lefticon="wap-home"
 >
+  <view class="userInfo">
+    <image class="avatar" wx:if="{{userInfo.avatar}}" bind:tap="openUserInfoEdit" src="{{userInfo.avatar}}"></image>
+    <van-icon wx:else class="avatar" bind:tap="openUserInfoEdit" name="user" />
+  </view>
   <view class="navbar">
     <view class="navbar-content">
       <view wx:for="{{navbar}}" wx:key="*this" class="navbar-content-item" wx:if="{{!item.hide}}" bindtap="itemtaphandle(item)">
@@ -30,77 +34,49 @@
       </van-cell-group>
     </view>
   </view>
+  <van-dialog
+    use-slot
+    show-cancel-button
+    show="{{editInfo}}"
+    bind:close="onClose"
+    bind:confirm="onConfirm"
+  >
+    <view class="getUserInfo">
+      <view class="title">获取头像</view>
+      <button open-type="chooseAvatar" class="avatarInfo" bindchooseavatar="onChooseAvatar">
+        <image class="avatar" wx:if="{{cacheUserInfo.avatar}}" src="{{cacheUserInfo.avatar}}"></image>
+        <van-icon wx:else class="avatar" name="user" />
+      </button>
+      <view class="nickname">
+        <input type="nickname" placeholder="请输入昵称" bind:change="onNameChange" value="{{cacheUserInfo.nickName}}" />
+      </view>
+    </view>
+  </van-dialog>
 </custom-container>
-<van-dialog id="van-dialog" />
-<van-dialog
-  use-slot
-  title="工厂/公司名修改"
-  show="{{ show }}"
-  show-cancel-button
-  bind:close="onClose"
-  bind:confirm="onConfirm"
->
-  <view class="company-container">
-    <van-field
-      size="large"
-      value="{{ cacheCompany }}"
-      label="工厂/公司名"
-      type="textarea"
-      autosize
-      placeholder="请输入工厂/公司名"
-      border="{{ false }}"
-      bind:change="onCompanyChange"
-    />
-  </view>
-</van-dialog>
-<van-popup
-  show="{{ showHomeSet }}"
-  position="bottom"
-  round
-  bind:close="onHomeSetClose"
->
-  <view class="popupTitle">选择首页展示方式</view>
-  <van-radio-group value="{{ homeset.id }}" bind:change="onRadioChange">
-    <van-cell-group wx:for="{{homeSetList}}" wx:key="name">
-      <van-cell title="{{item.text}}" clickable data-name="{{item.id}}" bind:click="onRadioClick">
-        <van-radio slot="right-icon" name="{{item.id}}" />
-      </van-cell>
-    </van-cell-group>
-  </van-radio-group>
-</van-popup>
 </template>
 
 <script>
 import mpx, { createPage } from '@mpxjs/core'
-import { isAdmin, updateUserInfo } from '@/api'
-import Dialog from '@vant/weapp/dialog/dialog'
+import { isAdmin, updateUserInfo, fileUpload } from '@/api'
 import jumpAction from '@/utils/jump'
 import store from '@/store'
 
 createPage({
   data: {
     showManagerEntry: false,
-    show: false,
-    showHomeSet: false,
-    cacheCompany: '',
-    homeSetList: [{
-      text: '展示左右两侧(既能发布需求又能寻求信息)',
-      id: '1'
-    }, {
-      text: '只展示左侧(我只发布需求)',
-      id: '2'
-    }, {
-      text: '只展示右侧(我只寻求信息)',
-      id: '3'
-    }]
+    editInfo: false,
+    cacheUserInfo: {
+      nickName: '',
+      avatar: ''
+    }
   },
   computed: {
-    ...store.mapState(['company', 'homeset']),
+    ...store.mapState(['company', 'homeset', 'userInfo']),
     navbar() {
       return [
         {
           name: '主动求职',
-          icon: 'manager-o',
+          icon: 'gift-o',
           jumptype: 'mp',
           url: '/person-center/pages/person-info'
         },
@@ -138,12 +114,6 @@ createPage({
         ],
         [
           {
-            name: '首页设置',
-            icon: 'wap-home-o',
-            jumptype: 'homeSet',
-            value: this.homeset.text
-          },
-          {
             name: '系统设置',
             icon: 'setting-o',
             jumptype: 'setting'
@@ -172,73 +142,70 @@ createPage({
         this.showManagerEntry = true
       }
     },
-    itemtaphandle(item) {
+    async itemtaphandle(item) {
       if (item.jumptype === 'company') {
-        this.cacheCompany = this.company
-        this.show = true
-      } else if (item.jumptype === 'homeSet') {
-        this.showHomeSet = true
+        const res = await mpx.showModal({
+          title: '工厂/公司名修改',
+          content: this.company,
+          editable: true,
+          placeholderText: '请输入工厂/公司名'
+        })
+        if (res.confirm) {
+          mpx.showLoading({ title: '更新中……' })
+          const inter = await updateUserInfo({
+            company: res.content
+          })
+          if (inter.code === 200) {
+            this.setState({
+              company: res.content
+            })
+            mpx.showToast({
+              title: '更新成功！'
+            })
+          } else {
+            mpx.showToast({
+              title: res.msg,
+              icon: 'none'
+            })
+          }
+        }
       } else {
         jumpAction(item)
       }
     },
-    onHomeSetClose() {
-      this.showHomeSet = false
+    openUserInfoEdit() {
+      this.cacheUserInfo.nickName = this.userInfo.nickName
+      this.cacheUserInfo.avatar = this.userInfo.avatar
+      this.editInfo = true
     },
-    onRadioChange({ detail }) {
-      this.setHomeSet(this.homeSetList.find(item => item.id === detail))
+    async onChooseAvatar(e) {
+      const { avatarUrl } = e.detail
+      this.cacheUserInfo.avatar = avatarUrl
+      try {
+        const res = await fileUpload(avatarUrl)
+        this.cacheUserInfo.avatar = res.fileID
+      } catch (error) {}
     },
-    onRadioClick(e) {
-      const name = e.currentTarget.dataset.name
-      this.setHomeSet(this.homeSetList.find(item => item.id === name))
-    },
-    setHomeSet(homeset) {
-      console.log(homeset)
-      mpx.showLoading({
-        mask: true,
-        title: '更新设置中……'
-      })
-      updateUserInfo({
-        homeset
-      }).then(() => {
-        mpx.showToast({
-          title: '更新完成'
-        })
-        this.setState({
-          homeset
-        })
-        this.showHomeSet = false
-      }).catch(err => {
-        mpx.showToast({
-          title: err
-        })
-        this.showHomeSet = false
-      })
+    onNameChange(e) {
+      const { value } = e.detail
+      if (!value.length) {
+        return
+      }
+      this.cacheUserInfo.nickName = value
     },
     onClose() {
-      this.show = false
-    },
-    onCompanyChange(e) {
-      this.cacheCompany = e.detail
+      this.editInfo = false
     },
     async onConfirm() {
-      mpx.showLoading({ title: '更新中……' })
       const res = await updateUserInfo({
-        company: this.cacheCompany
+        userInfo: this.cacheUserInfo
       })
       if (res.code === 200) {
         this.setState({
-          company: this.cacheCompany
-        })
-        mpx.showToast({
-          title: '更新成功！'
-        })
-      } else {
-        mpx.showToast({
-          title: res.msg,
-          icon: 'none'
+          userInfo: { ...this.cacheUserInfo }
         })
       }
+      this.editInfo = false
     }
   }
 })
@@ -282,6 +249,67 @@ createPage({
     margin-bottom 16rpx
 .company-container
   min-height 100rpx
+.userInfo
+  display flex
+  align-items center
+  justify-content center
+  margin-bottom -80rpx
+  .avatar
+    width 120rpx
+    height 120rpx
+    background #ffffff
+    object-fit cover
+    border-radius 60rpx
+    display flex
+    align-items center
+    justify-content center
+    font-size 60rpx
+.getUserInfo
+  overflow hidden
+  height 360rpx
+  display flex
+  flex-direction column
+  align-items center
+  padding 16rpx 32rpx
+  bonx-sizing borser-box
+  .title
+    font-size 36rpx
+  .avatarInfo
+    width 150rpx
+    height 150rpx
+    border-radius 75rpx
+    padding 0
+    background #ffffff
+    display flex
+    align-items center
+    justify-content center
+    font-size 80rpx
+    border 2rpx solid #eeeeee
+    margin-top 24rpx
+    &:after
+      display none
+    .avatar
+      width 150rpx
+      height 150rpx
+      border-radius 75rpx
+  .nickname
+    width 100%
+    margin-top 24rpx
+    border 2rpx solid #eeeeee
+    height 80rpx
+    line-height 80rpx
+    box-sizing border-box
+    border-radius 16rpx
+    display flex
+    align-items center
+    justify-content flex-start
+    padding 0 24rpx
+    input
+      width 100%
+      font-size 36rpx
+      display flex
+      align-items center
+      justify-content flex-start
 </style>
 
 <script name="json">

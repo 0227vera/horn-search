@@ -69,13 +69,15 @@
         bind:click-right="onRadioSure"
         safe-area-inset-top="{{false}}"
       />
-      <van-radio-group value="{{ radio }}" bind:change="onRadioChange">
-        <van-cell-group>
-          <van-cell size="large" wx:for="{{radioList}}" wx:key="value" title="{{item.name}}" clickable data-name="{{item.value}}" bind:click="onItemClick">
-            <van-radio slot="right-icon" name="{{item.value}}" />
-          </van-cell>
-        </van-cell-group>
-      </van-radio-group>
+      <view style="max-height: 75vh; overflow-x: hidden;">
+        <van-radio-group value="{{ radio }}" bind:change="onRadioChange">
+          <van-cell-group>
+            <van-cell size="large" wx:for="{{radioList}}" wx:key="value" title="{{item.name}}" clickable data-name="{{item.value}}" bind:click="onItemClick">
+              <van-radio slot="right-icon" name="{{item.value}}" />
+            </van-cell>
+          </van-cell-group>
+        </van-radio-group>
+      </view>
     </block>
     <!-- 多选列表 -->
     <block wx:elif="{{showCheckBox}}">
@@ -100,7 +102,7 @@
             <van-cell
               size="large"
               wx:for="{{ checkBoxList }}"
-              wx:key="index"
+              wx:key="value"
               title="{{ item.name }}"
               value-class="value-class"
               clickable
@@ -248,11 +250,20 @@ createComponent({
   },
   computed: {
     showRadio() {
-      const radioShowList = ['cooperType', 'orderType', 'factoryScale', 'tailingsCategory', 'categorySubId', 'useId']
+      const radioShowList = ['cooperType', 'orderType', 'factoryScale', 'tailingsCategory', 'categorySubId', 'useId', 'used']
       return radioShowList.includes(this.type) || this.needShowRadio
     },
     showCheckBox() {
-      const checkboxShowList = ['fabricProp', 'productType']
+      const checkboxShowList = [
+        'fabricProp',
+        'productType',
+        'note',
+        'category-copy',
+        'sincere',
+        'advantage',
+        'origin',
+        'add'
+      ]
       return checkboxShowList.includes(this.type) || this.needShowCheckbox
     }
   },

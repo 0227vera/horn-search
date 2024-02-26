@@ -1,6 +1,5 @@
 import mpx, { createStore } from '@mpxjs/core'
 import MapSdk from '@/wx-map-sdk/qqmap-wx-jssdk.min.js'
-import Dialog from '@vant/weapp/dialog/dialog'
 import dayjs from 'dayjs'
 import steps from '../constant/steps'
 
@@ -33,7 +32,7 @@ export default createStore({
     footerNavBar: [],
     usInfo: {},
     mapSdk: new MapSdk({
-      key: 'H3QBZ-NGN6Q-NPL5M-4W72L-NKC55-ZFF3O'
+      key: '7KUBZ-RTTWB-MY3UF-JFREG-DZJ52-5WB3B'
     }),
     adInfo: {},
     location: {
@@ -74,6 +73,10 @@ export default createStore({
         start: dayjs(Date.now()).format('HH:mm'),
         end: ''
       }
+    },
+    userInfo: {
+      nickName: '',
+      avatar: ''
     },
     homeset: {}
   },
@@ -135,7 +138,6 @@ export default createStore({
         mpx.getLocation({
           type: 'gcj02',
           success (res) {
-            Dialog.close()
             const { longitude, latitude } = res
             commit('setState', {
               location: { longitude, latitude }
@@ -152,17 +154,21 @@ export default createStore({
                   adInfo: result
                 })
                 resolve(res)
+              },
+              fail(err) {
+                console.log(err)
               }
             })
           },
           fail (err) {
             reject(err)
-            Dialog.confirm({
+            mpx.showModal({
               title: '提示',
-              message: '您未打开定位信息，无法为您精准推送附近的订单，建议你前往打开定位服务，方便您的使用'
-            }).then(res => {
-              mpx.openSetting()
-            }).catch(() => {})
+              content: '您未打开定位信息，无法为您精准推送附近的订单，建议你前往打开定位服务，方便您的使用',
+              success(res) {
+                if (res.confirm) mpx.openSetting()
+              }
+            })
           }
         })
       })

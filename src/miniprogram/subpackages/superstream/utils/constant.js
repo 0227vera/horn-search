@@ -99,7 +99,9 @@ export const initUsedObj = {
   poi: {},
   tel: '',
   images: [],
-  note: ''
+  note: '',
+  unit: '',
+  num: ''
 }
 
 export const initTailingsObj = {

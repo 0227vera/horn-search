@@ -29,6 +29,7 @@ ReleaseModel.DB_STRUCTURE = {
   tel: 'string|true',
   images: 'array|false',
   note: 'string|false',
+  noteValue: 'array|false',
   times: 'array|false',
   OPENID: 'string|true',
   RELEASE_ID: 'string|true',

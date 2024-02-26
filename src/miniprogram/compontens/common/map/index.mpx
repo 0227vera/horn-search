@@ -30,7 +30,7 @@ createComponent({
       value: {}
     },
     mapFull: {
-      mapFull: Boolean,
+      type: Boolean,
       value: false
     }
   },

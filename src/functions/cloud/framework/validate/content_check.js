@@ -38,12 +38,12 @@ async function checkImg(imgData, mine) {
         contentType: 'image/' + mine,
         value: Buffer.from(imgData, 'base64') // 这里必须要将小程序端传过来的进行Buffer转化,否则就会报错,接口异常
       }
-
     })
     console.log('imgcheck', result);
     if (!result || result.errCode !== 0) {
       throw new AppError('图片内容不合适，请修改');
     }
+    return result
   } catch (err) {
     console.log('imgcheck ex', err);
     throw new AppError('图片内容不合适，请修改');

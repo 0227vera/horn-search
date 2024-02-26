@@ -18,6 +18,8 @@ ReleaseModel.DB_STRUCTURE = {
   price: 'int|false',
   poi: 'object|true',
   location: 'geopoint|true',
+  unit: 'string|false',
+  num: 'string|false',
   tel: 'string|true',
   images: 'array|true',
   note: 'string|false',

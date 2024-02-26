@@ -14,7 +14,7 @@
         value="{{updateObj.categoryName}}"
         input-align="right"
         placeholder="请点击选择设备名称"
-        bind:tap="showPopupContainer('category')"
+        bind:tap="showPopupContainer('used')"
       />
     </view>
     <!-- 类别子系列 -->
@@ -29,7 +29,21 @@
       bind:change="onFieldChange"
       id="categorySub"
     />
-     <!-- 位置相关 -->
+    <!-- 数量 -->
+    <van-field
+      size="large"
+      label="数量"
+      title-width="240rpx"
+      value="{{ updateObj.num }}"
+      placeholder="请输入设备数量"
+      input-align="right"
+      type="number"
+      bind:change="onFieldChange"
+      id="num"
+    >
+      <view slot="right-icon" style="color: #333; font-weight: bold;">{{updateObj.unit}}</view>
+    </van-field>
+    <!-- 位置相关 -->
     <van-field size="large"
       label="位置"
       type="textarea"
@@ -56,28 +70,30 @@
       id="tel"
     />
     <!-- 图片 -->
-    <van-cell title="图片展示" size="large" title-width="160rpx" required value="{{imagesValue}}" border="{{false}}" />
-    <view class="image-container">
-      <view class="iamge-content">
-        <van-uploader
-          bind:after-read="afterRead"
-          accept="media"
-          deletable
-          disabled="{{uploaderDisabled}}"
-        />
-        <view class="imgurl-container" wx:for="{{updateObj.images}}" wx:key="*this">
-          <van-image
-            bind:click="previewMedia(index)"
-            width="80"
-            height="80"
-            src="{{item}}"
-            radius="8"
-            fit="cover"
+    <block wx:if="{{true}}">
+      <van-cell title="图片展示" size="large" title-width="160rpx" required value="{{imagesValue}}" border="{{false}}" />
+      <view class="image-container">
+        <view class="iamge-content">
+          <van-uploader
+            bind:after-read="afterRead"
+            accept="media"
+            deletable
+            disabled="{{uploaderDisabled}}"
           />
-          <van-icon name="clear" bindtap="clearImg(item)" class="image-clear-icon"/>
+          <view class="imgurl-container" wx:for="{{updateObj.images}}" wx:key="*this">
+            <van-image
+              bind:click="previewMedia(index)"
+              width="80"
+              height="80"
+              src="{{item}}"
+              radius="8"
+              fit="cover"
+            />
+            <van-icon name="clear" bindtap="clearImg(item)" class="image-clear-icon"/>
+          </view>
         </view>
       </view>
-    </view>
+    </block>
     <!-- 价格 -->
     <van-field size="large"
       label="价格"
@@ -102,6 +118,7 @@
       autosize
       id="note"
       bind:change="onFieldChange"
+      wx:if="{{false}}"
     />
   </van-cell-group>
   <van-cell border="{{false}}" wx:if="{{showBottomNav}}">
@@ -112,6 +129,7 @@
   show="{{showPopup}}"
   type="{{popupType}}"
   categoryList="{{categoryList}}"
+  radioList="{{radioList}}"
   bind:close="closePopupContainer"
   bind:confirm="onConfirmHandle"
 />
@@ -139,6 +157,9 @@ createComponent({
   computed: {
     categoryList() {
       return this.configById.category
+    },
+    radioList() {
+      return this.configById.list
     }
   },
   methods: {
@@ -149,13 +170,14 @@ createComponent({
     onConfirmHandle({ detail = {} } = {}) {
       const { data, type } = detail
       const actions = {
-        category: () => {
-          this.updateObj.category = data.id
-          this.updateObj.categoryName = data.text
+        used: () => {
+          this.updateObj.category = data.value
+          this.updateObj.categoryName = data.name
+          this.updateObj.unit = data.unit
           if (data.needDetail) {
             this.subCategoryInfo.show = true
-            this.subCategoryInfo.label = `${data.text}(分类)`
-            this.subCategoryInfo.placeholder = `请输入${data.text}的具体类别`
+            this.subCategoryInfo.label = `${data.name}(分类)`
+            this.subCategoryInfo.placeholder = `请输入${data.name}的具体类别`
           } else {
             this.subCategoryInfo.show = false
             this.updateObj.categorySub = ''

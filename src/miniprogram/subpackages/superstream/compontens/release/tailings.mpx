@@ -56,28 +56,30 @@
       id="tel"
     />
     <!-- 图片 -->
-    <van-cell title="图片展示" size="large" title-width="160rpx" value="{{imagesValue}}" border="{{false}}" />
-    <view class="image-container">
-      <view class="iamge-content">
-        <van-uploader
-          bind:after-read="afterRead"
-          accept="media"
-          deletable
-          disabled="{{uploaderDisabled}}"
-        />
-        <view class="imgurl-container" wx:for="{{updateObj.images}}" wx:key="*this">
-          <van-image
-            bind:click="previewMedia(index)"
-            width="80"
-            height="80"
-            src="{{item}}"
-            radius="8"
-            fit="cover"
+    <block wx:if="{{true}}">
+      <van-cell title="图片展示" size="large" title-width="160rpx" value="{{imagesValue}}" border="{{false}}" />
+      <view class="image-container">
+        <view class="iamge-content">
+          <van-uploader
+            bind:after-read="afterRead"
+            accept="media"
+            deletable
+            disabled="{{uploaderDisabled}}"
           />
-          <van-icon name="clear" bindtap="clearImg(item)" class="image-clear-icon"/>
+          <view class="imgurl-container" wx:for="{{updateObj.images}}" wx:key="*this">
+            <van-image
+              bind:click="previewMedia(index)"
+              width="80"
+              height="80"
+              src="{{item}}"
+              radius="8"
+              fit="cover"
+            />
+            <van-icon name="clear" bindtap="clearImg(item)" class="image-clear-icon"/>
+          </view>
         </view>
       </view>
-    </view>
+    </block>
     <!-- 联系时间 -->
     <view class="category-container">
       <van-field
@@ -117,11 +119,13 @@
       title-width="200rpx"
       value="{{ updateObj.note }}"
       placeholder="可以在此输入补充说明"
-      input-align="left"
+      input-align="right"
+      is-link
+      readonly
       type="textarea"
       autosize
       id="note"
-      bind:change="onFieldChange"
+      bindtap="showPopupContainer('note')"
     />
   </van-cell-group>
   <van-cell border="{{false}}" wx:if="{{showBottomNav}}">
@@ -137,6 +141,8 @@
   timeType="time"
   needShowRadio="{{needShowRadio}}"
   radioList="{{tailingsList}}"
+  initCheckbox="{{initCheckbox}}"
+  checkBoxList="{{checkBoxList}}"
   bind:close="closePopupContainer"
   bind:confirm="onConfirmHandle"
 />
@@ -151,6 +157,7 @@ import { mixins } from '@/subpackages/superstream/utils/mixins.js'
 import { tailingsValidate } from '@/subpackages/superstream/utils/validate.js'
 import { initTailingsObj } from '@/subpackages/superstream/utils/constant.js'
 import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
+import { tailingsAddList } from '@/constant/config.js'
 
 import dayjs from 'dayjs'
 const store = getApp().globalStore
@@ -197,6 +204,10 @@ createComponent({
           })
           return
         }
+      } else if (type === 'note') {
+        this.popupTitle = '请选择补充内容'
+        this.checkBoxList = tailingsAddList
+        this.initCheckbox = this.updateObj.noteValue
       }
       this.showPopup = true
       this.popupType = type
@@ -228,6 +239,10 @@ createComponent({
           } else {
             this.updateObj.times[1] = data.time
           }
+        },
+        note: () => {
+          this.updateObj.note = data.selectedList.map(item => item.name).join('、')
+          this.updateObj.noteValue = data.value
         }
       }
       actions?.[type]?.()

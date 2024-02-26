@@ -1,6 +1,6 @@
 {
-  "miniprogramRoot": "miniprogram",
-  "cloudfunctionRoot": "functions",
+  "miniprogramRoot": "miniprogram/",
+  "cloudfunctionRoot": "functions/",
   "compileType": "miniprogram",
   "setting": {
     "newFeature": true,
@@ -9,11 +9,17 @@
     "postcss": true,
     "minified": false,
     "checkSiteMap": false,
-    "autoAudits": false
+    "autoAudits": false,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "packNpmRelationList": []
   },
-  "appid": "wxd1984be288ed3998",
   "projectname": "服装召工桥",
   "description": "服装召工桥招长临工发货找货",
+  "appid": "wx99eb45295c37547b",
   "condition": {},
   "packNpmManually": true,
   "packNpmRelationList": [
@@ -21,5 +27,16 @@
       "packageJsonPath": "./package.json",
       "miniprogramNpmDistDir": "./miniprogram/"
     }
-  ]
+  ],
+  "libVersion": "3.2.1",
+  "srcMiniprogramRoot": "miniprogram/",
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  },
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate/"
 }

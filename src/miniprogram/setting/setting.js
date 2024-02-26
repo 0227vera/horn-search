@@ -1,3 +1,3 @@
 export default {
-  CLOUD_ID: 'cloud1-2ghfxje8f4990d8f'
+  CLOUD_ID: 'prod-horn-search-6f0zg662fe589c3'
 }

@@ -151,10 +151,15 @@ async function count(collectionName, where) {
   let query = await db.collection(collectionName)
 
   // 查询条件
-  if (typeof (where) === 'string' || typeof (where) === 'number')
+  if (typeof (where) === 'string' || typeof (where) === 'number') {
     query = await query.doc(where)
-  else
-    query = await query.where(fmtWhere(where))
+  } else {
+    const newWhere = JSON.parse(JSON.stringify(where))
+    if (newWhere && newWhere.and && newWhere.and.location) {
+      delete newWhere.and.location
+    }
+    query = await query.where(fmtWhere(newWhere))
+  }
   query = await query.count()
   return query.total
 }
@@ -916,7 +921,6 @@ function fmtWhere(where) {
       minDistance: where.location.minDistance || 0,
       maxDistance: where.location.maxDistance || 1000000000 * 1000
     })
-    console.log('where.location=======+>', where.location)
   }
   for (let k in where) {
     /* 判断是否有条件数组

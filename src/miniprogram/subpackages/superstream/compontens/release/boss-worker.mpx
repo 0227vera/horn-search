@@ -166,32 +166,36 @@
       value="{{ updateObj.origin }}"
       placeholder="例如十三行写字楼品质"
       input-align="right"
-      bind:change="onFieldChange"
       id="origin"
+      readonly
+      is-link
+      bind:tap="showPopupContainer('origin')"
     />
     <!-- 图片 -->
-    <van-cell size="large" title-width="160rpx" title="图片展示" value="{{imagesValue}}" border="{{false}}" />
-    <view class="image-container">
-      <view class="iamge-content">
-        <van-uploader
-          bind:after-read="afterRead"
-          accept="media"
-          deletable
-          disabled="{{uploaderDisabled}}"
-        />
-        <view class="imgurl-container" wx:for="{{updateObj.images}}" wx:key="*this">
-          <van-image
-            bind:click="previewMedia(index)"
-            width="80"
-            height="80"
-            src="{{item}}"
-            radius="8"
-            fit="cover"
+    <block wx:if="{{true}}">
+      <van-cell size="large" title-width="160rpx" title="图片展示" value="{{imagesValue}}" border="{{false}}" />
+      <view class="image-container">
+        <view class="iamge-content">
+          <van-uploader
+            bind:after-read="afterRead"
+            accept="media"
+            deletable
+            disabled="{{uploaderDisabled}}"
           />
-          <van-icon name="clear" bindtap="clearImg(item)" class="image-clear-icon"/>
+          <view class="imgurl-container" wx:for="{{updateObj.images}}" wx:key="*this">
+            <van-image
+              bind:click="previewMedia(index)"
+              width="80"
+              height="80"
+              src="{{item}}"
+              radius="8"
+              fit="cover"
+            />
+            <van-icon name="clear" bindtap="clearImg(item)" class="image-clear-icon"/>
+          </view>
         </view>
       </view>
-    </view>
+    </block>
     <!-- 要求 -->
     <van-field
       size="large"
@@ -199,11 +203,13 @@
       title-width="160rpx"
       value="{{ updateObj.note }}"
       placeholder="请输入您对工人或服装的要求"
-      input-align="left"
+      input-align="right"
       type="textarea"
       autosize
       id="note"
-      bind:change="onFieldChange"
+      readonly
+      is-link
+      bind:tap="showPopupContainer('note')"
     />
     <!-- 招工概述 -->
     <van-field
@@ -212,25 +218,27 @@
       title-width="160rpx"
       value="{{ updateObj.add }}"
       placeholder="请输入招工概述"
-      input-align="left"
+      input-align="right"
       type="textarea"
       autosize
-      error-message="{{updateObj.add ? '' : '例如：本厂自产自销、源充足、环境良好、出粮准时、外住房补300、周末不加班等'}}"
       id="add"
-      bind:change="onFieldChange"
+      readonly
+      is-link
+      bind:tap="showPopupContainer('add')"
     />
     <!-- 工厂名 -->
     <van-field
       size="large"
       label="工厂名"
       title-width="160rpx"
-      value="{{ updateObj.company }}"
-      placeholder="请输入您的工厂或公司名称"
-      input-align="left"
+      wx:if="{{false}}"
+      wx:if="{{company}}"
+      value="{{ company }}"
+      input-align="right"
       type="textarea"
       autosize
       id="company"
-      bind:change="onFieldChange"
+      readonly
     />
   </van-cell-group>
   <van-cell border="{{false}}" wx:if="{{showBottomNav}}">
@@ -241,6 +249,7 @@
   show="{{showPopup}}"
   type="{{popupType}}"
   categoryList="{{categoryList}}"
+  checkBoxList="{{checkBoxList}}"
   bind:close="closePopupContainer"
   bind:confirm="onConfirmHandle"
 />
@@ -253,6 +262,7 @@ import mpx, { createComponent } from '@mpxjs/core'
 import { mixins } from '@/subpackages/superstream/utils/mixins.js'
 import { validateBossWorker } from '@/subpackages/superstream/utils/validate.js'
 import { initBossWorkerObj, unitList, categoryTypeList } from '@/subpackages/superstream/utils/constant.js'
+import { bossWorkerOriginList, bossWorkerNoteList, bossWorkerAddList } from '@/constant/config.js'
 
 const store = getApp().globalStore
 
@@ -270,6 +280,11 @@ createComponent({
     originLabel: '货源(品质层次)',
     updateObj: JSON.parse(JSON.stringify(initBossWorkerObj))
   },
+  attached() {
+    if (this.company) {
+      this.updateObj.company = this.company
+    }
+  },
   computed: {
     categoryList() {
       return this.configById.category
@@ -283,6 +298,25 @@ createComponent({
         label: '',
         placeholder: ''
       }
+    },
+    showPopupContainer(type) {
+      if (!this.addressList.length && type === 'address') {
+        mpx.navigateTo({
+          url: AddAddressUrl
+        })
+        return
+      } else if (type === 'origin') {
+        this.initCheckbox = this.updateObj.originValue
+        this.checkBoxList = bossWorkerOriginList
+      } else if (type === 'note') {
+        this.initCheckbox = this.updateObj.noteValue
+        this.checkBoxList = bossWorkerNoteList
+      } else if (type === 'add') {
+        this.initCheckbox = this.updateObj.addValue
+        this.checkBoxList = bossWorkerAddList
+      }
+      this.showPopup = true
+      this.popupType = type
     },
     // 弹窗确认
     onConfirmHandle({ detail = {} } = {}) {
@@ -320,6 +354,18 @@ createComponent({
         address: () => {
           this.updateObj.poi = data.poi
           this.updateObj.tel = data.tel
+        },
+        origin: () => {
+          this.updateObj.origin = data.selectedList.map(item => item.name).join('、')
+          this.updateObj.originValue = data.value
+        },
+        note: () => {
+          this.updateObj.note = data.selectedList.map(item => item.name).join('、')
+          this.updateObj.noteValue = data.value
+        },
+        add: () => {
+          this.updateObj.add = data.selectedList.map(item => item.name).join('、')
+          this.updateObj.addValue = data.value
         }
       }
       actions?.[type]?.()

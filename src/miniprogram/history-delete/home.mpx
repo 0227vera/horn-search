@@ -1,0 +1,179 @@
+<template>
+  <custom-container
+    title="服装招工桥 | 发货找货平台"
+    lefticon="friends"
+    clickLeft="{{clickLeft}}"
+  >
+    <view class="container">
+      <view class="list" wx:if="{{list.length}}" wx:if="{{homeset.id === '1'}}">
+        <!-- animation-duration: {{0.3 * (index + 1)}}s -->
+        <view wx:for="{{list}}" wx:key="*this" style="animation-name: {{index % 2 === 0 ? 'homeJishu' : 'homeOushu'}};" class="list-item">
+          <view wx:for="{{item}}" wx:for-index="mIndex" wx:for-item="m" wx:key="*this" class="list-item_line {{step - 1 === mIndex ? 'active' : ''}}" bind:tap="jump(m)">
+            <image class="image" src="{{m.icon}}"></image>
+            <view class="text">{{m.text}}</view>
+            <view class="desc" wx:if="{{m.desc}}">{{m.desc}}</view>
+            <view class="tips" wx:if="{{m.tips}}">{{m.tips}}</view>
+          </view>
+        </view>
+      </view>
+      <!-- 只展示甲方 -->
+      <view class="list-filter list" style="animation-duration: {{0.3 * (index + 1)}}s" wx:if="{{homeset.id === '2'}}">
+        <view wx:for="{{list}}" wx:key="*this" class="list-item">
+          <view class="list-item_line" bind:tap="jump(item[0])">
+            <image class="image" src="{{item[0].icon}}"></image>
+            <view class="text">{{item[0].text}}</view>
+            <view class="desc" wx:if="{{item[0].desc}}">{{item[0].desc}}</view>
+            <view class="tips" wx:if="{{item[0].tips}}">{{item[0].tips}}</view>
+          </view>
+        </view>
+      </view>
+      <!-- 只展示乙方 -->
+      <view class="list-filter list" style="animation-duration: {{0.3 * (index + 1)}}s" wx:if="{{homeset.id === '3'}}">
+        <view wx:for="{{list}}" wx:key="*this" class="list-item">
+          <view class="list-item_line" bind:tap="jump(item[1])">
+            <image class="image" src="{{item[1].icon}}"></image>
+            <view class="text">{{item[1].text}}</view>
+            <view class="desc" wx:if="{{item[1].desc}}">{{item[1].desc}}</view>
+            <view class="tips" wx:if="{{item[1].tips}}">{{item[1].tips}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </custom-container>
+  <guide-subcri />
+</template>
+
+<script>
+import mpx, { createPage } from '@mpxjs/core'
+import jumpAction from '@/utils/jump.js'
+import list from '@/constant/home.js'
+import ParsonCenter from '@/subpackages/person-center/pages/index.mpx?resolve'
+import store from '@/store'
+
+createPage({
+  onShareAppMessage() {
+    getApp().onShareAppMessage()
+  },
+  data: {
+    list,
+    clickLeft() {
+      mpx.navigateTo({
+        url: ParsonCenter
+      })
+    }
+  },
+  computed: {
+    ...store.mapState(['navBarStyle', 'homeset']),
+    top() {
+      return this.navBarStyle.height + this.navBarStyle.top + this.navBarStyle.paddingBottom
+    },
+    tipsStyle() {
+      return `top: ${this.top}px; left: 0;`
+    }
+  },
+  onLoad() {
+    console.log('', this.homeset)
+  },
+  onShow() {
+    this.list = list
+    this.setNavBarStyle({
+      showDropdown: false,
+      clickDropdown: null
+    })
+  },
+  onHide() {
+    this.list = []
+  },
+  methods: {
+    ...store.mapMutations(['setNavBarStyle']),
+    jump(m) {
+      jumpAction(m.action)
+    }
+  }
+})
+</script>
+
+<style lang="stylus" scoped>
+@import "@/assets/base.styl"
+.container
+  padding 16rpx 32rpx 150rpx
+  overflow hidden
+  .list
+    flex-column()
+    &.list-filter
+      display flex
+      flex-wrap wrap
+      flex-direction row
+      .list-item
+        border-bottom none
+        animation-name showbotomToUp
+        width 50%
+        flex-shrink 0
+        .list-item_line
+          width 100%
+    &-item
+      flex-space-between()
+      margin-bottom 32rpx
+      border-bottom 2rpx dashed #666666
+      &:last-child
+        border-bottom none
+      // animation-name showbotomToUp
+      animation-duration 0.5s
+      &_line
+        width 50%
+        // padding 16rpx
+        padding-top 16rpx
+        padding-bottom 32rpx
+        position relative
+        flex-center()
+        flex-column()
+        &.active
+          animation scaleContent 2s infinite
+        .image
+          width 80rpx
+          height 80rpx
+          border-radius 50%
+          border 2rpx solid #dddddd
+          padding 8rpx
+          margin-bottom 16rpx
+          background #ffffff
+          box-shadow $box-shadow
+        .text
+          font-size $size-main
+          color $color-main
+          font-weight bold
+          margin-top 8rpx
+        .desc
+          font-size 26rpx
+          text-align center
+          margin-top 8rpx
+        .tips
+          position absolute
+          top 0
+          left 200rpx
+          background $color-red
+          padding 3rpx 8rpx
+          color #ffffff
+          border-radius 20rpx
+          font-size 24rpx
+          font-weight bold
+@-webkit-keyframes scaleContent
+  0%
+    transform scale(1)
+  50%
+    transform scale(1.3)
+  to
+    transform scale(1)
+</style>
+
+<script name="json">
+module.exports = {
+  usingComponents: {
+    "guide-subcri": "@/compontens/common/service-notice/guide.mpx?root=common-coms-page"
+  },
+  "componentPlaceholder": {
+    "guide-subcri": "view"
+  },
+  "disableScroll": true
+}
+</script>

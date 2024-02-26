@@ -37,6 +37,7 @@ ReleaseModel.DB_STRUCTURE = {
   // numMax: 'string|false',
   // numMin: 'string|false',
   add: 'string|false',
+  addValue: 'array|false',
   company: 'string|false',
   OPENID: 'string|true',
   RELEASE_ID: 'string|true',

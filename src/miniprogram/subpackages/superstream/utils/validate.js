@@ -100,20 +100,20 @@ export const validateFactory = ({ updateObj } = {}) => {
     success: false,
     text: ''
   }
-  if (!updateObj.factoryScale) {
-    result.text = '请选择{工厂规模}'
+  if (!updateObj.cooperType) {
+    result.text = '请选择{合作方式}'
     return result
   }
-  if (!updateObj.area) {
+  if (!updateObj.factoryScale) {
+    result.text = '请选择{合作规模}'
+    return result
+  }
+  if (!updateObj.area && updateObj.cooperType !== 'a3') {
     result.text = '请输入{地域要求}'
     return result
   }
-  if (!updateObj.cooperType) {
-    result.text = '请选择{合作类型}'
-    return result
-  }
   if (!updateObj.productType?.length) {
-    result.text = '请选择{产品类型}'
+    result.text = '请选择{产品款式}'
     return result
   }
   if (!updateObj.num) {
@@ -202,10 +202,10 @@ export const validateUsed = ({ updateObj, subCategoryInfo } = {}) => {
     result.text = subCategoryInfo.placeholder
     return result
   }
-  if (!updateObj.images.length) {
-    result.text = '请上传图片信息'
-    return result
-  }
+  // if (!updateObj.images.length) {
+  //   result.text = '请上传图片信息'
+  //   return result
+  // }
   if (!updateObj.tel) {
     result.text = '请输入{手机号}'
     return result

@@ -2,6 +2,7 @@
 const findWorkerCategory = [
   {
     text: '车间生产类',
+    id: '1-',
     children: [
       { text: "裁工师傅/主裁", id: "1-0", showCategoryType: true },
       { text: "电剪/副裁", id: "1-3", showCategoryType: true },
@@ -37,6 +38,7 @@ const findWorkerCategory = [
   },
   {
     text: '打版车版类',
+    id: '2-',
     children: [
       { text: "纸样师/打版师", id: "3-0", showCategoryType: true, categoryType: '2' },
       { text: "车版师/样衣工", id: "3-3", showCategoryType: true, categoryType: '2' },
@@ -49,6 +51,7 @@ const findWorkerCategory = [
   },
   {
     text: '工厂管理类',
+    id: '3-',
     children: [
       { text: "厂长/主管", id: "6-0", showCategoryType: true, categoryType: '2' },
       { text: "裁床主管", id: "6-3", showCategoryType: true, categoryType: '2' },
@@ -65,6 +68,7 @@ const findWorkerCategory = [
   },
   {
     text: '设计开发类',
+    id: '4-',
     children: [
       { text: "男装设计师", id: "9-0", showCategoryType: true, categoryType: '2' },
       { text: "女装设计师", id: "9-3", showCategoryType: true, categoryType: '2' },
@@ -98,28 +102,47 @@ const cooperTypeList = [{
 const usedDetectCategory = [{
   text: '设备类',
   children: [
-    { text: "货架", id: "1-0" },
-    { text: "电脑", id: "1-3" },
-    { text: "模特(含卓天商务模特)", id: "1-6" },
-    { text: "四线", id: "1-9" },
-    { text: "五线", id: "1-12" },
-    { text: "冚车", id: "1-15" },
-    { text: "模板绗棉车", id: "1-18" },
-    { text: "专机机器", id: "1-21" },
-    { text: "唛架机", id: "1-24" },
-    { text: "烫炉/烫台", id: "1-27" },
-    { text: "凤眼机", id: "1-30" },
-    { text: "打揽机", id: "1-33" }
+    { text: "货架", id: "1-0", unit: '个' },
+    { text: "电脑", id: "1-3", unit: '台' },
+    { text: "模特(含卓天商务模特)", id: "1-6", unit: '个' },
+    { text: "四线", id: "1-9", unit: '台' },
+    { text: "五线", id: "1-12", unit: '台' },
+    { text: "冚车", id: "1-15", unit: '台' },
+    { text: "模板绗棉车", id: "1-18", unit: '台' },
+    { text: "专机机器", id: "1-21", unit: '台' },
+    { text: "唛架机", id: "1-24", unit: '个' },
+    { text: "烫炉/烫台", id: "1-27", unit: '台' },
+    { text: "凤眼机", id: "1-30", unit: '台' },
+    { text: "打揽机", id: "1-33", unit: '台' }
   ]
 }, {
   text: '生活类',
   children: [
-    { text: "电动车", id: "2-0" },
-    { text: "冰箱", id: "2-3" },
-    { text: "洗衣机", id: "2-6" },
-    { text: "空调", id: "2-9" }
+    { text: "电动车", id: "2-0", unit: '台' },
+    { text: "冰箱", id: "2-3", unit: '台' },
+    { text: "洗衣机", id: "2-6", unit: '个' },
+    { text: "空调", id: "2-9", unit: '台' }
   ]
 }]
+
+const usedDetectList = [
+  { name: "货架", value: "1-0", unit: '个' },
+  { name: "电脑", value: "1-3", unit: '台' },
+  { name: "模特(含卓天商务模特)", value: "1-6", unit: '个' },
+  { name: "四线", value: "1-9", unit: '台' },
+  { name: "五线", value: "1-12", unit: '台' },
+  { name: "冚车", value: "1-15", unit: '台' },
+  { name: "模板绗棉车", value: "1-18", unit: '台' },
+  { name: "专机机器", value: "1-21", unit: '台', needDetail: true },
+  { name: "唛架机", value: "1-24", unit: '个' },
+  { name: "烫炉/烫台", value: "1-27", unit: '台' },
+  { name: "凤眼机", value: "1-30", unit: '台' },
+  { name: "打揽机", value: "1-33", unit: '台' },
+  { name: "电动车", value: "2-0", unit: '台' },
+  { name: "冰箱", value: "2-3", unit: '台' },
+  { name: "洗衣机", value: "2-6", unit: '个' },
+  { name: "空调", value: "2-9", unit: '台' }
+]
 
 const fabricPropList = [{
   name: '针织',
@@ -313,16 +336,30 @@ const leaseTransferCategory = [{
   ]
 }]
 
-const workerFilter = [{
-  type: 'category',
-  id: 'category',
-  text: '岗位筛选',
-  initText: '岗位筛选',
-  value: [],
-  activeList: [],
-  list: findWorkerCategory,
-  max: 3
-}]
+const workerFilter = findWorkerCategory.map((item, index) => {
+  return {
+    type: 'radio',
+    id: `category${index}`,
+    text: item.text,
+    initText: item.text,
+    activeList: [],
+    list: item.children.map(m => ({
+      name: m.text,
+      value: m.id
+    }))
+  }
+})
+
+// [{
+//   type: 'category',
+//   id: 'category',
+//   text: '岗位筛选',
+//   initText: '岗位筛选',
+//   value: [],
+//   activeList: [],
+//   list: findWorkerCategory,
+//   max: 3
+// }]
 // , {
 //   type: 'dropdown',
 //   id: 'distance',
@@ -555,6 +592,7 @@ export default {
   usedDetect: {
     fromOrigin: 'usedDetect',
     category: usedDetectCategory,
+    list: usedDetectList,
     filterList: usedDetectFilter,
     partyA: {
       fristTab: '发布二手设备信息',

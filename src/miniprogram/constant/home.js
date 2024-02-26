@@ -1,9 +1,10 @@
 export default [[{
   // text: '工厂招工发布',
-  text: '去招工',
+  text: '我要招工',
   desc: '点击填写所要招工的信息',
   icon: 'cloud://cloud1-2ghfxje8f4990d8f.636c-cloud1-2ghfxje8f4990d8f-1322280819/home-icon/1.1 招工.png',
   id: 'findWorker',
+  sort: 1,
   dot: false,
   tips: '热门',
   action: {
@@ -18,7 +19,7 @@ export default [[{
   extraInfo: {}
 }, {
   // text: '我要找事做',
-  text: '招长工/临工信息公示',
+  text: '急招',
   desc: '点击查找您想做的事',
   icon: 'cloud://cloud1-2ghfxje8f4990d8f.636c-cloud1-2ghfxje8f4990d8f-1322280819/home-icon/1.2 找工作.png',
   id: 'findJob',
@@ -36,10 +37,11 @@ export default [[{
   extraInfo: {}
 }], [{
   // text: '找工厂合作发布',
-  text: '去找工厂合作',
+  text: '我要找加工厂',
   desc: '点击填写对工厂的要求',
   icon: 'cloud://cloud1-2ghfxje8f4990d8f.636c-cloud1-2ghfxje8f4990d8f-1322280819/home-icon/2.1 找合作.png',
   id: '',
+  sort: 2,
   dot: false,
   tips: '诚信',
   action: {
@@ -54,7 +56,7 @@ export default [[{
   extraInfo: {}
 }, {
   // text: '我要找货做',
-  text: '去找货做',
+  text: '裁片外发',
   desc: '点击查看有哪些合作需求',
   icon: 'cloud://cloud1-2ghfxje8f4990d8f.636c-cloud1-2ghfxje8f4990d8f-1322280819/home-icon/2.2 找货做.png',
   id: '',
@@ -71,9 +73,10 @@ export default [[{
   },
   extraInfo: {}
 }], [{
-  text: '去出租转让',
-  icon: 'cloud://cloud1-2ghfxje8f4990d8f.636c-cloud1-2ghfxje8f4990d8f-1322280819/home-icon/3.1 转让.png',
+  text: '出租转让发布',
+  icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/3.1 转让.png',
   id: '',
+  sort: 3,
   dot: false,
   tips: '长期有效',
   action: {
@@ -88,8 +91,8 @@ export default [[{
   extraInfo: {}
 }, {
   // text: '出租转让公示',
-  text: '去找房',
-  icon: 'cloud://cloud1-2ghfxje8f4990d8f.636c-cloud1-2ghfxje8f4990d8f-1322280819/home-icon/3.2 转让公示.png',
+  text: '厂房转让',
+  icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/3.2 转让公示.png',
   id: '',
   dot: false,
   tips: '',
@@ -138,9 +141,9 @@ export default [[{
 //   extraInfo: {}
 // }],
 [{
-  // text: '出售二手设备发布',
-  text: '去出售二手设备',
-  icon: 'cloud://cloud1-2ghfxje8f4990d8f.636c-cloud1-2ghfxje8f4990d8f-1322280819/home-icon/5.1 二手设备.png',
+  text: '我要转让设备',
+  sort: 5,
+  icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/5.1 二手设备.png',
   id: '',
   dot: false,
   tips: '',
@@ -156,8 +159,8 @@ export default [[{
   extraInfo: {}
 }, {
   // text: '我要捡漏二手没备',
-  text: '去捡漏二手没备',
-  icon: 'cloud://cloud1-2ghfxje8f4990d8f.636c-cloud1-2ghfxje8f4990d8f-1322280819/home-icon/5.2 捡漏.png',
+  text: '二手设备',
+  icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/5.2 捡漏.png',
   id: '',
   dot: false,
   tips: '聚划算',
@@ -173,8 +176,9 @@ export default [[{
   extraInfo: {}
 }], [{
   // text: '尾货处理发布',
-  text: '去处理尾货',
-  icon: 'cloud://cloud1-2ghfxje8f4990d8f.636c-cloud1-2ghfxje8f4990d8f-1322280819/home-icon/6.1 调仓.png',
+  text: '我要处理尾货',
+  sort: 6,
+  icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/6.1 调仓.png',
   id: '',
   dot: false,
   tips: '清仓',
@@ -190,8 +194,8 @@ export default [[{
   extraInfo: {}
 }, {
   // text: '货尾中心公示',
-  text: '去找货尾',
-  icon: 'cloud://cloud1-2ghfxje8f4990d8f.636c-cloud1-2ghfxje8f4990d8f-1322280819/home-icon/6.2 货运.png',
+  text: '找货尾',
+  icon: 'cloud://cloud1-0gfibr1283141-0b78337d158.636c-cloud1-0gfibr1283141-0b78337d158-1307055684/home-module-icon/6.2 货运.png',
   id: '',
   dot: false,
   tips: '方便联系',

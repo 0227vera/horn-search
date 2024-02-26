@@ -1,0 +1,222 @@
+<template>
+  <custom-container
+    title="服装招工桥 | 发货找货平台"
+    lefticon="friends"
+    needScroll="{{false}}"
+    clickLeft="{{clickLeft}}"
+  >
+    <view class="container"  wx:show="{{showPage}}">
+      <view class="partyA-container">
+        <view class="partyA">
+          <view class="partyA-item first-item">免费发布</view>
+          <view wx:for="{{renderPartyAList}}" wx:key="*this" class="partyA-item" bind:tap="jump(item)">
+            {{item.text}}
+          </view>
+        </view>
+      </view>
+      <view class="partyB">
+        <van-tabs
+          ellipsis="{{false}}"
+          tab-active-class="tabClassActive"
+          tab-class="tabClass"
+          active="{{ tabActive }}"
+          bind:change="onTabChange"
+        >
+          <van-tab wx:key="*this" wx:for="{{renderPartyBList}}" title="{{item.text}}"></van-tab>
+        </van-tabs>
+      </view>
+      <view class="list" wx:if="{{fromOrigin}}">
+        <partyB
+          categoryTypeId="{{categoryTypeId}}"
+          updateList="{{updateList}}"
+        />
+      </view>
+    </view>
+  </custom-container>
+  <van-dialog id="van-dialog" />
+</template>
+
+<script>
+import mpx, { createPage } from '@mpxjs/core'
+import jumpAction from '@/utils/jump.js'
+import list from '@/constant/home.js'
+import ParsonCenter from '@/subpackages/person-center/pages/index.mpx?resolve'
+import config, { categoryMap } from '@/constant/release.js'
+import store from '@/store'
+
+createPage({
+  onShareAppMessage() {
+    getApp().onShareAppMessage()
+  },
+  data: {
+    tabActive: 0,
+    list,
+    updateList: false,
+    showPage: false,
+    clickLeft() {
+      mpx.navigateTo({
+        url: ParsonCenter
+      })
+    }
+  },
+  watch: {
+    categoryTypeId: {
+      handler(val) {
+        const { fromOrigin } = config[val]
+        this.setState({
+          fromOrigin
+        })
+      },
+      immediate: true
+    }
+  },
+  computed: {
+    ...store.mapState(['navBarStyle', 'homeset', 'fromOrigin']),
+    top() {
+      return this.navBarStyle.height + this.navBarStyle.top + this.navBarStyle.paddingBottom
+    },
+    currentTab() {
+      return this.renderPartyBList.find((_, index) => index === this.tabActive)
+    },
+    categoryTypeId() {
+      return categoryMap[this.currentTab.action.params.id]
+    },
+    extraList() {
+      return [{
+        text: '我要主动求职',
+        id: 'gotoUserInfo',
+        sort: 7,
+        action: {
+          icon: 'arrow',
+          name: '去发布',
+          jumptype: 'mp',
+          link: '/person-center/pages/person-info'
+        }
+      }, {
+        text: '我要诚寻客户',
+        id: 'gotoCompanyInfo',
+        sort: 4,
+        action: {
+          icon: 'arrow',
+          id: 'gotoCompanyInfo',
+          name: '去发布',
+          jumptype: 'mp',
+          link: '/person-center/pages/company-info'
+        }
+      }]
+    },
+    renderPartyAList() {
+      return this.list.map(item => item[0]).concat(this.extraList).sort((a, b) => a.sort - b.sort)
+    },
+    renderPartyBList() {
+      return this.list.map(item => item[1])
+    }
+  },
+  onLoad() {
+    this.setLocation()
+  },
+  onShow() {
+    this.setNavBarStyle({
+      showDropdown: false,
+      clickDropdown: null
+    })
+    const { fromOrigin } = config[this.categoryTypeId]
+    fromOrigin && this.setState({ fromOrigin })
+    this.showPage = true
+    this.setLocation()
+  },
+  onHide() {
+    this.showPage = false
+  },
+  methods: {
+    ...store.mapMutations(['setNavBarStyle', 'setState']),
+    ...store.mapActions(['setLocation']),
+    jump(m) {
+      jumpAction(m.action)
+    },
+    onTabChange({ detail }) {
+      const { index } = detail
+      this.tabActive = index
+      this.updateList = !this.updateList
+    }
+  }
+})
+</script>
+<style scoped>
+.van-tabs__line{
+  background-color: #79b3f4 !important;
+}
+.van-tabs__scroll--line {
+  height: 88rpx !important;
+}
+.van-tabs--line{
+  height: 88rpx !important;
+}
+</style>
+
+<style lang="stylus" scoped>
+@import "@/assets/base.styl"
+.tabClass
+  font-weight bold !important
+  font-size 26rpx !important
+  height 88rpx !important
+  line-height 88rpx !important
+.tabClassActive
+  font-size 32rpx !important
+  color #79b3f4 !important
+.container
+  width 100%
+  height 100%
+  overflow hidden
+  flex-column()
+  .partyA-container
+    padding 0 16rpx
+  .partyA
+    padding 8rpx
+    display flex
+    flex-wrap wrap
+    justify-content space-around
+    background #ffffff
+    box-shadow $box-shadow
+    border-radius 16rpx
+    &-item
+      width 24%
+      height 50rpx
+      background #79b3f4
+      border-radius 8rpx
+      flex-center()
+      margin-top 8rpx
+      margin-bottom 8rpx
+      color #000000
+      font-size 26rpx
+      font-weight bold
+      &.first-item
+        color $color-red
+        background none
+        font-size 32rpx
+        // animation scaleAni 1s infinite
+  .partyB
+    margin-top 16rpx
+  .list
+    border-top $border
+    flex 1
+    overflow hidden
+@-webkit-keyframes scaleAni
+  0%
+    transform scale(1)
+  50%
+    transform scale(1.1)
+  100%
+    transform scale(1)
+</style>
+
+<script name="json">
+module.exports = {
+  usingComponents: {
+    "partyB": "@/subpackages/superstream/compontens/order/partyB.mpx"
+  },
+  "componentPlaceholder": {
+  },
+  "disableScroll": true
+}
+</script>

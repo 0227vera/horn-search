@@ -1,0 +1,88 @@
+<template>
+  <view class="container">
+    <view class="content"></view>
+    <view class="name">招工桥</view>
+  </view>
+</template>
+
+<script>
+import mpx, { createPage } from '@mpxjs/core'
+
+import homePageUrl from '@/subpackages/homepage/pages/index.mpx?resolve'
+import store from '@/store'
+
+createPage({
+  async onLoad(params) {
+    this.params = params
+    this.appReady && this.jumpAction()
+  },
+  computed: {
+    ...store.mapState(['appReady'])
+  },
+  watch: {
+    appReady(val) {
+      val && this.jumpAction()
+    }
+  },
+  methods: {
+    jumpAction() {
+      let url = homePageUrl
+      const { type = '', path = '' } = this.params
+      if (type === 'mp') {
+        url = decodeURIComponent(path)
+      } else if (type === 'h5') {
+        url = `/pages/webview?path=${path}`
+      }
+      // note: 将动画强势播放,同时加载异步分包必须要的内容
+      setTimeout(() => {
+        mpx.redirectTo({ url })
+      }, 2000)
+    }
+  }
+})
+</script>
+<style lang="stylus" scoped>
+@import "@/assets/base.styl"
+.container
+  width 100vw
+  height 100vh
+  display flex
+  flex-center()
+  flex-column()
+  background-image linear-gradient(to right top, #aa8fd8, #9a9ae1, #8aa7ec)
+  .content
+    flex-center()
+    background-image url(../assets/logo.png)
+    background-size 100% 100%
+    border 4rpx solid rgb(0, 129, 255)
+    width 300rpx
+    height 300rpx
+    border-radius 150rpx
+    font-size 40rpx
+    font-weight bold
+    animation logo 2s infinite
+    box-shadow $box-shadow
+  .name
+    font-size 50rpx
+    font-weight bold
+    color #000000
+    margin-top 50rpx
+    letter-spacing 10rpx
+@-webkit-keyframes logo
+  0%
+    transform scale(1)
+  50%
+    transform scale(1.2)
+  100%
+    transform scale(1)
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+    },
+    "componentPlaceholder": {
+    },
+    "disableScroll": true
+  }
+</script>

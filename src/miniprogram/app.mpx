@@ -20,13 +20,9 @@ createApp({
       appReady: false
     })
     const userInfo = await getCurrentUser()
-    const { address = [], OPENID, company, biographical, companyInfo, homeset } = userInfo.data
-    if (!Object.keys(homeset).length) {
-      Object.assign(homeset, { id: '1', text: '展示左右两侧' })
-    }
+    const { address = [], OPENID, company, biographical, companyInfo, userInfo: user } = userInfo.data
     let obj = {
-      appReady: true,
-      homeset
+      appReady: true
     }
     address.length && Object.assign(obj, {
       addressList: address
@@ -36,6 +32,9 @@ createApp({
     })
     companyInfo && Object.keys(companyInfo).length && Object.assign(obj, {
       companyInfo
+    })
+    user && Object.keys(user) && Object.assign(obj, {
+      userInfo: user
     })
     OPENID && Object.assign(obj, {
       openid: OPENID
@@ -47,7 +46,7 @@ createApp({
   eventBus: new EventBus(),
   onShareAppMessage() {
     return {
-      path: '/pages/home'
+      path: '/pages/index'
     }
   }
 })
@@ -63,8 +62,7 @@ page
 <script type="application/json">
   {
     "pages": [
-      "./pages/home",
-      "./pages/webview"
+      "./pages/index"
     ],
     "packages": [
       "./subpackages/person-center/app?root=person-center",
@@ -76,6 +74,8 @@ page
       "./subpackages/company/app?root=company"
     ],
     "usingComponents": {
+      "van-tab": "@vant/weapp/tab/index",
+      "van-tabs": "@vant/weapp/tabs/index",
       "custom-container": "@/compontens/base/custom-container",
       "van-tabbar": "@vant/weapp/tabbar/index",
       "van-tabbar-item": "@vant/weapp/tabbar-item/index",
@@ -113,7 +113,7 @@ page
     "lazyCodeLoading": "requiredComponents",
     "__usePrivacyCheck__": true,
     "preloadRule": {
-      "pages/home": {
+      "pages/index": {
         "network": "all",
         "packages": [
           "superstream"
@@ -139,6 +139,9 @@ page
     "permission": {
       "scope.userLocation": {
         "desc": "你的位置信息将用于小程序位置接口的效果展示"
+      },
+      "scope.userInfo": {
+        "desc": "用于展示相关信息"
       }
     }
   }

@@ -14,6 +14,7 @@
     <view class="list-item-opa">
       <van-button
         wx:for="{{buttons}}"
+        wx:key="*this"
         size="small"
         style="margin-left: 8rpx"
         wx:for-item="b"

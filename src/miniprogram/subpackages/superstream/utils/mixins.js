@@ -18,10 +18,12 @@ export const mixins = {
     popupType: '',
     tmplIds: [ORDER_UPDATE],
     uploaderDisabled: false,
-    toastText: ''
+    toastText: '',
+    checkBoxList: [],
+    initCheckbox: undefined
   },
   computed: {
-    ...store.mapState(['adInfo', 'fromOrigin', 'cacheForm', 'addressList', 'showBottomNav']),
+    ...store.mapState(['adInfo', 'fromOrigin', 'cacheForm', 'addressList', 'showBottomNav', 'company']),
     configById() {
       return config[this.categoryTypeId]
     },
@@ -137,7 +139,7 @@ export const mixins = {
         title: '提交中...',
         mask: true
       });
-      await this.$refs.serviceNotice?.showServiceNotice?.()
+      // await this.$refs.serviceNotice?.showServiceNotice?.()
       if (formatList.length) {
         this.updateObj = formatNumSubmitData({ obj: this.updateObj, formatList })
       }
@@ -145,14 +147,6 @@ export const mixins = {
         ...this.updateObj,
         status: 1
       })
-      if (this.updateObj.company) {
-        updateUserInfo({
-          company: this.updateObj.company
-        })
-        this.setState({
-          company: this.updateObj.company
-        })
-      }
       mpx.hideLoading()
       if (res.code === 200) {
         const self = this

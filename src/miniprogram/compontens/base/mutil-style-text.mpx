@@ -1,7 +1,7 @@
 <template>
   <view class="mpx-special-text" wx:style="{{containerStyle}}">
     <slot name="before"></slot>
-    <view wx:for="{{textArr}}" class="special-text-item" wx:key="index" data-index="{{index}}" wx:style="{{verticalAlign}};{{item.style}}">{{item.text}}</view>
+    <view wx:for="{{textArr}}" class="special-text-item" wx:key="*this" data-index="{{index}}" wx:style="{{verticalAlign}};{{item.style}}">{{item.text}}</view>
     <slot name="after"></slot>
   </view>
 </template>
@@ -32,7 +32,7 @@ createComponent({
     },
     rules: {
       type: Object,
-      default: () => {}
+      value: () => {}
     },
     enableDefault: {
       type: Boolean,

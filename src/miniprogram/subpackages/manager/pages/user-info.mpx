@@ -1,0 +1,266 @@
+<template>
+<custom-container title="用户信息">
+  <item-container title="发布订单（作为甲方的数据）：">
+    <view class="release">
+      <view class="release-nav">
+        <van-sidebar active-key="{{ releaseInfo.active }}" bind:change="onChange">
+          <van-sidebar-item wx:for="{{releaseInfo.list}}" wx:key="*this" title="{{item.title}}" badge="{{item.badge}}" />
+        </van-sidebar>
+      </view>
+      <view class="release-content">
+        <view wx:for="{{releaseInfo.activeList}}" wx:key="_id" class="release-content-item">
+          <view>
+            {{index + 1}}.
+            {{item.time}}
+          </view>
+          <view>
+            {{item.showName}}
+          </view>
+        </view>
+      </view>
+    </view>
+  </item-container>
+  <item-container title="阅读订单（作为乙方的数据）：">
+    <view class="release">
+      <view class="release-nav">
+        <van-sidebar active-key="{{ readOrderInfo.active }}" bind:change="onReadChange">
+          <van-sidebar-item wx:for="{{readOrderInfo.list}}" wx:key="*this" title="{{item.title}}" badge="{{item.badge}}" />
+        </van-sidebar>
+      </view>
+      <view class="release-content">
+        <view wx:for="{{readOrderInfo.activeList}}" wx:key="_id" class="release-content-item">
+          <view>
+            {{index + 1}}.
+            {{item.time}}
+          </view>
+          <view>
+            {{item.showName}}({{item.times}}次)
+          </view>
+        </view>
+      </view>
+    </view>
+  </item-container>
+  <item-container title="打电话的订单（作为乙方的数据）：">
+    <view class="release">
+      <view class="release-nav">
+        <van-sidebar active-key="{{ callOrderInfo.active }}" bind:change="onCallChange">
+          <van-sidebar-item wx:for="{{callOrderInfo.list}}" wx:key="*this" title="{{item.title}}" badge="{{item.badge}}" />
+        </van-sidebar>
+      </view>
+      <view class="release-content">
+        <view wx:for="{{callOrderInfo.activeList}}" wx:key="_id" class="release-content-item">
+          <view>
+            {{index + 1}}.
+            {{item.time}}
+          </view>
+          <view>
+            {{item.showName}}({{item.times}}次)
+          </view>
+        </view>
+      </view>
+    </view>
+  </item-container>
+</custom-container>
+</template>
+
+<script setup lang="ts">
+import mpx, { onLoad, onMounted, reactive, ref } from '@mpxjs/core'
+import { getReleaseList } from '@/api'
+import dayjs from 'dayjs'
+enum fromOriginsEnum {
+  bossWorker,
+  factoryCooper,
+  leaseTransfer,
+  usedDetect,
+  tailings
+}
+
+const fromOrigins = [
+  { id: 'bossWorker', title: '我要招工' },
+  { id: 'factoryCooper', title: '我找工厂' },
+  { id: 'leaseTransfer', title: '出租转让' },
+  { id: 'usedDetect', title: '二手设备' },
+  { id: 'tailings', title: '尾货处理' }
+]
+
+interface InfoItem<K, T> {
+    active: string
+    list: Array<K>
+    activeList: Array<T>
+}
+interface InfoListItem<T> {
+    title: string
+    id: string
+    badge: number
+    list: Array<T>
+}
+
+interface InfoActiveListItem {
+    showName?: string
+    time: string
+    categoryName?: string
+    cooperTypeName?: string
+    RELEASE_ADD_TIME?: number
+    readlist?: Array<any>
+    calllist?: Array<any>
+    times?: number | string
+}
+
+const releaseInfo = reactive<InfoItem<InfoListItem<InfoActiveListItem>, InfoActiveListItem>>({
+  active: 'bossWorker',
+  list: [],
+  activeList: []
+})
+
+const readOrderInfo = reactive<InfoItem<InfoListItem<InfoActiveListItem>, InfoActiveListItem>>({
+  active: 'bossWorker',
+  list: [],
+  activeList: []
+})
+
+const callOrderInfo = reactive<InfoItem<InfoListItem<InfoActiveListItem>, InfoActiveListItem>>({
+  active: 'bossWorker',
+  list: [],
+  activeList: []
+})
+
+const callOrderList = ref<Array<Record<string, any>>>([])
+
+const currentOpenid = ref<string>('')
+
+onLoad(async ({ OPENID = '' }) => {
+  if (!OPENID) {
+    mpx.showToast({
+      title: '参数有误',
+      icon: 'error',
+      success() {
+        mpx.navigateBack()
+      }
+    })
+  }
+  currentOpenid.value = OPENID
+  // 作为甲方的数据：
+  const res = await Promise.all(
+    fromOrigins.map(item => getReleaseList({ OPENID, fromOrigin: item.id }))
+  )
+  releaseInfo.list = fromOrigins.map((item, index) => ({
+    title: item.title,
+    id: item.id,
+    badge: res[index]?.data?.total || 0,
+    list: res[index]?.data?.list || []
+  }))
+  releaseInfo.activeList = (releaseInfo.list.find(f => f.id === releaseInfo.active)?.list || []).map(item => ({
+    showName: item.categoryName || item.cooperTypeName,
+    time: dayjs(item.RELEASE_ADD_TIME).format('YYYY-MM-DD HH点')
+  }))
+  // 已读的数据
+  const read = await Promise.all(
+    fromOrigins.map(item => getReleaseList({
+      and: {
+        'readlist.openid': ['in', [OPENID]]
+      },
+      fromOrigin: item.id
+    }))
+  )
+  readOrderInfo.list = fromOrigins.map((item, index) => ({
+    title: item.title,
+    id: item.id,
+    badge: read[index]?.data?.total || 0,
+    list: read[index]?.data?.list || []
+  }))
+  readOrderInfo.activeList = (readOrderInfo.list.find(f => f.id === readOrderInfo.active)?.list || []).map(item => ({
+    showName: item.categoryName || item.cooperTypeName,
+    time: dayjs(item.RELEASE_ADD_TIME).format('YYYY-MM-DD HH点'),
+    times: (item.readlist as Array<any>)?.find(f => f.openid === OPENID)?.times
+  }))
+  // 已呼叫的数据
+  const calllist = await Promise.all(
+    fromOrigins.map(item => getReleaseList({
+      and: {
+        'calllist.openid': ['in', [OPENID]]
+      },
+      fromOrigin: item.id
+    }))
+  )
+  callOrderInfo.list = fromOrigins.map((item, index) => ({
+    title: item.title,
+    id: item.id,
+    badge: calllist[index]?.data?.total || 0,
+    list: calllist[index]?.data?.list || []
+  }))
+  callOrderInfo.activeList = (callOrderInfo.list.find(f => f.id === callOrderInfo.active)?.list || []).map(item => ({
+    showName: item.categoryName || item.cooperTypeName,
+    time: dayjs(item.RELEASE_ADD_TIME).format('YYYY-MM-DD HH点'),
+    times: (item.readlist as Array<any>)?.find(f => f.openid === OPENID)?.times
+  }))
+})
+const onChange = e => {
+  releaseInfo.active = fromOriginsEnum[e.detail]
+  releaseInfo.activeList = (releaseInfo.list.find(f => f.id === releaseInfo.active)?.list || []).map(item => ({
+    showName: item.categoryName || item.cooperTypeName,
+    time: dayjs(item.RELEASE_ADD_TIME).format('YYYY-MM-DD HH:mm')
+  }))
+}
+
+const onReadChange = e => {
+  readOrderInfo.active = fromOriginsEnum[e.detail]
+  readOrderInfo.activeList = (readOrderInfo.list.find(f => f.id === readOrderInfo.active)?.list || []).map(item => ({
+    showName: item.categoryName || item.cooperTypeName,
+    time: dayjs(item.RELEASE_ADD_TIME).format('YYYY-MM-DD HH:mm'),
+    times: (item.calllist as Array<any>)?.find(f => f.openid === currentOpenid.value)?.times
+  }))
+}
+
+const onCallChange = e => {
+  callOrderInfo.active = fromOriginsEnum[e.detail]
+  callOrderInfo.activeList = (callOrderInfo.list.find(f => f.id === callOrderInfo.active)?.list || []).map(item => ({
+    showName: item.categoryName || item.cooperTypeName,
+    time: dayjs(item.RELEASE_ADD_TIME).format('YYYY-MM-DD HH:mm'),
+    times: (item.calllist as Array<any>)?.find(f => f.openid === currentOpenid.value)?.times
+  }))
+}
+
+defineExpose({
+  releaseInfo,
+  readOrderInfo,
+  onChange,
+  onReadChange,
+  callOrderInfo,
+  onCallChange
+})
+</script>
+
+<style lang="stylus" scoped>
+@import "@/assets/base.styl"
+.release
+  display flex
+  height 300px
+  &-nav
+    width 80px
+  &-content
+    flex 1
+    height 100%
+    padding 16rpx
+    overflow-x hidden
+    &-item
+      display flex
+      justify-content space-between
+      align-items center
+      padding 16rpx 0
+      border-bottom $border
+      font-size 24rpx
+      font-weight bold
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "van-sidebar": "@vant/weapp/sidebar/index",
+      "van-sidebar-item": "@vant/weapp/sidebar-item/index",
+      "item-container": "@/subpackages/order-detail/components/item-container.mpx?root=order-detail"
+    },
+    "componentPlaceholder": {
+      "item-container": "view"
+    }
+  }
+</script>

@@ -200,41 +200,44 @@
       id="area"
     />
     <!-- 图片 -->
-    <van-cell size="large" title="图片展示" title-width="160rpx" value="{{imagesValue}}" border="{{false}}" />
-    <view class="image-container">
-      <view class="iamge-content">
-        <van-uploader
-          bind:after-read="afterRead"
-          accept="media"
-          deletable
-          disabled="{{uploaderDisabled}}"
-        />
-        <view class="imgurl-container" wx:for="{{updateObj.images}}" wx:key="*this">
-          <van-image
-            bind:click="previewMedia(index)"
-            width="80"
-            height="80"
-            src="{{item}}"
-            radius="8"
-            fit="cover"
+    <block wx:if="{{true}}">
+      <van-cell size="large" title="图片展示" title-width="160rpx" value="{{imagesValue}}" border="{{false}}" />
+      <view class="image-container">
+        <view class="iamge-content">
+          <van-uploader
+            bind:after-read="afterRead"
+            accept="media"
+            deletable
+            disabled="{{uploaderDisabled}}"
           />
-          <van-icon name="clear" bindtap="clearImg(item)" class="image-clear-icon"/>
+          <view class="imgurl-container" wx:for="{{updateObj.images}}" wx:key="*this">
+            <van-image
+              bind:click="previewMedia(index)"
+              width="80"
+              height="80"
+              src="{{item}}"
+              radius="8"
+              fit="cover"
+            />
+            <van-icon name="clear" bindtap="clearImg(item)" class="image-clear-icon"/>
+          </view>
         </view>
       </view>
-    </view>
+    </block>
     <!-- 合作概述 -->
     <van-field
       size="large"
       label="合作概述"
       title-width="160rpx"
       value="{{ updateObj.add }}"
-      placeholder="请输入合作概述"
-      input-align="left"
-      error-message="{{updateObj.add ? '' : '例如十三行写字楼货源，要求管理质检等人员齐全能马上开货、看质量返单、配合度高、跑量为主等'}}"
+      placeholder="请选择合作概述"
+      input-align="right"
       type="textarea"
       autosize
       id="add"
-      bind:change="onFieldChange"
+      is-link
+      readonly
+      bind:tap="showPopupContainer('add')"
     />
   </van-cell-group>
   <van-cell border="{{false}}">
@@ -246,8 +249,8 @@
   type="{{popupType}}"
   title="{{popupTitle}}"
   initRadio="{{initRadio}}"
-  initCheckbox="{{initCheckbox}}"
   radioList="{{radioList}}"
+  initCheckbox="{{initCheckbox}}"
   checkBoxList="{{checkBoxList}}"
   bind:close="closePopupContainer"
   bind:confirm="onConfirmHandle"
@@ -261,6 +264,7 @@ import mpx, { createComponent } from '@mpxjs/core'
 import { mixins } from '@/subpackages/superstream/utils/mixins.js'
 import { validateFactory } from '@/subpackages/superstream/utils/validate.js'
 import { initFactoryObj } from '@/subpackages/superstream/utils/constant.js'
+import { factoryCooperAddList } from '@/constant/config.js'
 
 createComponent({
   mixins: [mixins],
@@ -321,6 +325,10 @@ createComponent({
         this.radioList = this.orderTypeList
         this.popupTitle = '请选择订单类型'
         this.initRadio = this.updateObj.orderType
+      } else if (type === 'add') {
+        this.popupTitle = '请选择合作概述'
+        this.checkBoxList = factoryCooperAddList
+        this.initCheckbox = this.updateObj.addValue
       } else if (type === 'address') {
         if (!this.addressList.length) {
           mpx.navigateTo({
@@ -346,11 +354,11 @@ createComponent({
         },
         fabricProp: () => {
           this.updateObj.fabricProp = data.value
-          this.updateObj.fabricPropName = data.selectedList.map(item => item.name).join(';')
+          this.updateObj.fabricPropName = data.selectedList.map(item => item.name).join('、')
         },
         productType: () => {
           this.updateObj.productType = data.value
-          this.updateObj.productTypeName = data.selectedList.map(item => item.name).join(';')
+          this.updateObj.productTypeName = data.selectedList.map(item => item.name).join('、')
         },
         orderType: () => {
           this.updateObj.orderType = data.value
@@ -359,6 +367,10 @@ createComponent({
         address: () => {
           this.updateObj.poi = data.poi
           this.updateObj.tel = data.tel
+        },
+        add: () => {
+          this.updateObj.add = data.selectedList.map(item => item.name).join('、')
+          this.updateObj.addValue = data.value
         }
       }
       actions?.[type]?.()

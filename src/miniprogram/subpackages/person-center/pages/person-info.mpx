@@ -79,21 +79,22 @@
       bind:tap="showPopupContainer('time', 'end')"
     />
     <!-- 补充信息 -->
+    <!-- error-message="{{biographical.note ? '' : '例如：诚实可信、技术好、踏实肯干等'}}" -->
     <van-field
       size="large"
       label="补充信息"
       title-width="160rpx"
       value="{{ biographical.note }}"
-      placeholder="请输入补充信息"
-      readonly="{{!pageCanEdit}}"
-      input-align="left"
+      placeholder="请选择补充信息"
+      readonly
+      input-align="right"
       type="textarea"
       autosize
-      error-message="{{biographical.note ? '' : '例如：诚实可信、技术好、踏实肯干等'}}"
       error-message-align="right"
       id="note"
+      is-link
       bind:change="onFieldChange"
-      bind:tap="gotoChangeStatus"
+      bind:tap="showPopupContainer('note')"
     />
     <van-field
       size="large"
@@ -133,30 +134,20 @@
   minHour="{{minHour}}"
   minMinute="{{minMinute}}"
   initTime="{{initTime}}"
+  checkBoxList="{{checkBoxList}}"
   categoryList="{{categoryList}}"
   max="{{3}}"
   bind:close="closePopupContainer"
   bind:confirm="onConfirmHandle"
 />
 <toast wx:ref="toast" text="{{toastText}}" />
-<van-dialog
-  title="提示"
-  use-slot
-  show-cancel-button
-  show="{{ dialogShow }}"
-  bind:confirm="dialogConfirm"
-  bind:close="onClose"
->
-  <view class="dialog-container">
-    <mutil-style-text text="{{noticeText}}" rules="{{noticeRules}}" />
-  </view>
-</van-dialog>
 </template>
 
 <script>
 import mpx, { createPage } from '@mpxjs/core'
 import { updateUserInfo } from '@/api'
 import config from '@/constant/release.js'
+import { personInfoNoteList } from '@/constant/config.js'
 import store from '@/store'
 import dayjs from 'dayjs'
 import guid from '@/utils'
@@ -165,7 +156,6 @@ import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?r
 createPage({
   data: {
     showPopup: false,
-    dialogShow: false,
     noticeText: '如需更改工厂信息，请先关闭推送状态，{完成后再开启}，确认关闭？',
     popupType: '',
     initTime: '',
@@ -183,7 +173,8 @@ createPage({
       '{x}': {
         style: 'color: #ff525d;font-weight:bold;'
       }
-    }
+    },
+    checkBoxList: personInfoNoteList
   },
   computed: {
     ...store.mapState(['addressList', 'adInfo', 'biographical']),
@@ -335,19 +326,35 @@ createPage({
               }
             })
           }
+        },
+        note: () => {
+          this.setState({
+            biographical: {
+              ...this.biographical,
+              note: data.selectedList.map(item => item.name).join('、')
+            }
+          })
         }
       }
       actions?.[type]?.()
       this.closePopupContainer()
     },
-    gotoChangeStatus() {
+    async gotoChangeStatus() {
       if (this.pageCanEdit) {
         return
       }
-      this.dialogShow = true
-    },
-    onClose() {
-      this.dialogShow = false
+      const res = mpx.showModal({
+        title: '提示',
+        content: '如需更改工厂信息，请先关闭推送状态，完成后再开启，确认关闭？'
+      })
+      if (res.confrim) {
+        this.setState({
+          biographical: {
+            ...this.biographical,
+            status: 'off'
+          }
+        })
+      }
     },
     async onSwitchChange() {
       const biographical = JSON.parse(JSON.stringify(this.biographical))
@@ -372,14 +379,6 @@ createPage({
       } else {
         this.setState({ biographical })
       }
-    },
-    dialogConfirm() {
-      this.setState({
-        biographical: {
-          ...this.biographical,
-          status: 'off'
-        }
-      })
     },
     onFieldChange(e) {
       this.setState({

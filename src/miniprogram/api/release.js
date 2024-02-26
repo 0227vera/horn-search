@@ -3,8 +3,8 @@ import store from '@/store'
 
 const getCommonParams = (params = {}) => {
   return {
-    ...params,
-    fromOrigin: store.state.fromOrigin
+    fromOrigin: store.state.fromOrigin,
+    ...params
   }
 }
 

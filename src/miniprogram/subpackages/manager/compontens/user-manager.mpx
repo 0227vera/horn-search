@@ -1,30 +1,146 @@
 <template>
-  <table-list
-    bind:btnclick="showPopup"
-    list="{{list}}"
-    showListLoading="{{loadingList}}"
-    showAddBtn="{{false}}"
-    emptyDescription="{{emptyDescription}}"
-  />
+  <view class="container">
+    <view wx:if="{{totalText}}" class="total">
+      <mutil-style-text text="{{totalText}}" />
+    </view>
+    <block  wx:if="{{list.length}}">
+      <view class="list">
+        <view wx:for="{{list}}" wx:key="_id" class="list-item">
+          <view>{{item.OPENID}}</view>
+          <van-button size="mini" type="primary" round bind:tap="gotoUserInfo(item)">用户详情</van-button>
+        </view>
+      </view>
+      <view class="loadmore">
+        <van-loading wx:if="{{loadmore.loading}}" type="spinner" size="14px" color="#1989fa">
+          <text style="color: #000000;font-weight: bold;">加载中...</text>
+        </van-loading>
+        <view wx:else bind:tap="more">
+          {{loadmore.text}}
+        </view>
+      </view>
+    </block>
+  </view>
 </template>
 
-<script>
-import mpx, { createComponent } from '@mpxjs/core'
+<script setup lang="ts">
+import mpx, { computed, onMounted, reactive, ref } from '@mpxjs/core'
+import { getUserList } from '@/api'
+interface Page {
+  page: number
+  size: number
+}
 
-createComponent({
-  data: {
-    list: [],
-    loadingList: false,
-    emptyDescription: '暂无用户数据'
-  }
+interface LoadMore {
+  text: string
+  isClick: boolean
+  loading: boolean
+}
+
+interface userItem {
+  OPENID: string
+  _id: string
+}
+
+const pageInfo = {
+  page: 1,
+  size: 100
+}
+
+const list = ref<Array<Record<string, userItem>>>([])
+const total = ref<number>(0)
+const loadingList = ref<boolean>(false)
+const emptyDescription = ref<string>('')
+const page = reactive<Page>(JSON.parse(JSON.stringify(pageInfo)))
+const loadmore = reactive<LoadMore>({
+  text: '~~点击加载更多~~',
+  isClick: true,
+  loading: false
 })
 
+onMounted(() => {
+  getList()
+})
+
+const getList = async () => {
+  loadmore.loading = true
+  mpx.showLoading({
+    title: '加载中……'
+  })
+  const res = await getUserList(page)
+  mpx.hideLoading()
+  list.value = list.value.concat(res.data?.list || [])
+  total.value = res.data.total
+  loadmore.loading = false
+  if (list.value.length >= total.value) {
+    loadmore.text = '~~哥，这次真的没有了~~'
+    loadmore.isClick = false
+  }
+}
+
+const more = () => {
+  if (!loadmore.isClick || loadmore.loading) {
+    return
+  }
+  page.page++
+  getList()
+}
+
+const totalText = computed<string>(() => {
+  if (total.value) {
+    return `一共有{${total.value}}个用户`
+  }
+  return ''
+})
+const gotoUserInfo = (item: userItem) => {
+  mpx.navigateTo({
+    url: `/manager/pages/user-info?OPENID=${item.OPENID}`
+  })
+}
+
+defineExpose({
+  list,
+  totalText,
+  loadingList,
+  loadmore,
+  more,
+  emptyDescription,
+  gotoUserInfo
+})
 </script>
+<style lang="stylus" scoped>
+@import "@/assets/base.styl"
+.container
+  flex-column()
+  padding 32rpx
+  padding-bottom 100rpx
+  .total
+    height 80rpx
+    line-height 80rpx
+    background #ffffff
+    border-radius 16rpx 16rpx 0 0
+    padding 0 16rpx
+    border-bottom $border
+  .list
+    background #ffffff
+    border-radius 0 0 16rpx 16rpx
+    padding 16rpx
+    &-item
+      display flex
+      align-items center
+      justify-content space-between
+      margin-bottom 16rpx
+  .loadmore
+    height 80rpx
+    flex-center()
+</style>
 
 <script type="application/json">
   {
     "usingComponents": {
-      "table-list": "./base/table-list.mpx"
+      "mutil-style-text": "@/compontens/base/mutil-style-text.mpx?root=common-coms-page"
+    },
+    "componentPlaceholder": {
+      "mutil-style-text": "view"
     }
   }
 </script>
