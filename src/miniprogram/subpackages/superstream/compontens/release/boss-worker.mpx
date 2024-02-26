@@ -232,13 +232,13 @@
       label="工厂名"
       title-width="160rpx"
       wx:if="{{false}}"
-      value="{{ updateObj.company }}"
-      placeholder="请输入您的工厂或公司名称"
+      wx:if="{{company}}"
+      value="{{ company }}"
       input-align="right"
       type="textarea"
       autosize
       id="company"
-      bind:change="onFieldChange"
+      readonly
     />
   </van-cell-group>
   <van-cell border="{{false}}" wx:if="{{showBottomNav}}">
@@ -279,6 +279,11 @@ createComponent({
     },
     originLabel: '货源(品质层次)',
     updateObj: JSON.parse(JSON.stringify(initBossWorkerObj))
+  },
+  attached() {
+    if (this.company) {
+      this.updateObj.company = this.company
+    }
   },
   computed: {
     categoryList() {
