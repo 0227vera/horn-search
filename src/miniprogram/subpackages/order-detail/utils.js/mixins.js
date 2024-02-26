@@ -122,7 +122,6 @@ const mixin = {
         const res = await getUserList({ and, fields: 'biographical' })
         const { list = [] } = res.data || {}
         this.talentList = list
-        console.log(list)
       }
     }
   },

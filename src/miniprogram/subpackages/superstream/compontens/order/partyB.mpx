@@ -434,7 +434,6 @@ createComponent({
       const { currentTarget } = e
       const { dataset } = currentTarget
       const { name, id } = dataset
-      console.log(e, id, this.renderFilterList)
       this.renderFilterList.forEach(item => {
         if (item.id === id) {
           item.value = name
@@ -444,7 +443,6 @@ createComponent({
       })
     },
     onRadioChange(e) {
-      console.log('onRadioChange', e)
       const { detail, target } = e
       this.renderFilterList.forEach(item => {
         if (item.id === target.id) {

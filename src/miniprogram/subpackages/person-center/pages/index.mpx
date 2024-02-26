@@ -57,7 +57,7 @@
 
 <script>
 import mpx, { createPage } from '@mpxjs/core'
-import { isAdmin, updateUserInfo } from '@/api'
+import { isAdmin, updateUserInfo, fileUpload } from '@/api'
 import jumpAction from '@/utils/jump'
 import store from '@/store'
 
@@ -178,9 +178,13 @@ createPage({
       this.cacheUserInfo.avatar = this.userInfo.avatar
       this.editInfo = true
     },
-    onChooseAvatar(e) {
+    async onChooseAvatar(e) {
       const { avatarUrl } = e.detail
       this.cacheUserInfo.avatar = avatarUrl
+      try {
+        const res = await fileUpload(avatarUrl)
+        this.cacheUserInfo.avatar = res.fileID
+      } catch (error) {}
     },
     onNameChange(e) {
       const { value } = e.detail

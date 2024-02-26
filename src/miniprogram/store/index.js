@@ -139,14 +139,12 @@ export default createStore({
           type: 'gcj02',
           success (res) {
             const { longitude, latitude } = res
-            console.log('========>', res)
             commit('setState', {
               location: { longitude, latitude }
             })
             state.mapSdk.reverseGeocoder({
               location: `${latitude},${longitude}`,
               success (res) {
-                console.log(res)
                 const { result } = res || {}
                 commit('setState', {
                   location: {

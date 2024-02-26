@@ -171,7 +171,6 @@ createComponent({
       const { data, type } = detail
       const actions = {
         used: () => {
-          console.log(data)
           this.updateObj.category = data.value
           this.updateObj.categoryName = data.name
           this.updateObj.unit = data.unit

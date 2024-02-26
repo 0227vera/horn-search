@@ -147,16 +147,11 @@ createPage({
     onDetailChange(e) {
       this.addInfo.address.detail = e.detail
     },
-    // note: 获取昵称
-    onChooseAvatar(e) {
-      console.log(e)
-    },
     // note: 获取电话
     async getPhoneNumber(e) {
       const res = await getPhone(e.detail)
       const phone = res.data.phoneInfo.phoneNumber
       this.addInfo.phone = phone
-      console.log(phone)
     },
     // note: popup的处理
     closePopupContainer() {

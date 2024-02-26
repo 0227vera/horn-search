@@ -286,7 +286,6 @@ createPage({
     },
     onConfirmHandle({ detail = {} } = {}) {
       const { data, type } = detail
-      console.log(data, type)
       const actions = {
         category: () => {
           this.setState({

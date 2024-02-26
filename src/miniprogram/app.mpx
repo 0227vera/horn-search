@@ -21,7 +21,6 @@ createApp({
     })
     const userInfo = await getCurrentUser()
     const { address = [], OPENID, company, biographical, companyInfo, userInfo: user } = userInfo.data
-    console.log(user)
     let obj = {
       appReady: true
     }
