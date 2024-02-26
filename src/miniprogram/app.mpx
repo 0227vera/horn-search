@@ -4,7 +4,7 @@ import apiProxy from '@mpxjs/api-proxy'
 import store from './store'
 import { getCommonConfig, getCurrentUser } from '@/api'
 import { EventBus } from '@/utils'
-import setting from './setting/setting'
+import { CLOUD_ID } from '@/constant/pageConfig.js'
 
 mpx.use(apiProxy, { usePromise: true })
 
@@ -13,7 +13,7 @@ createApp({
   async onLaunch() {
     this.initNavBarStyle()
     wx.cloud.init({
-      env: setting.CLOUD_ID,
+      env: CLOUD_ID,
       traceUser: true
     })
     this.setState({

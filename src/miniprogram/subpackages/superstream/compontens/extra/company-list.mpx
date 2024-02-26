@@ -115,6 +115,7 @@ createComponent({
     }
   },
   methods: {
+    ...store.mapMutations(['setNavBarStyle']),
     async getList() {
       this.moreLoad.loading = true
       const res = await getUserList(this.paramsList)
@@ -167,6 +168,12 @@ createComponent({
                     f.companyInfo = companyInfo
                   }
                 })
+              })
+            },
+            complete: () => {
+              this.setNavBarStyle({
+                showDropdown: false,
+                clickDropdown: null
               })
             }
           })

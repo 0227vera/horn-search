@@ -1,9 +1,10 @@
-import { ORDER_UPDATE } from '@/setting/noticeInfo.js'
-import { fileUpload, addRelease, updateRelease, updateUserInfo } from '@/api'
+import { fileUpload, addRelease, updateRelease } from '@/api'
 import config from '@/constant/release.js'
 import { formatNumSubmitData } from '@/subpackages/superstream/utils/utils.js'
 import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
 import mpx from '@mpxjs/core'
+import { noticeTemplateIdList } from '@/constant/pageConfig.js'
+const { ORDER_UPDATE } = noticeTemplateIdList
 const store = getApp().globalStore
 
 export const mixins = {

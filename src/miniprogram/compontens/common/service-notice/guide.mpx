@@ -5,7 +5,8 @@
 
 <script>
 import { createComponent } from '@mpxjs/core'
-import { NEW_ORDER_NOTICE, ORDER_UPDATE } from '@/setting/noticeInfo.js'
+import { noticeTemplateIdList } from '@/constant/pageConfig.js'
+const { NEW_ORDER_NOTICE, ORDER_UPDATE } = noticeTemplateIdList
 
 createComponent({
   data: {
