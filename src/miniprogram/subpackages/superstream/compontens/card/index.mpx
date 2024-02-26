@@ -247,8 +247,8 @@ createComponent({
     font-size 24rpx
     font-weight bold
     padding 2rpx 8rpx
-    border-radius 0 28rpx 28rpx 0
-    opacity 0.7
+    border-radius 16rpx 28rpx 28rpx 0
+    opacity 0.9
   &_info
     display flex
     align-items center
