@@ -389,6 +389,7 @@ createComponent({
       }
     },
     async makePhone(item) {
+      getApp().eventBus.emit('preview')
       makePhoneToBoss(item)
     },
     gotoAddress(item) {

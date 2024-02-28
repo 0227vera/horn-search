@@ -8,7 +8,7 @@
     <view class="container"  wx:show="{{showPage}}">
       <view class="partyA-container">
         <view class="partyA">
-          <view class="partyA-item first-item">免费发布</view>
+          <view class="partyA-item first-item">免费发布=></view>
           <view wx:for="{{renderPartyAList}}" wx:key="*this" class="partyA-item" bind:tap="jump(item)">
             {{item.text}}
           </view>
@@ -52,6 +52,7 @@ createPage({
     tabActive: 0,
     list,
     updateList: false,
+    needUpdate: true,
     showPage: false,
     clickLeft() {
       mpx.navigateTo({
@@ -114,6 +115,9 @@ createPage({
   },
   onLoad() {
     this.setLocation()
+    getApp().eventBus.on('preview', () => {
+      this.needUpdate = false
+    })
   },
   onShow() {
     this.setNavBarStyle({
@@ -124,6 +128,13 @@ createPage({
     fromOrigin && this.setState({ fromOrigin })
     this.showPage = true
     this.setLocation()
+    if (this.needUpdate) {
+      this.updateList = !this.updateList
+    } else {
+      setTimeout(() => {
+        this.needUpdate = true
+      })
+    }
   },
   onHide() {
     this.showPage = false

@@ -197,6 +197,7 @@ createComponent({
       if (!item.images.length) {
         return
       }
+      getApp().eventBus.emit('preview')
       wx.previewMedia({
         current: 0,
         sources: item.images.map(i => ({
