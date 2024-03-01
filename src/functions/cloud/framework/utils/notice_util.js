@@ -60,36 +60,36 @@ const sendToWorkers = async function(id, origin) {
   const name = tran(origin)
   const ReleaseModel = require(`../../project/model/release_${name}_model.js`)
   const order = await ReleaseModel.getOne({ _id: id })
+  const time = dayjs(order.RELEASE_ADD_TIME).format('YYYY年MM月DD日 HH:mm')
+  const data = Object.assign({}, temValue(origin, order), {
+    character_string1: {
+      value: order._id
+    },
+    thing2: {
+      value: order.company || '点击查看'
+    },
+    time5: {
+      value: time
+    }
+  })
+  Object.keys(data).forEach(item => {
+    const value = data[item].value
+    console.log('===========>', item, value)
+    if (item.includes('thing')) {
+      data[item].value = value.slice(0, 20)
+    }
+  })
+  console.log('========+>', data)
   for (let i = 0; i < res.list.length; i++) {
     let item = res.list[i]
-    const page = encodeURIComponent(`/order-detail/pages/detail-to-worker?id=${id}&fromOrigin=${origin}`)
+    const page = `/order-detail/pages/detail-to-worker?id=${id}&fromOrigin=${origin}`
     sendMiniOnceTempMsg({
       touser: item.OPENID,
       page,
       templateId: NEW_ORDER_NOTICE,
-      data: Object.assign(temValue(origin, order), {
-        character_string1: {
-          value: order._id
-        },
-        thing2: {
-          value: order.company || '点击查看'
-        },
-        time5: {
-          value: dayjs(order.RELEASE_ADD_TIME).format('YYYY-MM-DD: HH:mm:ss')
-        }
-      })
+      data
     }).then(res => {
-      log('success', {
-        code: 200,
-        message: JSON.stringify(res),
-        stack: item.OPENID + JSON.stringify(order)
-      })
-    }).catch(err => {
-      log('error', {
-        code: 500,
-        message: JSON.stringify(err),
-        stack: item.OPENID + JSON.stringify(order)
-      })
+      console.log('success========>', res)
     })
   }
 }
