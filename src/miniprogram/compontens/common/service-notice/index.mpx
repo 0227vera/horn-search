@@ -25,6 +25,8 @@
 
 <script>
 import mpx, { createComponent } from '@mpxjs/core'
+import { updateUserInfo } from '@/api'
+import store from '@/store'
 
 createComponent({
   properties: {
@@ -36,6 +38,9 @@ createComponent({
   data: {
     show: false,
     radio: '1'
+  },
+  computed: {
+    ...store.mapState(['noticeTems'])
   },
   methods: {
     showServiceNotice() {
@@ -52,7 +57,10 @@ createComponent({
             mpx.requestSubscribeMessage({
               tmplIds: this.tmplIds
             }).then(res => {
-              resolve(res)
+              const noticeTems = [...new Set(this.noticeTems.concat(this.tmplIds))]
+              updateUserInfo({ noticeTems }).finally(() => {
+                resolve(res)
+              })
             }).catch(err => {
               reject(err)
             }).finally(() => {

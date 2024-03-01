@@ -293,6 +293,7 @@ createComponent({
   methods: {
     initObj() {
       this.updateObj = JSON.parse(JSON.stringify(initBossWorkerObj))
+      this.showCategoryType = false
       this.subCategoryInfo = {
         show: false,
         label: '',

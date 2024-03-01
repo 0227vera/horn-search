@@ -10,7 +10,7 @@ export const MapSdkKey = '7KUBZ-RTTWB-MY3UF-JFREG-DZJ52-5WB3B'
 // note: 订阅消息相关的模版id
 export const noticeTemplateIdList = {
   // note: 新订单消息
-  NEW_ORDER_NOTICE: 'FwPgLeCwk4f0dP5_nxd9b6V_616TlhG1RdlWGcR_czw',
+  NEW_ORDER_NOTICE: 'VgJs01oSxPcKPqsNpyv3A-NGTw0T9AVUxq1rVaEOdgM',
   // note: 订单流转
-  ORDER_UPDATE: 'Z6UbxDMOx4Mfe2waRr_1vJ7mTsfn2gEWsSfrs27J1xQ'
+  ORDER_UPDATE: 'cNiq2ajXK4gtNfs6eRizlFmWqKlb6wXsSg4G1p2vYUU'
 }

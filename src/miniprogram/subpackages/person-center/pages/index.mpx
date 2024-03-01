@@ -34,25 +34,26 @@
       </van-cell-group>
     </view>
   </view>
-  <van-dialog
-    use-slot
-    show-cancel-button
-    show="{{editInfo}}"
-    bind:close="onClose"
-    bind:confirm="onConfirm"
-  >
-    <view class="getUserInfo">
-      <view class="title">获取头像</view>
-      <button open-type="chooseAvatar" class="avatarInfo" bindchooseavatar="onChooseAvatar">
-        <image class="avatar" wx:if="{{cacheUserInfo.avatar}}" src="{{cacheUserInfo.avatar}}"></image>
-        <van-icon wx:else class="avatar" name="user" />
-      </button>
-      <view class="nickname">
-        <input type="nickname" placeholder="请输入昵称" bind:change="onNameChange" value="{{cacheUserInfo.nickName}}" />
-      </view>
-    </view>
-  </van-dialog>
 </custom-container>
+<van-dialog
+  use-slot
+  show-cancel-button
+  show="{{editInfo}}"
+  bind:close="onClose"
+  bind:confirm="onConfirm"
+>
+  <view class="getUserInfo">
+    <view class="title">获取头像</view>
+    <button open-type="chooseAvatar" class="avatarInfo" bindchooseavatar="onChooseAvatar">
+      <image class="avatar" wx:if="{{cacheUserInfo.avatar}}" src="{{cacheUserInfo.avatar}}"></image>
+      <van-icon wx:else class="avatar" name="user" />
+    </button>
+    <view class="nickname">
+      <input type="nickname" placeholder="请输入昵称" bind:change="onNameChange" value="{{cacheUserInfo.nickName}}" />
+    </view>
+  </view>
+</van-dialog>
+<guide-subcri />
 </template>
 
 <script>
@@ -71,7 +72,7 @@ createPage({
     }
   },
   computed: {
-    ...store.mapState(['company', 'homeset', 'userInfo']),
+    ...store.mapState(['company', 'userInfo']),
     navbar() {
       return [
         {
@@ -315,8 +316,11 @@ createPage({
 <script name="json">
 module.exports = {
   usingComponents: {
+    "guide-subcri": "@/compontens/common/service-notice/guide.mpx?root=common-coms-page"
   },
-  "componentPlaceholder": {},
+  "componentPlaceholder": {
+    "guide-subcri": "view"
+  },
   "navigationStyle": "custom",
   "disableScroll": true
 }

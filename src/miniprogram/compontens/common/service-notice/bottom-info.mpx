@@ -7,9 +7,9 @@
     <view class="btn">
       <van-button size="small" type="primary">{{btn}}</van-button>
     </view>
-    <view class="close" catchtap="close">
+    <!-- <view class="close" catchtap="close">
       <van-icon name="cross" />
-    </view>
+    </view> -->
   </view>
 </template>
 
@@ -101,12 +101,8 @@ createComponent({
 <script type="application/json">
   {
     "usingComponents": {
-      "van-button": "@vant/weapp/button/index?root=vant-page",
-      "van-icon": "@vant/weapp/icon/index?root=vant-page"
     },
     "componentPlaceholder": {
-      "van-button": "view",
-      "van-icon": "view"
     }
   }
 </script>

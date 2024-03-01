@@ -1,6 +1,6 @@
 const BaseController = require('./base_controller')
 const ReleaseService = require('../service/release_service.js')
-// const { sendToWorkers } = require('../../framework/utils/notice_util.js')
+const { sendToWorkers } = require('../../framework/utils/notice_util.js')
 
 class ReleaseController extends BaseController {
   async getList() {
@@ -54,9 +54,11 @@ class ReleaseController extends BaseController {
       OPENID: this._openId
     })
     const res = await service.create(params)
-    // if (res) {
-    //   sendToWorkers(res)
-    // }
+    if (res) {
+      try {
+        sendToWorkers(res, this._event.params.fromOrigin)
+      } catch (error) {}
+    }
     return res
   }
 

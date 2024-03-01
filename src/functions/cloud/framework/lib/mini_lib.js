@@ -26,8 +26,6 @@ async function sendMiniOnceTempMsg(body, key = '') {
     // 默认参数
     body.lang = 'zh_CN';
     body.miniprogramState = body.miniprogramState || 'formal';
-    console.log('----------_>', body)
-
     await cloud.openapi.subscribeMessage.send(body);
   } catch (err) {
     cloudUtil.log('##sendOnceTempMsg[' + key + ']', err);

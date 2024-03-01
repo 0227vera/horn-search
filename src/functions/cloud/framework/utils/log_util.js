@@ -47,7 +47,6 @@ class LogUtil {
  	info(str, ex = '') {
  		if (this.level > LogUtil.LEVEL.INFO) return;
 
- 		console.log('[' + this._getTime() + '] INFO: ' + str, ex);
 
  		this.logOut += "######" + '[' + this._getTime() + '] INFO: ' + str + (ex ? JSON.stringify(ex) : '');
  	}

@@ -4,7 +4,7 @@ import { formatNumSubmitData } from '@/subpackages/superstream/utils/utils.js'
 import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
 import mpx from '@mpxjs/core'
 import { noticeTemplateIdList } from '@/constant/pageConfig.js'
-const { ORDER_UPDATE } = noticeTemplateIdList
+const { ORDER_UPDATE, NEW_ORDER_NOTICE } = noticeTemplateIdList
 const store = getApp().globalStore
 
 export const mixins = {
@@ -17,7 +17,7 @@ export const mixins = {
   data: {
     showPopup: false,
     popupType: '',
-    tmplIds: [ORDER_UPDATE],
+    tmplIds: [ORDER_UPDATE, NEW_ORDER_NOTICE],
     uploaderDisabled: false,
     toastText: '',
     checkBoxList: [],
@@ -140,7 +140,7 @@ export const mixins = {
         title: '提交中...',
         mask: true
       });
-      // await this.$refs.serviceNotice?.showServiceNotice?.()
+      await this.$refs.serviceNotice?.showServiceNotice?.()
       if (formatList.length) {
         this.updateObj = formatNumSubmitData({ obj: this.updateObj, formatList })
       }

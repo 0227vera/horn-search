@@ -366,7 +366,6 @@ async function isExistCollection(collectionName) {
 async function createCollection(collectionName) {
   try {
     await db.createCollection(collectionName)
-
     console.log('>> Create New Collection [' + collectionName + '] Succ, OVER.')
     return true
   } catch (err) {
@@ -907,7 +906,6 @@ function fmtWhere(where) {
       else
         whereEx = dbCmd.or(fmtWhere(where.or))
     }
-    // console.log(whereEx)
     return whereEx
   }
   // 如果是数组 一般是用在or的或条件

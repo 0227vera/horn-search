@@ -6,7 +6,6 @@ class Controller {
     this._request = event.params
   }
   dev_log(obj, needLight = false) {
-    needLight && console.log('-----------------')
     console.log(JSON.stringify(obj, 1, 2))
   }
 }

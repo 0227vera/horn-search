@@ -78,7 +78,7 @@ export default createStore({
       nickName: '',
       avatar: ''
     },
-    homeset: {}
+    noticeTems: []
   },
   getters: {
     currentGooterList(state) {

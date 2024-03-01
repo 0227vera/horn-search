@@ -20,7 +20,7 @@ createApp({
       appReady: false
     })
     const userInfo = await getCurrentUser()
-    const { address = [], OPENID, company, biographical, companyInfo, userInfo: user } = userInfo.data
+    const { address = [], OPENID, company, biographical, companyInfo, userInfo: user, noticeTems = [] } = userInfo.data
     let obj = {
       appReady: true
     }
@@ -36,6 +36,7 @@ createApp({
     user && Object.keys(user) && Object.assign(obj, {
       userInfo: user
     })
+    noticeTems.length && Object.assign(obj, { noticeTems })
     OPENID && Object.assign(obj, {
       openid: OPENID
     })
@@ -46,7 +47,9 @@ createApp({
   eventBus: new EventBus(),
   onShareAppMessage() {
     return {
-      path: '/pages/index'
+      path: '/pages/index',
+      title: '服装招工桥|招长临工发货找货',
+      imageUrl: 'cloud://prod-horn-search-6f0zg662fe589c3.7072-prod-horn-search-6f0zg662fe589c3-1324447467/constant/default-share.jpg'
     }
   }
 })

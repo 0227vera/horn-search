@@ -51,8 +51,6 @@ async function getTempFileURL(tempFileList, isValid = false) {
   let result = await cloud.getTempFileURL({
     fileList: tempFileList
   })
-  console.log(result);
-
   let list = result.fileList;
   let outList = [];
   for (let i = 0; i < list.length; i++) {
@@ -98,7 +96,6 @@ async function handlerCloudFiles(oldFiles, newFiles) {
       let result = await cloud.deleteFile({
         fileList: [oldFiles[i]]
       });
-      console.log(result);
     }
   }
 
@@ -131,7 +128,6 @@ async function handlerCloudFilesByRichEditor(oldFiles, newFiles) {
       let result = await cloud.deleteFile({
         fileList: [oldFiles[i].val]
       });
-      console.log(result);
     }
   }
 

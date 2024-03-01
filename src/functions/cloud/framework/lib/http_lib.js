@@ -8,7 +8,6 @@ function https(url, postData) {
       form: postData
     },
     function (error, response, body) {
-      console.log('[BODY]' + body);
       if (!error && response.statusCode === 200) {
         let json = JSON.parse(body);
         resolve(json);

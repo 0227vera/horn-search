@@ -8,7 +8,7 @@ const mixin = {
     return {
       title: this.shareTitle,
       path,
-      imageUrl: this.images?.[0] || ''
+      imageUrl: this.images?.[0] || 'cloud://prod-horn-search-6f0zg662fe589c3.7072-prod-horn-search-6f0zg662fe589c3-1324447467/constant/default-share.jpg'
     }
   },
   data: {

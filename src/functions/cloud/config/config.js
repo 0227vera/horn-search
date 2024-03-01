@@ -20,8 +20,8 @@ module.exports = {
   // ## 缓存相关
   IS_CACHE: true, // 是否开启缓存
   // #### 内容安全
-  CLIENT_CHECK_CONTENT: false, // 前台图片文字是否校验
-  ADMIN_CHECK_CONTENT: false, // 后台图片文字是否校验
+  CLIENT_CHECK_CONTENT: true, // 前台图片文字是否校验
+  ADMIN_CHECK_CONTENT: true, // 后台图片文字是否校验
   // note: 数据库集合前缀
   FIELD_PREFIX: Warrior_Prefix,
   // ### 后台业务相关

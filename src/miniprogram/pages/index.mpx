@@ -46,7 +46,7 @@ import store from '@/store'
 
 createPage({
   onShareAppMessage() {
-    getApp().onShareAppMessage()
+    return getApp().onShareAppMessage()
   },
   data: {
     tabActive: 0,
@@ -72,7 +72,7 @@ createPage({
     }
   },
   computed: {
-    ...store.mapState(['navBarStyle', 'homeset', 'fromOrigin']),
+    ...store.mapState(['navBarStyle', 'fromOrigin']),
     top() {
       return this.navBarStyle.height + this.navBarStyle.top + this.navBarStyle.paddingBottom
     },
