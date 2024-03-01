@@ -46,6 +46,7 @@ import store from '@/store'
 
 createPage({
   onShareAppMessage() {
+    getApp().eventBus.emit('preview')
     return getApp().onShareAppMessage()
   },
   data: {

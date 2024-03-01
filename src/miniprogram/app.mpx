@@ -48,7 +48,7 @@ createApp({
   onShareAppMessage() {
     return {
       path: '/pages/index',
-      title: '服装招工桥|招长临工发货找货',
+      title: '服装免费小程序|招长临工发货找货',
       imageUrl: 'cloud://prod-horn-search-6f0zg662fe589c3.7072-prod-horn-search-6f0zg662fe589c3-1324447467/constant/default-share.jpg'
     }
   }
