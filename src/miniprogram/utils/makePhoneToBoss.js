@@ -1,19 +1,43 @@
+import mpx from '@mpxjs/core'
 import store from '@/store'
 import { updateRelease } from '@/api'
 
-const makePhoneToBoss = async (item) => {
-  const res = await wx.getUserInfo()
-  const { userInfo } = res
+const makePhoneToBoss = item => {
+  const { userInfo, openid } = store.state
+  if (!userInfo.tel) {
+    store.commit('setState', {
+      showUserInfoSetting: true
+    })
+    mpx.showToast({
+      icon: 'none',
+      title: '请先完善个人信息',
+      duration: 1500,
+      mask: true
+    })
+    getApp().eventBus.once('userinfo-finish', () => {
+      makePhoneToBoss(item)
+      console.log(item)
+    })
+    return
+  }
   wx.makePhoneCall({
     phoneNumber: item.tel,
     success() {
+      const pushItem = {
+        avatarUrl: userInfo.avatar,
+        nickName: userInfo.nickName,
+        tel: userInfo.tel,
+        openid,
+        times: 1,
+        time: [Date.now()]
+      }
       if (item.calllist?.length) {
-        const isCalled = item.calllist.find(item => item.openid === store.state.openid)
+        const isCalled = item.calllist.find(item => item.openid === openid)
         if (isCalled) {
           updateRelease({
             _id: item._id,
             calllist: item.calllist.map(item => {
-              if (item.openid === store.state.openid) {
+              if (item.openid === openid) {
                 item.times++
               }
               item.time.push(Date.now())
@@ -23,24 +47,14 @@ const makePhoneToBoss = async (item) => {
         } else {
           updateRelease({
             _id: item._id,
-            calllist: item.calllist.concat({
-              avatarUrl: userInfo.avatarUrl,
-              openid: store.state.openid,
-              times: 1,
-              time: [Date.now()]
-            })
+            calllist: item.calllist.concat(pushItem)
           })
         }
       } else {
         updateRelease({
           _id: item._id,
           status: '3',
-          calllist: [{
-            avatarUrl: userInfo.avatarUrl,
-            openid: store.state.openid,
-            times: 1,
-            time: [Date.now()]
-          }]
+          calllist: [pushItem]
         })
       }
     },

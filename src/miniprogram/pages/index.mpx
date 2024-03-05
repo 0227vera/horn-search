@@ -34,6 +34,7 @@
     </view>
   </custom-container>
   <van-dialog id="van-dialog" />
+  <user-info />
 </template>
 
 <script>
@@ -225,9 +226,11 @@ createPage({
 <script name="json">
 module.exports = {
   usingComponents: {
-    "partyB": "@/subpackages/superstream/compontens/order/partyB.mpx"
+    "partyB": "@/subpackages/superstream/compontens/order/partyB.mpx",
+    "user-info": "@/subpackages/person-center/compontens/user-info.mpx?root=person-center"
   },
   "componentPlaceholder": {
+    "user-info": "view"
   },
   "disableScroll": true
 }

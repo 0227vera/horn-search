@@ -12,12 +12,14 @@
       <item-container title="推送情况：">
         <finder readlist="{{readlist}}" />
       </item-container>
-      <item-container wx:if="{{active === 2}}" title="呼叫人信息：">
+      <item-container wx:if="{{active === 2 && calllist.length}}" title="呼叫人列表：">
         <view class="call-container">
-          <view wx:for="{{calllist}}" wx:key="*this" class="call-item">
+          <view wx:for="{{calllist}}" wx:key="*this" class="call-item" bind:tap="clickCaller(item)">
             <image class="call-item-image" src="{{item.avatarUrl}}"></image>
             <text class="call-item-num">{{item.times}}</text>
+            <view class="call-item-nickName">{{item.nickName}}</view>
           </view>
+          <view class="call-item none" wx:for="{{5 - calllist.length % 5}}" wx:key="*this"></view>
         </view>
       </item-container>
       <item-container title="人才市场：" wx:if="{{talentList.length}}">
@@ -45,6 +47,7 @@ import { updateRelease } from '@/api'
 import store from '@/store'
 import Dialog from '@vant/weapp/dialog/dialog'
 import mixins from '@/subpackages/order-detail/utils.js/mixins.js'
+import dayjs from 'dayjs'
 
 createPage({
   mixins: [mixins],
@@ -133,6 +136,19 @@ createPage({
   methods: {
     updateList(e) {
       this.talentList = e.detail
+    },
+    async clickCaller(item) {
+      const callTimes = item.time.map((item, index) => `第${index + 1}次：${dayjs(item).format('YYYY-MM-DD HH:mm:ss')}`).join('\r\n')
+      const res = await mpx.showModal({
+        title: `点击确认将为您回拨${item.nickName}`,
+        content: `他的呼叫时间详情(如下)\r\n${callTimes}`
+      })
+      if (res.confirm) {
+        mpx.makePhoneCall({
+          phoneNumber: item.tel
+        })
+      }
+      console.log(item)
     }
   }
 })
@@ -148,20 +164,39 @@ createPage({
   align-items center
 .call-container
   display flex
+  justify-content space-around
+  flex-wrap wrap
   padding 20rpx
 .call-item
+  border 2rpx solid #ebedf0
+  border-radius 16rpx
+  padding 8rpx
+  margin-top 8rpx
   position relative
-  height 60rpx
-  margin-left -10rpx
+  display flex
+  flex-direction column
+  align-items center
+  justify-content center
+  width 120rpx
+  overflow hidden
+  &.none
+    border none
   &-image
     width 60rpx
     height 60rpx
     border-radius 50%
-    border 2rpx solid #fff
+    border 2rpx solid #eeeeee
+  &-nickName
+    width 100%
+    margin-top 2rpx
+    overflow hidden
+    text-overflow ellipsis
+    overflow hidden
+    white-space nowrap
   &-num
     position absolute
     top 0
-    left 10rpx
+    left 20rpx
     font-size 20rpx
     background red
     width 24rpx

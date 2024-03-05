@@ -107,7 +107,7 @@ const mixin = {
     this.cooperType = cooperType
     this.OPENID = OPENID
     this.readlist = readlist
-    this.calllist = calllist
+    this.calllist = calllist.sort((a, b) => a?.times - b?.times)
     this.loading = false
     if (this.isWorker) {
       this.readlistFunc(readlist)

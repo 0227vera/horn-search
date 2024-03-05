@@ -118,7 +118,7 @@
       label="补充"
       title-width="200rpx"
       value="{{ updateObj.note }}"
-      placeholder="可以在此输入补充说明"
+      placeholder="请选择补充说明"
       input-align="right"
       is-link
       readonly

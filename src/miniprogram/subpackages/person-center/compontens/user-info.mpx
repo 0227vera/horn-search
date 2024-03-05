@@ -1,0 +1,204 @@
+<template>
+<van-dialog
+  use-slot
+  show-cancel-button
+  show="{{showUserInfoSetting}}"
+  bind:close="onClose"
+  use-confirm-button-slot
+>
+  <view class="getUserInfo">
+    <view class="title">个人信息</view>
+    <button open-type="chooseAvatar" class="avatarInfo" bindchooseavatar="onChooseAvatar">
+      <image class="avatar" wx:if="{{cacheUserInfo.avatar}}" src="{{cacheUserInfo.avatar}}"></image>
+      <van-icon wx:else class="avatar" name="user" />
+      <view class="camera">
+        <van-icon name="photograph" />
+      </view>
+    </button>
+    <van-cell-group border style="width: 100%">
+      <van-field
+        title-width="80rpx"
+        label="昵称"
+        type="nickname"
+        value="{{ cacheUserInfo.nickName }}"
+        placeholder="请输入用户名"
+        bind:change="onNameChange"
+      />
+      <van-field
+        label="电话"
+        title-width="80rpx"
+        type="number"
+        value="{{ cacheUserInfo.tel }}"
+        placeholder="请输入电话"
+        bind:change="onTelChange"
+      >
+        <van-button
+          wx:if="{{!cacheUserInfo.tel}}"
+          slot="button"
+          size="mini"
+          round
+          type="primary"
+          open-type="getPhoneNumber"
+          bindgetphonenumber="getPhoneNumber"
+        >快速获取</van-button>
+      </van-field>
+    </van-cell-group>
+  </view>
+  <view slot="confirm-button" class="confirm-button" bind:tap="onConfirm">确认</view>
+</van-dialog>
+</template>
+
+<script>
+import mpx, { createComponent } from '@mpxjs/core'
+import { isAdmin, updateUserInfo, fileUpload, getPhone } from '@/api'
+import jumpAction from '@/utils/jump'
+import store from '@/store'
+createComponent({
+  data: {
+    cacheUserInfo: {
+      nickName: '',
+      avatar: '',
+      tel: ''
+    }
+  },
+  computed: {
+    ...store.mapState(['userInfo', 'showUserInfoSetting'])
+  },
+  watch: {
+    showUserInfoSetting(val) {
+      if (val) {
+        this.cacheUserInfo = JSON.parse(JSON.stringify(this.userInfo))
+      }
+    }
+  },
+  methods: {
+    ...store.mapMutations(['setState']),
+    onClose(e) {
+      if (e.detail === 'confirm') {
+        this.setState({
+          showUserInfoSetting: true
+        })
+        return
+      }
+      this.setState({
+        showUserInfoSetting: false
+      })
+    },
+    async onChooseAvatar(e) {
+      const { avatarUrl } = e.detail
+      this.cacheUserInfo.avatar = avatarUrl
+      try {
+        const res = await fileUpload(avatarUrl)
+        this.cacheUserInfo.avatar = res.fileID
+      } catch (error) {}
+    },
+    onNameChange(e) {
+      this.cacheUserInfo.nickName = e.detail
+    },
+    onTelChange(e) {
+      this.cacheUserInfo.tel = e.detail
+    },
+    async getPhoneNumber(e) {
+      const res = await getPhone(e.detail)
+      const phone = res.data.phoneInfo.phoneNumber
+      this.cacheUserInfo.tel = phone
+    },
+    async onConfirm() {
+      const testIncludesPhone = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/
+      const { avatar, nickName, tel } = this.cacheUserInfo
+      let title = ''
+      if (!avatar) {
+        title = '请上传头像'
+      } else if (!nickName) {
+        title = '请输入昵称'
+      } else if (!tel) {
+        title = '请输入电话'
+      } else if (!testIncludesPhone.test(tel)) {
+        title = '输入电话有误'
+      }
+      if (title) {
+        this.setState({
+          showUserInfoSetting: true
+        })
+        mpx.showToast({
+          icon: 'error',
+          title
+        })
+        return
+      }
+      mpx.showLoading({
+        title: '保存中……'
+      })
+      const res = await updateUserInfo({
+        userInfo: this.cacheUserInfo
+      })
+      mpx.hideLoading()
+      if (res.code === 200) {
+        this.setState({
+          userInfo: { ...this.cacheUserInfo },
+          showUserInfoSetting: false
+        })
+      }
+      getApp().eventBus.emit('userinfo-finish')
+    }
+  }
+})
+</script>
+
+<style lang="stylus" scoped>
+.confirm-button
+  width 50%
+  display flex
+  justify-content center
+  align-items center
+  color #ee0a24
+.getUserInfo
+  display flex
+  flex-direction column
+  align-items center
+  padding 16rpx 32rpx
+  bonx-sizing borser-box
+  .title
+    font-size 36rpx
+    margin-top 12rpx
+  .avatarInfo
+    width 150rpx
+    height 150rpx
+    border-radius 75rpx
+    padding 0
+    background #ffffff
+    display flex
+    align-items center
+    justify-content center
+    font-size 80rpx
+    border 4rpx solid #eeeeee
+    margin-top 24rpx
+    margin-bottom 24rpx
+    position relative
+    &:after
+      display none
+    .avatar
+      width 150rpx
+      height 150rpx
+      border-radius 75rpx
+    .camera
+      background #eeeeee
+      overflow hidden
+      width 60rpx
+      height 60rpx
+      display flex
+      justify-content center
+      align-items center
+      border-radius 50%
+      position absolute
+      color #07c160
+      font-size 48rpx
+      bottom 0
+      right 0
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {}
+  }
+</script>

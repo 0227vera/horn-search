@@ -76,8 +76,10 @@ export default createStore({
     },
     userInfo: {
       nickName: '',
-      avatar: ''
+      avatar: '',
+      tel: ''
     },
+    showUserInfoSetting: false,
     noticeTems: []
   },
   getters: {

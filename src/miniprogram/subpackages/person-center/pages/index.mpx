@@ -35,41 +35,19 @@
     </view>
   </view>
 </custom-container>
-<van-dialog
-  use-slot
-  show-cancel-button
-  show="{{editInfo}}"
-  bind:close="onClose"
-  bind:confirm="onConfirm"
->
-  <view class="getUserInfo">
-    <view class="title">获取头像</view>
-    <button open-type="chooseAvatar" class="avatarInfo" bindchooseavatar="onChooseAvatar">
-      <image class="avatar" wx:if="{{cacheUserInfo.avatar}}" src="{{cacheUserInfo.avatar}}"></image>
-      <van-icon wx:else class="avatar" name="user" />
-    </button>
-    <view class="nickname">
-      <input type="nickname" placeholder="请输入昵称" bind:change="onNameChange" value="{{cacheUserInfo.nickName}}" />
-    </view>
-  </view>
-</van-dialog>
 <guide-subcri />
+<user-info />
 </template>
 
 <script>
 import mpx, { createPage } from '@mpxjs/core'
-import { isAdmin, updateUserInfo, fileUpload } from '@/api'
+import { isAdmin, updateUserInfo, fileUpload, getPhone } from '@/api'
 import jumpAction from '@/utils/jump'
 import store from '@/store'
 
 createPage({
   data: {
-    showManagerEntry: false,
-    editInfo: false,
-    cacheUserInfo: {
-      nickName: '',
-      avatar: ''
-    }
+    showManagerEntry: false
   },
   computed: {
     ...store.mapState(['company', 'userInfo']),
@@ -175,38 +153,9 @@ createPage({
       }
     },
     openUserInfoEdit() {
-      this.cacheUserInfo.nickName = this.userInfo.nickName
-      this.cacheUserInfo.avatar = this.userInfo.avatar
-      this.editInfo = true
-    },
-    async onChooseAvatar(e) {
-      const { avatarUrl } = e.detail
-      this.cacheUserInfo.avatar = avatarUrl
-      try {
-        const res = await fileUpload(avatarUrl)
-        this.cacheUserInfo.avatar = res.fileID
-      } catch (error) {}
-    },
-    onNameChange(e) {
-      const { value } = e.detail
-      if (!value.length) {
-        return
-      }
-      this.cacheUserInfo.nickName = value
-    },
-    onClose() {
-      this.editInfo = false
-    },
-    async onConfirm() {
-      const res = await updateUserInfo({
-        userInfo: this.cacheUserInfo
+      this.setState({
+        showUserInfoSetting: true
       })
-      if (res.code === 200) {
-        this.setState({
-          userInfo: { ...this.cacheUserInfo }
-        })
-      }
-      this.editInfo = false
     }
   }
 })
@@ -265,58 +214,13 @@ createPage({
     align-items center
     justify-content center
     font-size 60rpx
-.getUserInfo
-  overflow hidden
-  height 360rpx
-  display flex
-  flex-direction column
-  align-items center
-  padding 16rpx 32rpx
-  bonx-sizing borser-box
-  .title
-    font-size 36rpx
-  .avatarInfo
-    width 150rpx
-    height 150rpx
-    border-radius 75rpx
-    padding 0
-    background #ffffff
-    display flex
-    align-items center
-    justify-content center
-    font-size 80rpx
-    border 2rpx solid #eeeeee
-    margin-top 24rpx
-    &:after
-      display none
-    .avatar
-      width 150rpx
-      height 150rpx
-      border-radius 75rpx
-  .nickname
-    width 100%
-    margin-top 24rpx
-    border 2rpx solid #eeeeee
-    height 80rpx
-    line-height 80rpx
-    box-sizing border-box
-    border-radius 16rpx
-    display flex
-    align-items center
-    justify-content flex-start
-    padding 0 24rpx
-    input
-      width 100%
-      font-size 36rpx
-      display flex
-      align-items center
-      justify-content flex-start
 </style>
 
 <script name="json">
 module.exports = {
   usingComponents: {
-    "guide-subcri": "@/compontens/common/service-notice/guide.mpx?root=common-coms-page"
+    "guide-subcri": "@/compontens/common/service-notice/guide.mpx?root=common-coms-page",
+    "user-info": "@/subpackages/person-center/compontens/user-info.mpx"
   },
   "componentPlaceholder": {
     "guide-subcri": "view"

@@ -164,7 +164,7 @@
       title-width="240rpx"
       required="{{false}}"
       value="{{ updateObj.origin }}"
-      placeholder="例如十三行写字楼品质"
+      placeholder="请选择{{originLabel}}"
       input-align="right"
       id="origin"
       readonly
@@ -202,7 +202,7 @@
       label="岗位要求"
       title-width="160rpx"
       value="{{ updateObj.note }}"
-      placeholder="请输入您对工人或服装的要求"
+      placeholder="请选择岗位要求(支持多选)"
       input-align="right"
       type="textarea"
       autosize
@@ -217,7 +217,7 @@
       label="招工概述"
       title-width="160rpx"
       value="{{ updateObj.add }}"
-      placeholder="请输入招工概述"
+      placeholder="请选择招工概述(支持多选"
       input-align="right"
       type="textarea"
       autosize
@@ -248,6 +248,7 @@
 <popup
   show="{{showPopup}}"
   type="{{popupType}}"
+  title="{{popupTitle}}"
   categoryList="{{categoryList}}"
   checkBoxList="{{checkBoxList}}"
   bind:close="closePopupContainer"
@@ -278,6 +279,7 @@ createComponent({
       placeholder: ''
     },
     originLabel: '货源(品质层次)',
+    popupTitle: '',
     updateObj: JSON.parse(JSON.stringify(initBossWorkerObj))
   },
   attached() {
@@ -309,12 +311,15 @@ createComponent({
       } else if (type === 'origin') {
         this.initCheckbox = this.updateObj.originValue
         this.checkBoxList = bossWorkerOriginList
+        this.popupTitle = `请选择${this.originLabel}(支持多选)`
       } else if (type === 'note') {
         this.initCheckbox = this.updateObj.noteValue
         this.checkBoxList = bossWorkerNoteList
+        this.popupTitle = `请选择岗位要求(支持多选)`
       } else if (type === 'add') {
         this.initCheckbox = this.updateObj.addValue
         this.checkBoxList = bossWorkerAddList
+        this.popupTitle = `请选择岗招工概述(支持多选)`
       }
       this.showPopup = true
       this.popupType = type

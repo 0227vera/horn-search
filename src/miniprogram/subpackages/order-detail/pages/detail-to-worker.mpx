@@ -22,6 +22,7 @@
     </view>
   </custom-container>
   <nav-footer wx:if="{{shareTitle}}" list="{{footerList}}" />
+  <user-info />
 </template>
 
 <script>
@@ -174,9 +175,11 @@ createPage({
       "item-container": "../components/item-container",
       "nav-footer": "@/subpackages/order-detail/components/nav-footer.mpx",
       "base-info": "../components/base-info.mpx",
-      "skeleton": "@/subpackages/order-detail/components/skeleton.mpx"
+      "skeleton": "@/subpackages/order-detail/components/skeleton.mpx",
+      "user-info": "@/subpackages/person-center/compontens/user-info.mpx?root=person-center"
     },
     "componentPlaceholder": {
+      "user-info": "view"
     },
     "disableScroll": true,
     "navigationStyle": "custom"

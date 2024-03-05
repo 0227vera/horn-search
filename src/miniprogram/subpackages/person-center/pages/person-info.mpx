@@ -277,6 +277,8 @@ createPage({
           url: AddAddressUrl
         })
         return
+      } else if (type === 'note') {
+        this.popupTitle = '请选择补充内容'
       }
       this.popupType = type
       this.showPopup = true
@@ -432,7 +434,6 @@ createPage({
       }
       biographical.start = +biographical.time.start.replace(':', '')
       biographical.end = +biographical.time.end.replace(':', '') || null
-      console.log('release', biographical)
       mpx.showLoading({
         title: this.pageType === 'edit' ? '更新中……' : '发布中……'
       })

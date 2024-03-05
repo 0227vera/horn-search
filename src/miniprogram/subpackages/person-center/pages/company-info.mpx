@@ -51,7 +51,7 @@
       autosize
       type="textarea"
       input-align="right"
-      placeholder="例如针织外套小香风等"
+      placeholder="请选择擅长品类"
       id="category"
       bind:tap="showPopupContainer('category')"
     />
@@ -66,7 +66,7 @@
       autosize
       type="textarea"
       input-align="right"
-      placeholder="例如南城拼多多直播等"
+      placeholder="请选择诚寻类型"
       error-message="客户长期合作"
       error-message-align="right"
       id="sincere"
@@ -87,7 +87,7 @@
       autosize
       type="textarea"
       input-align="right"
-      placeholder="包头包尾,保证质量,出货快捷!管理质检配备齐全"
+      placeholder="请选择本厂优势"
       id="advantage"
       bind:tap="showPopupContainer('advantage')"
     />
@@ -187,6 +187,7 @@ createPage({
   },
   data: {
     showPopup: false,
+    popupTitle: '',
     popupType: '',
     toastText: '',
     textRules: {
@@ -293,10 +294,13 @@ createPage({
       if (type === 'category') {
         type = 'category-copy'
         this.checkBoxList = companyInfoCategoryList
+        this.popupTitle = '请选择擅长品类'
       } else if (type === 'sincere') {
         this.checkBoxList = companyInfoSincereList
+        this.popupTitle = '请选择诚寻类型'
       } else if (type === 'advantage') {
         this.checkBoxList = companyInfoAdvantageList
+        this.popupTitle = '请选择本厂优势'
       }
       this.popupType = type
       this.showPopup = true
@@ -477,7 +481,6 @@ createPage({
         }
       }
       companyInfo.company = this.company
-      console.log('release', companyInfo)
       mpx.showLoading({
         title: this.pageType === 'edit' ? '更新中……' : '发布中……'
       })

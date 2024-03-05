@@ -64,7 +64,6 @@ import mpx, { createComponent } from '@mpxjs/core'
 import { cardImgDefault } from '@/constant/pageConfig.js'
 import store from '@/store'
 import dayjs from 'dayjs'
-import makePhoneToBoss from '@/utils/makePhoneToBoss'
 import unreadFun from '@/utils/unread'
 import actions from './utils'
 

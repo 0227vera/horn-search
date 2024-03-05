@@ -125,6 +125,12 @@ createPage({
     }
   },
   onShow() {
+    if (this.userInfo.nickName && !this.addInfo.name) {
+      this.addInfo.name = this.userInfo.nickName
+    }
+    if (this.userInfo.tel && !this.addInfo.phone) {
+      this.addInfo.phone = this.userInfo.tel
+    }
     this.setLocation().then(() => {
       this.addInfo.address.areaProvice = this.adInfo.ad_info.province
       this.addInfo.address.area = `${this.adInfo.ad_info.province}${this.adInfo.ad_info.city}${this.adInfo.ad_info.district}`
@@ -135,7 +141,7 @@ createPage({
     })
   },
   computed: {
-    ...store.mapState(['mapSdk', 'adInfo', 'addressList'])
+    ...store.mapState(['mapSdk', 'adInfo', 'addressList', 'userInfo'])
   },
   methods: {
     ...store.mapActions(['setLocation']),
