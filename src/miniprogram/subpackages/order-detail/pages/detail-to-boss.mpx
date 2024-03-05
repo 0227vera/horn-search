@@ -148,7 +148,6 @@ createPage({
           phoneNumber: item.tel
         })
       }
-      console.log(item)
     }
   }
 })

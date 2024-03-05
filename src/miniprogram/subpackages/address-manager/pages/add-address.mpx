@@ -180,7 +180,6 @@ createPage({
     // note: 详细地址
     openSearchDetail() {
       const _this = this
-      console.log(this.addInfo)
       wx.chooseLocation({
         latitude: this.addInfo.address.location.lat,
         longitude: this.addInfo.address.location.lng,
