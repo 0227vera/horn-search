@@ -226,11 +226,12 @@ createPage({
 <script name="json">
 module.exports = {
   usingComponents: {
-    "partyB": "@/subpackages/superstream/compontens/order/partyB.mpx",
+    "partyB": "@/subpackages/superstream/compontens/order/partyB.mpx?root=common-coms-page",
     "user-info": "@/subpackages/person-center/compontens/user-info.mpx?root=person-center"
   },
   "componentPlaceholder": {
-    "user-info": "view"
+    "user-info": "view",
+    "partyB": "view"
   },
   "disableScroll": true
 }
