@@ -15,9 +15,10 @@
       <item-container wx:if="{{active === 2 && calllist.length}}" title="呼叫人列表：">
         <view class="call-container">
           <view wx:for="{{calllist}}" wx:key="*this" class="call-item" bind:tap="clickCaller(item)">
-            <image class="call-item-image" src="{{item.avatarUrl}}"></image>
+            <image wx:if="{{item.avatarUrl}}" class="call-item-image" src="{{item.avatarUrl}}"></image>
+            <van-icon wx:else class="call-item-image" name="user" />
             <text class="call-item-num">{{item.times}}</text>
-            <view class="call-item-nickName">{{item.nickName}}</view>
+            <view class="call-item-nickName">{{item.nickName || ('用户' + (index + 1))}}</view>
           </view>
           <view class="call-item none" wx:for="{{5 - calllist.length % 5}}" wx:key="*this"></view>
         </view>
@@ -138,9 +139,12 @@ createPage({
       this.talentList = e.detail
     },
     async clickCaller(item) {
+      if (!item.tel) {
+        return
+      }
       const callTimes = item.time.map((item, index) => `第${index + 1}次：${dayjs(item).format('YYYY-MM-DD HH:mm:ss')}`).join('\r\n')
       const res = await mpx.showModal({
-        title: `点击确认将为您回拨${item.nickName}`,
+        title: `点击确认将为您回拨${item.nickName || '求职者'}`,
         content: `他的呼叫时间详情(如下)\r\n${callTimes}`
       })
       if (res.confirm) {
@@ -185,6 +189,10 @@ createPage({
     height 60rpx
     border-radius 50%
     border 2rpx solid #eeeeee
+    display flex
+    align-items center
+    justify-content center
+    font-size 40rpx
   &-nickName
     width 100%
     margin-top 2rpx
@@ -192,6 +200,7 @@ createPage({
     text-overflow ellipsis
     overflow hidden
     white-space nowrap
+    text-align center
   &-num
     position absolute
     top 0

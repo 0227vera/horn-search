@@ -3,23 +3,23 @@ import store from '@/store'
 import { updateRelease } from '@/api'
 
 const makePhoneToBoss = item => {
-  const { userInfo, openid } = store.state
-  if (!userInfo.tel) {
-    store.commit('setState', {
-      showUserInfoSetting: true
-    })
-    mpx.showToast({
-      icon: 'none',
-      title: '请先完善个人信息',
-      duration: 1500,
-      mask: true
-    })
-    getApp().eventBus.once('userinfo-finish', () => {
-      makePhoneToBoss(item)
-      console.log(item)
-    })
-    return
-  }
+  const { userInfo = {}, openid } = store.state
+  // if (!userInfo.tel) {
+  //   store.commit('setState', {
+  //     showUserInfoSetting: true
+  //   })
+  //   mpx.showToast({
+  //     icon: 'none',
+  //     title: '请先完善个人信息',
+  //     duration: 1500,
+  //     mask: true
+  //   })
+  //   getApp().eventBus.once('userinfo-finish', () => {
+  //     makePhoneToBoss(item)
+  //     console.log(item)
+  //   })
+  //   return
+  // }
   wx.makePhoneCall({
     phoneNumber: item.tel,
     success() {
