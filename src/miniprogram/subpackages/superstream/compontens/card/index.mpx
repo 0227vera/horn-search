@@ -101,6 +101,11 @@ createComponent({
       }
     }
   },
+  watch: {
+    fromOrigin() {
+      this.triggerEvent('update')
+    }
+  },
   computed: {
     ...store.mapState(['openid', 'fromOrigin', 'adInfo']),
     isWorker() {

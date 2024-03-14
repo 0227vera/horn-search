@@ -141,7 +141,7 @@
         </view>
       </scroll-view>
     </view>
-    <skeleton wx:if="{{loading}}" mstyle="padding: 0 16rpx;" />
+    <skeleton wx:if="{{loading || updateDataIng}}" mstyle="padding: 0 16rpx;" />
     <view wx:elif="{{list.length}}" class="card-list">
       <scroll-view
         scroll-y
@@ -157,6 +157,7 @@
           buttons="{{buttons}}"
           role="worker"
           moreLoad="{{moreLoad}}"
+          bind:update="update"
           bind:footer-btn="footerBtn"
           bind:more-load="moreLoadHandle"
         />
@@ -193,6 +194,7 @@ createComponent({
   data: {
     loading: true,
     page: JSON.parse(JSON.stringify(pageInfo)),
+    updateDataIng: false,
     textRules: {
       '{x}': {
         style: 'color: #ff525d; font-weight: bold;'
@@ -338,6 +340,13 @@ createComponent({
   },
   methods: {
     ...store.mapMutations(['setState']),
+    update() {
+      this.list = []
+      this.updateDataIng = true
+      setTimeout(() => {
+        this.updateDataIng = false
+      })
+    },
     refreshList() {
       this.list = []
       this.filter = {}

@@ -22,6 +22,7 @@ const findWorkerCategory = [
       { text: "上腰", id: "1-39", showCategoryType: true },
       { text: "车门筒", id: "1-42", showCategoryType: true },
       { text: "车口袋", id: "1-45", showCategoryType: true },
+      { text: "上拉链", id: "1-46", showCategoryType: true },
       { text: "模板绗线", id: "1-48", showCategoryType: true },
       { text: "塞棉/拍棉", id: "1-51", showCategoryType: true },
       { text: "手工类", id: "1-54", showCategoryType: true, needDetail: true },
