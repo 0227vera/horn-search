@@ -372,7 +372,7 @@ createComponent({
         add: () => {
           let text = ''
           if (data.selectedList.length) {
-            text = `本厂：${data.selectedList.map(item => item.name).join('、')}`
+            text = `本厂${data.selectedList.map(item => item.name).join('、')}`
           }
           this.updateObj.add = text
           this.updateObj.addValue = data.value

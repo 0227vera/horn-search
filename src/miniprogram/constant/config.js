@@ -45,7 +45,7 @@ export const bossWorkerNoteList = [{
   name: '管理能力强',
   value: 'f8'
 }, {
-  name: '女性',
+  name: '限女性',
   value: 'f9'
 }]
 export const bossWorkerAddList = [{

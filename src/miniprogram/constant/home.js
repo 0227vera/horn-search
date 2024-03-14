@@ -41,7 +41,7 @@ export default [[{
   },
   extraInfo: {}
 }, {
-  text: '裁片外发',
+  text: '裁片外发、寻工厂',
   id: '',
   action: {
     url: '/superstream/pages/index',
