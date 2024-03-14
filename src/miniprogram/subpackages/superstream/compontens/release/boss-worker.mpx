@@ -370,7 +370,11 @@ createComponent({
           this.updateObj.noteValue = data.value
         },
         add: () => {
-          this.updateObj.add = data.selectedList.map(item => item.name).join('、')
+          let text = ''
+          if (data.selectedList.length) {
+            text = `本厂：${data.selectedList.map(item => item.name).join('、')}`
+          }
+          this.updateObj.add = text
           this.updateObj.addValue = data.value
         }
       }
