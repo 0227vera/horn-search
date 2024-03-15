@@ -26,7 +26,7 @@
         </van-tabs>
       </view>
       <company-list wx:if="{{com === 'company-list'}}" />
-      <talent wx:elif="{{com === 'talent'}}" />
+      <talent num="{{4}}" mStyle="{{mStyle}}" wx:elif="{{com === 'talent'}}" />
       <view class="list" wx:elif="{{fromOrigin}}">
         <partyB
           categoryTypeId="{{categoryTypeId}}"
@@ -63,6 +63,9 @@ createPage({
       mpx.navigateTo({
         url: ParsonCenter
       })
+    },
+    mStyle: {
+      padding: '16rpx 32rpx'
     }
   },
   watch: {
