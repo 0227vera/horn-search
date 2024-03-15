@@ -23,8 +23,8 @@
           <view class="call-item none" wx:for="{{5 - calllist.length % 5}}" wx:key="*this"></view>
         </view>
       </item-container>
-      <item-container title="人才市场：" wx:if="{{talentList.length}}">
-        <talent talentList="{{talentList}}" orderid="{{orderid}}" bind:update="updateList" />
+      <item-container title="人才市场：" wx:if="{{category && fromOrigin === 'bossWorker'}}">
+        <talent category="{{category}}" orderid="{{orderid}}" />
       </item-container>
       <item-container title="基本信息：">
         <base-info orderData="{{orderData}}" />
@@ -57,8 +57,7 @@ createPage({
     orderid: '',
     calllist: [],
     readlist: [],
-    status: '',
-    talentList: []
+    status: ''
   },
   computed: {
     ...store.mapState(['steps', 'openid', 'fromOrigin']),
@@ -135,9 +134,6 @@ createPage({
     }
   },
   methods: {
-    updateList(e) {
-      this.talentList = e.detail
-    },
     async clickCaller(item) {
       if (!item.tel) {
         return

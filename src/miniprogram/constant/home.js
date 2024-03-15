@@ -80,6 +80,55 @@ export default [[{
     }
   },
   extraInfo: {}
+}], [{
+  text: '我要诚寻客户',
+  id: 'gotoCompanyInfo',
+  sort: 4,
+  action: {
+    icon: 'arrow',
+    id: 'gotoCompanyInfo',
+    name: '去发布',
+    jumptype: 'mp',
+    link: '/person-center/pages/company-info'
+  }
+}, {
+  text: '诚寻客户',
+  id: '',
+  com: 'company-list',
+  action: {
+    url: '/superstream/pages/index',
+    jumptype: 'mp',
+    params: {
+      key: 'partyB',
+      id: 'findGoodUser',
+      type: 'partyB'
+    }
+  },
+  extraInfo: {}
+}], [{
+  text: '我要主动求职',
+  id: 'gotoUserInfo',
+  sort: 7,
+  action: {
+    icon: 'arrow',
+    name: '去发布',
+    jumptype: 'mp',
+    link: '/person-center/pages/person-info'
+  }
+}, {
+  text: '主动求职',
+  id: '',
+  com: 'talent',
+  action: {
+    url: '/superstream/pages/index',
+    jumptype: 'mp',
+    params: {
+      key: 'partyB',
+      id: 'activeJob',
+      type: 'partyB'
+    }
+  },
+  extraInfo: {}
 }],
 // [{
 //   text: '公司直聘发布',

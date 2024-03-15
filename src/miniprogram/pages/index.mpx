@@ -25,7 +25,9 @@
           <van-tab wx:key="*this" wx:for="{{renderPartyBList}}" title="{{item.text}}"></van-tab>
         </van-tabs>
       </view>
-      <view class="list" wx:if="{{fromOrigin}}">
+      <company-list wx:if="{{com === 'company-list'}}" />
+      <talent wx:elif="{{com === 'talent'}}" />
+      <view class="list" wx:elif="{{fromOrigin}}">
         <partyB
           categoryTypeId="{{categoryTypeId}}"
           updateList="{{updateList}}"
@@ -44,6 +46,7 @@ import list from '@/constant/home.js'
 import ParsonCenter from '@/subpackages/person-center/pages/index.mpx?resolve'
 import config, { categoryMap } from '@/constant/release.js'
 import store from '@/store'
+import dayjs from 'dayjs'
 
 createPage({
   onShareAppMessage() {
@@ -65,10 +68,12 @@ createPage({
   watch: {
     categoryTypeId: {
       handler(val) {
-        const { fromOrigin } = config[val]
-        this.setState({
-          fromOrigin
-        })
+        if (val) {
+          const { fromOrigin } = config[val]
+          this.setState({
+            fromOrigin
+          })
+        }
       },
       immediate: true
     }
@@ -81,38 +86,20 @@ createPage({
     currentTab() {
       return this.renderPartyBList.find((_, index) => index === this.tabActive)
     },
-    categoryTypeId() {
-      return categoryMap[this.currentTab.action.params.id]
+    com() {
+      return this.currentTab.com || ''
     },
-    extraList() {
-      return [{
-        text: '我要主动求职',
-        id: 'gotoUserInfo',
-        sort: 7,
-        action: {
-          icon: 'arrow',
-          name: '去发布',
-          jumptype: 'mp',
-          link: '/person-center/pages/person-info'
-        }
-      }, {
-        text: '我要诚寻客户',
-        id: 'gotoCompanyInfo',
-        sort: 4,
-        action: {
-          icon: 'arrow',
-          id: 'gotoCompanyInfo',
-          name: '去发布',
-          jumptype: 'mp',
-          link: '/person-center/pages/company-info'
-        }
-      }]
+    categoryTypeId() {
+      if (!this.com) {
+        return categoryMap[this.currentTab.action.params.id]
+      }
+      return ''
     },
     renderPartyAList() {
-      return this.list.map(item => item[0]).concat(this.extraList).sort((a, b) => a.sort - b.sort)
+      return this.list.filter(item => item[0]).map(item => item[0]).sort((a, b) => a.sort - b.sort)
     },
     renderPartyBList() {
-      return this.list.map(item => item[1])
+      return this.list.filter(item => item[1]).map(item => item[1])
     }
   },
   onLoad() {
@@ -126,8 +113,10 @@ createPage({
       showDropdown: false,
       clickDropdown: null
     })
-    const { fromOrigin } = config[this.categoryTypeId]
-    fromOrigin && this.setState({ fromOrigin })
+    if (!this.com) {
+      const { fromOrigin } = config[this.categoryTypeId]
+      fromOrigin && this.setState({ fromOrigin })
+    }
     this.showPage = true
     this.setLocation()
     if (this.needUpdate) {
@@ -227,11 +216,15 @@ createPage({
 module.exports = {
   usingComponents: {
     "partyB": "@/subpackages/superstream/compontens/order/partyB.mpx?root=common-coms-page",
-    "user-info": "@/subpackages/person-center/compontens/user-info.mpx?root=person-center"
+    "user-info": "@/subpackages/person-center/compontens/user-info.mpx?root=person-center",
+    "company-list": "@/subpackages/superstream/compontens/extra/company-list.mpx?root=superstream",
+    "talent": "@/subpackages/order-detail/components/talent.mpx?root=order-detail"
   },
   "componentPlaceholder": {
     "user-info": "view",
-    "partyB": "view"
+    "partyB": "view",
+    "company-list": "view",
+    "talent": "view"
   },
   "disableScroll": true
 }

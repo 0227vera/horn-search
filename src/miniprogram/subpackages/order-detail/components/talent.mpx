@@ -27,29 +27,60 @@
           </view>
         </view>
       </view>
-      <!-- <view class="talent-item-call">
-        <van-button round type="primary" size="small" bind:tap="callTel(item)">打电话</van-button>
-      </view> -->
     </view>
+  </view>
+  <skeleton />
+  <view class="moreload">
+    <van-loading wx:if="{{moreLoad.loading}}" type="spinner" size="14px" color="#1989fa">
+      <text style="color: #000000;font-weight: bold;">加载中...</text>
+    </van-loading>
+    <view wx:else bind:tap="moreLoadHandle">{{moreLoad.text}}</view>
   </view>
 </template>
 
 <script>
 import { createComponent } from '@mpxjs/core'
-import { updateUserInfo } from '@/api'
+import { updateUserInfo, getUserList } from '@/api'
+import dayjs from 'dayjs'
 createComponent({
   properties: {
-    talentList: {
-      type: Array,
-      value: []
-    },
     // 订单的id
     orderid: {
       type: String,
       value: ''
+    },
+    category: {
+      type: String,
+      value: ''
     }
   },
+  data: {
+    talentList: [],
+    moreLoad: {
+      loading: false,
+      isClick: true,
+      text: '~~没有更多啦~~'
+    }
+  },
+  attached() {
+    this.getList()
+  },
   methods: {
+    async getList() {
+      const currentTime = +dayjs(Date.now()).format('HHmm')
+      const and = {
+        'biographical.status': 'on',
+        'biographical.start': ['<=', currentTime]
+      }
+      if (this.category) {
+        Object.assign(and, {
+          'biographical.category': ['like', this.category]
+        })
+      }
+      const res = await getUserList({ and, fields: 'biographical' })
+      const { list = [] } = res.data || {}
+      this.talentList = list
+    },
     callTel({ biographical, _id }) {
       wx.makePhoneCall({
         phoneNumber: biographical.tel,
@@ -93,11 +124,10 @@ createComponent({
 <style lang="stylus" scoped>
 .talent
   &-container
-    padding 16rpx
   &-item
-    margin-bottom 16rpx
+    padding 16rpx 32rpx
     background #f6f6f6
-    border-radius 8rpx
+    border-radius 16rpx
     padding 8rpx
     &:last-child
       margin-bottom 0
@@ -130,11 +160,21 @@ createComponent({
          flex 1
          overflow hidden
          font-weight bold
+.moreload
+  color #000000
+  font-size 28rpx
+  font-weight bold
+  width 100%
+  display flex
+  align-items center
+  justify-content center
+  padding 50rpx 0
 </style>
 
 <script type="application/json">
   {
     "usingComponents": {
+      "skeleton": "./skeleton-talent"
     },
     "componentPlaceholder": {
     }

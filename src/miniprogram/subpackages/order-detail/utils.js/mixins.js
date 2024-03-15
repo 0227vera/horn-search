@@ -15,7 +15,8 @@ const mixin = {
     loading: true,
     orderData: {},
     params: {},
-    images: []
+    images: [],
+    category: ''
   },
   computed: {
     ...store.mapState(['openid', 'fromOrigin']),
@@ -111,18 +112,6 @@ const mixin = {
     this.loading = false
     if (this.isWorker) {
       this.readlistFunc(readlist)
-    } else {
-      const currentTime = +dayjs(Date.now()).format('HHmm')
-      if (this.fromOrigin === 'bossWorker') {
-        const and = {
-          'biographical.status': 'on',
-          'biographical.category': ['like', category],
-          'biographical.start': ['<=', currentTime]
-        }
-        const res = await getUserList({ and, fields: 'biographical' })
-        const { list = [] } = res.data || {}
-        this.talentList = list
-      }
     }
   },
   methods: {

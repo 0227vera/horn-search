@@ -45,7 +45,7 @@ createPage({
     showPopup: false,
     updateList: false
   },
-  async onLoad(params) {
+  onLoad(params) {
     /**
      * type: 区分是boss还是worker
      * key: 确定使用哪个组件展示
@@ -102,7 +102,7 @@ createPage({
       if (this.roleType === 'partyA') {
         Object.keys(config).forEach(item => {
           result.push({
-            name: config[item].partyA.title[this.footerList.findIndex(f => f.key === this.currentCom)],
+            name: config[item].partyA.title?.[this.footerList.findIndex(f => f.key === this.currentCom)],
             value: config[item].fromOrigin,
             key: item
           })
