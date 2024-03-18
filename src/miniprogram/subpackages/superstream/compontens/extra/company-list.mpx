@@ -48,6 +48,12 @@ import Dialog from '@vant/weapp/dialog/dialog'
 import store from '@/store'
 import { pageInfo } from '@/subpackages/superstream/utils/constant.js'
 createComponent({
+  properties: {
+    updateList: {
+      type: Boolean,
+      value: false
+    }
+  },
   data: {
     list: [],
     loading: true,
@@ -56,6 +62,11 @@ createComponent({
       loading: false,
       isClick: true,
       text: '~~没有更多啦~~'
+    }
+  },
+  watch: {
+    updateList() {
+      this.moreLoadHandle()
     }
   },
   attached() {
@@ -233,7 +244,7 @@ createComponent({
 <style lang="stylus" scoped>
 .list
   &-container
-   padding 16rpx 32rpx
+    padding 16rpx 32rpx
   &-item
     width 100%
     background #ffffff

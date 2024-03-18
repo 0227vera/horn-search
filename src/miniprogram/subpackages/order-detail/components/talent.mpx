@@ -28,7 +28,7 @@
         </view>
       </view>
     </view>
-    <view class="moreload">
+    <view class="moreload" wx:if="{{needMore}}">
       <van-loading wx:if="{{moreLoad.loading}}" type="spinner" size="14px" color="#1989fa">
         <text style="color: #000000;font-weight: bold;">加载中...</text>
       </van-loading>
@@ -36,9 +36,9 @@
     </view>
   </view>
   <skeleton num="{{num}}" wx:elif="{{loading}}" />
-  <view wx:else class="status">
-    <van-empty />
-    <view class="text">暂无数据</view>
+  <view wx:else class="status {{needMore ? '' : 'small-status'}}">
+    <van-empty wx:if="{{needMore}}" />
+    <view class="text">{{needMore ? '暂无数据' : '暂无对应技能的人才'}}</view>
   </view>
 </template>
 
@@ -46,14 +46,10 @@
 import { createComponent } from '@mpxjs/core'
 import { updateUserInfo, getUserList } from '@/api'
 import dayjs from 'dayjs'
+import store from '@/store'
 import { pageInfo } from '@/subpackages/superstream/utils/constant.js'
 createComponent({
   properties: {
-    // 订单的id
-    orderid: {
-      type: String,
-      value: ''
-    },
     category: {
       type: String,
       value: ''
@@ -65,6 +61,14 @@ createComponent({
     mStyle: {
       type: Object,
       value: {}
+    },
+    needMore: {
+      type: Boolean,
+      value: true
+    },
+    updateList: {
+      type: Boolean,
+      value: false
     }
   },
   data: {
@@ -77,12 +81,22 @@ createComponent({
       text: '~~没有更多啦~~'
     }
   },
+  computed: {
+    ...store.mapState(['openid'])
+  },
+  watch: {
+    updateList() {
+      this.moreLoadHandle()
+    }
+  },
   async attached() {
     this.loading = true
     this.getList()
-    getApp().eventBus.on('scroll-to-lower', () => {
-      this.moreLoadHandle()
-    })
+    if (this.needMore) {
+      getApp().eventBus.on('scroll-to-lower', () => {
+        this.moreLoadHandle()
+      })
+    }
   },
   methods: {
     moreLoadHandle() {
@@ -105,6 +119,9 @@ createComponent({
       const res = await getUserList({ ...this.pageInfo, and, fields: 'biographical' })
       const { list = [] } = res.data || {}
       this.talentList = this.talentList.concat(list)
+      if (!this.talentList.length) {
+        this.triggerEvent('empty')
+      }
       if (this.talentList.length < res.data.total) {
         this.moreLoad.text = '~点击加载更多~'
         this.moreLoad.isClick = true
@@ -121,18 +138,18 @@ createComponent({
         success: () => {
           const newBiographical = JSON.parse(JSON.stringify(biographical))
           newBiographical.callList = newBiographical.callList || []
-          const callInfo = newBiographical.callList.find(item => item.orderid === this.orderid)
+          const callInfo = newBiographical.callList.find(item => item.openid === this.openid)
           if (callInfo) {
             // 之前就呼叫过
             newBiographical.callList.forEach(item => {
-              if (item.orderid === this.orderid) {
+              if (item.openid === this.openid) {
                 item.times++
               }
             })
           } else {
             // 之前没有呼叫过
             newBiographical.callList.push({
-              orderid: this.orderid,
+              openid: this.openid,
               times: 1
             })
           }
@@ -140,13 +157,11 @@ createComponent({
             _id,
             biographical: newBiographical
           }).then(() => {
-            const talentList = this.talentList.map(item => {
+            this.talentList.forEach(item => {
               if (item._id === _id) {
                 item.biographical = newBiographical
               }
-              return item
             })
-            this.triggerEvent('update', talentList)
           })
         }
       })
@@ -162,6 +177,7 @@ createComponent({
     background #f6f6f6
     border-radius 16rpx
     padding 8rpx
+    margin-bottom 16rpx
     &:last-child
       margin-bottom 0
     &-name
@@ -213,6 +229,8 @@ createComponent({
     font-size 28rpx
     color #000000
     font-weight bold
+.small-status
+  height 100rpx
 </style>
 
 <script type="application/json">

@@ -25,8 +25,23 @@
           <van-tab wx:key="*this" wx:for="{{renderPartyBList}}" title="{{item.text}}"></van-tab>
         </van-tabs>
       </view>
-      <company-list wx:if="{{com === 'company-list'}}" />
-      <talent num="{{4}}" mStyle="{{mStyle}}" wx:elif="{{com === 'talent'}}" />
+      <view wx:if="{{com}}" style="flex:1;overflow:hidden;">
+        <scroll-view
+          scroll-y
+          style="height: 100%;"
+          bindscrolltolower="moreLoadHandle"
+          enhanced
+          show-scrollbar="{{false}}"
+        >
+          <company-list updateList="{{updateExtraList}}" wx:if="{{com === 'company-list'}}" />
+          <talent
+            num="{{4}}"
+            updateList="{{updateExtraList}}"
+            mStyle="{{mStyle}}"
+            wx:elif="{{com === 'talent'}}"
+          />
+        </scroll-view>
+      </view>
       <view class="list" wx:elif="{{fromOrigin}}">
         <partyB
           categoryTypeId="{{categoryTypeId}}"
@@ -59,6 +74,7 @@ createPage({
     updateList: false,
     needUpdate: true,
     showPage: false,
+    updateExtraList: false,
     clickLeft() {
       mpx.navigateTo({
         url: ParsonCenter
@@ -139,6 +155,9 @@ createPage({
     jump(m) {
       jumpAction(m.action)
     },
+    moreLoadHandle() {
+      this.updateExtraList = !this.updateExtraList
+    },
     onTabChange({ detail }) {
       const { index } = detail
       this.tabActive = index
@@ -218,7 +237,7 @@ createPage({
 <script name="json">
 module.exports = {
   usingComponents: {
-    "partyB": "@/subpackages/superstream/compontens/order/partyB.mpx?root=common-coms-page",
+    "partyB": "@/subpackages/superstream/compontens/order/partyB.mpx?root=superstream",
     "user-info": "@/subpackages/person-center/compontens/user-info.mpx?root=person-center",
     "company-list": "@/subpackages/superstream/compontens/extra/company-list.mpx?root=superstream",
     "talent": "@/subpackages/order-detail/components/talent.mpx?root=order-detail"

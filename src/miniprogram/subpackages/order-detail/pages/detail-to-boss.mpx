@@ -24,7 +24,11 @@
         </view>
       </item-container>
       <item-container title="人才市场：" wx:if="{{category && fromOrigin === 'bossWorker'}}">
-        <talent category="{{category}}" orderid="{{orderid}}" />
+        <talent
+          category="{{category}}"
+          mStyle="{{mStyle}}"
+          needMore="{{false}}"
+        />
       </item-container>
       <item-container title="基本信息：">
         <base-info orderData="{{orderData}}" />
@@ -57,7 +61,10 @@ createPage({
     orderid: '',
     calllist: [],
     readlist: [],
-    status: ''
+    status: '',
+    mStyle: {
+      padding: '16rpx'
+    }
   },
   computed: {
     ...store.mapState(['steps', 'openid', 'fromOrigin']),

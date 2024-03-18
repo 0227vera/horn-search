@@ -214,7 +214,6 @@ createPage({
     },
     callListNum() {
       if (this.callList.length) {
-        const times = this.callList.reduce((sum, item) => sum + item.times, 0)
         return `已有{${this.callList.length}}人呼叫过您`
       }
       return ''
@@ -345,11 +344,13 @@ createPage({
       if (this.pageCanEdit) {
         return
       }
-      const res = mpx.showModal({
+      const res = await mpx.showModal({
         title: '提示',
         content: '如需更改工厂信息，请先关闭推送状态，完成后再开启，确认关闭？'
       })
-      if (res.confrim) {
+      console.log(res)
+      if (res.confirm) {
+        console.log(this.biographical)
         this.setState({
           biographical: {
             ...this.biographical,
