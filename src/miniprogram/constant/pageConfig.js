@@ -1,8 +1,10 @@
 // 云函数的初始化id
-export const CLOUD_ID = 'prod-horn-search-6f0zg662fe589c3'
+export const CLOUD_ID = 'prod-horn-search-7fufgqz8705bd8b'
+
+export const shareImg = 'cloud://prod-horn-search-7fufgqz8705bd8b.7072-prod-horn-search-7fufgqz8705bd8b-1324447467/constant/WechatIMG72.jpg'
 
 // note: 卡片中图片没有时候的默认图片展示
-export const cardImgDefault = 'cloud://prod-horn-search-6f0zg662fe589c3.7072-prod-horn-search-6f0zg662fe589c3-1324447467/constant/暂无图片.png'
+export const cardImgDefault = 'cloud://prod-horn-search-7fufgqz8705bd8b.7072-prod-horn-search-7fufgqz8705bd8b-1324447467/constant/暂无图片.png'
 
 // note: 地图sdk的key
 export const MapSdkKey = '7KUBZ-RTTWB-MY3UF-JFREG-DZJ52-5WB3B'

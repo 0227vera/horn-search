@@ -264,6 +264,7 @@ import { mixins } from '@/subpackages/superstream/utils/mixins.js'
 import { validateBossWorker } from '@/subpackages/superstream/utils/validate.js'
 import { initBossWorkerObj, unitList, categoryTypeList } from '@/subpackages/superstream/utils/constant.js'
 import { bossWorkerOriginList, bossWorkerNoteList, bossWorkerAddList } from '@/constant/config.js'
+import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
 
 const store = getApp().globalStore
 

@@ -265,6 +265,7 @@ import { mixins } from '@/subpackages/superstream/utils/mixins.js'
 import { validateFactory } from '@/subpackages/superstream/utils/validate.js'
 import { initFactoryObj } from '@/subpackages/superstream/utils/constant.js'
 import { factoryCooperAddList } from '@/constant/config.js'
+import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
 
 createComponent({
   mixins: [mixins],

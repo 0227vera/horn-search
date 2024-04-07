@@ -2,13 +2,14 @@ import mpx from '@mpxjs/core'
 import { getReleaseOneById, getUserList } from '@/api'
 import dayjs from 'dayjs'
 import store from '@/store'
+import { shareImg } from '@/constant/pageConfig.js'
 const mixin = {
   onShareAppMessage() {
     const path = `/order-detail/pages/detail-to-worker?id=${this._id}&fromOrigin=${this.fromOrigin}`
     return {
       title: this.shareTitle,
       path,
-      imageUrl: this.images?.[0] || 'cloud://prod-horn-search-6f0zg662fe589c3.7072-prod-horn-search-6f0zg662fe589c3-1324447467/constant/default-share.jpg'
+      imageUrl: this.images?.[0] || shareImg
     }
   },
   data: {
