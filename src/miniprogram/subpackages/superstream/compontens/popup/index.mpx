@@ -262,7 +262,8 @@ createComponent({
         'sincere',
         'advantage',
         'origin',
-        'add'
+        'add',
+        'device'
       ]
       return checkboxShowList.includes(this.type) || this.needShowCheckbox
     }

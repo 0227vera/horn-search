@@ -5,7 +5,7 @@
     <view class="category-container">
       <van-field size="large"
         class="category-content"
-        label="类别"
+        label="标题"
         title-width="80rpx"
         required
         is-link
@@ -13,7 +13,7 @@
         border="{{false}}"
         value="{{updateObj.categoryName}}"
         input-align="right"
-        placeholder="请点击选择出租/转让"
+        placeholder="请点击选择您是要出租或转让"
         bind:tap="showPopupContainer('category')"
       />
     </view>
@@ -99,7 +99,7 @@
         />
       </van-dropdown-menu>
     </view>
-    <!-- 家具电器 -->
+    <!-- 设备 -->
     <van-field size="large"
       wx:if="{{showDevice}}"
       label="{{labelDevice}}"
@@ -110,7 +110,9 @@
       type="textarea"
       autosize
       id="device"
-      bind:change="onFieldChange"
+      readonly
+      is-link
+      bind:tap="showPopupContainer('device')"
     />
     <!-- 图片 -->
     <block wx:if="{{true}}">
@@ -204,7 +206,7 @@ import { mixins } from '@/subpackages/superstream/utils/mixins.js'
 import { validateLease } from '@/subpackages/superstream/utils/validate.js'
 import { initLeaseObj, rentUnitList } from '@/subpackages/superstream/utils/constant.js'
 import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
-import { leaseTransferAddList } from '@/constant/config.js'
+import { leaseTransferAddList, leaseTransferAddListOther, leaseTransferDeviceList, leaseTransferDeviceListOther } from '@/constant/config.js'
 const store = getApp().globalStore
 
 createComponent({
@@ -269,8 +271,12 @@ createComponent({
         this.popupTitle = '请选择房屋用途'
       } else if (type === 'add') {
         this.popupTitle = '请选择补充内容'
-        this.checkBoxList = leaseTransferAddList
+        this.checkBoxList = this.isZhufang ? leaseTransferAddListOther : leaseTransferAddList
         this.initCheckbox = this.updateObj.addValue
+      } else if (type === 'device') {
+        this.popupTitle = this.placeholderDevice
+        this.checkBoxList = this.isZhufang ? leaseTransferDeviceListOther : leaseTransferDeviceList
+        this.initCheckbox = this.updateObj.deviceValue
       }
       this.showPopup = true
       this.popupType = type
@@ -283,9 +289,14 @@ createComponent({
           this.updateObj.category = data.id
           this.updateObj.categoryName = data.text
           this.showDevice = data.showDevice
+          if (this.isZhufang !== data.isZhufang) {
+            this.updateObj.deviceValue = []
+            this.updateObj.device = ''
+          }
+          this.isZhufang = data.isZhufang
           if (data.showDevice) {
             this.labelDevice = data.labelDevice
-            this.placeholderDevice = `请输入有哪些${data.labelDevice}`
+            this.placeholderDevice = `请选择${data.labelDevice}`
           }
           if (data.needDetail) {
             this.subCategoryInfo = {
@@ -322,6 +333,10 @@ createComponent({
         add: () => {
           this.updateObj.add = data.selectedList.map(item => item.name).join('、')
           this.updateObj.addValue = data.value
+        },
+        device: () => {
+          this.updateObj.device = data.selectedList.map(item => item.name).join('、')
+          this.updateObj.deviceValue = data.value
         }
       }
       actions?.[type]?.()

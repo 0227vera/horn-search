@@ -129,7 +129,7 @@ createComponent({
           })
         }
         orderTypeName && list.push({
-          title: '订单类型',
+          title: '货源',
           value: orderTypeName
         })
         fabricPropName && list.push({

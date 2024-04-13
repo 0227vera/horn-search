@@ -34,6 +34,7 @@
       label="{{updateObj.factoryScale ? updateObj.factoryScale === 'e1' ? '工厂地域要求' : '作坊地域要求' : '地域要求'}}"
       required
       title-width="240rpx"
+      maxlength="{{10}}"
       value="{{ updateObj.area }}"
       placeholder="例如海珠区康乐、鹭江"
       input-align="right"
@@ -99,16 +100,16 @@
       bind:change="onFieldChange"
       id="tel"
     />
-    <!-- 订单类型 -->
+    <!-- 货源 -->
     <van-field
       size="large"
-      label="订单类型"
+      label="货源"
       title-width="160rpx"
       is-link
       readonly
       value="{{updateObj.orderTypeName}}"
       input-align="right"
-      placeholder="请点击选择订单类型"
+      placeholder="请点击选择货源"
       bind:tap="showPopupContainer('orderType')"
     />
     <!-- 面料属性 -->
@@ -197,6 +198,7 @@
       placeholder="例如海珠区康乐、鹭江"
       input-align="right"
       bind:change="onFieldChange"
+      maxlength="{{10}}"
       id="area"
     />
     <!-- 图片 -->
@@ -324,7 +326,7 @@ createComponent({
         this.initCheckbox = this.updateObj.productType
       } else if (type === 'orderType') {
         this.radioList = this.orderTypeList
-        this.popupTitle = '请选择订单类型'
+        this.popupTitle = '请选择货源'
         this.initRadio = this.updateObj.orderType
       } else if (type === 'add') {
         this.popupTitle = '请选择合作概述'
@@ -370,7 +372,8 @@ createComponent({
           this.updateObj.tel = data.tel
         },
         add: () => {
-          this.updateObj.add = data.selectedList.map(item => item.name).join('、')
+          const text = data.selectedList.map(item => item.name).join('、')
+          this.updateObj.add = `要求${text}`
           this.updateObj.addValue = data.value
         }
       }

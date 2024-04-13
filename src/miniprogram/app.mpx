@@ -4,8 +4,7 @@ import apiProxy from '@mpxjs/api-proxy'
 import store from './store'
 import { getCommonConfig, getCurrentUser } from '@/api'
 import { EventBus } from '@/utils'
-import { CLOUD_ID } from '@/constant/pageConfig.js'
-import { shareImg } from '@/constant/pageConfig.js'
+import { CLOUD_ID, shareImg } from '@/constant/pageConfig.js'
 
 mpx.use(apiProxy, { usePromise: true })
 

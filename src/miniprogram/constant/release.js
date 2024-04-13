@@ -240,26 +240,38 @@ const productTypeList = [{
 }]
 
 const orderTypeList = [{
+  name: '十三行单',
+  value: 'd0'
+}, {
   name: '档口货',
   value: 'd1'
 }, {
   name: '网档单',
   value: 'd2'
 }, {
-  name: '直播单',
+  name: '电商单',
   value: 'd3'
 }, {
-  name: '电商单',
+  name: '直播单',
   value: 'd4'
 }, {
   name: '公司单',
   value: 'd5'
 }, {
-  name: '卓天商务单',
+  name: '拼多多单',
   value: 'd6'
 }, {
-  name: '外单',
+  name: '卓天商务单',
   value: 'd7'
+}, {
+  name: 'Temu单',
+  value: 'd8'
+}, {
+  name: '跨境电商单',
+  value: 'd9'
+}, {
+  name: '外单',
+  value: 'd10'
 }]
 
 const factoryScaleList = [{
@@ -271,6 +283,23 @@ const factoryScaleList = [{
 }]
 
 const leaseTransferCategory = [{
+  text: '转让',
+  children: [
+    { text: "厂房转让", id: "2-0", showDevice: true, labelDevice: '设备' },
+    { text: "一楼厂房转让", id: "2-3", showDevice: true, labelDevice: '设备' },
+    { text: "二楼厂房转让", id: "2-6", showDevice: true, labelDevice: '设备' },
+    { text: "裁房转让", id: "2-9", showDevice: true, labelDevice: '设备' },
+    { text: "烫房转让", id: "2-12", showDevice: true, labelDevice: '设备' },
+    { text: "专机店转让", id: "2-15", showDevice: false, labelDevice: '设备' },
+    { text: "仓库转让", id: "2-18", showDevice: false, labelDevice: '设备' },
+    { text: "烫房转让", id: "2-21", showDevice: true, labelDevice: '设备' },
+    { text: "住房转让", id: "2-24", showDevice: true, isZhufang: true, labelDevice: '设备' },
+    { text: "旺铺转让", id: "2-27", showDevice: false, labelDevice: '设备' },
+    { text: "小餐饮店转让", id: "2-30", showDevice: false, labelDevice: '设备' },
+    { text: "餐馆转让", id: "2-33", showDevice: false, labelDevice: '设备' },
+    { text: "服装公司/写字楼转让", id: "2-36", showDevice: false, labelDevice: '设备' }
+  ]
+}, {
   text: '招租',
   children: [
     { text: "厂房招租", id: "1-0" },
@@ -282,6 +311,7 @@ const leaseTransferCategory = [{
       text: "房屋出租",
       id: "1-15",
       needDetail: true,
+      isZhufang: true,
       showDevice: true,
       labelDevice: '家具电器',
       subCategoryInfo: {
@@ -318,22 +348,8 @@ const leaseTransferCategory = [{
           value: 'g2'
         }]
       }
-    }
-  ]
-}, {
-  text: '转让',
-  children: [
-    { text: "公司/写字楼转让", id: "2-0", showDevice: true, labelDevice: '设备' },
-    { text: "直播间转让", id: "2-3", showDevice: true, labelDevice: '设备' },
-    { text: "店铺转让", id: "2-6", showDevice: true, labelDevice: '设备' },
-    { text: "仓库转让", id: "2-9", showDevice: true, labelDevice: '设备' },
-    { text: "厂房转让", id: "2-12", showDevice: true, labelDevice: '设备' },
-    { text: "制衣厂转让", id: "2-15", showDevice: true, labelDevice: '设备' },
-    { text: "裁床转让", id: "2-18", showDevice: true, labelDevice: '设备' },
-    { text: "烫房转让", id: "2-21", showDevice: true, labelDevice: '设备' },
-    { text: "专机店转让", id: "2-24", showDevice: true, labelDevice: '设备' },
-    { text: "住房转让", id: "2-27", showDevice: true, labelDevice: '设备' },
-    { text: "餐馆转让", id: "2-30", showDevice: true, labelDevice: '设备' }
+    },
+    { text: "公寓招租", isZhufang: true, id: "1-18" }
   ]
 }]
 
@@ -415,8 +431,8 @@ const factoryFilter = [{
 }, {
   type: 'checkbox',
   id: 'orderType',
-  text: '订单类型筛选',
-  initText: '订单类型筛选',
+  text: '货源筛选',
+  initText: '货源筛选',
   value: [],
   activeList: [],
   list: orderTypeList

@@ -11,7 +11,7 @@ export const bossWorkerOriginList = [{
   name: '公司单(有质量要求)',
   value: 'e4'
 }, {
-  name: '高等品质质量',
+  name: '中高等品质质量',
   value: 'e5'
 }, {
   name: '中等品质质量',
@@ -52,57 +52,243 @@ export const bossWorkerAddList = [{
   name: '自产自销',
   value: 'g1'
 }, {
-  name: '货源充足',
+  name: '新开工厂',
   value: 'g2'
 }, {
-  name: '外住有房补',
+  name: '全新设备',
   value: 'g3'
 }, {
-  name: '出粮准时',
+  name: '货源充足',
   value: 'g4'
 }, {
-  name: '周末不加班',
+  name: '开货有单价',
   value: 'g5'
 }, {
-  name: '月休一天',
+  name: '外住有房补',
   value: 'g6'
 }, {
-  name: '月休两天',
+  name: '出粮准时',
   value: 'g7'
 }, {
-  name: '正式员工交社保',
+  name: '全勤',
   value: 'g8'
+}, {
+  name: '年奖',
+  value: 'g9'
+}, {
+  name: '日结（或做完结账）',
+  value: 'g10'
+}, {
+  name: '周末不加班',
+  value: 'g11'
+}, {
+  name: '月休一天',
+  value: 'g12'
+}, {
+  name: '月休两天',
+  value: 'g13'
+}, {
+  name: '正式员工交社保',
+  value: 'g14'
+}, {
+  name: '针织为主',
+  value: 'g15'
+}, {
+  name: '梭织为主',
+  value: 'g16'
+}, {
+  name: '生产快时尚爆款全品类产品',
+  value: 'g17'
+}, {
+  name: '主做衬衣',
+  value: 'g18'
+}, {
+  name: '主做T恤小衫',
+  value: 'g19'
+}, {
+  name: '主做裤子',
+  value: 'g20'
+}, {
+  name: '主做半身裙',
+  value: 'g21'
+}, {
+  name: '主做连衣裙',
+  value: 'g22'
+}, {
+  name: '主做外套',
+  value: 'g23'
+}, {
+  name: '主做棉衣羽绒服',
+  value: 'g24'
+}, {
+  name: '主做童装',
+  value: 'g25'
+}, {
+  name: '主做男装',
+  value: 'g26'
 }]
 
 export const factoryCooperAddList = [{
-  name: '十三行写字楼货源',
+  name: '毛货勿扰',
   value: 'h1'
 }, {
-  name: '要求管理质检等人员齐全能马上开货',
+  name: '能马上开货',
   value: 'h2'
 }, {
-  name: '看质量返单',
+  name: '实力工厂，有产能',
   value: 'h3'
 }, {
-  name: '配合度高',
+  name: '有尾查',
   value: 'h4'
 }, {
-  name: '跑量为主',
+  name: '管理质检齐全',
   value: 'h5'
+}, {
+  name: '配合度高',
+  value: 'h6'
+}, {
+  name: '责任感强',
+  value: 'h7'
+}, {
+  name: '2至4人作坊',
+  value: 'h8'
+}, {
+  name: '能保质量',
+  value: 'h9'
+}, {
+  name: '跑量为主',
+  value: 'h10'
+}, {
+  name: '看质量返单',
+  value: 'h11'
+}, {
+  name: '单价与质量成正比',
+  value: 'h12'
+}, {
+  name: '长期合作',
+  value: 'h13'
 }]
 
 export const leaseTransferAddList = [{
-  name: '有电梯',
+  name: '格局方正',
   value: 'i1'
 }, {
-  name: '格局方正',
+  name: '可进货拉拉',
   value: 'i2'
 }, {
-  name: '采光好',
+  name: '独立办公室',
   value: 'i3'
 }, {
-  name: '带停车位',
+  name: '空调车间',
   value: 'i4'
+}, {
+  name: '九成新设备',
+  value: 'i5'
+}, {
+  name: '全新设备',
+  value: 'i6'
+}, {
+  name: '家电齐全',
+  value: 'i7'
+}, {
+  name: '有电梯',
+  value: 'i8'
+}, {
+  name: '带停车位',
+  value: 'i9'
+}, {
+  name: '不是顶楼',
+  value: 'i10'
+}, {
+  name: '下楼即招工',
+  value: 'i11'
+}, {
+  name: '消防合格',
+  value: 'i12'
+}, {
+  name: '空转也可',
+  value: 'i13'
+}]
+
+export const leaseTransferAddListOther = [{
+  name: '有电梯',
+  value: 'i14'
+}, {
+  name: '不能做饭',
+  value: 'i15'
+}, {
+  name: '不能明火做饭',
+  value: 'i16'
+}, {
+  name: '不可制衣',
+  value: 'i17'
+}, {
+  name: '家电齐全',
+  value: 'i18'
+}, {
+  name: '采光好',
+  value: 'i19'
+}, {
+  name: '拎包入住',
+  value: 'i20'
+}, {
+  name: '有停车位',
+  value: 'i21'
+}, {
+  name: '出进方便',
+  value: 'i22'
+}]
+
+export const leaseTransferDeviceList = [{
+  name: '唛架机',
+  value: 'k1'
+}, {
+  name: '裁床',
+  value: 'k2'
+}, {
+  name: '电剪 ',
+  value: 'k3'
+}, {
+  name: '烫炉',
+  value: 'k4'
+}, {
+  name: '烫台',
+  value: 'k5'
+}, {
+  name: '平车',
+  value: 'k6'
+}, {
+  name: '四线',
+  value: 'k7'
+}, {
+  name: '五线',
+  value: 'k8'
+}, {
+  name: '冚车',
+  value: 'k9'
+}, {
+  name: '其他衣车或专机',
+  value: 'k10'
+}]
+
+export const leaseTransferDeviceListOther = [{
+  name: '床',
+  value: 'k11'
+}, {
+  name: '衣柜',
+  value: 'k12'
+}, {
+  name: '空调',
+  value: 'k13'
+}, {
+  name: '冰箱',
+  value: 'k14'
+}, {
+  name: '洗衣机',
+  value: 'k15'
+}, {
+  name: '网线wifi',
+  value: 'k16'
 }]
 
 export const tailingsAddList = [{
@@ -114,34 +300,101 @@ export const tailingsAddList = [{
 }]
 
 export const personInfoNoteList = [{
-  name: '诚实可信',
+  name: '补充信息选项',
   value: 'a1'
 }, {
-  name: '技术好',
+  name: '现在有空,能立即到岗',
   value: 'a2'
 }, {
-  name: '踏实肯干',
+  name: '大单小单均可',
   value: 'a3'
+}, {
+  name: '可做夜班',
+  value: 'a4'
+}, {
+  name: '长期合作',
+  value: 'a5'
 }]
 export const companyInfoCategoryList = [{
   name: '针织',
   value: 'b1'
 }, {
-  name: '外套',
+  name: '梭织',
   value: 'b2'
 }, {
-  name: '小香风',
+  name: '牛仔',
   value: 'b3'
+}, {
+  name: '雪纺/真丝',
+  value: 'b4'
+}, {
+  name: '蕾丝/网纱',
+  value: 'b5'
+}, {
+  name: 'T恤/小衫',
+  value: 'b6'
+}, {
+  name: '衬衣',
+  value: 'b7'
+}, {
+  name: '连衣裙',
+  value: 'b8'
+}, {
+  name: '裤子',
+  value: 'b9'
+}, {
+  name: '半身裙',
+  value: 'b10'
+}, {
+  name: '连体裤',
+  value: 'b11'
+}, {
+  name: '外套',
+  value: 'b12'
+}, {
+  name: '小香风',
+  value: 'b13'
+}, {
+  name: '毛毛衣',
+  value: 'b14'
+}, {
+  name: '马夹',
+  value: 'b15'
+}, {
+  name: '棉服/羽绒服',
+  value: 'b16'
 }]
+
 export const companyInfoSincereList = [{
-  name: '南城',
+  name: '十三行单',
   value: 'c1'
 }, {
-  name: '拼多多',
+  name: '档口单',
   value: 'c2'
 }, {
-  name: '直播',
+  name: '网档单',
   value: 'c3'
+}, {
+  name: '电商单',
+  value: 'c4'
+}, {
+  name: '直播单',
+  value: 'c5'
+}, {
+  name: '拼多多单',
+  value: 'c6'
+}, {
+  name: '卓天商务单',
+  value: 'c7'
+}, {
+  name: 'Temu单',
+  value: 'c8'
+}, {
+  name: '跨境电商单',
+  value: 'c9'
+}, {
+  name: '外单',
+  value: 'c10'
 }]
 export const companyInfoAdvantageList = [{
   name: '包头包尾',
@@ -153,6 +406,15 @@ export const companyInfoAdvantageList = [{
   name: '出货快捷',
   value: 'd3'
 }, {
-  name: '管理质检配备齐全',
+  name: '有尾查',
   value: 'd4'
+}, {
+  name: '管理质检齐全',
+  value: 'd5'
+}, {
+  name: '配合度高',
+  value: 'd6'
+}, {
+  name: '责任感强',
+  value: 'd7'
 }]
