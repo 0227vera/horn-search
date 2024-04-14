@@ -120,6 +120,34 @@
         </van-checkbox-group>
       </view>
     </block>
+    <!-- 输入表单 -->
+    <block wx:elif="{{showForm}}">
+      <van-nav-bar
+        left-text="取消"
+        right-text="确定"
+        title="{{title}}"
+        bind:click-left="close"
+        bind:click-right="onFormSure"
+        safe-area-inset-top="{{false}}"
+      />
+      <van-cell-group class="form" style="background:#fff">
+        <van-field
+          wx:for="{{formList}}"
+          wx:key="value"
+          size="large"
+          label="{{item.name + '数量'}}"
+          title-width="290rpx"
+          value="{{ item.num }}"
+          placeholder="{{'请输入' + item.name}}"
+          input-align="right"
+          type="number"
+          id="{{item.value}}"
+          bind:change="onFormChange"
+        >
+        <view slot="right-icon" style="color: #333; font-weight: bold;">{{item.unit}}</view>
+      </van-field>
+    </van-cell-group>
+    </block>
   </van-popup>
 </template>
 
@@ -154,6 +182,10 @@ createComponent({
       value: ''
     },
     radioList: {
+      type: Array,
+      value: []
+    },
+    formList: {
       type: Array,
       value: []
     },
@@ -192,6 +224,10 @@ createComponent({
     initTime: {
       type: String,
       value: ''
+    },
+    initCategory: {
+      type: String | Array,
+      value: []
     }
   },
   watch: {
@@ -203,6 +239,7 @@ createComponent({
     },
     initCheckbox: {
       handler(val) {
+        console.log(val, this.checkBoxList)
         this.checkbox = val
         if (this.checkbox.length && this.checkbox.length >= this.checkBoxList.length) {
           this.checkbox.unshift('-1')
@@ -213,6 +250,13 @@ createComponent({
     initTime: {
       handler(val) {
         this.currentDate = val
+      },
+      immediate: true
+    },
+    initCategory: {
+      handler(val) {
+        console.log(val)
+        this.activeId = val
       },
       immediate: true
     }
@@ -262,10 +306,15 @@ createComponent({
         'sincere',
         'advantage',
         'origin',
-        'add',
-        'device'
+        'add'
       ]
       return checkboxShowList.includes(this.type) || this.needShowCheckbox
+    },
+    showForm() {
+      const fromShowList = [
+        'device'
+      ]
+      return fromShowList.includes(this.type)
     }
   },
   methods: {
@@ -390,6 +439,23 @@ createComponent({
       const obj = {
         value: this.checkbox,
         selectedList: this.checkBoxList.filter(item => this.checkbox.includes(item.value))
+      }
+      this.confirm(obj)
+    },
+    onFormChange(e) {
+      const { detail, target: { id } } = e
+      const newForm = JSON.parse(JSON.stringify(this.formList))
+      newForm.forEach(item => {
+        if (item.value === id) {
+          item.num = detail
+        }
+      })
+      this.triggerEvent('formChange', newForm)
+    },
+    onFormSure() {
+      const list = this.formList.filter(item => item.num)
+      const obj = {
+        value: list
       }
       this.confirm(obj)
     }

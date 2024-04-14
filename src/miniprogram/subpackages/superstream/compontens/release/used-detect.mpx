@@ -130,6 +130,7 @@
   type="{{popupType}}"
   categoryList="{{categoryList}}"
   radioList="{{radioList}}"
+  initRadio="{{updateObj.category}}"
   bind:close="closePopupContainer"
   bind:confirm="onConfirmHandle"
 />

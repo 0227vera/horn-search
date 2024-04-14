@@ -248,7 +248,7 @@ export const leaseTransferDeviceList = [{
   value: 'k2',
   unit: '米'
 }, {
-  name: '电剪 ',
+  name: '电剪',
   value: 'k3',
   unit: '把'
 }, {
@@ -316,9 +316,6 @@ export const tailingsAddList = [{
 }]
 
 export const personInfoNoteList = [{
-  name: '补充信息选项',
-  value: 'a1'
-}, {
   name: '现在有空,能立即到岗',
   value: 'a2'
 }, {

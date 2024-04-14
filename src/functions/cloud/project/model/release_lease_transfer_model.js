@@ -22,7 +22,6 @@ ReleaseModel.DB_STRUCTURE = {
   priceUnitName: 'string|true',
   device: 'string|false',
   deviceValue: 'array|false',
-  deviceNum: 'object|false',
   status: 'string|true',
   calllist: 'array|false',
   readlist: 'array|false',

@@ -250,6 +250,8 @@
   show="{{showPopup}}"
   type="{{popupType}}"
   title="{{popupTitle}}"
+  initCategory="{{updateObj.category}}"
+  initCheckbox="{{initCheckbox}}"
   categoryList="{{categoryList}}"
   checkBoxList="{{checkBoxList}}"
   bind:close="closePopupContainer"
@@ -273,6 +275,7 @@ createComponent({
   mixins: [mixins],
   data: {
     showCategoryType: false,
+    initCheckbox: [],
     categoryTypeList,
     unitList,
     subCategoryInfo: {

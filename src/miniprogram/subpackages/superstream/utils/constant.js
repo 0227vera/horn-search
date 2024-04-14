@@ -20,7 +20,10 @@ export const initBossWorkerObj = {
   images: [],
   poi: {},
   add: '',
-  company: store.state.company
+  company: store.state.company,
+  originValue: [],
+  noteValue: [],
+  addValue: []
 }
 
 export const unitList = [
@@ -63,7 +66,8 @@ export const initFactoryObj = {
   images: [],
   tel: '',
   poi: {},
-  add: ''
+  add: '',
+  addValue: []
   // company: store.state.company
 }
 
@@ -86,7 +90,6 @@ export const initLeaseObj = {
   priceUnitName: '元/月',
   device: '',
   deviceValue: [],
-  deviceNum: {},
   poi: {},
   tel: '',
   images: [],
@@ -115,5 +118,6 @@ export const initTailingsObj = {
   tel: '',
   images: [],
   times: [],
-  note: ''
+  note: '',
+  noteValue: []
 }

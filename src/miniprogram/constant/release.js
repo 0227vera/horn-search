@@ -293,7 +293,7 @@ const leaseTransferCategory = [{
     { text: "专机店转让", id: "2-15", showDevice: false, labelDevice: '设备' },
     { text: "仓库转让", id: "2-18", showDevice: false, labelDevice: '设备' },
     { text: "烫房转让", id: "2-21", showDevice: true, labelDevice: '设备' },
-    { text: "住房转让", id: "2-24", showDevice: true, isZhufang: true, labelDevice: '设备' },
+    { text: "住房转让", id: "2-24", showDevice: true, isZhufang: true, labelDevice: '家具电器' },
     { text: "旺铺转让", id: "2-27", showDevice: false, labelDevice: '设备' },
     { text: "小餐饮店转让", id: "2-30", showDevice: false, labelDevice: '设备' },
     { text: "餐馆转让", id: "2-33", showDevice: false, labelDevice: '设备' },
@@ -349,7 +349,7 @@ const leaseTransferCategory = [{
         }]
       }
     },
-    { text: "公寓招租", isZhufang: true, id: "1-18" }
+    { text: "公寓招租", isZhufang: true, labelDevice: '家具电器', id: "1-18" }
   ]
 }]
 

@@ -114,23 +114,6 @@
       is-link
       bind:tap="showPopupContainer('device')"
     />
-    <!-- 设备数量 -->
-    <van-field
-      wx:if="{{deviceList.length}}"
-      wx:for="{{deviceList}}"
-      size="large"
-      wx:if="{{showDevice}}"
-      label="{{item.name + '数量'}}"
-      title-width="200rpx"
-      value="{{ updateObj.deviceNum[item.value] }}"
-      placeholder="{{'请输入' + item.name + '数量'}}"
-      input-align="right"
-      type="number"
-      id="{{item.value}}"
-      bind:change="onDeviceNumChange"
-    >
-      <view slot="right-icon" style="color: #333; font-weight: bold;">{{item.unit}}</view>
-    </van-field>
     <!-- 图片 -->
     <block wx:if="{{true}}">
       <van-cell title="图片展示" size="large" title-width="160rpx" value="{{imagesValue}}" border="{{false}}" />
@@ -207,11 +190,14 @@
   categoryList="{{categoryList}}"
   radioList="{{radioList}}"
   initRadio="{{initRadio}}"
+  initCategory="{{updateObj.category}}"
+  formList="{{formList}}"
   title="{{popupTitle}}"
   bind:close="closePopupContainer"
   bind:confirm="onConfirmHandle"
   checkBoxList="{{checkBoxList}}"
   initCheckbox="{{initCheckbox}}"
+  bind:formChange="formChange"
 />
 <toast wx:ref="toast" text="{{toastText}}" />
 <service-notice wx:ref="serviceNotice" tmplIds="{{tmplIds}}" />
@@ -230,8 +216,6 @@ createComponent({
   mixins: [mixins],
   data: {
     rentUnitList,
-    allList: JSON.parse(JSON.stringify(leaseTransferDeviceList.concat(leaseTransferDeviceListOther))),
-    deviceList: [],
     radioList: [],
     initRadio: '',
     popupTitle: '',
@@ -250,6 +234,7 @@ createComponent({
       placeholder: '',
       radioList: []
     },
+    formList: [],
     updateObj: JSON.parse(JSON.stringify(initLeaseObj))
   },
   computed: {
@@ -287,7 +272,7 @@ createComponent({
       this.showDevice = data.showDevice
       if (data.showDevice) {
         this.labelDevice = data.labelDevice
-        this.placeholderDevice = `请选择${data.labelDevice}`
+        this.placeholderDevice = `请填写${data.labelDevice}`
       }
       this.isZhufang = data.isZhufang
       if (data.needDetail) {
@@ -303,21 +288,9 @@ createComponent({
         }
       }
     },
-    onDeviceNumChange (e) {
-      const { detail, target: { id } } = e
-      this.updateObj.deviceNum[id] = detail
-      console.log(this.updateObj.deviceValue)
-      this.allList.forEach(item => {
-        if (item.value === id) {
-          item.num = detail
-        }
-      })
-      this.updateObj.device = this.allList.filter(item => this.updateObj.deviceValue.includes(item.value)).map(item => {
-        if (item.num) {
-          return `${item.name}(${item.num}${item.unit})`
-        }
-        return item.name
-      }).join('、')
+    formChange(e) {
+      const { detail } = e
+      this.formList = detail
     },
     showPopupContainer(type) {
       if (!this.addressList.length && type === 'address') {
@@ -339,8 +312,13 @@ createComponent({
         this.initCheckbox = this.updateObj.addValue
       } else if (type === 'device') {
         this.popupTitle = this.placeholderDevice
-        this.checkBoxList = this.isZhufang ? leaseTransferDeviceListOther : leaseTransferDeviceList
-        this.initCheckbox = this.updateObj.deviceValue
+        const cacheform = JSON.parse(JSON.stringify(this.updateObj.deviceValue))
+        this.formList = this.isZhufang ? leaseTransferDeviceListOther : leaseTransferDeviceList
+        this.formList.forEach(item => {
+          const num = cacheform.find(f => f.value === item.value)?.num ?? null
+          num && (item.num = num)
+        })
+        console.log(this.formList, this.updateObj.deviceValue)
       }
       this.showPopup = true
       this.popupType = type
@@ -354,6 +332,7 @@ createComponent({
           this.updateObj.categoryName = data.text
           this.showDevice = data.showDevice
           if (this.isZhufang !== data.isZhufang) {
+            this.formList = []
             this.updateObj.deviceValue = []
             this.updateObj.device = ''
             this.updateObj.add = ''
@@ -362,7 +341,7 @@ createComponent({
           this.isZhufang = data.isZhufang
           if (data.showDevice) {
             this.labelDevice = data.labelDevice
-            this.placeholderDevice = `请选择${data.labelDevice}`
+            this.placeholderDevice = `请填写${data.labelDevice}`
           }
           if (data.needDetail) {
             this.subCategoryInfo = {
@@ -401,10 +380,8 @@ createComponent({
           this.updateObj.addValue = data.value
         },
         device: () => {
-          this.updateObj.device = data.selectedList.map(item => item.name).join('、')
+          this.updateObj.device = data.value.map(item => `${item.name}(${item.num}${item.unit})`).join('、')
           this.updateObj.deviceValue = data.value
-          this.deviceList = data.selectedList
-          this.updateObj.deviceNum = {}
         }
       }
       actions?.[type]?.()
