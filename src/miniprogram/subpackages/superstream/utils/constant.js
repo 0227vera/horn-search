@@ -85,10 +85,13 @@ export const initLeaseObj = {
   priceUnit: '1',
   priceUnitName: '元/月',
   device: '',
+  deviceValue: [],
+  deviceNum: {},
   poi: {},
   tel: '',
   images: [],
-  add: ''
+  add: '',
+  addValue: []
 }
 
 export const initUsedObj = {

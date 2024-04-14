@@ -114,6 +114,23 @@
       is-link
       bind:tap="showPopupContainer('device')"
     />
+    <!-- 设备数量 -->
+    <van-field
+      wx:if="{{deviceList.length}}"
+      wx:for="{{deviceList}}"
+      size="large"
+      wx:if="{{showDevice}}"
+      label="{{item.name + '数量'}}"
+      title-width="200rpx"
+      value="{{ updateObj.deviceNum[item.value] }}"
+      placeholder="{{'请输入' + item.name + '数量'}}"
+      input-align="right"
+      type="number"
+      id="{{item.value}}"
+      bind:change="onDeviceNumChange"
+    >
+      <view slot="right-icon" style="color: #333; font-weight: bold;">{{item.unit}}</view>
+    </van-field>
     <!-- 图片 -->
     <block wx:if="{{true}}">
       <van-cell title="图片展示" size="large" title-width="160rpx" value="{{imagesValue}}" border="{{false}}" />
@@ -213,6 +230,8 @@ createComponent({
   mixins: [mixins],
   data: {
     rentUnitList,
+    allList: JSON.parse(JSON.stringify(leaseTransferDeviceList.concat(leaseTransferDeviceListOther))),
+    deviceList: [],
     radioList: [],
     initRadio: '',
     popupTitle: '',
@@ -255,6 +274,51 @@ createComponent({
       }
       this.showDevice = false
     },
+    callBackCom() {
+      let data = null
+      console.log(this.updateObj)
+      this.categoryList.forEach(item => {
+        item.children.forEach(f => {
+          if (f.id === this.updateObj.category) {
+            data = f
+          }
+        })
+      })
+      this.showDevice = data.showDevice
+      if (data.showDevice) {
+        this.labelDevice = data.labelDevice
+        this.placeholderDevice = `请选择${data.labelDevice}`
+      }
+      this.isZhufang = data.isZhufang
+      if (data.needDetail) {
+        this.subCategoryInfo = {
+          ...data.subCategoryInfo,
+          show: true
+        }
+        if (data.useInfo) {
+          this.useInfo = {
+            ...data.useInfo,
+            show: true
+          }
+        }
+      }
+    },
+    onDeviceNumChange (e) {
+      const { detail, target: { id } } = e
+      this.updateObj.deviceNum[id] = detail
+      console.log(this.updateObj.deviceValue)
+      this.allList.forEach(item => {
+        if (item.value === id) {
+          item.num = detail
+        }
+      })
+      this.updateObj.device = this.allList.filter(item => this.updateObj.deviceValue.includes(item.value)).map(item => {
+        if (item.num) {
+          return `${item.name}(${item.num}${item.unit})`
+        }
+        return item.name
+      }).join('、')
+    },
     showPopupContainer(type) {
       if (!this.addressList.length && type === 'address') {
         mpx.navigateTo({
@@ -292,6 +356,8 @@ createComponent({
           if (this.isZhufang !== data.isZhufang) {
             this.updateObj.deviceValue = []
             this.updateObj.device = ''
+            this.updateObj.add = ''
+            this.updateObj.addValue = []
           }
           this.isZhufang = data.isZhufang
           if (data.showDevice) {
@@ -337,6 +403,8 @@ createComponent({
         device: () => {
           this.updateObj.device = data.selectedList.map(item => item.name).join('、')
           this.updateObj.deviceValue = data.value
+          this.deviceList = data.selectedList
+          this.updateObj.deviceNum = {}
         }
       }
       actions?.[type]?.()

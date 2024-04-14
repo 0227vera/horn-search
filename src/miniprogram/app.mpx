@@ -20,7 +20,7 @@ createApp({
       appReady: false
     })
     const res = await getCurrentUser()
-    const { address = [], OPENID, company, biographical, companyInfo, userInfo: user, noticeTems = [] } = res.userInfo?.data || {}
+    const { address = [], OPENID, company, biographical, companyInfo, userInfo: user, noticeTems = [] } = res.data || {}
     let obj = {
       appReady: true
     }
@@ -41,6 +41,7 @@ createApp({
       openid: OPENID
     })
     company && Object.assign(obj, { company })
+    console.log(obj, res)
     this.setState(obj)
   },
   globalStore: store,

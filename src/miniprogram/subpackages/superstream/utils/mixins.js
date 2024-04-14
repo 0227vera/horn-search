@@ -51,6 +51,7 @@ export const mixins = {
         Object.keys(this.updateObj).forEach(item => {
           this.updateObj[item] = this.cacheForm[item] || this.updateObj[item]
         })
+        this.callBackCom?.()
         this.setState({
           cacheForm: {}
         })

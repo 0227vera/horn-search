@@ -169,6 +169,8 @@
       id="origin"
       readonly
       is-link
+      type="textarea"
+      autosize
       bind:tap="showPopupContainer('origin')"
     />
     <!-- 图片 -->
@@ -231,7 +233,6 @@
       size="large"
       label="工厂名"
       title-width="160rpx"
-      wx:if="{{false}}"
       wx:if="{{company}}"
       value="{{ company }}"
       input-align="right"

@@ -73,10 +73,10 @@ const sendToWorkers = async function(id, origin) {
     }
   })
   Object.keys(data).forEach(item => {
-    const value = data[item].value
+    const value = data[item].value + ''
     console.log('===========>', item, value)
     if (item.includes('thing')) {
-      data[item].value = value.slice(0, 20)
+      data[item].value = value ? value.slice(0, 20) : '点击查看'
     }
   })
   console.log('========+>', data)

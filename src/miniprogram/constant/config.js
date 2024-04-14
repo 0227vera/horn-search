@@ -241,54 +241,70 @@ export const leaseTransferAddListOther = [{
 
 export const leaseTransferDeviceList = [{
   name: '唛架机',
-  value: 'k1'
+  value: 'k1',
+  unit: '台'
 }, {
   name: '裁床',
-  value: 'k2'
+  value: 'k2',
+  unit: '米'
 }, {
   name: '电剪 ',
-  value: 'k3'
+  value: 'k3',
+  unit: '把'
 }, {
   name: '烫炉',
-  value: 'k4'
+  value: 'k4',
+  unit: '个'
 }, {
   name: '烫台',
-  value: 'k5'
+  value: 'k5',
+  unit: '张'
 }, {
   name: '平车',
-  value: 'k6'
+  value: 'k6',
+  unit: '台'
 }, {
   name: '四线',
-  value: 'k7'
+  value: 'k7',
+  unit: '台'
 }, {
   name: '五线',
-  value: 'k8'
+  value: 'k8',
+  unit: '台'
 }, {
   name: '冚车',
-  value: 'k9'
+  value: 'k9',
+  unit: '台'
 }, {
   name: '其他衣车或专机',
-  value: 'k10'
+  value: 'k10',
+  unit: '台'
 }]
 
 export const leaseTransferDeviceListOther = [{
   name: '床',
-  value: 'k11'
+  value: 'k11',
+  unit: '张'
 }, {
   name: '衣柜',
-  value: 'k12'
+  value: 'k12',
+  unit: '个'
 }, {
   name: '空调',
-  value: 'k13'
+  value: 'k13',
+  unit: '台'
 }, {
   name: '冰箱',
-  value: 'k14'
+  value: 'k14',
+  unit: '台'
 }, {
   name: '洗衣机',
-  value: 'k15'
+  value: 'k15',
+  unit: '台'
 }, {
   name: '网线wifi',
-  value: 'k16'
+  value: 'k16',
+  unit: '个'
 }]
 
 export const tailingsAddList = [{
