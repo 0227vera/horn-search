@@ -7,6 +7,7 @@
     root-portal
     z-index="{{100}}"
     bind:enter="enter"
+    close-on-click-overlay="{{false}}"
   >
     <!-- 时间选择 -->
     <van-datetime-picker
