@@ -16,7 +16,6 @@ const makePhoneToBoss = item => {
   //   })
   //   getApp().eventBus.once('userinfo-finish', () => {
   //     makePhoneToBoss(item)
-  //     console.log(item)
   //   })
   //   return
   // }

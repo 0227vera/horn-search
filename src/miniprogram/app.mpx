@@ -41,7 +41,6 @@ createApp({
       openid: OPENID
     })
     company && Object.assign(obj, { company })
-    console.log(obj, res)
     this.setState(obj)
   },
   globalStore: store,
@@ -143,9 +142,6 @@ page
     "permission": {
       "scope.userLocation": {
         "desc": "你的位置信息将用于小程序位置接口的效果展示"
-      },
-      "scope.userInfo": {
-        "desc": "用于展示相关信息"
       }
     }
   }

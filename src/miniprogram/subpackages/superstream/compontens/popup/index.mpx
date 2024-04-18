@@ -131,23 +131,25 @@
         bind:click-right="onFormSure"
         safe-area-inset-top="{{false}}"
       />
-      <van-cell-group class="form" style="background:#fff">
-        <van-field
-          wx:for="{{formList}}"
-          wx:key="value"
-          size="large"
-          label="{{item.name + '数量'}}"
-          title-width="290rpx"
-          value="{{ item.num }}"
-          placeholder="{{'请输入' + item.name}}"
-          input-align="right"
-          type="number"
-          id="{{item.value}}"
-          bind:change="onFormChange"
-        >
-        <view slot="right-icon" style="color: #333; font-weight: bold;">{{item.unit}}</view>
-      </van-field>
-    </van-cell-group>
+      <view style="max-height: 75vh; overflow-x: hidden;">
+        <van-cell-group class="form" style="background:#fff;">
+          <van-field
+            wx:for="{{formList}}"
+            wx:key="value"
+            size="large"
+            label="{{item.name}}"
+            title-width="290rpx"
+            value="{{ item.num }}"
+            placeholder="{{'请输入' + item.name}}"
+            input-align="right"
+            type="number"
+            id="{{item.value}}"
+            bind:change="onFormChange"
+          >
+          <view slot="right-icon" style="color: #333; font-weight: bold;">{{item.unit}}</view>
+        </van-field>
+      </van-cell-group>
+    </view>
     </block>
   </van-popup>
 </template>
@@ -240,7 +242,6 @@ createComponent({
     },
     initCheckbox: {
       handler(val) {
-        console.log(val, this.checkBoxList)
         this.checkbox = val
         if (this.checkbox.length && this.checkbox.length >= this.checkBoxList.length) {
           this.checkbox.unshift('-1')
@@ -256,8 +257,9 @@ createComponent({
     },
     initCategory: {
       handler(val) {
-        console.log(val)
-        this.activeId = val
+        if (val?.length) {
+          this.activeId = val
+        }
       },
       immediate: true
     }

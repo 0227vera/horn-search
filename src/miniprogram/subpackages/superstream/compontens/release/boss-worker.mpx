@@ -383,7 +383,9 @@ createComponent({
           this.updateObj.addValue = data.value
         }
       }
-      actions?.[type]?.()
+      try {
+        actions?.[type]?.()
+      } catch (error) {}
       this.closePopupContainer()
     },
     changeUnit(e) {

@@ -345,7 +345,9 @@ createPage({
           })
         }
       }
-      actions?.[type]?.()
+      try {
+        actions?.[type]?.()
+      } catch (error) {}
       this.closePopupContainer()
     },
     onFieldChange(e) {

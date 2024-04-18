@@ -240,44 +240,68 @@ export const leaseTransferAddListOther = [{
 }]
 
 export const leaseTransferDeviceList = [{
-  name: '唛架机',
+  name: '唛架机数量',
   value: 'k1',
   unit: '台'
 }, {
-  name: '裁床',
+  name: '裁床长度',
   value: 'k2',
   unit: '米'
 }, {
-  name: '电剪',
+  name: '裁床个数',
   value: 'k3',
-  unit: '把'
-}, {
-  name: '烫炉',
-  value: 'k4',
   unit: '个'
 }, {
-  name: '烫台',
+  name: '电剪数量',
+  value: 'k4',
+  unit: '把'
+}, {
+  name: '烫炉数量',
   value: 'k5',
+  unit: '个'
+}, {
+  name: '烫台数量',
+  value: 'k6',
   unit: '张'
 }, {
-  name: '平车',
-  value: 'k6',
-  unit: '台'
-}, {
-  name: '四线',
+  name: '平车数量',
   value: 'k7',
   unit: '台'
 }, {
-  name: '五线',
+  name: '四线数量',
   value: 'k8',
   unit: '台'
 }, {
-  name: '冚车',
+  name: '五线数量',
   value: 'k9',
   unit: '台'
 }, {
-  name: '其他衣车或专机',
+  name: '冚车数量',
   value: 'k10',
+  unit: '台'
+}, {
+  name: '货架数量',
+  value: 'k11',
+  unit: '个'
+}, {
+  name: '钉扣机数量',
+  value: 'k12',
+  unit: '台'
+}, {
+  name: '锁眼机数量',
+  value: 'k13',
+  unit: '台'
+}, {
+  name: '拉橡筋机器数量',
+  value: 'k14',
+  unit: '台'
+}, {
+  name: '打条机数量',
+  value: 'k15',
+  unit: '台'
+}, {
+  name: '其他衣车或专机数量',
+  value: 'k16',
   unit: '台'
 }]
 

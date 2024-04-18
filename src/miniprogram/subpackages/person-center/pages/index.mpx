@@ -117,7 +117,7 @@ createPage({
     ...store.mapMutations(['setState']),
     async isAdmin() {
       const res = await isAdmin()
-      if (res.data.ADMIN_ID) {
+      if (res.data.ADMIN_ID && res.data.ADMIN_PHONE === '18331588738') {
         this.showManagerEntry = true
       }
     },

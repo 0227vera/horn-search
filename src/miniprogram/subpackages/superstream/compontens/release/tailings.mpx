@@ -245,7 +245,9 @@ createComponent({
           this.updateObj.noteValue = data.value
         }
       }
-      actions?.[type]?.()
+      try {
+        actions?.[type]?.()
+      } catch (error) {}
       this.closePopupContainer()
     },
     // note: 提交操作

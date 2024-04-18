@@ -189,7 +189,9 @@ createComponent({
           this.updateObj.tel = data.tel
         }
       }
-      actions?.[type]?.()
+      try {
+        actions?.[type]?.()
+      } catch (error) {}
       this.closePopupContainer()
     },
     // note: 提交操作

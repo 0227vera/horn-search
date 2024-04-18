@@ -377,7 +377,9 @@ createComponent({
           this.updateObj.addValue = data.value
         }
       }
-      actions?.[type]?.()
+      try {
+        actions?.[type]?.()
+      } catch (error) {}
       this.closePopupContainer()
     },
     // note: 提交操作

@@ -261,7 +261,6 @@ createComponent({
     },
     callBackCom() {
       let data = null
-      console.log(this.updateObj)
       this.categoryList.forEach(item => {
         item.children.forEach(f => {
           if (f.id === this.updateObj.category) {
@@ -318,7 +317,6 @@ createComponent({
           const num = cacheform.find(f => f.value === item.value)?.num ?? null
           num && (item.num = num)
         })
-        console.log(this.formList, this.updateObj.deviceValue)
       }
       this.showPopup = true
       this.popupType = type
@@ -384,7 +382,9 @@ createComponent({
           this.updateObj.deviceValue = data.value
         }
       }
-      actions?.[type]?.()
+      try {
+        actions?.[type]?.()
+      } catch (error) {}
       this.closePopupContainer()
     },
     changeUnit(e) {
