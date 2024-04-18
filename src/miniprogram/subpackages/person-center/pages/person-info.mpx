@@ -53,6 +53,7 @@
     />
     <!-- 时间先关 -->
     <van-field
+      wx:if="{{false}}"
       size="large"
       label="到岗时间"
       title-width="160rpx"
@@ -65,6 +66,7 @@
       bind:tap="showPopupContainer('time', 'start')"
     />
     <van-field
+      wx:if="{{false}}"
       size="large"
       label="截止时间"
       title-width="160rpx"
@@ -194,7 +196,7 @@ createPage({
       return 'new'
     },
     constText() {
-      return this.pageType === 'new' ? '{发布}将为您{推送}给对应匹配{招工方}' : '{已}为您{推送}给能匹配的{招工方}'
+      return this.pageType === 'new' ? '发布后信息会在{高手推荐}区展示' : '{已}为您{推送}给能匹配的{招工方}'
     },
     categoryList() {
       return config['findWorker'].category

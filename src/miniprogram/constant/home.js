@@ -116,7 +116,7 @@ export default [[{
     link: '/person-center/pages/person-info'
   }
 }, {
-  text: '主动求职',
+  text: '高手推荐',
   id: '',
   com: 'talent',
   action: {
