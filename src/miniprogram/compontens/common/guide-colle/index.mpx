@@ -16,6 +16,24 @@ const onClose = () => {
   })
   show.value = false
 }
+const setShowStatus = () => {
+  const hadCount = +mpx.getStorageSync(KEY) || 0
+  mpx.setStorage({
+    key: KEY,
+    data: hadCount + 1
+  })
+  let timer = setInterval(() => {
+    wx.checkIsAddedToMyMiniProgram({
+      success(res) {
+        if (res.added) {
+          show.value = false
+          clearInterval(timer)
+          timer = null
+        }
+      }
+    })
+  }, 5 * 1000)
+}
 onMounted(() => {
   const hadCount = +mpx.getStorageSync(KEY) || 0
   const closeCount = +mpx.getStorageSync(CLOSE_KEY) || 0
@@ -28,18 +46,12 @@ onMounted(() => {
       success(res) {
         show.value = !res.added
         if (show.value) {
-          mpx.setStorage({
-            key: KEY,
-            data: hadCount + 1
-          })
+          setShowStatus()
         }
       },
       fail() {
         show.value = true
-        mpx.setStorage({
-          key: KEY,
-          data: hadCount + 1
-        })
+        setShowStatus()
       }
     })
   }
