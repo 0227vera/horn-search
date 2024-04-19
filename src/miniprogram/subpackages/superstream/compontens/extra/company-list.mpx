@@ -192,7 +192,7 @@ createComponent({
         case 'nav':
           wx.openLocation({
             latitude: item.companyInfo.poi.location.lat,
-            longitude: item.companyInfo.poi.location.lat,
+            longitude: item.companyInfo.poi.location.lng,
             name: item.companyInfo.poi.name,
             address: item.companyInfo.poi.name
           })

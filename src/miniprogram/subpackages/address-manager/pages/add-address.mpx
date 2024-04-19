@@ -30,6 +30,18 @@
         <van-button wx:if="{{!addInfo.phone}}" size="mini" round type="primary" slot="right-icon" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">快速获取</van-button>
       </van-field>
       <van-field size="large"
+        label="定位"
+        value="{{ addInfo.address.name }}"
+        placeholder="请选择定位"
+        is-link
+        type="textarea"
+        autosize
+        readonly
+        required
+        input-align="right"
+        bind:tap="openSearchDetail"
+      />
+      <van-field size="large"
         label="省市区"
         value="{{ addInfo.address.area }}"
         placeholder="请选择省市区"
@@ -48,18 +60,6 @@
         autosize
         input-align="right"
         bind:change="onDetailChange"
-      />
-      <van-field size="large"
-        label="定位"
-        value="{{ addInfo.address.name }}"
-        placeholder="请选择定位"
-        is-link
-        type="textarea"
-        autosize
-        readonly
-        required
-        input-align="right"
-        bind:tap="openSearchDetail"
       />
       <van-field
         size="large"
@@ -107,6 +107,7 @@ createPage({
       phone: null,
       checked: true,
       address: {
+        area: '',
         areaProvice: '',
         areaCode: '',
         detail: '',
@@ -123,8 +124,6 @@ createPage({
       this.pageType = 'edit'
       Object.assign(this.addInfo, this.addressList.find(item => item.id === params.id) || {})
     }
-  },
-  onShow() {
     if (this.userInfo.nickName && !this.addInfo.name) {
       this.addInfo.name = this.userInfo.nickName
     }
@@ -184,6 +183,7 @@ createPage({
         latitude: this.addInfo.address.location.lat,
         longitude: this.addInfo.address.location.lng,
         success(res) {
+          console.log('chooseLocation得到的数据', res)
           if (!res.name) {
             return
           }
@@ -194,7 +194,9 @@ createPage({
               latitude: res.latitude,
               longitude: res.longitude
             },
+            coord_type: 5,
             success(r) {
+              console.log('reverseGeocoder接口调用得到的数据', r)
               const re = r.result
               _this.addInfo.address.areaProvice = re.ad_info.province
               _this.addInfo.address.area = `${re.ad_info.province}${re.ad_info.city}${re.ad_info.district}`

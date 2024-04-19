@@ -73,7 +73,7 @@ createPage({
         click: () => {
           wx.openLocation({
             latitude: this.poi.location.lat,
-            longitude: this.poi.location.lat,
+            longitude: this.poi.location.lng,
             name: this.poi.name,
             address: this.poi.name
           })

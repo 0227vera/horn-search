@@ -404,7 +404,7 @@ createComponent({
     gotoAddress(item) {
       wx.openLocation({
         latitude: item.poi.location.lat,
-        longitude: item.poi.location.lat,
+        longitude: item.poi.location.lng,
         name: item.poi.name,
         address: item.poi.name
       })
