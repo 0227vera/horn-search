@@ -72,7 +72,7 @@ createPage({
         [
           {
             name: '地址管理',
-            icon: 'todo-list-o',
+            icon: 'location-o',
             jumptype: 'mp',
             url: '/address-manager/pages/index'
           },
