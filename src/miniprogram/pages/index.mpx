@@ -6,6 +6,7 @@
     clickLeft="{{clickLeft}}"
   >
     <view class="container"  wx:show="{{showPage}}">
+      <guide-colle />
       <view class="partyA-container">
         <view class="partyA">
           <view class="partyA-item first-item">免费发布=></view>
@@ -240,7 +241,8 @@ module.exports = {
     "partyB": "@/subpackages/superstream/compontens/order/partyB.mpx?root=superstream",
     "user-info": "@/subpackages/person-center/compontens/user-info.mpx?root=person-center",
     "company-list": "@/subpackages/superstream/compontens/extra/company-list.mpx?root=superstream",
-    "talent": "@/subpackages/order-detail/components/talent.mpx?root=order-detail"
+    "talent": "@/subpackages/order-detail/components/talent.mpx?root=order-detail",
+    "guide-colle": "@/compontens/common/guide-colle/index.mpx"
   },
   "componentPlaceholder": {
     "user-info": "view",

@@ -7,7 +7,8 @@ module.exports = defineConfig({
         alias: {
           '@': path.resolve(__dirname, 'src/miniprogram')
         }
-      }
+      },
+      cache: false
     }
   },
   pluginOptions: {

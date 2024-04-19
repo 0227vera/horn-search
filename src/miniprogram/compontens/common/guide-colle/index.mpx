@@ -1,0 +1,111 @@
+<script setup>
+import mpx, { onMounted, ref } from '@mpxjs/core'
+const rect = mpx.getMenuButtonBoundingClientRect()
+const show = ref(false)
+const MAX_COUNT = 10
+const CLOSE_MAX_COUNT = 3
+const KEY = 'guide_colle'
+const CLOSE_KEY = 'guide_close'
+const style = {
+  left: `${rect.left}px`
+}
+const onClose = () => {
+  mpx.setStorage({
+    key: CLOSE_KEY,
+    data: (+mpx.getStorageSync(CLOSE_KEY) || 0) + 1
+  })
+  show.value = false
+}
+onMounted(() => {
+  const hadCount = +mpx.getStorageSync(KEY) || 0
+  const closeCount = +mpx.getStorageSync(CLOSE_KEY) || 0
+  if (hadCount > MAX_COUNT || closeCount >= CLOSE_MAX_COUNT) {
+    show.value = false
+    return
+  }
+  if (wx.canIUse('checkIsAddedToMyMiniProgram')) {
+    wx.checkIsAddedToMyMiniProgram({
+      success(res) {
+        show.value = !res.added
+        if (show.value) {
+          mpx.setStorage({
+            key: KEY,
+            data: hadCount + 1
+          })
+        }
+      },
+      fail() {
+        show.value = true
+        mpx.setStorage({
+          key: KEY,
+          data: hadCount + 1
+        })
+      }
+    })
+  }
+})
+defineExpose({
+  style,
+  onClose,
+  show
+})
+</script>
+
+<template>
+  <view class="container" wx:if="{{show}}">
+    <view class="bg">
+      <view class="content">点击添加到我的小程序，方便下次快速打开</view>
+      <view class="arrow" wx:style="{{style}}">
+        <van-icon class="arrow-icon" name="play" />
+      </view>
+      <van-icon class="close" name="cross" bind:tap="onClose" />
+    </view>
+  </view>
+</template>
+
+<style lang="stylus" scoped>
+.container
+  padding 16rpx
+  overflow hidden
+  animation showIn 0.3s
+  .bg
+    background #ffffff
+    border-radius 16rpx
+    position relative
+    display flex
+    padding 8rpx 16rpx
+    box-sizing border-box
+    .arrow
+      position absolute
+      top -36rpx
+      animation aniArror 1s infinite
+      animation-delay 0.3s
+      &-icon
+        transform rotate(-90deg)
+        color #ffffff
+      font-size 48rpx
+    .content
+      font-size 28rpx
+      flex 1
+    .close
+      margin-right 8rpx
+      font-weight blod
+@-webkit-keyframes showIn
+  from
+    transform translateX(100%)
+  to
+    transform translateX(0)
+@-webkit-keyframes aniArror
+  0%
+    top -36rpx
+  60%
+    top -24rpx
+  100%
+    top -36rpx
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {}
+  }
+</script>
