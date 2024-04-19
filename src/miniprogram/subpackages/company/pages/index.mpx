@@ -1,11 +1,22 @@
 <template>
   <custom-container title="加入我们">
-    <van-cell-group inset>
+    <view class="text-container" wx:if="{{introduceList.length}}">
+      <view class="content">
+        <view wx:for="{{introduceList}}" wx:key="text" class="text">
+          <mutil-style-text
+            text="{{item.text}}"
+            rules="{{rules}}"
+          />
+        </view>
+      </view>
+    </view>
+    <van-cell-group inset wx:if="{{hasUsInfo}}">
       <van-cell title="描述" value="{{usInfo.text}}" />
       <van-cell title="电话" value="{{usInfo.phone}}" />
       <van-cell title="微信" value="{{usInfo.wechat}}" />
       <van-cell title="邮箱" value="{{usInfo.email}}" />
     </van-cell-group>
+    <view style="width: 100%;height: 50rpx"></view>
   </custom-container>
 </template>
 
@@ -16,8 +27,54 @@ import { getComPanyInfo } from '@/api'
 
 createPage({
   data: {
-    usInfo: {
-
+    introduceList: [
+      {
+        text: '为方便服装业发加工、制衣厂招工、加工厂寻客户、长工临工找自己擅长的事做、找厂房等，{公益}##微信小程序##“召工桥”已上线，是完全{免费}服务于服装业的{公共平台}。'
+      },
+      {
+        text: '大家可以根据自己的需求进入小程序##免费发布信息##，同时进入小程序通过浏览信息来完成##长临工找自己擅长的事做、加工厂找货源、寻客户、接加工单、找厂房##等。'
+      },
+      {
+        text: '平台配有导航，并以距离为算法，您的发布信息优先推荐给附近的人；您浏览到的信息是由近到远的排序，##方便与附近的人优先合作。##'
+      },
+      {
+        text: '##可发布信息的有：##'
+      },
+      {
+        text: '我要##招工##---{供服装制衣厂发布招工信息} ##可招厂长/车位/裁床/烫工/包装/打版/车版/冚车/四线/卷边/  等各流水线的长工或临工##'
+      },
+      {
+        text: '我要##找加工厂##---{如需外发裁片或寻找加工厂可发布信息外发或找厂}'
+      },
+      {
+        text: '##出租转让发布##---有厂房或作坊转让的可在平台发布转让信息让更多人看到'
+      },
+      {
+        text: '我要##转让设备##---可发布信息转让二手衣车/货架/电动车/家用电器等'
+      },
+      {
+        text: '我要##诚寻客户##---加工厂发布信息  可寻客户合作'
+      },
+      {
+        text: '我要##处理尾货##---发布信息处理尾货  更多收尾货的报价  不让压价'
+      },
+      {
+        text: '我要##主动求职##---临工有空，随时发布信息找事做'
+      }
+    ],
+    rules: {
+      '{x}': {
+        style: 'color: #ff525d;font-weight: 500;font-size: 32rpx;'
+      },
+      '##x##': {
+        style: 'color: #000: font-weight: 500;font-size: 32rpx;'
+      }
+    },
+    usInfo: {}
+  },
+  computed: {
+    hasUsInfo() {
+      return Object.keys(this.usInfo).length
     }
   },
   async onLoad() {
@@ -29,14 +86,28 @@ createPage({
 </script>
 
 <style lang="stylus" scoped>
-
+.text-container
+  padding 16rpx 32rpx
+  .content
+    background #ffffff
+    border-radius 16rpx
+    padding 16rpx
+    .text
+      color #333
+      font-size 28rpx
+      text-indent 64rpx
+      margin-bottom 16rpx
+      &:last-child
+        margin-bottom 0
 </style>
 
 <script type="application/json">
   {
     "usingComponents": {
+      "mutil-style-text": "@/compontens/base/mutil-style-text.mpx?root=common-coms-page"
     },
     "componentPlaceholder": {
+      "mutil-style-text": "view"
     },
     "navigationStyle": "custom",
     "disableScroll": true

@@ -114,7 +114,7 @@
       </van-field>
     </view>
     <!-- 补充 -->
-    <van-field size="large"
+    <!-- <van-field size="large"
       label="补充"
       title-width="200rpx"
       value="{{ updateObj.note }}"
@@ -126,7 +126,7 @@
       autosize
       id="note"
       bindtap="showPopupContainer('note')"
-    />
+    /> -->
   </van-cell-group>
   <van-cell border="{{false}}" wx:if="{{showBottomNav}}">
     <van-button round type="primary" block bind:tap="releaseData">发布</van-button>
@@ -196,6 +196,7 @@ createComponent({
         this.needShowRadio = true
       } else if (type === 'time') {
         this.currentTimeId = id
+        this.popupTitle = '请选择联系时间'
         this.initTime = (id === 'start' ? this.updateObj.times?.[0] : this.updateObj.times?.[1]) || dayjs(Date.now()).format('HH:mm')
       } else if (type === 'address') {
         if (!this.addressList.length) {
