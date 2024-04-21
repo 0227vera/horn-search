@@ -7,13 +7,12 @@
     <van-cell-group class="content" border="{{ false }}" inset>
       <van-field size="large"
         value="{{ addInfo.name }}"
-        placeholder="请输入姓名"
-        label="姓名"
+        placeholder="请输入联系人/单位名称"
+        label="联系人/单位"
         border="{{ false }}"
         bind:change="onChange"
         id="name"
-        input-align="right"
-        required
+        input-align="left"
       />
       </van-field>
       <van-field size="large"
@@ -25,7 +24,7 @@
         type="digit"
         id="phone"
         required
-        input-align="right"
+        input-align="left"
       >
         <van-button wx:if="{{!addInfo.phone}}" size="mini" round type="primary" slot="right-icon" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">快速获取</van-button>
       </van-field>
@@ -38,7 +37,7 @@
         autosize
         readonly
         required
-        input-align="right"
+        input-align="left"
         bind:tap="openSearchDetail"
       />
       <van-field size="large"
@@ -48,7 +47,7 @@
         is-link
         readonly
         required
-        input-align="right"
+        input-align="left"
         bind:tap="openArea"
       />
       <van-field size="large"
@@ -58,7 +57,7 @@
         required
         type="textarea"
         autosize
-        input-align="right"
+        input-align="left"
         bind:change="onDetailChange"
       />
       <van-field
@@ -218,10 +217,10 @@ createPage({
         success: false,
         text: ''
       }
-      if (!this.addInfo.name) {
-        result.text = '请输入姓名'
-        return result
-      }
+      // if (!this.addInfo.name) {
+      //   result.text = '请输入姓名'
+      //   return result
+      // }
       if (!this.addInfo.phone) {
         result.text = '请输入电话'
         return result

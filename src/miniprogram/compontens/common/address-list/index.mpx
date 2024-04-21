@@ -99,13 +99,21 @@ createComponent({
     ...store.mapState(['addressList'])
   },
   attached() {
-    const item = this.addressList.find(item => item.checked)
-    if (item?.id) {
-      this.triggerEvent('choose-item', item)
+    this.setDefault()
+  },
+  pageLifetimes: {
+    show() {
+      this.setDefault()
     }
   },
   methods: {
     ...store.mapMutations(['setState']),
+    setDefault() {
+      const item = this.addressList.find(item => item.checked)
+      if (item?.id) {
+        this.triggerEvent('choose-item', item)
+      }
+    },
     CellClickHandle(arg) {
       if (!this.isCanChoose) return
       const list = JSON.parse(JSON.stringify(this.addressList))

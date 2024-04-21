@@ -15,7 +15,8 @@
                   <mutil-style-text class="text" rules="{{content.rules || textRules}}" text="{{content.value}}" />
                 </view>
               </block>
-              <block wx:elif="{{content.type === 'tag'}}">
+              <!-- todo: 暂时隐藏，之后放开 -->
+              <!-- <block wx:elif="{{content.type === 'tag'}}">
                 <view class="list-item_info-content-item_tags">
                   <view class="list-item_info-content-item_tags-item" wx:for="{{content.tags}}" wx:key="*this" wx:for-item="tag">
                     <mutil-style-text text="{{tag.text}}" rules="{{tag.rules || textRules}}" />
@@ -24,7 +25,7 @@
                     <mutil-style-text text="{{content.timeText}}" rules="{{textRules}}" />
                   </view>
                 </view>
-              </block>
+              </block> -->
             </view>
           </view>
         </view>

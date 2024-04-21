@@ -53,7 +53,8 @@ createComponent({
               resolve(true)
               return
             }
-            this.show = true
+            // 暂时有未处理的问题，先不弹出
+            // this.show = true
             mpx.requestSubscribeMessage({
               tmplIds: this.tmplIds
             }).then(res => {

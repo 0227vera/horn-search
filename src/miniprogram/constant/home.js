@@ -27,7 +27,7 @@ export default [[{
   },
   extraInfo: {}
 }], [{
-  text: '我要找加工厂',
+  text: '我要外发寻厂',
   id: '',
   sort: 2,
   action: {
