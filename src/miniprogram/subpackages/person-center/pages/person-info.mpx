@@ -295,7 +295,7 @@ createPage({
             biographical: {
               ...this.biographical,
               category: data.map(item => item.id).join(';'),
-              categoryName: data.map(item => item.text).join(';')
+              categoryName: `专业${data.map(item => item.text).join(';')}`
             }
           })
         },

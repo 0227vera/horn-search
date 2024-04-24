@@ -4,7 +4,8 @@
     <van-swipe-cell custom-class="{{index % 2 === 1 ? 'jishu' : 'oushu'}}" wx:for="{{renderList}}" wx:key="_id" right-width="{{ canDelete ? 65 : 0 }}">
       <view wx:if="{{canDelete}}" slot="right" class="van-swipe-cell__right" bind:tap="delete(item)">删除</view>
       <view class="list-item" bind:tap="gotoDetail(item)">
-        <view wx:if="{{item.tag}}" class="tag">{{item.tag}}</view>
+        <!-- todo: 暂时隐藏，之后放开 -->
+        <!-- <view wx:if="{{item.tag}}" class="tag">{{item.tag}}</view> -->
         <view class="list-item_info">
           <image class="list-item_info-img" catchtap="priview(item)" src="{{item.thumb}}"></image>
           <view class="list-item_info-content">

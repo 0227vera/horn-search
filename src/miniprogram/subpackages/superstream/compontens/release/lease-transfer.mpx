@@ -378,7 +378,7 @@ createComponent({
           this.updateObj.addValue = data.value
         },
         device: () => {
-          this.updateObj.device = data.value.map(item => `${item.name}(${item.num}${item.unit})`).join('、')
+          this.updateObj.device = data.value.map(item => `${item.name}${item.num}${item.unit}`).join('、')
           this.updateObj.deviceValue = data.value
         }
       }

@@ -85,15 +85,15 @@ createComponent({
       const currentTime = Date.now()
       return Object.assign(this.pageInfo, {
         'companyInfo.status': 'on',
-        'companyInfo.start': ['<=', currentTime],
-        'companyInfo.end': ['>=', currentTime],
+        // 'companyInfo.start': ['<=', currentTime],
+        // 'companyInfo.end': ['>=', currentTime],
         fields: 'companyInfo'
       })
     },
     renderList() {
       const renderList = this.list.map(item => {
         const content = []
-        content.push({
+        item.companyInfo.area && item.companyInfo.parkSpace && content.push({
           label: '本厂面积：',
           value: `${item.companyInfo.area}平(${item.companyInfo.parkSpace}个车位)`
         })
@@ -143,7 +143,7 @@ createComponent({
     },
     moreLoadHandle() {
       if (!this.moreLoad.isClick || this.loading || this.moreLoad.loading) return
-      this.page.page++
+      this.pageInfo.page++
       this.getList()
     },
     clickBtn(item, e) {
@@ -190,6 +190,12 @@ createComponent({
           })
           break
         case 'nav':
+          if (!item.companyInfo.poi) {
+            mpx.showModal({
+              title: '暂未获取对方位置信息'
+            })
+            return
+          }
           wx.openLocation({
             latitude: item.companyInfo.poi.location.lat,
             longitude: item.companyInfo.poi.location.lng,

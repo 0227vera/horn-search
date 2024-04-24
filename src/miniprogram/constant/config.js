@@ -194,20 +194,23 @@ export const leaseTransferAddList = [{
   name: '有电梯',
   value: 'i8'
 }, {
-  name: '带停车位',
+  name: '有吊机',
   value: 'i9'
 }, {
-  name: '不是顶楼',
+  name: '带停车位',
   value: 'i10'
 }, {
-  name: '下楼即招工',
+  name: '不是顶楼',
   value: 'i11'
 }, {
-  name: '消防合格',
+  name: '下楼即招工',
   value: 'i12'
 }, {
-  name: '空转也可',
+  name: '消防合格',
   value: 'i13'
+}, {
+  name: '空转也可',
+  value: 'i14'
 }]
 
 export const leaseTransferAddListOther = [{
@@ -240,67 +243,83 @@ export const leaseTransferAddListOther = [{
 }]
 
 export const leaseTransferDeviceList = [{
-  name: '唛架机数量',
+  name: '唛架机',
+  postText: '数量',
   value: 'k1',
   unit: '台'
 }, {
-  name: '裁床长度',
+  name: '裁床',
+  postText: '长度',
   value: 'k2',
   unit: '米'
 }, {
-  name: '裁床个数',
+  name: '裁床',
+  postText: '张数',
   value: 'k3',
-  unit: '个'
+  unit: '张'
 }, {
-  name: '电剪数量',
+  name: '电剪',
+  postText: '数量',
   value: 'k4',
   unit: '把'
 }, {
-  name: '烫炉数量',
+  name: '烫炉',
+  postText: '数量',
   value: 'k5',
   unit: '个'
 }, {
-  name: '烫台数量',
+  name: '烫台',
+  postText: '数量',
   value: 'k6',
   unit: '张'
 }, {
-  name: '平车数量',
+  name: '平车',
+  postText: '数量',
   value: 'k7',
   unit: '台'
 }, {
-  name: '四线数量',
+  name: '四线',
+  postText: '数量',
   value: 'k8',
   unit: '台'
 }, {
-  name: '五线数量',
+  name: '五线',
+  postText: '数量',
   value: 'k9',
   unit: '台'
 }, {
-  name: '冚车数量',
+  name: '冚车',
+  postText: '数量',
   value: 'k10',
   unit: '台'
 }, {
-  name: '货架数量',
+  name: '货架',
+  postText: '数量',
   value: 'k11',
   unit: '个'
 }, {
-  name: '钉扣机数量',
+  name: '钉扣机',
+  postText: '数量',
   value: 'k12',
   unit: '台'
 }, {
-  name: '锁眼机数量',
+  name: '锁眼机',
+  postText: '数量',
   value: 'k13',
   unit: '台'
 }, {
-  name: '拉橡筋机器数量',
+  name: '拉橡筋机器',
+  postText: '数量',
   value: 'k14',
   unit: '台'
 }, {
-  name: '打条机数量',
+  name: '打条机',
+  postText: '数量',
   value: 'k15',
   unit: '台'
 }, {
-  name: '其他衣车或专机数量',
+  name: '其他衣车或专机',
+  postText: '数量',
   value: 'k16',
   unit: '台'
 }]

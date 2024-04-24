@@ -137,7 +137,7 @@
             wx:for="{{formList}}"
             wx:key="value"
             size="large"
-            label="{{item.name}}"
+            label="{{item.name + item.postText || ''}}"
             title-width="290rpx"
             value="{{ item.num }}"
             placeholder="{{'请输入' + item.name}}"

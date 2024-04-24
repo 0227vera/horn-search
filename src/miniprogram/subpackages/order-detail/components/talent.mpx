@@ -3,7 +3,9 @@
     <view wx:for="{{talentList}}" wx:key="_id" class="talent-item">
       <view class="talent-item-name">
         <view>
-          {{item.biographical.name || 'XX先生/女士'}}
+          <text wx:if="{{item.biographical.name}}">
+            {{item.biographical.name || 'XX先生/女士'}}
+          </text>
         </view>
         <van-button round type="primary" size="small" bind:tap="callTel(item)">给他(她)打电话</van-button>
       </view>
@@ -13,11 +15,11 @@
             <view class="talent-item-content_item-label">擅长技能：</view>
             <view class="talent-item-content_item-value">{{item.biographical.categoryName}}</view>
           </view>
-          <view class="talent-item-content_item">
+          <!-- <view class="talent-item-content_item">
             <view class="talent-item-content_item-label">可到岗时间：</view>
             <view class="talent-item-content_item-value">{{item.biographical.time.start}}{{item.biographical.time.end ? ' ~ ' + item.biographical.time.end : '以后均可'}}</view>
-          </view>
-          <view class="talent-item-content_item">
+          </view> -->
+          <view class="talent-item-content_item" wx:if="{{item.biographical.poi}}">
             <view class="talent-item-content_item-label">地址：</view>
             <view class="talent-item-content_item-value">{{item.biographical.poi && item.biographical.poi.detail}}</view>
           </view>
@@ -74,7 +76,10 @@ createComponent({
   data: {
     talentList: [],
     loading: true,
-    pageInfo: JSON.parse(JSON.stringify(pageInfo)),
+    pageInfo: {
+      ...JSON.parse(JSON.stringify(pageInfo)),
+      size: 10
+    },
     moreLoad: {
       loading: false,
       isClick: true,
@@ -101,15 +106,15 @@ createComponent({
   methods: {
     moreLoadHandle() {
       if (!this.moreLoad.isClick || this.loading || this.moreLoad.loading) return
-      this.page.page++
+      this.pageInfo.page++
       this.getList()
     },
     async getList() {
       this.moreLoad.loading = true
       const currentTime = +dayjs(Date.now()).format('HHmm')
       const and = {
-        'biographical.status': 'on',
-        'biographical.start': ['<=', currentTime]
+        'biographical.status': 'on'
+        // 'biographical.start': ['<=', currentTime]
       }
       if (this.category) {
         Object.assign(and, {
