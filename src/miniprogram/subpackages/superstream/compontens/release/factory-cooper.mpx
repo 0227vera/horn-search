@@ -385,16 +385,19 @@ createComponent({
     },
     // note: 提交操作
     async releaseData() {
-      const currentKey = 'factory_cooper_release_time'
-      const checkTime = +mpx.getStorage(currentKey)
-      if (checkTime) {
-        const isSame = checkTime.isSame(dayjs(), 'day')
-        mpx.showToast({
-          title: '当前合作方式，一天最多发一次'
-        })
-        return
+      if (this.updateObj.cooperType !== 'a3') {
+        const currentKey = 'factory_cooper_release_time'
+        const checkTime = +mpx.getStorageSync(currentKey)
+        if (checkTime) {
+          const isSame = dayjs(checkTime).isSame(dayjs(), 'day')
+          this.toastText = '当前合作方式，{一天最多发一次}'
+          setTimeout(() => {
+            this.$refs.toast.show()
+          }, 0)
+          return
+        }
+        mpx.setStorage(currentKey, Date.now())
       }
-      mpx.setStorageSync(currentKey, Date.now())
       this.submitData(validateFactory)
     }
   }
