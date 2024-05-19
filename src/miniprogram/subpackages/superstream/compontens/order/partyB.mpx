@@ -153,7 +153,7 @@
         <card
           list="{{list}}"
           filterKeys="{{filterKeys}}"
-          fromOrigin="{{this.fromOrigin}}"
+          fromOrigin="{{fromOrigin}}"
           buttons="{{buttons}}"
           role="worker"
           moreLoad="{{moreLoad}}"
@@ -189,6 +189,10 @@ createComponent({
     updateList: {
       type: Boolean,
       value: false
+    },
+    tabActive: {
+      type: Number,
+      value: 0
     }
   },
   data: {
@@ -253,6 +257,16 @@ createComponent({
     listParams() {
       const params = {
         status: ['in', ['2', '3']]
+      }
+      if (this.tabActive === 1) {
+        Object.assign(params, {
+          cooperType: 'a3'
+        })
+      }
+      if (this.tabActive === 2) {
+        Object.assign(params, {
+          cooperType: ['in', ['a1', 'a2', 'a4']]
+        })
       }
       if (this.adInfo?.location) {
         Object.assign(params, {
@@ -357,20 +371,25 @@ createComponent({
     },
     async getList() {
       this.moreLoad.loading = true
+      let currentRequestOrigin = this.fromOrigin
       const res = await getReleaseList(this.listParams)
-      const { list, total } = res.data || {}
+      const { list, count } = res.data || {}
       if (this.adInfo?.location?.lat) {
         list.forEach(item => {
           item.distance = getDistance(this.adInfo.location.lat, this.adInfo.location.lng, item.poi.location.lat, item.poi.location.lng).toFixed(1)
         })
       }
+      // note: 防止出现undefined的情况，页面乱码
+      if (this.fromOrigin === currentRequestOrigin) {
+        this.list = this.list.concat(list || [])
+      }
       this.loading = false
       this.moreLoad.loading = false
-      this.list = this.list.concat(list || [])
-      if (this.fromOrigin !== 'factoryCooper' && !this.filter.cooperType?.length) {
+      console.log(this.tabActive)
+      if (this.tabActive !== 2 && !this.filter.cooperType?.length) {
         this.list = this.list.sort((a, b) => a.distance - b.distance)
       }
-      if (this.list.length < total) {
+      if (this.page.page < count) {
         this.moreLoad.text = '~点击加载更多~'
         this.moreLoad.isClick = true
       } else {
@@ -381,6 +400,7 @@ createComponent({
     moreLoadHandle() {
       if (!this.moreLoad.isClick || this.loading || this.moreLoad.loading) return
       this.page.page++
+      console.log('========>', this.moreLoad, this.loading, this.moreLoad.loading, this.page.page)
       this.getList()
     },
     footerBtn(e) {

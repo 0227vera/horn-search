@@ -62,7 +62,8 @@ export const mixins = {
         this.updateObj.poi = {
           ...this.adInfo,
           name: this.adInfo.address,
-          detail: this.adInfo.address
+          // detail: this.adInfo.address
+          detail: ''
         }
       }
       this.initAddressPhone()

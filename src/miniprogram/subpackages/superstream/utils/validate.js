@@ -59,6 +59,10 @@ export const validateBossWorker = ({ updateObj, subCategoryInfo } = {}) => {
       return result
     }
   }
+  if (!updateObj.poi.location) {
+    result.text = '请输入{位置信息}'
+    return result
+  }
   // if (!updateObj.origin) {
   //   result.text = '请输入货源'
   //   return result
@@ -120,6 +124,10 @@ export const validateFactory = ({ updateObj } = {}) => {
     result.text = '请输入{生产数量}'
     return result
   }
+  if (!updateObj.poi.location && updateObj.cooperType === 'a3') {
+    result.text = '请输入{位置信息}'
+    return result
+  }
   if (!updateObj.tel) {
     result.text = '请输入{手机号}'
     return result
@@ -165,6 +173,10 @@ export const validateLease = ({ updateObj, subCategoryInfo } = {}) => {
     result.text = '请填写{租金}'
     return result
   }
+  if (!updateObj.poi.location) {
+    result.text = '请输入{位置信息}'
+    return result
+  }
   if (!updateObj.tel) {
     result.text = '请输入{手机号}'
     return result
@@ -202,6 +214,10 @@ export const validateUsed = ({ updateObj, subCategoryInfo } = {}) => {
     result.text = subCategoryInfo.placeholder
     return result
   }
+  if (!updateObj.poi.location) {
+    result.text = '请输入{位置信息}'
+    return result
+  }
   if (!updateObj.images.length) {
     result.text = '请上传图片信息'
     return result
@@ -237,6 +253,10 @@ export const tailingsValidate = ({ updateObj, subCategoryInfo } = {}) => {
   }
   if (subCategoryInfo.show && !updateObj.categorySub) {
     result.text = subCategoryInfo.placeholder
+    return result
+  }
+  if (!updateObj.poi.location) {
+    result.text = '请输入{位置信息}'
     return result
   }
   if (!updateObj.tel) {

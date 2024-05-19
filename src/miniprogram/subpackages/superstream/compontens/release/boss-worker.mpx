@@ -174,7 +174,7 @@
       bind:tap="showPopupContainer('origin')"
     />
     <!-- 图片 -->
-    <block wx:if="{{true}}">
+    <block wx:if="{{updateObj.categoryName}}">
       <van-cell size="large" title-width="160rpx" title="图片展示" value="{{imagesValue}}" border="{{false}}" />
       <view class="image-container">
         <view class="iamge-content">

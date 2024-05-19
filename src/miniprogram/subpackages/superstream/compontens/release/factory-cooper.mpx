@@ -202,7 +202,7 @@
       id="area"
     />
     <!-- 图片 -->
-    <block wx:if="{{true}}">
+    <block wx:if="{{updateObj.cooperTypeName}}">
       <van-cell size="large" title="图片展示" title-width="160rpx" value="{{imagesValue}}" border="{{false}}" />
       <view class="image-container">
         <view class="iamge-content">
@@ -268,6 +268,7 @@ import { validateFactory } from '@/subpackages/superstream/utils/validate.js'
 import { initFactoryObj } from '@/subpackages/superstream/utils/constant.js'
 import { factoryCooperAddList } from '@/constant/config.js'
 import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
+import dayjs from 'dayjs'
 
 createComponent({
   mixins: [mixins],
@@ -384,6 +385,16 @@ createComponent({
     },
     // note: 提交操作
     async releaseData() {
+      const currentKey = 'factory_cooper_release_time'
+      const checkTime = +mpx.getStorage(currentKey)
+      if (checkTime) {
+        const isSame = checkTime.isSame(dayjs(), 'day')
+        mpx.showToast({
+          title: '当前合作方式，一天最多发一次'
+        })
+        return
+      }
+      mpx.setStorageSync(currentKey, Date.now())
       this.submitData(validateFactory)
     }
   }

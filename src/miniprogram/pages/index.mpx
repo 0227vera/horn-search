@@ -46,6 +46,7 @@
       <view class="list" wx:elif="{{fromOrigin}}">
         <partyB
           categoryTypeId="{{categoryTypeId}}"
+          tabActive="{{tabActive}}"
           updateList="{{updateList}}"
         />
       </view>
@@ -119,7 +120,8 @@ createPage({
       return this.list.filter(item => item[0]).map(item => item[0]).sort((a, b) => a.sort - b.sort)
     },
     renderPartyBList() {
-      return this.list.filter(item => item[1]).map(item => item[1])
+      const list = this.list.filter(item => item[1]).map(item => item[1])
+      return list
     }
   },
   onLoad() {

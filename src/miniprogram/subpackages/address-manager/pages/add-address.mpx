@@ -29,18 +29,31 @@
         <van-button wx:if="{{!addInfo.phone}}" size="mini" round type="primary" slot="right-icon" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">快速获取</van-button>
       </van-field>
       <van-field size="large"
+        label="具体地址"
+        value="{{ addInfo.address.detail }}"
+        placeholder="请输入具体地址"
+        required
+        type="textarea"
+        autosize
+        input-align="left"
+        bind:change="onDetailChange"
+      />
+      <van-field size="large"
         label="定位"
         value="{{ addInfo.address.name }}"
         placeholder="请选择定位"
-        is-link
+        error-message="方便用户导航"
         type="textarea"
         autosize
         readonly
         required
         input-align="left"
         bind:tap="openSearchDetail"
-      />
-      <van-field size="large"
+      >
+        <van-icon name="location-o" slot="right-icon" />
+      </van-field>
+      <!-- <van-field size="large"
+        wx:if="{{false}}"
         label="省市区"
         value="{{ addInfo.address.area }}"
         placeholder="请选择省市区"
@@ -49,17 +62,7 @@
         required
         input-align="left"
         bind:tap="openArea"
-      />
-      <van-field size="large"
-        label="详细地址"
-        value="{{ addInfo.address.detail }}"
-        placeholder="请输入详细地址"
-        required
-        type="textarea"
-        autosize
-        input-align="left"
-        bind:change="onDetailChange"
-      />
+      /> -->
       <van-field
         size="large"
         label="设置为默认地址"
@@ -133,9 +136,9 @@ createPage({
       this.addInfo.address.areaProvice = this.adInfo.ad_info.province
       this.addInfo.address.area = `${this.adInfo.ad_info.province}${this.adInfo.ad_info.city}${this.adInfo.ad_info.district}`
       this.addInfo.address.areaCode = this.adInfo.ad_info.adcode
-      this.addInfo.address.detail = this.adInfo.address
-      this.addInfo.address.name = this.adInfo.address
-      this.addInfo.address.location = this.adInfo.location
+      // this.addInfo.address.detail = this.adInfo.address
+      // this.addInfo.address.name = this.adInfo.address
+      // this.addInfo.address.location = this.adInfo.location
     })
   },
   computed: {
@@ -187,7 +190,7 @@ createPage({
             return
           }
           _this.addInfo.address.name = res.name
-          _this.addInfo.address.detail = res.name
+          // _this.addInfo.address.detail = res.name
           _this.mapSdk.reverseGeocoder({
             location: {
               latitude: res.latitude,
@@ -278,6 +281,13 @@ createPage({
 })
 
 </script>
+<style>
+.van-field__error-message{
+  color: #000000!important;
+  font-size: 32rpx!important;
+  font-weight: bold;
+}
+</style>
 
 <style lang="stylus" scoped>
 .container

@@ -142,7 +142,7 @@
             value="{{ item.num }}"
             placeholder="{{'请输入' + item.name}}"
             input-align="right"
-            type="number"
+            type="digit"
             id="{{item.value}}"
             bind:change="onFormChange"
           >

@@ -41,8 +41,22 @@ export default [[{
   },
   extraInfo: {}
 }, {
-  text: '裁片外发、寻工厂',
+  text: '裁片外发',
   id: '',
+  action: {
+    url: '/superstream/pages/index',
+    jumptype: 'mp',
+    params: {
+      key: 'partyB',
+      id: 'findCooper',
+      type: 'partyB'
+    }
+  },
+  extraInfo: {}
+}], [null, {
+  text: '寻工厂',
+  id: '',
+  com: '',
   action: {
     url: '/superstream/pages/index',
     jumptype: 'mp',
