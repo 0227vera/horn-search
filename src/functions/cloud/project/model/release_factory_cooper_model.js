@@ -22,7 +22,7 @@ ReleaseModel.DB_STRUCTURE = {
   fabricPropName: 'string|true',
   productType: 'array|true',
   productTypeName: 'string|true',
-  // price: 'string|false',
+  price: 'string|false',
   status: 'string|true',
   calllist: 'array|false',
   readlist: 'array|false',

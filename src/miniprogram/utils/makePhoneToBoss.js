@@ -1,8 +1,12 @@
-import mpx from '@mpxjs/core'
 import store from '@/store'
 import { updateRelease } from '@/api'
+import { todayIsShare } from '@/utils'
+import Dialog from '@vant/weapp/dialog/dialog'
 
 const makePhoneToBoss = item => {
+  if (!todayIsShare()) {
+    return
+  }
   const { userInfo = {}, openid } = store.state
   // if (!userInfo.tel) {
   //   store.commit('setState', {

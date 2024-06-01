@@ -4,6 +4,7 @@ import { formatNumSubmitData } from '@/subpackages/superstream/utils/utils.js'
 import AddAddressUrl from '@/subpackages/address-manager/pages/add-address.mpx?resolve'
 import mpx from '@mpxjs/core'
 import { noticeTemplateIdList } from '@/constant/pageConfig.js'
+import { todayIsShare } from '@/utils'
 const { ORDER_UPDATE, NEW_ORDER_NOTICE } = noticeTemplateIdList
 const store = getApp().globalStore
 
@@ -138,6 +139,9 @@ export const mixins = {
         return
       }
       this.updateObj.location = this.updateObj.poi.location
+      if (!todayIsShare()) {
+        return
+      }
       mpx.showLoading({
         title: '提交中...',
         mask: true

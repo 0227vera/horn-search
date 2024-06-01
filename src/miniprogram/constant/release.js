@@ -22,9 +22,11 @@ const findWorkerCategory = [
       { text: "做领上领", id: "1-36", showCategoryType: true },
       { text: "上腰", id: "1-39", showCategoryType: true },
       { text: "包腰", id: "1-40", showCategoryType: true },
+      { text: "拉筒", id: "1-41", showCategoryType: true },
       { text: "车门筒", id: "1-42", showCategoryType: true },
       { text: "车口袋", id: "1-45", showCategoryType: true },
       { text: "上拉链", id: "1-46", showCategoryType: true },
+      { text: "返工", id: "1-46", showCategoryType: true },
       { text: "模板绗线", id: "1-48", showCategoryType: true },
       { text: "塞棉/拍棉", id: "1-51", showCategoryType: true },
       { text: "手工类", id: "1-54", showCategoryType: true, needDetail: true },
@@ -193,6 +195,9 @@ const productTypeList = [{
   name: '全品类',
   value: 'c0'
 }, {
+  name: '上衣',
+  value: 'c101'
+}, {
   name: 'T恤',
   value: 'c1'
 }, {
@@ -207,6 +212,12 @@ const productTypeList = [{
 }, {
   name: '裤子',
   value: 'c5'
+}, {
+  name: '工装裤',
+  value: 'c505'
+}, {
+  name: '短裤',
+  value: 'c506'
 }, {
   name: '裙子',
   value: 'c6'

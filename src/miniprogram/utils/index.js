@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 /* eslint-disable func-call-spacing */
+
+import mpx from "@mpxjs/core"
+import dayjs from "dayjs"
+import Dialog from '@vant/weapp/dialog/dialog'
+
 /* eslint-disable prefer-rest-params */
 const guid = () => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -41,6 +46,25 @@ export const debounce = (func, wait, immediate) => {
       }, wait)
     }
   }
+}
+
+export const todayIsShare = () => {
+  const currentKey = 'today_share_key'
+  const checkTime = +mpx.getStorageSync(currentKey)
+  if (checkTime) {
+    const isSame = dayjs(checkTime).isSame(dayjs(), 'day')
+    if (isSame) {
+      return true
+    }
+  }
+  mpx.setStorageSync(currentKey, Date.now())
+  Dialog.confirm({
+    title: '提示',
+    message: '请分享一个可能需要的朋友或者群才能拨打电话哦',
+    showCancelButton: false,
+    confirmButtonOpenType: 'share'
+  })
+  return false
 }
 
 export class EventBus {

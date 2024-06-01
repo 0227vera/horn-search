@@ -23,6 +23,7 @@
   </custom-container>
   <nav-footer wx:if="{{shareTitle}}" list="{{footerList}}" />
   <user-info />
+  <van-dialog id="van-dialog" />
 </template>
 
 <script>

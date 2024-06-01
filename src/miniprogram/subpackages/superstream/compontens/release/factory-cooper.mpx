@@ -71,6 +71,21 @@
     >
       <view slot="right-icon" style="color: #333; font-weight: bold;">件(左右)</view>
     </van-field>
+     <!-- 单价 -->
+    <van-field
+      size="large"
+      label="单价"
+      title-width="160rpx"
+      value="{{ updateObj.price }}"
+      placeholder="请输入单价"
+      type="digit"
+      input-align="right"
+      bind:change="onFieldChange"
+      id="price"
+      center
+    >
+      <view slot="right-icon" style="color: #333; font-weight: bold;">元/件</view>
+    </van-field>
     <!-- 裁床地址 -->
     <van-field
       wx:if="{{updateObj.cooperType === 'a3'}}"
@@ -142,21 +157,6 @@
     >
       <view slot="right-icon" style="color: #333;">{{updateObj.factoryScale === 'e1' ? '人(以上)' : '人(左右)'}}</view>
     </van-field>
-    <!-- 单价 -->
-    <!-- <van-field
-      size="large"
-      label="单价"
-      title-width="160rpx"
-      value="{{ updateObj.price }}"
-      placeholder="请输入单价"
-      type="digit"
-      input-align="right"
-      bind:change="onFieldChange"
-      id="price"
-      center
-    >
-      <view slot="right-icon" style="color: #333; font-weight: bold;">元/件</view>
-    </van-field> -->
     <!-- 颜色码数 -->
     <!-- <van-field
       size="large"
@@ -391,10 +391,12 @@ createComponent({
         if (checkTime) {
           const isSame = dayjs(checkTime).isSame(dayjs(), 'day')
           this.toastText = '当前合作方式，{一天最多发一次}'
-          setTimeout(() => {
-            this.$refs.toast.show()
-          }, 0)
-          return
+          if (isSame) {
+            setTimeout(() => {
+              this.$refs.toast.show()
+            }, 0)
+            return
+          }
         }
         mpx.setStorage(currentKey, Date.now())
       }
